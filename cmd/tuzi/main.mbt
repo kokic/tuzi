@@ -1,0 +1,123 @@
+///|
+let default_port : UInt16 = 4000
+
+///|
+async fn main {
+  let cmd = build_command().parse()
+  let port = server_port(@env.get_env_vars(), cmd)
+  let config = parse_server_config(cmd)
+  let headless = cmd.flags.get("headless").unwrap_or(false)
+  let log = !cmd.flags.get("silent").unwrap_or(false)
+  let resources = static_resources()
+  let tasks = TaskService::new()
+  @async.with_task_group(group => {
+    let app = @moonback.App(
+      ctx => {
+        ctx.add_middleware(resources)
+        routes(config, log, tasks, group)(ctx)
+      },
+      config=@moonback.Config(stop_timeout=0),
+    )
+    defer app.close()
+    let listener = @moonback.listen(reuse_addr=true, port~)
+    if !headless {
+      launch_browser(port)
+    }
+    app.serve(listener)
+  })
+}
+
+///|
+fn static_resources() -> @moonback.Middleware {
+  let assets = warren_assets()
+  if assets.is_empty() {
+    let root = {
+      guard @env.get_env_var("WARREN_DIST") is Some(root) else {
+        @path.Path(@env.args()[0]).resolve().dirname().to_string()
+      }
+      root
+    }
+    @static.new(root~, rewrite_trailing_slash_index=true)
+  } else {
+    @static.from_assets(assets, rewrite_trailing_slash_index=true)
+  }
+}
+
+///|
+fn build_command() -> @argparse.Command {
+  Command(
+    "tuzi",
+    about="A minimal file browser",
+    flags=[
+      FlagArg("headless", about="run without opening the browser"),
+      FlagArg("silent", about="disable logging of file operations"),
+    ],
+    options=[
+      OptionArg(
+        "icons",
+        about="file icons: none or svg, default \{@shared.IconMode::default_mode().to_string()}",
+      ),
+      OptionArg("port", short='p', about="server port, default \{default_port}"),
+      OptionArg(
+        "theme",
+        short='t',
+        about="color theme: light or dark, default \{@shared.Theme::default_theme().to_string()}",
+      ),
+    ],
+    positionals=[
+      PositionArg(
+        "path",
+        about="starting directory, default is the current directory",
+      ),
+    ],
+  )
+}
+
+///|
+/// The server port: `WARREN_PORT` (set by `warren dev`) wins over the
+/// `-p` flag; otherwise use `default_port`.
+fn server_port(
+  env : Map[String, String],
+  cmd : @argparse.Matches,
+) -> UInt16 raise {
+  let port = match () {
+    _ if env.get("WARREN_PORT") is Some(port) => port
+    _ if cmd.values.get("port") is Some([port]) => port
+    _ => return default_port
+  }
+  @string.parse_uint(port).to_uint16()
+}
+
+///|
+fn parse_server_config(cmd : @argparse.Matches) -> @shared.ServerConfig {
+  let path : @path.Path = match cmd.values {
+    { "path": [path], .. } => Path(path)
+    _ => Path(".")
+  }
+  let base = Path::from_native(path.resolve().to_string())
+  let theme = {
+    guard cmd.values.get("theme") is Some([theme]) else {
+      @shared.Theme::default_theme()
+    }
+    @shared.Theme::parse(theme)
+  }
+  let icons = {
+    guard cmd.values.get("icons") is Some([icons]) else {
+      @shared.IconMode::default_mode()
+    }
+    @shared.IconMode::parse(icons)
+  }
+  { base, theme, icons, }
+}
+
+///|
+async fn launch_browser(port : UInt16) -> Unit {
+  let url = "http://127.0.0.1:\{port}/"
+  @stdio.stdout.write("tuzi: \{url}\n")
+  if @path.sep == '\\' {
+    return ignore(@process.spawn_orphan("cmd", ["/c", "start", "", url]))
+  }
+  let (_, out) = @process.collect_stdout("uname", [])
+  let cmd = if out.text().contains("Darwin") { "open" } else { "xdg-open" }
+  ignore(@process.spawn_orphan(cmd, [url]))
+}

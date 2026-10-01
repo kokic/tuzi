@@ -1,0 +1,22 @@
+import {
+  "kokic/tuzi",
+  "kokic/uniform-path" @path,
+  "moonbit-community/rabbita",
+  "moonbit-community/rabbita/clipboard",
+  "moonbit-community/rabbita/common",
+  "moonbit-community/rabbita/dom",
+  "moonbit-community/rabbita/html",
+  "moonbitlang/async/http",
+  "moonbit-community/rabbita/js",
+  "moonbit-community/rabbita/nav",
+  "moonbit-community/rabbita/sub",
+  "moonbit-community/rabbita/websocket",
+  "moonbitlang/core/json",
+  "moonbitlang/core/immut/vector",
+  "moonbit-community/rui",
+  "moonbit-community/rabbita/dialog",
+}
+
+supported_targets = "js"
+
+pkgtype(kind: "executable")
