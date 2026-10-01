@@ -1,5 +1,5 @@
 ///|
-let formats_image : ReadOnlyArray[String] = [
+let image_formats : ReadOnlyArray[String] = [
   "jpg", "jpeg", "jpe", "jfif", "png", "gif", "bmp", "dib", "tif", "tiff", "webp",
   "avif", "heic", "heif", "svg", "svgz", "ico", "cur", "psd", "psb", "ai", "eps",
   "xcf", "sketch", "fig", "raw", "arw", "cr2", "cr3", "nef", "nrw", "orf", "rw2",
@@ -11,7 +11,7 @@ let formats_image : ReadOnlyArray[String] = [
 ]
 
 ///|
-let formats_video : ReadOnlyArray[String] = [
+let video_formats : ReadOnlyArray[String] = [
   "mp4", "avi", "mkv", "mov", "wmv", "flv", "f4v", "webm", "m4v", "mpg", "mpeg",
   "mpeg1", "mpeg2", "mpeg4", "vob", "rm", "rmvb", "3gp", "3g2", "asf", "ogv", "mts",
   "m2ts", "divx", "xvid", "amv", "dav", "fli", "flc", "dv", "hdv", "mxf", "r3d",
@@ -20,11 +20,30 @@ let formats_video : ReadOnlyArray[String] = [
 ]
 
 ///|
-let formats_font : ReadOnlyArray[String] = [
+let font_formats : ReadOnlyArray[String] = [
   "ttf", "otf", "ttc", "otc", "woff", "woff2", "eot", "pfb", "pfm", "pfa", "afm",
   "fon", "fnt", "bdf", "pcf", "snf", "dfont", "suit", "sfd", "ufo", "glyphs", "vfb",
   "vfj", "gxf", "pm", "acfm", "amfm", "cff", "cid", "fot", "pfr", "pt3", "t42", "tte",
 ]
 
 ///|
-let formats_moonbit : ReadOnlyArray[String] = ["mbt", "mbti", "mbtx", "mbtp"]
+let moonbit_formats : ReadOnlyArray[String] = ["mbt", "mbti", "mbtx", "mbtp"]
+
+///|
+let shell_formats : ReadOnlyArray[String] = [
+  "sh", "bash", "zsh", "fish", "csh", "tcsh", "bat", "cmd", "ps1",
+]
+
+///|
+let audio_formats : ReadOnlyArray[String] = [
+  "mp3", "wav", "flac", "aac", "m4a", "ogg", "oga", "opus", "wma", "aiff", "aif",
+  "alac", "mid", "midi",
+]
+
+///|
+let archive_formats : ReadOnlyArray[String] = [
+  "zip", "tar", "gz", "tgz", "bz2", "tbz", "xz", "txz", "lz", "tlz", "lzo", "zst",
+  "7z", "rar", "cab", "jar", "war", "ear", "apk", "ipa", "deb", "rpm", "ar", "z",
+  "lz4", "br", "ace", "arc", "lha", "lzh", "zoo", "sit", "tbz2", "lzma", "tzst",
+  "cpio", "sitx",
+]

@@ -11,6 +11,32 @@ let folder_icons : Map[String, String] = {
 pub let folder_markers : Array[String] = folder_icons.keys().to_array()
 
 ///|
+let extension_icons : Map[String, String] = {
+  let shell_icon = file_icon(".sh", fill="currentColor")
+  Map::from_iter(
+    [
+      shell_formats.iter().map(extension => (extension, shell_icon)),
+      font_formats.iter().map(extension => (extension, SVG_FONT)),
+      video_formats.iter().map(extension => (extension, SVG_VIDEO)),
+      image_formats.iter().map(extension => (extension, SVG_IMAGE)),
+      moonbit_formats.iter().map(extension => (extension, svg_moonbit)),
+      audio_formats.iter().map(e => (e, file_icon(e, fill="#c66b9b"))),
+      archive_formats
+      .iter()
+      .map(e => (e, file_icon(e.to_upper(), fill="#c19553"))),
+      config_icons.iter(),
+      data_icons.iter(),
+      source_icons.iter(),
+      document_icons.iter(),
+      binary_icons.iter(),
+      text_icons.iter(),
+    ]
+    .iter()
+    .flatten(),
+  )
+}
+
+///|
 /// Each registered filename or extension owns its SVG content. Empty values
 /// are intentional registrations, not requests to use unknown_file.
 /// Fill values with trusted complete <svg>...</svg> markup using a viewBox,
@@ -62,43 +88,6 @@ let builtin_svg_icons : IconRegistry = {
     ".zprofile": file_icon(".sh", fill="currentColor"),
     ".profile": file_icon(".sh", fill="currentColor"),
   },
-  extensions: {
-    "pdf": file_icon("pdf", fill="#db5448"),
-    "csv": file_icon("csv", fill="#006f38"),
-    "toml": file_icon("toml", fill="#dd6b20"),
-    "nu": file_icon("nu", fill="#3dd68c"),
-    "html": file_icon("html", fill="#e34c26"),
-    "js": file_icon("js", fill="#e5d467"),
-    "ts": file_icon("ts", fill="#3178c6"),
-    "java": file_icon("java", fill="#c22227"),
-    "hs": file_icon("hs", fill="#8f4e8b"),
-    "wasm": file_icon("wa", fill="#7665d7"),
-  },
-  rules: [
-    extension => config_icons.get(extension),
-    extension => data_icons.get(extension),
-    extension => source_icons.get(extension),
-    extension => document_icons.get(extension),
-    extension => audio_icons.get(extension),
-    extension => binary_icons.get(extension),
-    extension => text_icons.get(extension),
-    matches(formats_moonbit, svg_moonbit),
-    extension => archive_icons.get(extension),
-    matches(formats_image, SVG_IMAGE),
-    matches(formats_video, SVG_VIDEO),
-    matches(formats_font, SVG_FONT),
-    svg_rule_shell,
-  ],
-}
-
-///|
-let matches : (ReadOnlyArray[String], String) -> (String) -> String? = (
-  formats,
-  content,
-) => {
-  let extensions = Set::from_iter(formats.iter())
-  extension => {
-    guard extensions.contains(extension) else { None }
-    Some(content)
-  }
+  extensions: extension_icons,
+  rules: [],
 }
