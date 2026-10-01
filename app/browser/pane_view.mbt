@@ -102,7 +102,7 @@ fn Pane::pane_view(
   div(
     id="pane-\{idx.index()}-view-\{pane.id}",
     class=if active { "pane active" } else { "pane" },
-    style=pane_style(active, idx),
+    style=pane_style(active),
     {
       "header": breadcrumbs_view(
         pane.path,
@@ -180,7 +180,12 @@ fn breadcrumbs_view(
         @rui.button(
           variant=Ghost,
           size=Xs,
-          style=[UI_FONT_STYLE, "font-size: inherit", "line-height: inherit"],
+          style=[
+            UI_FONT_STYLE,
+            "font-size: inherit",
+            "line-height: inherit",
+            "--rui-button-base-fg: var(--rui-muted-foreground)",
+          ],
           attrs~,
           on_click=emit(PaneEvent(GotoPath(idx, target))),
           part,
@@ -191,7 +196,12 @@ fn breadcrumbs_view(
   div(class="phead", style=head_style, [
     @rui.breadcrumb(
       aria_label="Directory path",
-      style=[UI_FONT_STYLE, "flex: 1", "min-width: 0"],
+      style=[
+        UI_FONT_STYLE,
+        "flex: 1",
+        "min-width: 0",
+        "--rui-ghost-hover-bg: transparent",
+      ],
       @rui.breadcrumb_list(
         style=["font-size: inherit", "line-height: inherit"],
         items,
@@ -241,17 +251,28 @@ fn Pane::pane_rows(
     rows.push(
       li(
         id="pane-\{idx.index()}-view-\{pane.id}-row-\{row}",
-        class=if is_cursor { "sel" } else { "" },
-        style=row_style(is_cursor),
+        class=if is_cursor { "entry-row sel" } else { "entry-row" },
+        style=row_style(is_cursor, selected),
         on_click=emit(PaneEvent(Click(idx, row))),
         attrs=row_attrs,
         [
           input(
             input_type=Checkbox,
             checked=selected,
+            attrs=@html.Attrs::build().aria_label("Select \{entry.name}"),
+            style=[
+              "accent-color: var(--rui-primary)", "width: 14px", "height: 14px",
+              "margin: 0", "cursor: pointer",
+            ],
             on_change=emit.map(_value => PaneEvent(Select(idx, entry.name))),
           ),
-          span(style=["color: var(--rui-muted-foreground)"], "\{row + 1}"),
+          span(
+            style=[
+              "color: var(--rui-muted-foreground)", "font-size: var(--tuzi-entry-subtitle-size)",
+              "font-variant-numeric: tabular-nums", "text-align: right", "min-width: 2ch",
+            ],
+            "\{row + 1}",
+          ),
           div(
             style=entry_open_area_style(),
             attrs=@html.Attrs::build().on_dblclick(_ev => {

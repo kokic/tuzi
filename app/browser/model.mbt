@@ -69,7 +69,7 @@ priv enum Msg {
   BaseFailed(String)
   BaseRetry
   PaneEvent(PaneMsg)
-  Key(@common.Keyboard)
+  Key(@dom.KeyboardEvent)
   SortCycle
   ThemeToggle
   HelpOpen

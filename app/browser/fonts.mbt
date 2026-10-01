@@ -16,14 +16,14 @@ priv struct FontTheme {
 
 ///|
 let default_font_theme : FontTheme = {
-  ui_family: "Poppins, sans-serif",
-  code_family: "ui-monospace, monospace",
+  ui_family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  code_family: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
   entry_line_height: 1.25,
   sizes: {
     entry_title: "1rem",
     entry_subtitle: "0.8rem",
-    pane_header: "0.8rem",
-    footer: "1rem",
+    pane_header: "0.8125rem",
+    footer: "0.8rem",
   },
 }
 

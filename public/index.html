@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tuzi</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         html,
         body {
@@ -22,6 +19,25 @@
 
         html {
             font-size: var(--root-font-size, 18px);
+        }
+
+        #tuzi .entry-row:hover {
+            --tuzi-row-hover: var(--rui-muted);
+        }
+
+        #tuzi .entry-row input:focus-visible {
+            outline: 2px solid var(--rui-ring);
+            outline-offset: 2px;
+        }
+
+        #tuzi .phead [aria-current="page"] {
+            font-weight: 600;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #tuzi .entry-row {
+                transition: none;
+            }
         }
 
         .file-icon-svg>svg {

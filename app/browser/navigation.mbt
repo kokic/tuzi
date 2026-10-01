@@ -263,5 +263,15 @@ fn Model::scroll_to_cursor(model : Model) -> Cmd {
   let pane = model.pane_at(model.active)
   guard pane.cursor is Some(_) else { return @rabbita.none }
   let row = pane.cursor_index(filter?=model.entry_filter())
-  @nav.scroll_to("pane-\{model.active.index()}-view-\{pane.id}-row-\{row}")
+  let id = "pane-\{model.active.index()}-view-\{pane.id}-row-\{row}"
+  @cmd.custom_cmd(kind=AfterRender, _ => {
+    guard @dom.document().get_element_by_id(id).to_option() is Some(node) else {
+      return
+    }
+    node.scroll_into_view_with_options(
+      block="nearest",
+      inline="nearest",
+      container="nearest",
+    )
+  })
 }

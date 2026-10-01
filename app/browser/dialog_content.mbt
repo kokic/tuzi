@@ -57,7 +57,7 @@ fn modal(
       .aria_labelledby(DialogTitleId)
       .on_keydown(event => handle_dialog_keyboard_event(event, emit)),
     on_close=_ => emit(DialogCancel),
-    style~,
+    style=[UI_FONT_STYLE, "background: var(--rui-card)", ..style],
     [
       @rui.dialog_header([@rui.dialog_title(id=DialogTitleId, title)]),
       ..children,

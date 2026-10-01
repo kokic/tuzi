@@ -8,14 +8,13 @@ fn Model::view(
 ) -> Html {
   @rui.theme(
     mode=color_mode(model.theme),
+    id="tuzi",
     style=[
       ..default_font_theme.style(),
+      ..appearance_style,
       "height: 100%",
       "display: flex",
       "flex-direction: column",
-      ..if model.theme == Dark {
-        ["--rui-background: #2f2f2f"]
-      },
     ],
     [
       div(

@@ -1,8 +1,18 @@
 ///|
+let appearance_style : Array[String] = [
+  "--rui-radius: 6px", "--rui-background: light-dark(#fafafa, #202020)", "--rui-card: light-dark(#ffffff, #262626)",
+  "--rui-card-foreground: var(--rui-foreground)", "--rui-popover: var(--rui-card)",
+  "--rui-popover-foreground: var(--rui-foreground)", "--rui-input-background: var(--rui-card)",
+  "--rui-outline-background: var(--rui-card)", "--tuzi-header-background: light-dark(#fafafa, #242424)",
+  "--tuzi-selection-background: light-dark(#e6eef9, #2b3c53)", "--tuzi-selection-indicator: light-dark(#416a9b, #96b9e3)",
+  "--tuzi-marked-background: light-dark(#f0f5fc, #253244)",
+]
+
+///|
 fn application_style() -> Array[String] {
   [
     "display: flex", "flex-direction: column", "flex: 1", "min-height: 0", "min-width: 0",
-    "margin: 8px",
+    "padding: 8px", "gap: 6px",
   ]
 }
 
@@ -10,46 +20,50 @@ fn application_style() -> Array[String] {
 fn toolbar_style() -> Array[String] {
   [
     "flex: none", "display: flex", "flex-wrap: wrap", "align-items: center", "gap: 8px",
-    "padding: 6px 12px",
+    "padding: 0 2px", "min-height: 32px",
   ]
 }
 
 ///|
 fn count_style(active : Bool) -> Array[String] {
   if active {
-    ["font-weight: 700"]
+    [
+      "font-weight: 600", "color: var(--rui-primary)", "font-variant-numeric: tabular-nums",
+    ]
   } else {
-    ["font-weight: 600", "color: var(--rui-muted-foreground)"]
+    [
+      "font-weight: 500", "color: var(--rui-muted-foreground)", "font-variant-numeric: tabular-nums",
+    ]
   }
 }
 
 ///|
 fn panes_style() -> Array[String] {
-  ["flex: 1", "min-height: 0", "display: flex"]
+  [
+    "flex: 1", "min-height: 0", "display: flex", "gap: 1px", "overflow: clip", "border: 1px solid var(--rui-border)",
+    "border-radius: var(--rui-radius)", "background: var(--rui-border)",
+  ]
 }
 
 ///|
-fn pane_style(active : Bool, idx : PaneSide) -> Array[String] {
+fn pane_style(active : Bool) -> Array[String] {
   [
     "flex: 1",
     "min-width: 0",
     "display: flex",
     "flex-direction: column",
     "min-height: 0",
-    ..match idx {
-      Left =>
-        [
-          "border-top-left-radius: var(--rui-radius)", "border-bottom-left-radius: var(--rui-radius)",
-        ]
-      Right =>
-        [
-          "border-top-right-radius: var(--rui-radius)", "border-bottom-right-radius: var(--rui-radius)",
-        ]
-    },
+    "box-sizing: border-box",
+    "overflow: clip",
+    "background: var(--rui-card)",
     ..if active {
-      ["outline: 2px solid var(--rui-ring)", "outline-offset: -2px"]
+      [
+        "--tuzi-cursor-background: var(--tuzi-selection-background)", "--tuzi-cursor-indicator: var(--tuzi-selection-indicator)",
+      ]
     } else {
-      ["outline: 1px solid var(--rui-border)", "outline-offset: -1px"]
+      [
+        "--tuzi-cursor-background: var(--rui-muted)", "--tuzi-cursor-indicator: var(--rui-border)",
+      ]
     },
   ]
 }
@@ -62,12 +76,12 @@ fn pane_header_style(active : Bool) -> Array[String] {
     "align-items: center",
     "gap: 8px",
     "font-size: var(--tuzi-pane-header-size)",
-    "padding: 2px 0 2px 8px",
-    "--rui-ghost-hover-bg: light-dark(var(--rui-accent), color-mix(in oklab, var(--rui-primary) 24%, var(--rui-background)))",
+    "padding: 3px 8px",
+    "min-height: 28px",
+    "border-bottom: 1px solid var(--rui-border)",
+    "background: var(--tuzi-header-background)",
     ..if active {
-      [
-        "background: color-mix(in oklab, var(--rui-primary) 8%, var(--rui-background))",
-      ]
+      ["background: var(--rui-muted)"]
     },
   ]
 }
@@ -76,32 +90,38 @@ fn pane_header_style(active : Bool) -> Array[String] {
 fn pane_list_style() -> Array[String] {
   [
     "flex: 1", "display: grid", "grid-template-columns: max-content max-content max-content minmax(0, 1fr)",
-    "column-gap: 6px", "align-content: start", "overflow-y: auto", "margin: 0", "padding: 0 0",
-    "list-style: none",
+    "column-gap: 8px", "align-content: start", "overflow-y: auto", "margin: 0", "padding: 4px 0",
+    "list-style: none", "scrollbar-width: thin", "scrollbar-color: var(--rui-border) transparent",
   ]
 }
 
 ///|
 fn pane_status_style() -> Array[String] {
-  ["padding: 8px"]
+  ["padding: 20px 16px", "margin: 0", "font-size: 0.8125rem"]
 }
 
 ///|
-fn row_style(is_cursor : Bool) -> Array[String] {
+fn row_style(is_cursor : Bool, selected : Bool) -> Array[String] {
   [
     "display: grid",
     "grid-column: 1 / -1",
     "grid-template-columns: subgrid",
     "align-items: center",
     "min-width: 0",
-    "padding: 3px 8px",
+    "padding: 4px 10px",
     "cursor: pointer",
     // Only the filename child opts back into text selection.
     "-webkit-user-select: none",
     "user-select: none",
     "line-height: var(--tuzi-entry-line-height)",
+    "background: var(--tuzi-row-background, var(--tuzi-row-hover, transparent))",
+    "transition: background-color 100ms ease",
     ..if is_cursor {
-      ["background: var(--rui-accent)", "color: var(--rui-accent-foreground)"]
+      [
+        "--tuzi-row-background: var(--tuzi-cursor-background)", "box-shadow: inset 2px 0 var(--tuzi-cursor-indicator)",
+      ]
+    } else if selected {
+      ["--tuzi-row-background: var(--tuzi-marked-background)"]
     } else {
       []
     },
@@ -157,8 +177,9 @@ fn entry_meta_style() -> Array[String] {
 ///|
 fn entry_details_style() -> Array[String] {
   [
-    "flex: none", "padding: 2px 8px", "font-size: var(--tuzi-footer-size)", "color: var(--rui-muted-foreground)",
-    "white-space: nowrap", "overflow: hidden", "text-overflow: ellipsis",
+    "flex: none", "padding: 4px 10px", "font-size: var(--tuzi-footer-size)", "color: var(--rui-muted-foreground)",
+    "white-space: nowrap", "overflow: hidden", "text-overflow: ellipsis", "min-height: 18px",
+    "line-height: 18px", "border-top: 1px solid var(--rui-border)", "background: var(--tuzi-header-background)",
   ]
 }
 
@@ -166,7 +187,7 @@ fn entry_details_style() -> Array[String] {
 fn status_style() -> Array[String] {
   [
     "flex: 1 1 240px", "min-width: 0", "max-width: 100%", "min-height: 32px", "display: flex",
-    "align-items: center", "gap: 8px", "overflow: hidden",
+    "align-items: center", "gap: 8px", "overflow: hidden", "color: var(--rui-muted-foreground)",
   ]
 }
 

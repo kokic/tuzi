@@ -141,8 +141,12 @@ fn Model::update_message(
 
 ///|
 fn Model::subscriptions(model : Model, emit : Emit[Msg]) -> @sub.Sub {
-  ignore(model)
-  @sub.batch([@sub.on_key_down(emit.map(kb => Key(kb)))])
+  @sub.custom_sub(
+    "keyboard",
+    Local,
+    KeyboardSubscription::OnKeyDown(event => model.keyboard_command(event, emit)),
+    keyboard_subscription_loader,
+  )
 }
 
 ///|

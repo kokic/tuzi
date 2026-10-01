@@ -19,10 +19,18 @@ fn Model::toolbar_view(
         on_click=emit(HelpOpen),
         "Help",
       ),
-      span(style=count_style(model.active == Left), "\{left}"),
-      span(style=["color: var(--rui-muted-foreground)"], " · "),
-      span(style=count_style(model.active == Right), "\{right}"),
-      span(style=["color: var(--rui-muted-foreground)"], " items"),
+      div(
+        style=[
+          "display: flex", "align-items: center", "gap: 6px", "font-size: var(--tuzi-footer-size)",
+          "color: var(--rui-muted-foreground)", "white-space: nowrap", "padding-right: 8px",
+        ],
+        [
+          span(style=count_style(model.active == Left), "\{left}"),
+          span("·"),
+          span(style=count_style(model.active == Right), "\{right}"),
+          span("items"),
+        ],
+      ),
       ..if sel > 0 {
         [
           @rui.badge(
@@ -45,10 +53,10 @@ fn Model::toolbar_view(
             style=[UI_FONT_STYLE],
             id="filter-input",
             value=model.filter,
-            placeholder="filter",
+            placeholder="Filter files…",
             on_input=emit.map(text => FilterChanged(text)),
             attrs=@html.Attrs::build()
-              .on_keydown(handle_filter_keyboard_event)
+              .aria_label("Filter files")
               .on_focus(_ => emit(FilterFocus(true)))
               .on_blur(_ => emit(FilterFocus(false))),
           ),
@@ -68,21 +76,17 @@ fn Model::toolbar_view(
         ],
       ),
       model.status_view(emit),
-      div(style=["margin-left: auto", "display: flex", "align-items: center"], [
-        span("["),
-        @rui.button(
-          style=[UI_FONT_STYLE],
-          variant=Ghost,
-          size=Xs,
-          title="Toggle light / dark theme",
-          on_click=emit(ThemeToggle),
-          match model.theme {
-            Light => "light"
-            Dark => "dark"
-          },
-        ),
-        span("]"),
-      ]),
+      @rui.button(
+        style=[UI_FONT_STYLE, "margin-left: auto"],
+        variant=Ghost,
+        size=Sm,
+        title="Toggle light / dark theme",
+        on_click=emit(ThemeToggle),
+        match model.theme {
+          Light => "Light"
+          Dark => "Dark"
+        },
+      ),
     ],
   )
 }
