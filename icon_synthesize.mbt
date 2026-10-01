@@ -34,6 +34,7 @@ let data_icons : ReadOnlyArray[(String, String)] = [
 
 ///|
 let source_icons : ReadOnlyArray[(String, String)] = [
+  ("nix", file_icon("nix", fill="#5277c3")),
   ("nu", file_icon("nu", fill="#3dd68c")),
   ("html", file_icon("html", fill="#e34c26")),
   ("js", file_icon("js", fill="#e5d467")),

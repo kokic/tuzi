@@ -51,6 +51,7 @@ let builtin_svg_icons : IconRegistry = {
     "moon.mod": svg_moonbit,
     "moon.pkg": svg_moonbit,
     "moon.work": svg_moonbit,
+    "flake.lock": file_icon("nix", fill="#5277c3"),
     ".gitignore": svg_file_git,
     ".gitattributes": svg_file_git,
     ".gitmodules": svg_file_git,
