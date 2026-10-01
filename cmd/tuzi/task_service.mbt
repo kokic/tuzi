@@ -32,7 +32,6 @@ priv struct TaskService {
   /// Tasks remain available for the lifetime of this server session.
   mut tasks : Array[@shared.Task]
   slots : @async.Semaphore
-  files : @async.Mutex
   /// Each subscriber retains at most one notification to read the latest state.
   mut subscribers : Array[(Int, @async.Queue[Unit])]
   mut next_subscriber : Int
@@ -46,7 +45,6 @@ fn TaskService::new() -> TaskService {
     next_id: 0,
     tasks: [],
     slots: @async.Semaphore(4),
-    files: @async.Mutex(),
     subscribers: [],
     next_subscriber: 0,
   }
@@ -103,12 +101,6 @@ fn TaskService::submit(
     self.revision += 1
     group.spawn_bg(() => {
       let status : @shared.TaskStatus = try {
-        // Waiting for the serial file executor must not consume a slot that
-        // could run an independent Git operation.
-        if kind is File(_) {
-          self.files.acquire()
-        }
-        defer (if kind is File(_) { self.files.release() })
         self.slots.acquire()
         defer self.slots.release()
         self.start(id)
