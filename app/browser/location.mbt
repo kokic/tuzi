@@ -15,16 +15,14 @@ fn Model::browser_location(model : Model) -> BrowserLocation {
 }
 
 ///|
-/// Keep separate locations for different server base directories on this origin.
-fn location_storage_key(base : Path) -> String {
-  "tuzi.location:" + base.to_string()
-}
+/// One saved location per browser origin, independent of the startup directory.
+let location_storage_key : String = "tuzi.location"
 
 ///|
-fn read_browser_location(base : Path) -> BrowserLocation? raise {
+fn read_browser_location() -> BrowserLocation? raise {
   let value : @js.Value = @js.Error_::wrap(() => {
     let storage : @js.Value = @js.globalThis.get_with_string("localStorage")
-    storage.apply_with_string("getItem", [location_storage_key(base)])
+    storage.apply_with_string("getItem", [location_storage_key])
   })
   guard value.is_string() else { return None }
   let location : BrowserLocation = @json.from_json(
@@ -39,9 +37,15 @@ fn read_browser_location(base : Path) -> BrowserLocation? raise {
 }
 
 ///|
-/// Missing, invalid, or unavailable storage falls back to the server base.
-fn load_browser_location(base : Path) -> BrowserLocation {
-  let saved = read_browser_location(base) catch { _ => None }
+/// Explicit paths skip history. Restoring without usable storage falls back to base.
+fn load_browser_location(
+  base : Path,
+  startup : @tuzi.StartupMode,
+) -> BrowserLocation {
+  let saved : BrowserLocation? = match startup {
+    OpenDirectory => None
+    RestoreHistory => read_browser_location() catch { _ => None }
+  }
   saved.unwrap_or({
     left: base.to_string(),
     right: base.to_string(),
@@ -51,13 +55,12 @@ fn load_browser_location(base : Path) -> BrowserLocation {
 
 ///|
 fn Model::save_browser_location(model : Model) -> Cmd {
-  let key = location_storage_key(model.base)
   let value = ToJson::to_json(model.browser_location()).stringify()
   @rabbita.effect(() => {
     @js.Error_::wrap(
       () => {
         let storage : @js.Value = @js.globalThis.get_with_string("localStorage")
-        storage.apply_with_string("setItem", [key, value])
+        storage.apply_with_string("setItem", [location_storage_key, value])
       },
       map_ok=_ => (),
     ) catch {

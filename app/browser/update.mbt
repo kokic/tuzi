@@ -39,16 +39,15 @@ fn Model::update_message(
     BaseFailed(error) =>
       ({ ..model, startup: StartupFailed(error), }, @rabbita.none)
     BaseRetry => ({ ..model, startup: Starting, }, request_startup(emit))
-    BaseLoaded(base, theme, icons) => {
-      let location = load_browser_location(base)
+    BaseLoaded(config) => {
+      let location = load_browser_location(config.base, config.startup)
       let left = Path(location.left)
       let right = Path(location.right)
       let updated = {
         ..model,
         startup: Started,
-        base,
-        theme,
-        icons,
+        theme: config.theme,
+        icons: config.icons,
         active: if location.active == 0 {
           Left
         } else {
@@ -56,7 +55,7 @@ fn Model::update_message(
         },
         panes: (model.panes.0.navigate(left), model.panes.1.navigate(right)),
       }
-      (updated, @rabbita.none)
+      (updated, updated.save_browser_location())
     }
     PaneEvent(msg) => model.update_panes(msg, emit)
     Key(kb) => model.handle_keyboard_event(kb, emit)

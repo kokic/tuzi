@@ -65,10 +65,7 @@ fn build_command() -> @argparse.Command {
       ),
     ],
     positionals=[
-      PositionArg(
-        "path",
-        about="starting directory, default is the current directory",
-      ),
+      PositionArg("path", about="directory to open (default: history or cwd)"),
     ],
   )
 }
@@ -90,9 +87,9 @@ fn server_port(
 
 ///|
 fn parse_server_config(cmd : @argparse.Matches) -> @shared.ServerConfig {
-  let path : @path.Path = match cmd.values {
-    { "path": [path], .. } => Path(path)
-    _ => Path(".")
+  let (path, startup) : (@path.Path, @shared.StartupMode) = match cmd.values {
+    { "path": [path], .. } => (Path(path), OpenDirectory)
+    _ => (Path("."), RestoreHistory)
   }
   let base = Path::from_native(path.resolve().to_string())
   let theme = {
@@ -107,7 +104,7 @@ fn parse_server_config(cmd : @argparse.Matches) -> @shared.ServerConfig {
     }
     @shared.IconMode::parse(icons)
   }
-  { base, theme, icons, }
+  { base, startup, theme, icons, }
 }
 
 ///|

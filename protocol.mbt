@@ -67,8 +67,15 @@ pub(all) struct ApiFailure {
 } derive(Eq, ToJson, FromJson)
 
 ///|
+pub(all) enum StartupMode {
+  OpenDirectory
+  RestoreHistory
+} derive(ToJson, FromJson)
+
+///|
 pub(all) struct ServerConfig {
   base : Path
+  startup : StartupMode
   theme : Theme
   icons : IconMode
 } derive(ToJson, FromJson)
@@ -125,6 +132,12 @@ pub extend ApiFailure with FromJson::{from_json}
 
 ///|
 pub extend ApiFailure with Eq::{equal, not_equal}
+
+///|
+pub extend StartupMode with ToJson::{to_json}
+
+///|
+pub extend StartupMode with FromJson::{from_json}
 
 ///|
 pub extend ServerConfig with ToJson::{to_json}

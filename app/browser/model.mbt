@@ -46,7 +46,6 @@ priv enum Dialog {
 ///|
 priv struct Model {
   startup : StartupState
-  base : Path
   theme : Theme
   icons : IconMode
   panes : (PaneStack, PaneStack)
@@ -66,7 +65,7 @@ priv struct Model {
 
 ///|
 priv enum Msg {
-  BaseLoaded(Path, Theme, IconMode)
+  BaseLoaded(@tuzi.ServerConfig)
   BaseFailed(String)
   BaseRetry
   PaneEvent(PaneMsg)
@@ -97,7 +96,6 @@ priv enum Msg {
 fn Model::initialize() -> Model {
   {
     startup: Starting,
-    base: Path(""),
     theme: Theme::default_theme(),
     icons: IconMode::default_mode(),
     panes: (PaneStack::initialize(Path("")), PaneStack::initialize(Path(""))),

@@ -23,6 +23,10 @@ warren build --bundle --browser-entry app/browser --server-entry app/tuzi
 ./dist/tuzi.exe [path]    # opens the browser at the configured port
 ```
 
+Pass `path` to open it in both panes. Without it, restore the last locations or
+use the current working directory. Locations are saved per browser origin,
+regardless of the startup directory.
+
 The bundle embeds the frontend and `public/` resources in `dist/tuzi.exe`, which
 can run from any directory. Keep `app/tuzi/warren_assets.mbt` in version control;
 Warren supplies its contents when bundling. For separate frontend files, replace

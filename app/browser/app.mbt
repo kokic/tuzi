@@ -72,10 +72,7 @@ fn request_startup(emit : Emit[Msg]) -> Cmd {
   request_api("/api/base", result => {
     emit(
       match result {
-        Ok(config) => {
-          let config : @tuzi.ServerConfig = config
-          BaseLoaded(config.base, config.theme, config.icons)
-        }
+        Ok(config) => BaseLoaded(config)
         Err(error) => BaseFailed(error.message())
       },
     )
