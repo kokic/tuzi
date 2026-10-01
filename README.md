@@ -19,12 +19,12 @@ I would also like to thank the Web UI framework [Rabbita](https://moonbit-commun
 ## Build & Run
 
 ```sh
-warren build --bundle --server-entry cmd/tuzi
+warren build --bundle --browser-entry app/browser --server-entry app/tuzi
 ./dist/tuzi.exe [path]    # opens the browser at the configured port
 ```
 
 The bundle embeds the frontend and `public/` resources in `dist/tuzi.exe`, which
-can run from any directory. Keep `cmd/tuzi/warren_assets.mbt` in version control;
+can run from any directory. Keep `app/tuzi/warren_assets.mbt` in version control;
 Warren supplies its contents when bundling. For separate frontend files, replace
 `--bundle` with `--server-target native` and keep the `dist/` files together.
 
@@ -37,7 +37,7 @@ Warren's `WARREN_PORT` setting selects the port.
 Dev with live reload (builds browser + server, opens preview):
 
 ```sh
-warren dev --server-target native --server-entry cmd/tuzi
+warren dev --server-target native --browser-entry app/browser --server-entry app/tuzi
 ```
 
 ## Usage
