@@ -14,6 +14,7 @@ import {
   "moonbitlang/core/string",
   "moonbitlang/core/immut/vector",
   "moonbit-community/rui",
+  "moonbit-community/rui/markdown",
   "moonbit-community/rabbita/dialog",
 }
 

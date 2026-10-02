@@ -71,6 +71,7 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     | TaskDetails(_)
     | Info(_)
     | OpenWith(_)
+    | Markdown(_)
     | GitInfo(_)
     | Progress(_)
     | DeleteConfirm(..) => self
@@ -136,6 +137,7 @@ fn Model::submit_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
     | TaskDetails(_)
     | Info(_)
     | GitInfo(_)
+    | Markdown(_)
     | Progress(_) => return (model, @rabbita.none)
   }
   match operations {

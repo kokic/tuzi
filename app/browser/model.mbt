@@ -35,6 +35,7 @@ priv enum Dialog {
   TaskDetails(Int)
   Info(InfoContext)
   OpenWith(OpenWithContext)
+  Markdown(MarkdownContext)
   GitInfo(GitContext)
   DeleteConfirm(directory~ : Path, names~ : Array[String])
   RenameInput(directory~ : Path, original~ : String, input~ : String)
@@ -84,6 +85,7 @@ priv enum Msg {
   InfoOpen
   OpenWithOpen
   OpenWithChanged(String)
+  MarkdownEvent(MarkdownMsg)
   GitEvent(GitMsg)
   TaskEvent(TaskMsg)
   DeleteOpen

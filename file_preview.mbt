@@ -23,6 +23,7 @@ fn Path::content_type(path : Path) -> String? {
       ".xml" => "application/xml; charset=utf-8"
       ".txt"
       | ".md"
+      | ".markdown"
       | ".csv"
       | ".tsv"
       | ".log"

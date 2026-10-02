@@ -73,6 +73,7 @@ fn Model::update_message(
     InfoOpen => model.open_info_dialog(emit)
     OpenWithOpen => (model.open_with_dialog(), @rabbita.none)
     OpenWithChanged(id) => (model.change_opener(id), @rabbita.none)
+    MarkdownEvent(msg) => (model.update_markdown(msg), @rabbita.none)
     GitEvent(msg) => model.update_git(msg, emit)
     TaskEvent(msg) => model.update_tasks(msg, emit)
     RenameOpen => model.open_rename_dialog(emit)
