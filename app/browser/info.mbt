@@ -14,7 +14,8 @@ priv struct InfoField {
 ///|
 fn Model::open_info_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
   let pane = model.pane_at(model.active)
-  guard pane.cursor_entry(filter?=model.entry_filter()) is Some(entry) else {
+  guard pane.cursor_entry(filter?=model.entry_filter(model.active))
+    is Some(entry) else {
     return (model, @rabbita.none)
   }
   let context : InfoContext = {

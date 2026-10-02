@@ -28,13 +28,15 @@ priv suberror OpenError {
 }
 
 ///|
-impl Show for OpenError with to_string(self) {
+impl Show for OpenError with fn to_string(self) {
   match self {
     UnknownOpener(id) => "Unknown opener: \{id}"
-    DefaultNotListed(id) => "Default opener must be listed in its association: \{id}"
+    DefaultNotListed(id) =>
+      "Default opener must be listed in its association: \{id}"
     NotApplicable(id) => "Opener is not available for this target: \{id}"
     UnsupportedTarget(path) => "Not a regular file or directory: \{path}"
-    ProgramMissing(program) => "Program not found: \{program}. Install it or update the opener configuration."
+    ProgramMissing(program) =>
+      "Program not found: \{program}. Install it or update the opener configuration."
   }
 }
 
@@ -81,7 +83,10 @@ fn validate_open_association(
 }
 
 ///|
-async fn OpenService::open(self : OpenService, request : @shared.OpenRequest) -> Unit {
+async fn OpenService::open(
+  self : OpenService,
+  request : @shared.OpenRequest,
+) -> Unit {
   // Resolve on the host and inspect the current target instead of trusting UI metadata.
   let native = @path.Path(request.path.to_string()).resolve().to_string()
   let path = Path::from_native(native)
@@ -101,4 +106,3 @@ async fn OpenService::open(self : OpenService, request : @shared.OpenRequest) ->
     error => raise error
   }
 }
-

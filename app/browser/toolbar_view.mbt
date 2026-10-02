@@ -40,41 +40,6 @@ fn Model::toolbar_view(
           ),
         ]
       },
-      @rui.input_group(
-        style=[
-          UI_FONT_STYLE,
-          "width: 100%",
-          "max-width: 320px",
-          "min-width: 0",
-          "flex: 1 1 240px",
-        ],
-        [
-          @rui.input_group_input(
-            style=[UI_FONT_STYLE],
-            id="filter-input",
-            value=model.filter,
-            placeholder="Filter files…",
-            on_input=emit.map(text => FilterChanged(text)),
-            attrs=@html.Attrs::build()
-              .aria_label("Filter files")
-              .on_focus(_ => emit(FilterFocus(true)))
-              .on_blur(_ => emit(FilterFocus(false))),
-          ),
-          ..if !model.filter.is_empty() {
-            [
-              @rui.input_group_addon(
-                align=InputInlineEnd,
-                @rui.input_group_button(
-                  style=[UI_FONT_STYLE],
-                  title="Clear filter",
-                  on_click=emit(FilterChanged("")),
-                  "×",
-                ),
-              ),
-            ]
-          },
-        ],
-      ),
       model.status_view(emit),
       @rui.button(
         style=[UI_FONT_STYLE, "margin-left: auto"],

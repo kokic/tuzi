@@ -36,7 +36,7 @@ fn pane_stack_view(
     }
   })
   let visible_id = stack.map(stack => stack.current.id)
-  let filter = model.map(model => model.entry_filter())
+  let filter = model.map(model => model.entry_filter(idx))
   let sort = model.map(model => model.sort)
   let active = model.map(model => model.active == idx)
   let views = stack
@@ -51,7 +51,15 @@ fn pane_stack_view(
           active,
           rows,
         ) => {
-          pane.pane_view(pane.view_data(filter?), idx, emit, sort, active, rows)
+          pane.pane_view(
+            pane.view_data(filter?),
+            idx,
+            emit,
+            sort,
+            active,
+            filter,
+            rows,
+          )
         })
         let visible = visible_id.map(current => current == id)
         visible.map2(content, (visible, content) => {
@@ -96,6 +104,7 @@ fn Pane::pane_view(
   emit : Emit[Msg],
   sort : SortMode,
   active : Bool,
+  filter : String?,
   rows : Html,
 ) -> Html {
   let sort_label = match sort {
@@ -146,7 +155,7 @@ fn Pane::pane_view(
       },
     ),
     "entries": rows,
-    "details": data.entry_details_view(),
+    "details": data.entry_details_view(idx, pane.id, filter.unwrap_or(""), emit),
   })
 }
 
@@ -316,8 +325,12 @@ fn entry_context_menu(
     ),
     span(
       style=[
-        "color: var(--rui-muted-foreground)", "font-size: var(--tuzi-entry-subtitle-size)",
-        "font-variant-numeric: tabular-nums", "text-align: right", "min-width: 2ch",
+        CODE_FONT_STYLE,
+        "color: var(--rui-muted-foreground)",
+        "font-size: var(--tuzi-entry-title-size)",
+        "font-variant-numeric: tabular-nums",
+        "text-align: right",
+        "min-width: 2ch",
       ],
       "\{row + 1}",
     ),
@@ -353,9 +366,80 @@ fn entry_context_menu(
 }
 
 ///|
-fn PaneViewData::entry_details_view(data : PaneViewData) -> Html {
+fn PaneViewData::entry_details_view(
+  data : PaneViewData,
+  idx : PaneSide,
+  view_id : Int,
+  filter : String,
+  emit : Emit[Msg],
+) -> Html {
   let info = data
     .cursor_entry()
     .map_or("", entry => "\{entry.name}  \{format_entry_meta(entry)}")
-  div(style=entry_details_style(), info)
+  div(style=entry_details_style(), [
+    span(style=["flex: 1", ..status_text_style()], title=info, info),
+    pane_filter_view(idx, view_id, filter, emit),
+  ])
+}
+
+///|
+fn pane_filter_view(
+  idx : PaneSide,
+  view_id : Int,
+  filter : String,
+  emit : Emit[Msg],
+) -> Html {
+  let label = match idx {
+    Left => "Filter left pane"
+    Right => "Filter right pane"
+  }
+  @rui.input_group(
+    style=[
+      CODE_FONT_STYLE,
+      "width: 200px",
+      "max-width: 50%",
+      "min-width: 0",
+      "flex: none",
+      "height: 24px",
+      "min-height: 0",
+    ],
+    [
+      @rui.input_group_input(
+        style=[
+          CODE_FONT_STYLE,
+          "font-size: inherit",
+          "line-height: inherit",
+          "padding: 0 6px",
+        ],
+        id=filter_input_id(idx, view_id),
+        value=filter,
+        placeholder="Filter files…",
+        title="\{label} (f)",
+        on_input=emit.map(text => FilterChanged(idx, text)),
+        attrs=@html.Attrs::build()
+          .aria_label(label)
+          .on_focus(_ => emit(FilterFocus(idx, true)))
+          .on_blur(_ => emit(FilterFocus(idx, false))),
+      ),
+      ..if !filter.is_empty() {
+        [
+          @rui.input_group_addon(
+            align=InputInlineEnd,
+            style=["padding: 0 2px"],
+            @rui.input_group_button(
+              style=[
+                CODE_FONT_STYLE,
+                "height: 20px",
+                "font-size: inherit",
+                "line-height: inherit",
+              ],
+              title="Clear filter",
+              on_click=emit(FilterChanged(idx, "")),
+              "×",
+            ),
+          ),
+        ]
+      },
+    ],
+  )
 }

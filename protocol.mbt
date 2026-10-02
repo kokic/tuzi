@@ -15,6 +15,7 @@ pub(all) enum FileOperation {
     level~ : Int
   )
   Unzip(source~ : Path, destination~ : Path)
+  CreateFile(parent~ : Path, name~ : String)
   Mkdir(parent~ : Path, name~ : String)
   Copy(source~ : Path, destination~ : Path)
   Move(source~ : Path, destination~ : Path)
@@ -176,6 +177,8 @@ pub fn FileOperation::description(operation : FileOperation) -> String {
     Zip(directory~, output_name~, ..) =>
       "compress \{directory.join(Path("./\{output_name}"))}"
     Unzip(source~, destination~) => "extract \{source} -> \{destination}"
+    CreateFile(parent~, name~) =>
+      "create file \{parent.join(Path("./\{name}"))}"
     Mkdir(parent~, name~) => "create \{parent.join(Path("./\{name}"))}"
     Copy(source~, destination~) => "copy \{source} -> \{destination}"
     Move(source~, destination~) => "move \{source} -> \{destination}"
@@ -291,7 +294,7 @@ pub fn TaskKind::affected_directories(self : TaskKind) -> Array[Path] {
   match self {
     File(Delete(target~)) => [target.dirname()]
     File(Rename(source~, ..)) => [source.dirname()]
-    File(Mkdir(parent~, ..)) => [parent]
+    File(CreateFile(parent~, ..)) | File(Mkdir(parent~, ..)) => [parent]
     File(Zip(directory~, ..)) => [directory]
     File(Unzip(destination~, ..)) => [destination.dirname(), destination]
     File(Copy(destination~, ..)) => [destination.dirname()]

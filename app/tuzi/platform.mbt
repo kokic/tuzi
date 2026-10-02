@@ -10,11 +10,12 @@ priv enum SystemOpenKind {
 #cfg(platform="windows")
 fn system_open_command(kind : SystemOpenKind) -> OpenCommand {
   match kind {
-    Url => {
-      program: "cmd",
-      // The empty argument is start's window title, before the URL.
-      arguments: [Literal("/c"), Literal("start"), Literal(""), Target],
-    }
+    Url =>
+      {
+        program: "cmd",
+        // The empty argument is start's window title, before the URL.
+        arguments: [Literal("/c"), Literal("start"), Literal(""), Target],
+      }
     Directory => { program: "explorer.exe", arguments: [Target], }
   }
 }

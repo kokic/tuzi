@@ -4,7 +4,7 @@ fn Model::copy_selected_paths_to_clipboard(
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
   let pane = model.pane_at(model.active)
-  let items = pane.selected_items(filter?=model.entry_filter())
+  let items = pane.selected_items(filter?=model.entry_filter(model.active))
   guard !items.is_empty() else { return (model, @rabbita.none) }
   let full = items
     .iter()

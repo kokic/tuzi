@@ -55,7 +55,8 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
           ),
           dialog_footer(emit, "Extract", Default, has_input=true),
         ])
-      MkdirInput(input~, ..) => name_input("New directory", "Name:", input)
+      NewEntryInput(input~, ..) =>
+        new_entry_dialog(input, model.dialog_error, emit)
       GitRenameInput(input~, ..) =>
         name_input("Rename branch", "New branch name:", input)
     }
@@ -94,6 +95,31 @@ fn name_dialog(
   modal(title, emit, [
     dialog_input(prompt, input, error, emit),
     dialog_footer(emit, "OK", Default, has_input=true),
+  ])
+}
+
+///|
+fn new_entry_dialog(input : String, error : String, emit : Emit[Msg]) -> Html {
+  modal("New file or folder", emit, [
+    dialog_input("Name:", input, error, emit),
+    @rui.field_description(
+      style=["margin-top: 1rem"],
+      "Enter to create folder · Esc to cancel",
+    ),
+    @rui.dialog_footer([
+      dialog_close_button("Cancel"),
+      @rui.button(
+        style=[UI_FONT_STYLE],
+        variant=Outline,
+        on_click=emit(NewEntrySubmit(File)),
+        "File",
+      ),
+      @rui.button(
+        style=[UI_FONT_STYLE],
+        on_click=emit(NewEntrySubmit(Folder)),
+        "Folder",
+      ),
+    ]),
   ])
 }
 
@@ -192,10 +218,10 @@ fn help_lines() -> Array[Html] {
     ("r", "rename"),
     ("i", "file / folder information"),
     ("z", "compress to ZIP"),
-    ("n", "new directory"),
+    ("n", "new file / folder"),
     ("s", "sort"),
     ("y", "copy path"),
-    ("f", "filter"),
+    ("f", "filter active pane"),
   ]
   binds.map(pair => {
     let (key, desc) = pair

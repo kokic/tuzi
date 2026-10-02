@@ -6,7 +6,10 @@ fn configured_openers() -> Map[String, OpenDefinition] {
     "browse": { label: "Enter in Tuzi", execution: Browse, },
     "preview": { label: "Open in browser", execution: Preview, },
     "extract": { label: "Extract ZIP", execution: ExtractZip, },
-    "vscode": { label: "Open in VSCode", execution: External(vscode_command()), },
+    "vscode": {
+      label: "Open in VSCode",
+      execution: External(vscode_command()),
+    },
     "explorer": {
       label: file_manager_label,
       execution: External(system_open_command(Directory)),
@@ -19,7 +22,13 @@ fn configured_openers() -> Map[String, OpenDefinition] {
 fn vscode_command() -> OpenCommand {
   {
     program: "cmd",
-    arguments: [Literal("/d"), Literal("/c"), Literal("code"), Literal("--"), Target],
+    arguments: [
+      Literal("/d"),
+      Literal("/c"),
+      Literal("code"),
+      Literal("--"),
+      Target,
+    ],
   }
 }
 
@@ -48,17 +57,20 @@ let file_manager_label : String = "Open in system file manager"
 
 ///|
 /// Complete filenames override extensions. Each association owns its whole menu.
-fn configured_open_registry(openers : Map[String, @shared.Opener]) -> @shared.OpenRegistry {
+fn configured_open_registry(
+  openers : Map[String, @shared.Opener],
+) -> @shared.OpenRegistry {
   let text : @shared.OpenAssociation = {
     openers: ["preview", "vscode"],
     default_opener: "preview",
   }
   let extensions : Map[String, @shared.OpenAssociation] = Map([])
-  for extension in [
-    "c", "h", "cpp", "hpp", "md", "mbt", "mbti", "txt", "rs", "go", "py",
-    "js", "mjs", "ts", "tsx", "jsx", "json", "html", "htm", "css", "xml",
-    "toml", "yaml", "yml", "ini", "conf", "sh",
-  ] {
+  for
+    extension in [
+      "c", "h", "cpp", "hpp", "md", "mbt", "mbti", "txt", "rs", "go", "py", "js",
+      "mjs", "ts", "tsx", "jsx", "json", "html", "htm", "css", "xml", "toml", "yaml",
+      "yml", "ini", "conf", "sh",
+    ] {
     extensions[extension] = text
   }
   extensions["zip"] = {

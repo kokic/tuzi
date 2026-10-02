@@ -43,7 +43,7 @@ fn Model::transfer_selection_to_other_pane(
 ) -> (Model, Cmd) {
   let src = model.pane_at(model.active)
   let dst = model.pane_at(model.active.other())
-  let items = src.selected_items(filter?=model.entry_filter())
+  let items = src.selected_items(filter?=model.entry_filter(model.active))
   guard !items.is_empty() else { return (model, @rabbita.none) }
   let operations = items.map(entry => {
     let from = src.path.join(Path("./\{entry.name}"))

@@ -22,7 +22,7 @@ fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
       directory_contains(source, directory) ||
       directory_contains(destination, directory)
     File(Mkdir(parent~, name~)) => directory == parent.join(Path("./\{name}"))
-    File(Zip(..)) => false
+    File(CreateFile(..)) | File(Zip(..)) => false
     Git(request) => {
       let subtree = match request.operation {
         Pull | Switch(_) => request.path.dirname()

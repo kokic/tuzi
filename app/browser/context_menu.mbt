@@ -25,7 +25,7 @@ fn entry_menu_content(
     ("Copy path", "y", CopyPaths),
     ("Compress to ZIP…", "z", ZipOpen),
     ("Information", "i", InfoOpen),
-    ("New directory…", "n", MkdirOpen),
+    ("New file or folder…", "n", NewEntryOpen),
   ]
   @rui.context_menu_content(
     scope,

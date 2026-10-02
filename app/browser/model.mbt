@@ -28,6 +28,12 @@ priv enum StartupState {
 } derive(Eq)
 
 ///|
+priv enum NewEntryKind {
+  File
+  Folder
+}
+
+///|
 priv enum Dialog {
   None
   Help
@@ -45,7 +51,7 @@ priv enum Dialog {
     level~ : Int
   )
   UnzipInput(source~ : Path, input~ : String)
-  MkdirInput(directory~ : Path, input~ : String)
+  NewEntryInput(directory~ : Path, input~ : String)
   GitRenameInput(context~ : GitContext, reference~ : String, input~ : String)
   Progress(ProgressBatch)
 } derive(Eq)
@@ -59,7 +65,7 @@ priv struct Model {
   panes : (PaneStack, PaneStack)
   active : PaneSide
   sort : SortMode
-  filter : String
+  filters : (String, String)
   editing : Bool
   dialog : Dialog
   // Late submission replies only update the dialog that initiated them.
@@ -94,9 +100,10 @@ priv enum Msg {
   ZipOpen
   ZipLevelChanged(String)
   ActivityOpen
-  MkdirOpen
-  FilterFocus(Bool)
-  FilterChanged(String)
+  NewEntryOpen
+  NewEntrySubmit(NewEntryKind)
+  FilterFocus(PaneSide, Bool)
+  FilterChanged(PaneSide, String)
   DialogInput(String)
   DialogCancel
   DialogSubmit
@@ -116,7 +123,7 @@ fn Model::initialize() -> Model {
     panes: (PaneStack::initialize(Path("")), PaneStack::initialize(Path(""))),
     active: Left,
     sort: Name,
-    filter: "",
+    filters: ("", ""),
     editing: false,
     dialog: None,
     dialog_revision: 0,
@@ -128,21 +135,41 @@ fn Model::initialize() -> Model {
 }
 
 ///|
-fn Model::entry_filter(model : Model) -> String? {
-  guard !model.filter.is_empty() else { None }
-  Some(model.filter)
+fn Model::filter_text(model : Model, idx : PaneSide) -> String {
+  match idx {
+    Left => model.filters.0
+    Right => model.filters.1
+  }
 }
 
 ///|
-fn Model::with_filter(model : Model, text : String) -> Model {
+fn Model::entry_filter(model : Model, idx : PaneSide) -> String? {
+  let filter = model.filter_text(idx)
+  guard !filter.is_empty() else { None }
+  Some(filter)
+}
+
+///|
+fn Model::with_filter(model : Model, idx : PaneSide, text : String) -> Model {
   let filter : String? = if text.is_empty() { None } else { Some(text) }
   {
     ..model,
-    filter: text,
-    panes: (
-      model.panes.0.map_views(pane => pane.with_filter(filter?)),
-      model.panes.1.map_views(pane => pane.with_filter(filter?)),
-    ),
+    filters: match idx {
+      Left => (text, model.filters.1)
+      Right => (model.filters.0, text)
+    },
+    panes: match idx {
+      Left =>
+        (
+          model.panes.0.map_views(pane => pane.with_filter(filter?)),
+          model.panes.1,
+        )
+      Right =>
+        (
+          model.panes.0,
+          model.panes.1.map_views(pane => pane.with_filter(filter?)),
+        )
+    },
   }
 }
 
@@ -154,10 +181,10 @@ fn Model::cycle_sort_order(model : Model) -> Model {
     sort,
     panes: (
       model.panes.0.map_views(pane => {
-        pane.with_entries(pane.entries, sort, filter?=model.entry_filter())
+        pane.with_entries(pane.entries, sort, filter?=model.entry_filter(Left))
       }),
       model.panes.1.map_views(pane => {
-        pane.with_entries(pane.entries, sort, filter?=model.entry_filter())
+        pane.with_entries(pane.entries, sort, filter?=model.entry_filter(Right))
       }),
     ),
   }

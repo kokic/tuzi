@@ -68,7 +68,16 @@ fn Model::update_message(
       }
       ({ ..model, theme, }, @rabbita.none)
     }
-    FilterFocus(focused) => ({ ..model, editing: focused, }, @rabbita.none)
+    FilterFocus(idx, focused) => {
+      let model = if focused {
+        { ..model, active: idx, editing: true, }
+      } else if model.active == idx {
+        { ..model, editing: false, }
+      } else {
+        model
+      }
+      (model, @rabbita.none)
+    }
     DeleteOpen => (model.open_delete_dialog(), @rabbita.none)
     InfoOpen => model.open_info_dialog(emit)
     OpenWith(target, id) => model.execute_opener(target, id, emit)
@@ -76,7 +85,7 @@ fn Model::update_message(
       let pane = model.pane_at(idx)
       guard pane.id == view_id &&
         pane
-        .visible_entries(filter?=model.entry_filter())
+        .visible_entries(filter?=model.entry_filter(idx))
         .any(entry => entry.name == name) else {
         return (model, @rabbita.none)
       }
@@ -123,11 +132,11 @@ fn Model::update_message(
     }
     ActivityOpen =>
       ({ ..model, dialog: Activity, dialog_error: "", }, @rabbita.none)
-    MkdirOpen =>
+    NewEntryOpen =>
       (
         {
           ..model,
-          dialog: MkdirInput(
+          dialog: NewEntryInput(
             directory=model.pane_at(model.active).path,
             input="",
           ),
@@ -135,8 +144,9 @@ fn Model::update_message(
         },
         @rabbita.none,
       )
+    NewEntrySubmit(kind) => model.submit_dialog(emit, new_entry_kind=kind)
     HelpOpen => ({ ..model, dialog: Help, dialog_error: "", }, @rabbita.none)
-    FilterChanged(text) => (model.with_filter(text), @rabbita.none)
+    FilterChanged(idx, text) => (model.with_filter(idx, text), @rabbita.none)
     DialogInput(text) =>
       (
         { ..model, dialog: model.dialog.with_input(text), dialog_error: "", },
@@ -161,7 +171,7 @@ fn Model::update_message(
       let pane = model.pane_at(idx)
       let names = if pane.selected.contains(name) {
         pane
-        .selected_items(filter?=model.entry_filter())
+        .selected_items(filter?=model.entry_filter(idx))
         .map(entry => entry.name)
       } else {
         [name]

@@ -78,8 +78,16 @@ fn Model::handle_keyboard_event(
     }
     _ if model.editing =>
       match key {
-        "Escape" => ({ ..model, editing: false, }, blur_filter_input())
-        "Tab" => (model.switch_active_pane(), blur_filter_input())
+        "Escape" =>
+          (
+            { ..model, editing: false, },
+            blur_filter_input(model.active, model.pane_at(model.active).id),
+          )
+        "Tab" =>
+          (
+            model.switch_active_pane(),
+            blur_filter_input(model.active, model.pane_at(model.active).id),
+          )
         _ => (model, @rabbita.none)
       }
     _ if kb.ctrl_key() || kb.meta_key() || kb.alt_key() =>
@@ -108,12 +116,16 @@ fn Model::handle_keyboard_event(
         "i" => (model, emit(InfoOpen))
         "r" => (model, emit(RenameOpen))
         "z" => (model, emit(ZipOpen))
-        "n" => (model, emit(MkdirOpen))
+        "n" => (model, emit(NewEntryOpen))
         "c" => (model, emit(TransferSelection(Copy)))
         "m" => (model, emit(TransferSelection(Move)))
         "y" => (model, emit(CopyPaths))
         "s" => (model, emit(SortCycle))
-        "f" => (model, focus_filter_input())
+        "f" =>
+          (
+            model,
+            focus_filter_input(model.active, model.pane_at(model.active).id),
+          )
         "?" => (model, emit(HelpOpen))
         _ => (model, @rabbita.none)
       }
@@ -158,12 +170,19 @@ fn handle_dialog_keyboard_event(
 }
 
 ///|
+fn filter_input_id(idx : PaneSide, view_id : Int) -> String {
+  "pane-\{idx.index()}-view-\{view_id}-filter"
+}
+
+///|
 /// Set editing only through the input's real focus/blur events. Defer focus
 /// until the triggering key has completed its default browser action.
-fn focus_filter_input() -> Cmd {
+fn focus_filter_input(idx : PaneSide, view_id : Int) -> Cmd {
   @rabbita.delay(
     @rabbita.effect(() => {
-      guard @dom.document().get_element_by_id("filter-input").to_option()
+      guard @dom.document()
+        .get_element_by_id(filter_input_id(idx, view_id))
+        .to_option()
         is Some(element) &&
         element.to_html_element() is Some(input) else {
         return
@@ -175,9 +194,11 @@ fn focus_filter_input() -> Cmd {
 }
 
 ///|
-fn blur_filter_input() -> Cmd {
+fn blur_filter_input(idx : PaneSide, view_id : Int) -> Cmd {
   @rabbita.effect(() => {
-    guard @dom.document().get_element_by_id("filter-input").to_option()
+    guard @dom.document()
+      .get_element_by_id(filter_input_id(idx, view_id))
+      .to_option()
       is Some(element) &&
       element.to_html_element() is Some(input) else {
       return
@@ -195,7 +216,7 @@ fn Model::move_active_pane_cursor(model : Model, delta : Int) -> Model {
       model.active,
       model
       .pane_at(model.active)
-      .move_cursor(delta, filter?=model.entry_filter()),
+      .move_cursor(delta, filter?=model.entry_filter(model.active)),
     ),
   }
 }
@@ -209,12 +230,12 @@ fn Model::toggle_selection_and_advance_cursor(model : Model) -> Model {
       model.active,
       model
       .pane_at(model.active)
-      .toggle_cursor_selection(filter?=model.entry_filter()),
+      .toggle_cursor_selection(filter?=model.entry_filter(model.active)),
     ),
   }
 }
 
 ///|
 fn Model::switch_active_pane(model : Model) -> Model {
-  { ..model.with_filter(""), active: model.active.other(), editing: false, }
+  { ..model, active: model.active.other(), editing: false, }
 }

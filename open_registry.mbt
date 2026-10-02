@@ -42,8 +42,11 @@ pub fn OpenRegistry::for_entry(
   if self.filenames.get(name) is Some(association) {
     return association
   }
-  let extension = @posix.Path(name).extname().to_owned()
-    .strip_prefix(".").map_or("", suffix => suffix.to_owned())
+  let extension = @posix.Path(name)
+    .extname()
+    .to_owned()
+    .strip_prefix(".")
+    .map_or("", suffix => suffix.to_owned())
   self.extensions.get(extension).unwrap_or(self.other_file)
 }
 

@@ -33,10 +33,13 @@ fn Model::view(
                 ),
               ]
             Started => {
-              let filter = model.entry_filter()
               let data = (
-                model.panes.0.current.view_data(filter?),
-                model.panes.1.current.view_data(filter?),
+                model.panes.0.current.view_data(
+                  filter?=model.entry_filter(Left),
+                ),
+                model.panes.1.current.view_data(
+                  filter?=model.entry_filter(Right),
+                ),
               )
               [model.toolbar_view(data, emit), panes]
             }

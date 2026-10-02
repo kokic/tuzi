@@ -155,6 +155,7 @@ fn entry_title_style(entry : Entry, color : String) -> Array[String] {
       "light-dark(oklch(from \{color} min(l, 0.5) c h / 1), oklch(from \{color} max(l, 0.75) c h / 1))"
   }
   [
+    CODE_FONT_STYLE,
     "min-width: 0",
     "grid-column: 1",
     "display: flex",
@@ -182,9 +183,19 @@ fn entry_meta_style() -> Array[String] {
 ///|
 fn entry_details_style() -> Array[String] {
   [
-    "flex: none", "padding: 4px 10px", "font-size: var(--tuzi-footer-size)", "color: var(--rui-muted-foreground)",
-    "white-space: nowrap", "overflow: hidden", "text-overflow: ellipsis", "min-height: 18px",
-    "line-height: 18px", "border-top: 1px solid var(--rui-border)", "background: var(--rui-background)",
+    CODE_FONT_STYLE,
+    "flex: none",
+    "display: flex",
+    "align-items: center",
+    "gap: 8px",
+    "padding: 4px 10px",
+    "font-size: var(--tuzi-footer-size)",
+    "color: var(--rui-muted-foreground)",
+    "min-width: 0",
+    "min-height: 18px",
+    "line-height: 18px",
+    "border-top: 1px solid var(--rui-border)",
+    "background: var(--rui-background)",
   ]
 }
 

@@ -30,7 +30,7 @@ fn validate_file_operation_input(
       validate_entry_name(source.basename())
       validate_entry_name(new_name)
     }
-    Mkdir(name~, ..) => validate_entry_name(name)
+    CreateFile(name~, ..) | Mkdir(name~, ..) => validate_entry_name(name)
     Zip(names~, output_name~, level~, ..) =>
       validate_zip_selection(names, output_name, level~)
     Unzip(source~, destination~) => {
@@ -63,6 +63,15 @@ async fn rename_entry(source : Path, new_name : String) -> Unit {
 ///|
 async fn mkdir_entry(path : Path, name : String) -> Unit {
   @async_fs.mkdir(path.join(Path("./\{name}")).to_string())
+}
+
+///|
+async fn create_file_entry(path : Path, name : String) -> Unit {
+  let file = @async_fs.create(
+    path.join(Path("./\{name}")).to_string(),
+    allow_existing=false,
+  )
+  file.close()
 }
 
 ///|
@@ -178,6 +187,7 @@ async fn execute_file_operation(operation : @shared.FileOperation) -> Unit {
   match operation {
     Delete(target~) => remove_entry(target)
     Rename(source~, new_name~) => rename_entry(source, new_name)
+    CreateFile(parent~, name~) => create_file_entry(parent, name)
     Mkdir(parent~, name~) => mkdir_entry(parent, name)
     Zip(directory~, names~, output_name~, level~) =>
       zip_entries(directory, names, output_name, level~)

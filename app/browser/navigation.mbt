@@ -14,7 +14,7 @@ fn Model::open_entry_at_row(
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
   let pane = model.pane_at(idx)
-  guard pane.visible_entries(filter?=model.entry_filter()).get(row)
+  guard pane.visible_entries(filter?=model.entry_filter(idx)).get(row)
     is Some(entry) else {
     return (model, @rabbita.none)
   }
@@ -93,7 +93,7 @@ fn Model::update_panes(
             ..model.pane_at(idx),
             cursor: model
             .pane_at(idx)
-            .visible_entries(filter?=model.entry_filter())
+            .visible_entries(filter?=model.entry_filter(idx))
             .get(row)
             .map(entry => entry.name),
           }),
@@ -144,7 +144,7 @@ fn Model::receive_listing(
               ..pane.with_entries(
                 entries,
                 model.sort,
-                filter?=model.entry_filter(),
+                filter?=model.entry_filter(idx),
               ),
               loading: Ready,
             }
@@ -233,7 +233,7 @@ fn Model::load_pending_panes(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
 fn Model::scroll_to_cursor(model : Model) -> Cmd {
   let pane = model.pane_at(model.active)
   guard pane.cursor is Some(_) else { return @rabbita.none }
-  let row = pane.cursor_index(filter?=model.entry_filter())
+  let row = pane.cursor_index(filter?=model.entry_filter(model.active))
   let id = "pane-\{model.active.index()}-view-\{pane.id}-row-\{row}"
   @cmd.custom_cmd(kind=AfterRender, _ => {
     guard @dom.document().get_element_by_id(id).to_option() is Some(node) else {

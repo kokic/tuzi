@@ -2,7 +2,7 @@
 /// Capture operation targets when opening, so later pane updates cannot retarget it.
 fn Model::open_delete_dialog(model : Model) -> Model {
   let pane = model.pane_at(model.active)
-  let items = pane.selected_items(filter?=model.entry_filter())
+  let items = pane.selected_items(filter?=model.entry_filter(model.active))
   guard !items.is_empty() else { return model }
   {
     ..model,
@@ -17,7 +17,8 @@ fn Model::open_delete_dialog(model : Model) -> Model {
 ///|
 fn Model::open_rename_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
   let pane = model.pane_at(model.active)
-  guard pane.selected_entry(filter?=model.entry_filter()) is Some(item) else {
+  guard pane.selected_entry(filter?=model.entry_filter(model.active))
+    is Some(item) else {
     return (
       model,
       emit(Toast("Select one item to rename", None, @rui.ToastDefault)),
@@ -40,7 +41,7 @@ fn Model::open_rename_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
 ///|
 fn Model::open_archive_dialog(model : Model) -> Model {
   let pane = model.pane_at(model.active)
-  let items = pane.selected_items(filter?=model.entry_filter())
+  let items = pane.selected_items(filter?=model.entry_filter(model.active))
   guard !items.is_empty() else { return model }
   {
     ..model,
@@ -62,7 +63,7 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     ZipInput(directory~, names~, level~, ..) =>
       ZipInput(directory~, names~, input~, level~)
     UnzipInput(source~, ..) => UnzipInput(source~, input~)
-    MkdirInput(directory~, ..) => MkdirInput(directory~, input~)
+    NewEntryInput(directory~, ..) => NewEntryInput(directory~, input~)
     GitRenameInput(context~, reference~, ..) =>
       GitRenameInput(context~, reference~, input~)
     None
@@ -86,7 +87,11 @@ fn validate_dialog_name(input : String) -> Result[String, String] {
 }
 
 ///|
-fn Model::submit_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
+fn Model::submit_dialog(
+  model : Model,
+  emit : Emit[Msg],
+  new_entry_kind? : NewEntryKind = Folder,
+) -> (Model, Cmd) {
   let operations = match model.dialog {
     GitRenameInput(context~, reference~, input~) =>
       return model.submit_git_rename(context, reference, input, emit)
@@ -124,9 +129,14 @@ fn Model::submit_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
         error => Err(error.to_string())
       }
     }
-    MkdirInput(directory~, input~) =>
+    NewEntryInput(directory~, input~) =>
       validate_dialog_name(input).map(name => {
-        [FileOperation::Mkdir(parent=directory, name~)]
+        [
+          match new_entry_kind {
+            File => FileOperation::CreateFile(parent=directory, name~)
+            Folder => FileOperation::Mkdir(parent=directory, name~)
+          },
+        ]
       })
     None
     | Help
@@ -141,7 +151,7 @@ fn Model::submit_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
     Err(message) => ({ ..model, dialog_error: message, }, @rabbita.none)
     Ok(operations) => {
       let input_dialog = match model.dialog {
-        RenameInput(..) | ZipInput(..) | UnzipInput(..) | MkdirInput(..) =>
+        RenameInput(..) | ZipInput(..) | UnzipInput(..) | NewEntryInput(..) =>
           Some(model.dialog)
         _ => None
       }
