@@ -194,5 +194,20 @@ fn Pane::with_entries(
       )
     },
   }
-  updated.with_filter(filter?)
+  let data = updated.view_data(filter?)
+  guard data.cursor_index is None else { return updated }
+  let previous = pane.view_data(filter?)
+  guard previous.cursor_index is Some(index) else {
+    return updated.with_filter(filter?)
+  }
+  // Keep the cursor near the removed entry in the previous visible order.
+  let names = Set::from_iter(data.entries.iter().map(entry => entry.name))
+  guard previous.entries[index + 1:]
+    .iter()
+    .concat(previous.entries[:index].rev_iter())
+    .find_first(entry => names.contains(entry.name))
+    is Some(entry) else {
+    return updated.with_filter(filter?)
+  }
+  { ..updated, cursor: Some(entry.name), }
 }
