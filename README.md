@@ -66,8 +66,7 @@ File operations are logged to the server's stdout.
 Configure opening methods in `app/tuzi/open_config.mbt`, like the code-defined
 icon registry. `configured_openers` defines each opener once with its label and
 built-in action or external program. External arguments are an array of
-`Literal("...")` and `Target` values, passed directly to the program without
-a shell.
+`Literal("...")` and `Target` values, passed to the configured program.
 
 `app/tuzi/platform.mbt` uses `#cfg(platform=...)` for Windows, macOS, and Linux
 to select system opening commands for URLs and directories at compile time.
@@ -85,7 +84,6 @@ files and folders. Enter and double-click use the configured default; changing
 menu order does not change that default. The initial defaults are directory
 navigation, ZIP extraction, and browser preview.
 
-VSCode uses the configured program without installation-directory discovery.
-On Windows the default is `Code.exe`; set its full executable path in
-`vscode_command` if it is not on PATH. Rebuild Tuzi after changing this code
-configuration.
+VSCode uses `code` on PATH on Windows and Linux, with Windows invoking it through
+`cmd /d /c`. macOS uses `open -a "Visual Studio Code"`. No installation-directory
+discovery is performed. Rebuild Tuzi after changing this code configuration.

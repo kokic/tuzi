@@ -15,10 +15,12 @@ fn configured_openers() -> Map[String, OpenDefinition] {
 }
 
 ///|
-/// Set program to a full executable path if Code.exe is not on PATH.
 #cfg(platform="windows")
 fn vscode_command() -> OpenCommand {
-  { program: "Code.exe", arguments: [Literal("--"), Target], }
+  {
+    program: "cmd",
+    arguments: [Literal("/d"), Literal("/c"), Literal("code"), Literal("--"), Target],
+  }
 }
 
 ///|
