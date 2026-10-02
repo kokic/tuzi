@@ -32,6 +32,21 @@ fn Model::open_entry(
 ) -> (Model, Cmd) {
   let path = model.pane_at(idx).path.join(Path("./\{entry.name}"))
   guard !entry.is_dir else { return model.navigate_to_directory(idx, path) }
+  if entry.name.to_lower().has_suffix(".zip") {
+    let stem = entry.name.view(end_offset=entry.name.length() - 4).to_owned()
+    let name = if stem.is_empty() { "archive" } else { stem }
+    return (
+      {
+        ..model,
+        dialog: UnzipInput(
+          source=path,
+          input=path.dirname().join(Path("./\{name}")).to_string(),
+        ),
+        dialog_error: "",
+      },
+      @rabbita.none,
+    )
+  }
   // When listing metadata is unavailable, let the server inspect the file.
   guard entry.size.map_or(true, size => {
     preview_content_type(path, size) is Some(_)

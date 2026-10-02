@@ -32,6 +32,10 @@ fn validate_file_operation_input(
     }
     Mkdir(name~, ..) => validate_entry_name(name)
     Zip(names~, output_name~, ..) => validate_zip_selection(names, output_name)
+    Unzip(source~, destination~) => {
+      validate_entry_name(source.basename())
+      validate_entry_name(destination.basename())
+    }
     Copy(source~, destination~) | Move(source~, destination~) => {
       validate_entry_name(source.basename())
       validate_entry_name(destination.basename())
@@ -176,6 +180,7 @@ async fn execute_file_operation(operation : @shared.FileOperation) -> Unit {
     Mkdir(parent~, name~) => mkdir_entry(parent, name)
     Zip(directory~, names~, output_name~) =>
       zip_entries(directory, names, output_name)
+    Unzip(source~, destination~) => unzip_entries(source, destination)
     Copy(source~, destination~) => copy_entry(source, destination)
     Move(source~, destination~) => move_entry(source, destination)
   }

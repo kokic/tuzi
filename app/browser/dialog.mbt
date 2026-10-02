@@ -59,6 +59,7 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     RenameInput(directory~, original~, ..) =>
       RenameInput(directory~, original~, input~)
     ZipInput(directory~, names~, ..) => ZipInput(directory~, names~, input~)
+    UnzipInput(source~, ..) => UnzipInput(source~, input~)
     MkdirInput(directory~, ..) => MkdirInput(directory~, input~)
     GitRenameInput(context~, reference~, ..) =>
       GitRenameInput(context~, reference~, input~)
@@ -111,6 +112,15 @@ fn Model::submit_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
           Ok([FileOperation::Zip(directory~, names~, output_name=name)])
         }
       }
+    UnzipInput(source~, input~) => {
+      guard !input.is_empty() else { Err("Destination directory is required") }
+      try {
+        let destination = source.dirname().resolve(Path(input))
+        Ok([FileOperation::Unzip(source~, destination~)])
+      } catch {
+        error => Err(error.to_string())
+      }
+    }
     MkdirInput(directory~, input~) =>
       validate_dialog_name(input).map(name => {
         [FileOperation::Mkdir(parent=directory, name~)]
@@ -127,7 +137,8 @@ fn Model::submit_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
     Err(message) => ({ ..model, dialog_error: message, }, @rabbita.none)
     Ok(operations) => {
       let input_dialog = match model.dialog {
-        RenameInput(..) | ZipInput(..) | MkdirInput(..) => Some(model.dialog)
+        RenameInput(..) | ZipInput(..) | UnzipInput(..) | MkdirInput(..) =>
+          Some(model.dialog)
         _ => None
       }
       model

@@ -9,6 +9,7 @@ pub(all) enum FileOperation {
   Delete(target~ : Path)
   Rename(source~ : Path, new_name~ : String)
   Zip(directory~ : Path, names~ : Array[String], output_name~ : String)
+  Unzip(source~ : Path, destination~ : Path)
   Mkdir(parent~ : Path, name~ : String)
   Copy(source~ : Path, destination~ : Path)
   Move(source~ : Path, destination~ : Path)
@@ -168,6 +169,7 @@ pub fn FileOperation::description(operation : FileOperation) -> String {
       "rename \{source} -> \{source.dirname().join(Path("./\{new_name}"))}"
     Zip(directory~, output_name~, ..) =>
       "compress \{directory.join(Path("./\{output_name}"))}"
+    Unzip(source~, destination~) => "extract \{source} -> \{destination}"
     Mkdir(parent~, name~) => "create \{parent.join(Path("./\{name}"))}"
     Copy(source~, destination~) => "copy \{source} -> \{destination}"
     Move(source~, destination~) => "move \{source} -> \{destination}"
@@ -285,6 +287,7 @@ pub fn TaskKind::affected_directories(self : TaskKind) -> Array[Path] {
     File(Rename(source~, ..)) => [source.dirname()]
     File(Mkdir(parent~, ..)) => [parent]
     File(Zip(directory~, ..)) => [directory]
+    File(Unzip(destination~, ..)) => [destination.dirname(), destination]
     File(Copy(destination~, ..)) => [destination.dirname()]
     File(Move(source~, destination~)) =>
       [source.dirname(), destination.dirname()]

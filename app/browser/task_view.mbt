@@ -146,7 +146,13 @@ fn activity_dialog(tasks : Array[Task], emit : Emit[Msg]) -> Html {
                   _ => task_details(task)
                 },
                 ..match (task.kind, task.status) {
-                  (File(Zip(..)) | Git(_), Queued | Running | Failed(_)) =>
+                  (
+                    File(Zip(..) | Unzip(..))
+                    | Git(_),
+                    Queued
+                    | Running
+                    | Failed(_),
+                  ) =>
                     [
                       @rui.button(
                         variant=Ghost,

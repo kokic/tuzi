@@ -17,6 +17,7 @@ fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
         directory,
       )
     File(Copy(destination~, ..)) => directory_contains(destination, directory)
+    File(Unzip(destination~, ..)) => directory_contains(destination, directory)
     File(Move(source~, destination~)) =>
       directory_contains(source, directory) ||
       directory_contains(destination, directory)

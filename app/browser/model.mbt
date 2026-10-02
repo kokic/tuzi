@@ -38,6 +38,7 @@ priv enum Dialog {
   DeleteConfirm(directory~ : Path, names~ : Array[String])
   RenameInput(directory~ : Path, original~ : String, input~ : String)
   ZipInput(directory~ : Path, names~ : Array[String], input~ : String)
+  UnzipInput(source~ : Path, input~ : String)
   MkdirInput(directory~ : Path, input~ : String)
   GitRenameInput(context~ : GitContext, reference~ : String, input~ : String)
   Progress(ProgressBatch)

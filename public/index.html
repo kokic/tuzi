@@ -34,6 +34,13 @@
             font-weight: 600;
         }
 
+        @media (hover: hover) {
+            #tuzi .phead [data-slot="breadcrumb"] button:hover {
+                --rui-button-fg: light-dark(#000, #fff);
+                font-weight: 700 !important;
+            }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             #tuzi .entry-row {
                 transition: none;

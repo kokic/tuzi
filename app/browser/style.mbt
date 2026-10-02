@@ -4,8 +4,8 @@ let appearance_style : Array[String] = [
   "--rui-card-foreground: var(--rui-foreground)", "--rui-popover: var(--rui-card)",
   "--rui-popover-foreground: var(--rui-foreground)", "--rui-input-background: var(--rui-card)",
   "--rui-outline-background: var(--rui-card)", "--tuzi-header-background: light-dark(#fafafa, #242424)",
-  "--tuzi-selection-background: light-dark(#e6eef9, #2b3c53)", "--tuzi-selection-indicator: light-dark(#416a9b, #96b9e3)",
-  "--tuzi-marked-background: light-dark(#f0f5fc, #253244)",
+  "--tuzi-selection-background: light-dark(#e5e5e5, #3a3a3a)", "--tuzi-selection-indicator: var(--rui-muted-foreground)",
+  "--tuzi-marked-background: light-dark(#f0f0f0, #303030)",
 ]
 
 ///|

@@ -37,6 +37,23 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
         name_input("Rename", "Rename \{original} to:", input)
       ZipInput(input~, ..) =>
         name_input("Compress to ZIP", "Archive name:", input)
+      UnzipInput(source~, input~) =>
+        modal("Extract ZIP", emit, [
+          @rui.field_description(
+            style=["overflow-wrap: anywhere"],
+            "Archive: \{source}",
+          ),
+          dialog_input(
+            "Destination directory:",
+            input,
+            model.dialog_error,
+            emit,
+          ),
+          @rui.field_description(
+            "Creates a new directory; existing directories are not overwritten. Relative paths start from the archive's directory. Use / as the path separator.",
+          ),
+          dialog_footer(emit, "Extract", Default, has_input=true),
+        ])
       MkdirInput(input~, ..) => name_input("New directory", "Name:", input)
       GitRenameInput(input~, ..) =>
         name_input("Rename branch", "New branch name:", input)
@@ -125,7 +142,7 @@ fn help_lines() -> Array[Html] {
     ("Tab/←/→", "switch pane"),
     ("↑↓", "move cursor"),
     ("Space", "select"),
-    ("Enter", "open file / enter directory"),
+    ("Enter", "open file / enter directory / extract ZIP"),
     ("Esc", "up / cancel"),
     ("c/m", "copy / move to other pane"),
     ("d", "delete"),
