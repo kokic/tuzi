@@ -84,6 +84,7 @@ pub(all) struct ServerConfig {
   startup : StartupMode
   theme : Theme
   icons : IconMode
+  openers : OpenRegistry
 } derive(ToJson, FromJson)
 
 ///|

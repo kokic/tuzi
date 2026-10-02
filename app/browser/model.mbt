@@ -34,6 +34,7 @@ priv enum Dialog {
   Activity
   TaskDetails(Int)
   Info(InfoContext)
+  OpenWith(OpenWithContext)
   GitInfo(GitContext)
   DeleteConfirm(directory~ : Path, names~ : Array[String])
   RenameInput(directory~ : Path, original~ : String, input~ : String)
@@ -54,6 +55,7 @@ priv struct Model {
   startup : StartupState
   theme : Theme
   icons : IconMode
+  openers : @tuzi.OpenRegistry?
   panes : (PaneStack, PaneStack)
   active : PaneSide
   sort : SortMode
@@ -80,6 +82,8 @@ priv enum Msg {
   ThemeToggle
   HelpOpen
   InfoOpen
+  OpenWithOpen
+  OpenWithChanged(String)
   GitEvent(GitMsg)
   TaskEvent(TaskMsg)
   DeleteOpen
@@ -105,6 +109,7 @@ fn Model::initialize() -> Model {
     startup: Starting,
     theme: Theme::default_theme(),
     icons: IconMode::default_mode(),
+    openers: None,
     panes: (PaneStack::initialize(Path("")), PaneStack::initialize(Path(""))),
     active: Left,
     sort: Name,

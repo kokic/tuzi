@@ -4,12 +4,20 @@ fn routes(
   log : Bool,
   tasks : TaskService,
   group : @async.TaskGroup[Unit],
+  openers : OpenService,
 ) -> @moonback.Module {
   ctx => {
     ctx
     ..get("/api/base", (_req, res) => respond(res, () => config))
     ..get("/api/image", serve_image)
     ..get("/api/file/:name", serve_file)
+    ..post("/api/open", (req, res) => {
+      respond(res, () => {
+        let request : @shared.OpenRequest = decode_request(req)
+        log_op(log, "open: \{request.opener}: \{request.path}")
+        openers.open(request)
+      })
+    })
     ..post("/api/list", (req, res) => {
       respond(res, () => {
         let request : @shared.ListingRequest = decode_request(req)
@@ -112,6 +120,11 @@ async fn[T : ToJson] respond(
 fn api_failure(error : Error) -> @shared.ApiFailure {
   let (code, message) : (@shared.ApiErrorCode, String) = match error {
     InvalidRequest(message) => (InvalidRequest, message)
+    OpenError::UnknownOpener(_) | OpenError::DefaultNotListed(_) as error =>
+      (InvalidRequest, Show::to_string(error))
+    OpenError::NotApplicable(_) | OpenError::UnsupportedTarget(_) as error =>
+      (Unsupported, Show::to_string(error))
+    OpenError::ProgramMissing(_) as error => (NotFound, Show::to_string(error))
     FileError::InvalidName(name) | ArchiveError::InvalidName(name) =>
       (InvalidName, "Invalid name: " + name)
     InvalidTarget(message) | OutputIsInput(message) => (InvalidTarget, message)

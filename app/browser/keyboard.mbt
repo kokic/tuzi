@@ -99,6 +99,7 @@ fn Model::handle_keyboard_event(
         }
         "d" => (model, emit(DeleteOpen))
         "i" => (model, emit(InfoOpen))
+        "o" => (model, emit(OpenWithOpen))
         "r" => (model, emit(RenameOpen))
         "z" => (model, emit(ZipOpen))
         "n" => (model, emit(MkdirOpen))

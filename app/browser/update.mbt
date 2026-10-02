@@ -48,6 +48,7 @@ fn Model::update_message(
         startup: Started,
         theme: config.theme,
         icons: config.icons,
+        openers: Some(config.openers),
         active: if location.active == 0 {
           Left
         } else {
@@ -70,6 +71,8 @@ fn Model::update_message(
     FilterFocus(focused) => ({ ..model, editing: focused, }, @rabbita.none)
     DeleteOpen => (model.open_delete_dialog(), @rabbita.none)
     InfoOpen => model.open_info_dialog(emit)
+    OpenWithOpen => (model.open_with_dialog(), @rabbita.none)
+    OpenWithChanged(id) => (model.change_opener(id), @rabbita.none)
     GitEvent(msg) => model.update_git(msg, emit)
     TaskEvent(msg) => model.update_tasks(msg, emit)
     RenameOpen => model.open_rename_dialog(emit)

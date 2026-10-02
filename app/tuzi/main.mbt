@@ -5,7 +5,8 @@ let default_port : UInt16 = 4000
 async fn main {
   let cmd = build_command().parse()
   let port = server_port(@env.get_env_vars(), cmd)
-  let config = parse_server_config(cmd)
+  let openers = OpenService::new()
+  let config = parse_server_config(cmd, openers.registry)
   let headless = cmd.flags.get("headless").unwrap_or(false)
   let log = !cmd.flags.get("silent").unwrap_or(false)
   let resources = static_resources()
@@ -14,7 +15,7 @@ async fn main {
     let app = @moonback.App(
       ctx => {
         ctx.add_middleware(resources)
-        routes(config, log, tasks, group)(ctx)
+        routes(config, log, tasks, group, openers)(ctx)
       },
       config=@moonback.Config(stop_timeout=0),
     )
@@ -86,7 +87,10 @@ fn server_port(
 }
 
 ///|
-fn parse_server_config(cmd : @argparse.Matches) -> @shared.ServerConfig {
+fn parse_server_config(
+  cmd : @argparse.Matches,
+  openers : @shared.OpenRegistry,
+) -> @shared.ServerConfig {
   let (path, startup) : (@path.Path, @shared.StartupMode) = match cmd.values {
     { "path": [path], .. } => (Path(path), OpenDirectory)
     _ => (Path("."), RestoreHistory)
@@ -104,7 +108,7 @@ fn parse_server_config(cmd : @argparse.Matches) -> @shared.ServerConfig {
     }
     @shared.IconMode::parse(icons)
   }
-  { base, startup, theme, icons, }
+  { base, startup, theme, icons, openers, }
 }
 
 ///|

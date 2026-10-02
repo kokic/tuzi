@@ -51,6 +51,7 @@ Each pane's bar shows the total number of items and the number of selected items
 - `Tab`/`←`/`→` switch the active pane
 - `↑↓` move, `Enter` enter a directory or open the file under the cursor in a new browser tab, `Esc` up, `Space` multi-select
 - Double-click also enters a directory or opens a file. Known formats use the browser's native viewer. Unknown formats up to and including 1 MiB (1,048,576 bytes) open as plain text; larger files show an unsupported-format toast without opening a tab or downloading. HTML and SVG documents are sandboxed with scripts disabled.
+- `o` or **Open with…** chooses how to open the file or folder under the cursor. Source/text files such as `.c` and `.md` can open in VSCode; folders can open in Tuzi, the system file manager (Explorer on Windows), or VSCode. External applications run on the computer hosting Tuzi and must be installed there.
 - `c`/`m` copy/move to the other pane (drag & drop works too)
 - `d` delete, `r` rename, `n` new dir, `s` sort, `y` copy path, `f` filter
 - `i` shows information for the file or folder under the cursor: name, full path, type, file size in bytes, and modification time in UTC (including seconds). Folder sizes are neither calculated nor shown. `Esc`/Close/`×`/click outside closes the dialog.
@@ -59,3 +60,24 @@ Each pane's bar shows the total number of items and the number of selected items
 - `?` opens the keymap help dialog (`Esc`/`×`/click outside closes it)
 
 File operations are logged to the server's stdout.
+
+## Openers
+
+Configure opening methods in `app/tuzi/open_config.mbt`, like the code-defined
+icon registry. `configured_openers` defines each opener once with its label and
+built-in action or external program. External arguments are an array of
+`Literal("...")` and `TargetPath` values, passed directly to the program without
+a shell. The platform is available when choosing programs and arguments.
+
+`configured_open_registry` associates opener IDs with folders, lowercase complete
+filenames, extensions without a leading dot, and other files. Complete filenames
+take precedence over extensions. Each association supplies its entire ordered
+`openers` list and a separate `default_opener` from that list. Multiple extensions
+can share an association, and an opener such as `vscode` can be reused for both
+files and folders. Enter and double-click use the configured default; changing
+menu order does not change that default. The initial defaults are directory
+navigation, ZIP extraction, and browser preview.
+
+Windows VSCode discovery checks PATH and standard user/system installation
+locations for `Code.exe`; custom installations can set the program explicitly in
+the opener configuration. Rebuild Tuzi after changing this code configuration.

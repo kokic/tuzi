@@ -70,6 +70,7 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     | Activity
     | TaskDetails(_)
     | Info(_)
+    | OpenWith(_)
     | GitInfo(_)
     | Progress(_)
     | DeleteConfirm(..) => self
@@ -87,6 +88,8 @@ fn validate_dialog_name(input : String) -> Result[String, String] {
 ///|
 fn Model::submit_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
   let operations = match model.dialog {
+    OpenWith(context) =>
+      return model.execute_opener(context.target, context.opener, emit)
     GitRenameInput(context~, reference~, input~) =>
       return model.submit_git_rename(context, reference, input, emit)
     DeleteConfirm(directory~, names~) =>

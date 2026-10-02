@@ -1,11 +1,9 @@
 ///|
 fn Model::open_cursor_entry(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
-  let pane = model.pane_at(model.active)
-  let data = pane.view_data(filter?=model.entry_filter())
-  guard data.entries.get(data.cursor_index.unwrap_or(0)) is Some(entry) else {
+  guard model.cursor_open_target() is Some(target) else {
     return (model, @rabbita.none)
   }
-  model.open_entry(model.active, entry, emit)
+  model.open_default(target, emit)
 }
 
 ///|
@@ -31,49 +29,7 @@ fn Model::open_entry(
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
   let path = model.pane_at(idx).path.join(Path("./\{entry.name}"))
-  guard !entry.is_dir else { return model.navigate_to_directory(idx, path) }
-  if entry.name.to_lower().has_suffix(".zip") {
-    let stem = entry.name.view(end_offset=entry.name.length() - 4).to_owned()
-    let name = if stem.is_empty() { "archive" } else { stem }
-    return (
-      {
-        ..model,
-        dialog: UnzipInput(
-          source=path,
-          input=path.dirname().join(Path("./\{name}")).to_string(),
-        ),
-        dialog_error: "",
-      },
-      @rabbita.none,
-    )
-  }
-  // When listing metadata is unavailable, let the server inspect the file.
-  guard entry.size.map_or(true, size => {
-    preview_content_type(path, size) is Some(_)
-  }) else {
-    return (
-      model,
-      emit(
-        Toast(
-          "Unsupported file format",
-          Some("Unknown formats can only be opened as text when at most 1 MiB."),
-          @rui.ToastDestructive,
-        ),
-      ),
-    )
-  }
-  (
-    model,
-    @rabbita.effect(() => {
-      let window = @dom.Window::from(@dom.window())
-      let opened : @js.Value = window.apply_with_string("open", [
-        path.file_url(),
-        "_blank",
-        "noopener",
-      ])
-      ignore(opened)
-    }),
-  )
+  model.open_default({ pane: idx, path, entry, }, emit)
 }
 
 ///|

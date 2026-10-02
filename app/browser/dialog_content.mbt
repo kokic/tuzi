@@ -23,6 +23,9 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
       Progress(batch) => progress_dialog(batch, emit)
       TaskDetails(id) => task_details_dialog(model.jobs.items, id, emit)
       Info(context) => context.dialog([], emit)
+      OpenWith(context) => model.openers.map_or(@html.nothing, registry => {
+        open_with_view(context, registry, model.dialog_error, emit)
+      })
       GitInfo(context) => git_info_dialog(context, model.jobs, emit)
       DeleteConfirm(names~, ..) =>
         modal(
@@ -184,6 +187,7 @@ fn help_lines() -> Array[Html] {
     ("↑↓", "move cursor"),
     ("Space", "select"),
     ("Enter", "open file / enter directory / extract ZIP"),
+    ("o", "choose how to open file / folder"),
     ("Esc", "up / cancel"),
     ("c/m", "copy / move to other pane"),
     ("d", "delete"),
