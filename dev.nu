@@ -1,0 +1,1 @@
+warren dev --server-target native --browser-entry app/browser --server-entry app/tuzi

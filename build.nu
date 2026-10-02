@@ -1,0 +1,1 @@
+warren build --bundle --browser-entry app/browser --server-entry app/tuzi
