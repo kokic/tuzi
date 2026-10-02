@@ -331,6 +331,7 @@ fn entry_context_menu(
         "font-variant-numeric: tabular-nums",
         "text-align: right",
         "min-width: 2ch",
+        "margin: 0 4px",
       ],
       "\{row + 1}",
     ),
@@ -349,7 +350,8 @@ fn entry_context_menu(
   let id = "pane-\{idx.index()}-view-\{item.view_id}-row-\{row}"
   let trigger_style = [
     "display: grid", "grid-column: 1 / -1", "grid-template-columns: subgrid", "align-items: baseline",
-    "min-width: 0", "padding: 4px 10px",
+    "align-content: center", "min-width: 0", "min-height: var(--tuzi-row-height)",
+    "padding: 4px 10px",
   ]
   @rui.context_menu(id=id + "-open", scope => {
     fragment([

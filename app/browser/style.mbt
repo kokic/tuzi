@@ -2,6 +2,7 @@
 let appearance_style : Array[String] = [
   "--rui-radius: 6px", "--tuzi-selection-background: light-dark(#e5e5e5, #3a3a3a)",
   "--tuzi-selection-indicator: var(--rui-muted-foreground)", "--tuzi-marked-background: light-dark(#f0f0f0, #303030)",
+  "--tuzi-row-height: max(35px, calc(1.5rem + 7px))",
 ]
 
 ///|
@@ -75,7 +76,8 @@ fn pane_header_style(active : Bool) -> Array[String] {
     "gap: 8px",
     "font-size: var(--tuzi-pane-header-size)",
     "padding: 3px 8px",
-    "min-height: 28px",
+    "box-sizing: border-box",
+    "min-height: var(--tuzi-row-height)",
     "border-bottom: 1px solid var(--rui-border)",
     "background: var(--rui-background)",
     ..if active {
