@@ -1,16 +1,10 @@
 ///|
-/// Capture the target when opening the chooser; pane updates cannot retarget it.
+/// Keep the item's path with the action, independent of the current cursor.
 priv struct OpenTarget {
   pane : PaneSide
   path : Path
   entry : Entry
-} derive(Eq)
-
-///|
-priv struct OpenWithContext {
-  target : OpenTarget
-  opener : String
-} derive(Eq)
+}
 
 ///|
 fn Model::cursor_open_target(model : Model) -> OpenTarget? {
@@ -23,29 +17,6 @@ fn Model::cursor_open_target(model : Model) -> OpenTarget? {
     path: pane.path.join(Path("./\{entry.name}")),
     entry,
   })
-}
-
-///|
-fn Model::open_with_dialog(model : Model) -> Model {
-  guard model.cursor_open_target() is Some(target) &&
-    model.openers is Some(registry) else {
-    return model
-  }
-  let association = registry.for_entry(
-    target.entry.name,
-    is_dir=target.entry.is_dir,
-  )
-  {
-    ..model,
-    dialog: OpenWith({ target, opener: association.default_opener, }),
-    dialog_error: "",
-  }
-}
-
-///|
-fn Model::change_opener(model : Model, opener : String) -> Model {
-  guard model.dialog is OpenWith(context) else { return model }
-  { ..model, dialog: OpenWith({ ..context, opener, }), dialog_error: "", }
 }
 
 ///|
@@ -115,9 +86,6 @@ fn Model::execute_opener(
   )
   guard association.openers.contains(id) else { return (model, @rabbita.none) }
   if target.unavailable_reason(opener.action) is Some(reason) {
-    if model.dialog is OpenWith(_) {
-      return ({ ..model, dialog_error: reason, }, @rabbita.none)
-    }
     return (
       model,
       emit(Toast("Cannot open file", Some(reason), @rui.ToastDestructive)),
@@ -185,53 +153,32 @@ fn Model::execute_opener(
 }
 
 ///|
-fn open_with_view(
-  context : OpenWithContext,
+fn open_with_menu(
+  scope : @rui.ContextMenuScope,
+  target : OpenTarget,
   registry : @tuzi.OpenRegistry,
-  error : String,
   emit : Emit[Msg],
 ) -> Html {
   let association = registry.for_entry(
-    context.target.entry.name,
-    is_dir=context.target.entry.is_dir,
+    target.entry.name,
+    is_dir=target.entry.is_dir,
   )
-  modal("Open with", emit, [
-    @rui.field_description(
-      style=["overflow-wrap: anywhere"],
-      context.target.path.to_string(),
-    ),
-    @rui.field(
-      [
-        @rui.field_label(for_="open-with", "Open using:"),
-        @rui.native_select(
-          id="open-with",
-          value=context.opener,
-          autofocus=true,
-          style=[UI_FONT_STYLE, "width: 100%"],
-          wrapper_style=["width: 100%"],
-          on_change=emit.map(id => OpenWithChanged(id)),
-          association.openers.map(id => {
-            let opener = registry.openers[id]
-            let suffix = if id == association.default_opener {
-              " (default)"
-            } else {
-              ""
-            }
-            @rui.native_select_option(
-              value=id,
-              selected=id == context.opener,
-              opener.label + suffix,
-            )
-          }),
-        ),
-        ..if !error.is_empty() {
-          [@rui.field_error(error)]
-        },
-      ],
-    ),
-    @rui.field_description(
-      "External applications open on the computer running Tuzi.",
-    ),
-    dialog_confirm_footer_view(label="Open", on_confirm=emit(DialogSubmit)),
-  ])
+  let items : Array[Html] = []
+  for id in association.openers {
+    let opener = registry.openers[id]
+    guard target.unavailable_reason(opener.action) is None else { continue }
+    items.push(
+      @rui.context_menu_item(
+        scope,
+        on_select=emit(OpenWith(target, id)),
+        opener.label,
+      ),
+    )
+  }
+  @rui.context_menu_content(
+    scope,
+    aria_label="Open with",
+    style=[UI_FONT_STYLE],
+    items,
+  )
 }

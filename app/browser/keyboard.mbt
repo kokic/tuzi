@@ -33,6 +33,13 @@ fn Model::keyboard_command(
   event : @dom.KeyboardEvent,
   emit : Emit[Msg],
 ) -> Cmd {
+  guard !event.get_default_prevented() &&
+    !event
+    .target()
+    .to_element()
+    .map_or(false, element => element.closest("[role=menu]") is Some(_)) else {
+    return @rabbita.none
+  }
   guard !event.is_composing() else { return @rabbita.none }
   if model.dialog == None &&
     !event.ctrl_key() &&
@@ -99,7 +106,6 @@ fn Model::handle_keyboard_event(
         }
         "d" => (model, emit(DeleteOpen))
         "i" => (model, emit(InfoOpen))
-        "o" => (model, emit(OpenWithOpen))
         "r" => (model, emit(RenameOpen))
         "z" => (model, emit(ZipOpen))
         "n" => (model, emit(MkdirOpen))

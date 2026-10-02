@@ -5,8 +5,7 @@ let default_port : UInt16 = 4000
 async fn main {
   let cmd = build_command().parse()
   let port = server_port(@env.get_env_vars(), cmd)
-  let platform = OpenPlatform::detect()
-  let openers = OpenService::new(platform)
+  let openers = OpenService::new()
   let config = parse_server_config(cmd, openers.registry)
   let headless = cmd.flags.get("headless").unwrap_or(false)
   let log = !cmd.flags.get("silent").unwrap_or(false)
@@ -23,7 +22,7 @@ async fn main {
     defer app.close()
     let listener = @moonback.listen(reuse_addr=true, port~)
     if !headless {
-      launch_browser(port, platform)
+      launch_browser(port)
     }
     app.serve(listener)
   })
@@ -113,8 +112,8 @@ fn parse_server_config(
 }
 
 ///|
-async fn launch_browser(port : UInt16, platform : OpenPlatform) -> Unit {
+async fn launch_browser(port : UInt16) -> Unit {
   let url = "http://127.0.0.1:\{port}/"
   @stdio.stdout.write("tuzi: \{url}\n")
-  platform.system_open_command(Url).launch(url)
+  system_open_command(Url).launch(url)
 }

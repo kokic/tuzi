@@ -51,7 +51,7 @@ Each pane's bar shows the total number of items and the number of selected items
 - `Tab`/`←`/`→` switch the active pane
 - `↑↓` move, `Enter` enter a directory or open the file under the cursor, `Esc` up, `Space` multi-select
 - Double-click also enters a directory or opens a file. Markdown (`.md` / `.markdown`, case-insensitive) opens in a dialog with Preview / Code icon tabs for rendered content and original text. Other known formats use the browser's native viewer in a new tab. Unknown formats up to and including 1 MiB (1,048,576 bytes) open as plain text; larger files show an unsupported-format toast without opening a tab or downloading. HTML and SVG documents are sandboxed with scripts disabled.
-- `o` or **Open with…** chooses how to open the file or folder under the cursor. Source/text files such as `.c` and `.md` can open in VSCode; folders can open in Tuzi, the system file manager (Explorer on Windows), or VSCode. External applications run on the computer hosting Tuzi and must be installed there.
+- Right-click a file or folder to see its available opening methods in a context menu; click a method to open it immediately. Source/text files such as `.c` and `.md` can open in VSCode; folders can open in Tuzi, the system file manager (Explorer on Windows), or VSCode. External applications run on the computer hosting Tuzi and must be installed there.
 - `c`/`m` copy/move to the other pane (drag & drop works too)
 - `d` delete, `r` rename, `n` new dir, `s` sort, `y` copy path, `f` filter
 - `i` shows information for the file or folder under the cursor: name, full path, type, file size in bytes, and modification time in UTC (including seconds). Folder sizes are neither calculated nor shown. `Esc`/Close/`×`/click outside closes the dialog.
@@ -67,11 +67,12 @@ Configure opening methods in `app/tuzi/open_config.mbt`, like the code-defined
 icon registry. `configured_openers` defines each opener once with its label and
 built-in action or external program. External arguments are an array of
 `Literal("...")` and `Target` values, passed directly to the program without
-a shell. The platform is available when choosing programs and arguments.
+a shell.
 
-`app/tuzi/platform.mbt` detects the platform once at startup and selects system
-opening commands for URLs and directories. Explicit applications such as VSCode
-keep their own program and arguments in the opener configuration. Both use
+`app/tuzi/platform.mbt` uses `#cfg(platform=...)` for Windows, macOS, and Linux
+to select system opening commands for URLs and directories at compile time.
+Explicit applications such as VSCode keep their own program and arguments in
+the opener configuration, with the same conditional compilation. Both use
 `OpenCommand::launch` to start the process; URL targets stay URLs and filesystem
 targets use resolved native paths.
 
@@ -84,6 +85,7 @@ files and folders. Enter and double-click use the configured default; changing
 menu order does not change that default. The initial defaults are directory
 navigation, ZIP extraction, and browser preview.
 
-Windows VSCode discovery checks PATH and standard user/system installation
-locations for `Code.exe`; custom installations can set the program explicitly in
-the opener configuration. Rebuild Tuzi after changing this code configuration.
+VSCode uses the configured program without installation-directory discovery.
+On Windows the default is `Code.exe`; set its full executable path in
+`vscode_command` if it is not on PATH. Rebuild Tuzi after changing this code
+configuration.

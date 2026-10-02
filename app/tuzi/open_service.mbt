@@ -39,8 +39,8 @@ impl Show for OpenError with to_string(self) {
 }
 
 ///|
-async fn OpenService::new(platform : OpenPlatform) -> OpenService {
-  let definitions = configured_openers(platform)
+fn OpenService::new() -> OpenService raise OpenError {
+  let definitions = configured_openers()
   let openers : Map[String, @shared.Opener] = Map([])
   let commands : Map[String, OpenCommand] = Map([])
   for id, definition in definitions {
@@ -102,32 +102,3 @@ async fn OpenService::open(self : OpenService, request : @shared.OpenRequest) ->
   }
 }
 
-///|
-/// Windows' `code` entry point is a batch script. Locate Code.exe so file paths
-/// never go through cmd.exe. PATH also covers portable/custom installations.
-async fn windows_vscode_program() -> String {
-  let candidates : Array[Path] = []
-  for directory in @env.get_env_var("PATH").unwrap_or("").split(";") {
-    let directory = directory.trim().to_owned()
-    guard !directory.is_empty() else { continue }
-    let base = Path::from_native(directory)
-    candidates.push(base.join(Path("Code.exe")))
-    if base.basename().to_lower() == "bin" {
-      candidates.push(base.dirname().join(Path("Code.exe")))
-    }
-  }
-  if @env.get_env_var("LOCALAPPDATA") is Some(directory) {
-    candidates.push(Path::from_native(directory).join(Path("Programs/Microsoft VS Code/Code.exe")))
-  }
-  for variable in ["ProgramFiles", "ProgramFiles(x86)"] {
-    if @env.get_env_var(variable) is Some(directory) {
-      candidates.push(Path::from_native(directory).join(Path("Microsoft VS Code/Code.exe")))
-    }
-  }
-  for candidate in candidates {
-    if @async_fs.exists(candidate.to_string()) {
-      return candidate.to_string()
-    }
-  }
-  "Code.exe"
-}

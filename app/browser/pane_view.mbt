@@ -7,9 +7,17 @@ fn allow_drop(drag : @dom.DragEvent) -> Cmd {
 
 ///|
 fn panes_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
-  pane_stack_view(model, Left, emit).view2(
-    pane_stack_view(model, Right, emit),
-    (left, right) => div(id="panes", style=panes_style(), [left, right]),
+  model
+  .map(model => (model.icons, model.openers))
+  .switch_by(
+    configuration => {
+      let (icons, openers) = configuration
+      pane_stack_view(model, Left, emit, icons, openers).view2(
+        pane_stack_view(model, Right, emit, icons, openers),
+        (left, right) => div(id="panes", style=panes_style(), [left, right]),
+      )
+    },
+    by=configuration => ToJson::to_json(configuration).stringify(),
   )
 }
 
@@ -18,6 +26,8 @@ fn pane_stack_view(
   model : Val[Model],
   idx : PaneSide,
   emit : Emit[Msg],
+  icons : IconMode,
+  openers : @tuzi.OpenRegistry?,
 ) -> Val[Html] {
   let stack = model.map(model => {
     match idx {
@@ -28,26 +38,27 @@ fn pane_stack_view(
   let visible_id = stack.map(stack => stack.current.id)
   let filter = model.map(model => model.entry_filter())
   let sort = model.map(model => model.sort)
-  let appearance = model.map(model => (model.active == idx, model.icons))
+  let active = model.map(model => model.active == idx)
   let views = stack
     .map(stack => @vector.Vector::from_array([..stack.parents, stack.current]))
     .assoc_by(
       (id, pane) => {
-        let content = pane.view4(filter, sort, appearance, (
+        let rows = pane_rows(
+          pane,
+          filter,
+          idx,
+          emit,
+          @tuzi.icons_for(icons),
+          openers,
+        )
+        let content = pane.view5(filter, sort, active, rows, (
           pane,
           filter,
           sort,
-          appearance,
+          active,
+          rows,
         ) => {
-          let (active, icons) = appearance
-          pane.pane_view(
-            pane.view_data(filter?),
-            idx,
-            emit,
-            sort,
-            active,
-            @tuzi.icons_for(icons),
-          )
+          pane.pane_view(pane.view_data(filter?), idx, emit, sort, active, rows)
         })
         let visible = visible_id.map(current => current == id)
         visible.map2(content, (visible, content) => {
@@ -92,7 +103,7 @@ fn Pane::pane_view(
   emit : Emit[Msg],
   sort : SortMode,
   active : Bool,
-  icons : IconTheme,
+  rows : Html,
 ) -> Html {
   let sort_label = match sort {
     Name => "name"
@@ -145,11 +156,7 @@ fn Pane::pane_view(
             }
         },
       ),
-      "entries": ul(
-        class="plist",
-        style=pane_list_style(),
-        pane.pane_rows(data, idx, emit, icons),
-      ),
+      "entries": rows,
       "details": data.entry_details_view(),
     },
   )
@@ -230,71 +237,145 @@ fn breadcrumb_segments(path : Path) -> Array[(String, Path)] {
 }
 
 ///|
-fn Pane::pane_rows(
-  pane : Pane,
-  data : PaneViewData,
+priv struct EntryRow {
+  view_id : Int
+  directory : String
+  row : Int
+  entry : Entry
+  selected : Bool
+  is_cursor : Bool
+} derive(Eq)
+
+///|
+fn pane_rows(
+  pane : Val[Pane],
+  filter : Val[String?],
   idx : PaneSide,
   emit : Emit[Msg],
   icons : IconTheme,
-) -> Array[Html] {
-  let vis = data.entries
-  let rows : Array[Html] = []
-  for row in 0..<vis.length() {
-    let entry = vis[row]
-    let selected = pane.selected.contains(entry.name)
-    let is_cursor = Some(entry.name) == pane.cursor
-    let row_attrs = @html.Attrs::build()
-      .on_dragstart(_drag => emit(DragStart(idx, entry.name)))
-      .on_dragover(allow_drop)
-      .on_drop(_drag => emit(Drop(idx)))
-      .on_dragend(_drag => emit(DragEnd))
-    rows.push(
-      li(
-        id="pane-\{idx.index()}-view-\{pane.id}-row-\{row}",
-        class=if is_cursor { "entry-row sel" } else { "entry-row" },
-        style=row_style(is_cursor, selected),
-        on_click=emit(PaneEvent(Click(idx, row))),
-        attrs=row_attrs,
-        [
-          input(
-            input_type=Checkbox,
-            checked=selected,
-            attrs=@html.Attrs::build().aria_label("Select \{entry.name}"),
-            style=[
-              "accent-color: var(--rui-primary)", "width: 14px", "height: 14px",
-              "margin: 0", "cursor: pointer",
-            ],
-            on_change=emit.map(_value => PaneEvent(Select(idx, entry.name))),
-          ),
-          span(
-            style=[
-              "color: var(--rui-muted-foreground)", "font-size: var(--tuzi-entry-subtitle-size)",
-              "font-variant-numeric: tabular-nums", "text-align: right", "min-width: 2ch",
-            ],
-            "\{row + 1}",
-          ),
-          div(
-            style=entry_open_area_style(),
-            attrs=@html.Attrs::build().on_dblclick(_ev => {
-              emit(PaneEvent(DblClick(idx, row)))
-            }),
-            [
-              icon_view(icons, entry),
-              div(style=entry_content_style(), [
-                span(
-                  style=entry_title_style(entry) +
-                    ["-webkit-user-select: text", "user-select: text"],
-                  entry.name,
-                ),
-                span(style=entry_meta_style(), format_entry_meta(entry)),
-              ]),
-            ],
-          ),
-        ],
-      ),
+  openers : @tuzi.OpenRegistry?,
+) -> Val[Html] {
+  let rows = pane
+    .map2(filter, (pane, filter) => {
+      let entries = pane.view_data(filter?).entries
+      @vector.Vector::from_array(
+        entries.mapi((row, entry) => EntryRow::{
+          view_id: pane.id,
+          directory: pane.path.to_string(),
+          row,
+          entry,
+          selected: pane.selected.contains(entry.name),
+          is_cursor: Some(entry.name) == pane.cursor,
+        }),
+      )
+    })
+    .assoc_by(
+      (name, row) => {
+        // Cursor movement only updates the row's appearance, keeping the double-click target mounted.
+        let menu = row.switch_by(
+          row => entry_context_menu(row, idx, emit, icons, openers),
+          by=row => {
+            ToJson::to_json(
+              (row.view_id, row.directory, row.row, row.entry, row.selected),
+            ).stringify()
+          },
+        )
+        menu.map2(row, (menu, row) => {
+          (
+            name,
+            li(
+              id="pane-\{idx.index()}-view-\{row.view_id}-row-\{row.row}",
+              class=if row.is_cursor { "entry-row sel" } else { "entry-row" },
+              style=[..row_style(row.is_cursor, row.selected), "padding: 0"],
+              menu,
+            ),
+          )
+        })
+      },
+      by=row => row.entry.name,
     )
+  rows.view(rows => {
+    let children : Map[String, Html] = Map::from_iter(rows.iter())
+    ul(class="plist", style=pane_list_style(), children)
+  })
+}
+
+///|
+fn entry_context_menu(
+  item : EntryRow,
+  idx : PaneSide,
+  emit : Emit[Msg],
+  icons : IconTheme,
+  openers : @tuzi.OpenRegistry?,
+) -> Val[Html] {
+  let { entry, row, selected, .. } = item
+  let row_attrs = @html.Attrs::build()
+    .on_click(_event => emit(PaneEvent(Click(idx, row))))
+    .on_dragstart(_drag => emit(DragStart(idx, entry.name)))
+    .on_dragover(allow_drop)
+    .on_drop(_drag => emit(Drop(idx)))
+    .on_dragend(_drag => emit(DragEnd))
+  let children = [
+    input(
+      input_type=Checkbox,
+      checked=selected,
+      attrs=@html.Attrs::build().aria_label("Select \{entry.name}"),
+      style=[
+        "accent-color: var(--rui-primary)", "width: 14px", "height: 14px", "margin: 0",
+        "cursor: pointer",
+      ],
+      on_change=emit.map(_value => PaneEvent(Select(idx, entry.name))),
+    ),
+    span(
+      style=[
+        "color: var(--rui-muted-foreground)", "font-size: var(--tuzi-entry-subtitle-size)",
+        "font-variant-numeric: tabular-nums", "text-align: right", "min-width: 2ch",
+      ],
+      "\{row + 1}",
+    ),
+    div(
+      style=entry_open_area_style(),
+      attrs=@html.Attrs::build().on_dblclick(_ev => {
+        emit(PaneEvent(DblClick(idx, row)))
+      }),
+      [
+        icon_view(icons, entry),
+        div(style=entry_content_style(), [
+          span(
+            style=entry_title_style(entry) +
+              ["-webkit-user-select: text", "user-select: text"],
+            entry.name,
+          ),
+          span(style=entry_meta_style(), format_entry_meta(entry)),
+        ]),
+      ],
+    ),
+  ]
+  let id = "pane-\{idx.index()}-view-\{item.view_id}-row-\{row}"
+  let trigger_style = [
+    "display: grid", "grid-column: 1 / -1", "grid-template-columns: subgrid", "align-items: center",
+    "min-width: 0", "padding: 4px 10px",
+  ]
+  guard openers is Some(registry) else {
+    return Val::constant(div(style=trigger_style, attrs=row_attrs, children))
   }
-  rows
+  let target : OpenTarget = {
+    pane: idx,
+    path: Path(item.directory).join(Path("./\{entry.name}")),
+    entry,
+  }
+  @rui.context_menu(id=id + "-open", style=["display: contents"], scope => {
+    fragment([
+      @rui.context_menu_trigger(
+        scope,
+        tabindex=-1,
+        attrs=row_attrs,
+        style=trigger_style,
+        children,
+      ),
+      open_with_menu(scope, target, registry, emit),
+    ])
+  })
 }
 
 ///|

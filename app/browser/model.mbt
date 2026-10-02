@@ -34,7 +34,6 @@ priv enum Dialog {
   Activity
   TaskDetails(Int)
   Info(InfoContext)
-  OpenWith(OpenWithContext)
   Markdown(MarkdownContext)
   GitInfo(GitContext)
   DeleteConfirm(directory~ : Path, names~ : Array[String])
@@ -83,8 +82,7 @@ priv enum Msg {
   ThemeToggle
   HelpOpen
   InfoOpen
-  OpenWithOpen
-  OpenWithChanged(String)
+  OpenWith(OpenTarget, String)
   MarkdownEvent(MarkdownMsg)
   GitEvent(GitMsg)
   TaskEvent(TaskMsg)

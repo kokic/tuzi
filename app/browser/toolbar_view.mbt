@@ -19,14 +19,6 @@ fn Model::toolbar_view(
         on_click=emit(HelpOpen),
         "Help",
       ),
-      @rui.button(
-        style=[UI_FONT_STYLE],
-        variant=Ghost,
-        size=Sm,
-        title="Choose how to open the file or folder under the cursor (o)",
-        on_click=emit(OpenWithOpen),
-        "Open with…",
-      ),
       div(
         style=[
           "display: flex", "align-items: center", "gap: 6px", "font-size: var(--tuzi-footer-size)",

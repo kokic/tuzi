@@ -1,33 +1,48 @@
 ///|
 /// Define each application once here; associations below refer to these IDs.
 /// Programs and arguments stay on the server and are never accepted from clients.
-async fn configured_openers(platform : OpenPlatform) -> Map[String, OpenDefinition] {
-  let vscode : OpenCommand = match platform {
-    Windows => {
-      program: windows_vscode_program(),
-      arguments: [Literal("--"), Target],
-    }
-    MacOS => {
-      program: "/usr/bin/open",
-      arguments: [Literal("-a"), Literal("Visual Studio Code"), Target],
-    }
-    Linux => { program: "code", arguments: [Literal("--"), Target], }
-  }
+fn configured_openers() -> Map[String, OpenDefinition] {
   {
     "browse": { label: "Enter in Tuzi", execution: Browse, },
     "preview": { label: "Open in browser", execution: Preview, },
     "extract": { label: "Extract ZIP", execution: ExtractZip, },
-    "vscode": { label: "Open in VSCode", execution: External(vscode), },
+    "vscode": { label: "Open in VSCode", execution: External(vscode_command()), },
     "explorer": {
-      label: if platform == Windows {
-        "Open in Windows Explorer"
-      } else {
-        "Open in system file manager"
-      },
-      execution: External(platform.system_open_command(Directory)),
+      label: file_manager_label,
+      execution: External(system_open_command(Directory)),
     },
   }
 }
+
+///|
+/// Set program to a full executable path if Code.exe is not on PATH.
+#cfg(platform="windows")
+fn vscode_command() -> OpenCommand {
+  { program: "Code.exe", arguments: [Literal("--"), Target], }
+}
+
+///|
+#cfg(platform="macos")
+fn vscode_command() -> OpenCommand {
+  {
+    program: "/usr/bin/open",
+    arguments: [Literal("-a"), Literal("Visual Studio Code"), Target],
+  }
+}
+
+///|
+#cfg(platform="linux")
+fn vscode_command() -> OpenCommand {
+  { program: "code", arguments: [Literal("--"), Target], }
+}
+
+///|
+#cfg(platform="windows")
+let file_manager_label : String = "Open in Windows Explorer"
+
+///|
+#cfg(any(platform="macos", platform="linux"))
+let file_manager_label : String = "Open in system file manager"
 
 ///|
 /// Complete filenames override extensions. Each association owns its whole menu.
