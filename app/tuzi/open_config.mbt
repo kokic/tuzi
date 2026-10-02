@@ -5,21 +5,13 @@ async fn configured_openers(platform : OpenPlatform) -> Map[String, OpenDefiniti
   let vscode : OpenCommand = match platform {
     Windows => {
       program: windows_vscode_program(),
-      arguments: [Literal("--"), TargetPath],
+      arguments: [Literal("--"), Target],
     }
     MacOS => {
       program: "/usr/bin/open",
-      arguments: [Literal("-a"), Literal("Visual Studio Code"), TargetPath],
+      arguments: [Literal("-a"), Literal("Visual Studio Code"), Target],
     }
-    Linux => { program: "code", arguments: [Literal("--"), TargetPath], }
-  }
-  let explorer : OpenCommand = {
-    program: match platform {
-      Windows => "explorer.exe"
-      MacOS => "/usr/bin/open"
-      Linux => "xdg-open"
-    },
-    arguments: [TargetPath],
+    Linux => { program: "code", arguments: [Literal("--"), Target], }
   }
   {
     "browse": { label: "Enter in Tuzi", execution: Browse, },
@@ -32,7 +24,7 @@ async fn configured_openers(platform : OpenPlatform) -> Map[String, OpenDefiniti
       } else {
         "Open in system file manager"
       },
-      execution: External(explorer),
+      execution: External(platform.system_open_command(Directory)),
     },
   }
 }

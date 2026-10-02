@@ -1,23 +1,4 @@
 ///|
-priv enum OpenPlatform {
-  Windows
-  MacOS
-  Linux
-} derive(Eq)
-
-///|
-priv enum OpenArgument {
-  Literal(String)
-  TargetPath
-}
-
-///|
-priv struct OpenCommand {
-  program : String
-  arguments : Array[OpenArgument]
-}
-
-///|
 priv enum OpenExecution {
   Browse
   Preview
@@ -58,13 +39,7 @@ impl Show for OpenError with to_string(self) {
 }
 
 ///|
-async fn OpenService::new() -> OpenService {
-  let platform : OpenPlatform = if @path.sep == '\\' {
-    Windows
-  } else {
-    let (_, output) = @process.collect_stdout("uname", [])
-    if output.text().trim() == "Darwin" { MacOS } else { Linux }
-  }
+async fn OpenService::new(platform : OpenPlatform) -> OpenService {
   let definitions = configured_openers(platform)
   let openers : Map[String, @shared.Opener] = Map([])
   let commands : Map[String, OpenCommand] = Map([])
@@ -120,14 +95,7 @@ async fn OpenService::open(self : OpenService, request : @shared.OpenRequest) ->
     self.commands.get(request.opener) is Some(command) else {
     raise NotApplicable(request.opener)
   }
-  let arguments = command.arguments.map(argument => {
-    match argument {
-      Literal(value) => value
-      TargetPath => native
-    }
-  })
-  // Editors intentionally outlive both this request and the Tuzi process.
-  ignore(@process.spawn_orphan(command.program, arguments, no_console_window=true)) catch {
+  command.launch(native, no_console_window=true) catch {
     @os_error.OSError(_, ..) as error if error.is_ENOENT() =>
       raise ProgramMissing(command.program)
     error => raise error

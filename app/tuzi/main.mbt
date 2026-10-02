@@ -5,7 +5,8 @@ let default_port : UInt16 = 4000
 async fn main {
   let cmd = build_command().parse()
   let port = server_port(@env.get_env_vars(), cmd)
-  let openers = OpenService::new()
+  let platform = OpenPlatform::detect()
+  let openers = OpenService::new(platform)
   let config = parse_server_config(cmd, openers.registry)
   let headless = cmd.flags.get("headless").unwrap_or(false)
   let log = !cmd.flags.get("silent").unwrap_or(false)
@@ -22,7 +23,7 @@ async fn main {
     defer app.close()
     let listener = @moonback.listen(reuse_addr=true, port~)
     if !headless {
-      launch_browser(port)
+      launch_browser(port, platform)
     }
     app.serve(listener)
   })
@@ -112,13 +113,8 @@ fn parse_server_config(
 }
 
 ///|
-async fn launch_browser(port : UInt16) -> Unit {
+async fn launch_browser(port : UInt16, platform : OpenPlatform) -> Unit {
   let url = "http://127.0.0.1:\{port}/"
   @stdio.stdout.write("tuzi: \{url}\n")
-  if @path.sep == '\\' {
-    return ignore(@process.spawn_orphan("cmd", ["/c", "start", "", url]))
-  }
-  let (_, out) = @process.collect_stdout("uname", [])
-  let cmd = if out.text().contains("Darwin") { "open" } else { "xdg-open" }
-  ignore(@process.spawn_orphan(cmd, [url]))
+  platform.system_open_command(Url).launch(url)
 }

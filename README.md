@@ -66,8 +66,14 @@ File operations are logged to the server's stdout.
 Configure opening methods in `app/tuzi/open_config.mbt`, like the code-defined
 icon registry. `configured_openers` defines each opener once with its label and
 built-in action or external program. External arguments are an array of
-`Literal("...")` and `TargetPath` values, passed directly to the program without
+`Literal("...")` and `Target` values, passed directly to the program without
 a shell. The platform is available when choosing programs and arguments.
+
+`app/tuzi/platform.mbt` detects the platform once at startup and selects system
+opening commands for URLs and directories. Explicit applications such as VSCode
+keep their own program and arguments in the opener configuration. Both use
+`OpenCommand::launch` to start the process; URL targets stay URLs and filesystem
+targets use resolved native paths.
 
 `configured_open_registry` associates opener IDs with folders, lowercase complete
 filenames, extensions without a leading dot, and other files. Complete filenames
