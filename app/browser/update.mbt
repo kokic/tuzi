@@ -49,6 +49,7 @@ fn Model::update_message(
         theme: config.theme,
         icons: config.icons,
         openers: Some(config.openers),
+        supports_drive_selection: config.supports_drive_selection,
         active: if location.active == 0 {
           Left
         } else {

@@ -48,6 +48,11 @@ warren dev --server-target native --browser-entry app/browser --server-entry app
 
 Each pane's bar shows the total number of items and the number of selected items.
 
+On Windows, click or right-click the drive segment at the start of a pane's
+breadcrumb to choose a drive. The list refreshes each time the menu opens;
+choosing a drive opens its root in that pane. Other breadcrumb segments still
+navigate directly to their directories.
+
 - `Tab`/`←`/`→` switch the active pane
 - `↑↓` move, `Enter` enter a directory or open the file under the cursor, `Esc` up, `Space` multi-select
 - Double-click also enters a directory or opens a file. Markdown (`.md` / `.markdown`, case-insensitive) opens in a dialog with Preview / Code icon tabs for rendered content and original text. Other known formats use the browser's native viewer in a new tab. Unknown formats up to and including 1 MiB (1,048,576 bytes) open as plain text; larger files show an unsupported-format toast without opening a tab or downloading. HTML and SVG documents are sandboxed with scripts disabled.

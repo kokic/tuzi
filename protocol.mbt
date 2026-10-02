@@ -86,6 +86,7 @@ pub(all) struct ServerConfig {
   theme : Theme
   icons : IconMode
   openers : OpenRegistry
+  supports_drive_selection : Bool
 } derive(ToJson, FromJson)
 
 ///|

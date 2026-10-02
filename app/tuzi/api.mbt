@@ -9,6 +9,7 @@ fn routes(
   ctx => {
     ctx
     ..get("/api/base", (_req, res) => respond(res, () => config))
+    ..get("/api/drives", (_req, res) => respond(res, () => list_drives()))
     ..get("/api/image", serve_image)
     ..get("/api/file/:name", serve_file)
     ..post("/api/open", (req, res) => {

@@ -8,12 +8,12 @@ fn allow_drop(drag : @dom.DragEvent) -> Cmd {
 ///|
 fn panes_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
   model
-  .map(model => (model.icons, model.openers))
+  .map(model => (model.icons, model.openers, model.supports_drive_selection))
   .switch_by(
     configuration => {
-      let (icons, openers) = configuration
-      pane_stack_view(model, Left, emit, icons, openers).view2(
-        pane_stack_view(model, Right, emit, icons, openers),
+      let (icons, openers, supports_drives) = configuration
+      pane_stack_view(model, Left, emit, icons, openers, supports_drives).view2(
+        pane_stack_view(model, Right, emit, icons, openers, supports_drives),
         (left, right) => div(id="panes", style=panes_style(), [left, right]),
       )
     },
@@ -28,6 +28,7 @@ fn pane_stack_view(
   emit : Emit[Msg],
   icons : IconMode,
   openers : @tuzi.OpenRegistry?,
+  supports_drives : Bool,
 ) -> Val[Html] {
   let stack = model.map(model => {
     match idx {
@@ -44,12 +45,28 @@ fn pane_stack_view(
     .assoc_by(
       (id, pane) => {
         let rows = pane_rows(pane, filter, idx, emit, icons, openers)
-        let content = pane.view5(filter, sort, active, rows, (
+        let drive_menu = pane
+          .map(pane => pane.path)
+          .switch_by(
+            path => {
+              guard supports_drives else { return Val::constant(@html.nothing) }
+              let (_, root) = breadcrumb_segments(path)[0]
+              drive_menu_view(
+                "pane-\{idx.index()}-view-\{id}-drives",
+                root,
+                idx,
+                emit,
+              )
+            },
+            by=path => path.to_string(),
+          )
+        let content = pane.view6(filter, sort, active, rows, drive_menu, (
           pane,
           filter,
           sort,
           active,
           rows,
+          drive_menu,
         ) => {
           pane.pane_view(
             pane.view_data(filter?),
@@ -59,6 +76,7 @@ fn pane_stack_view(
             active,
             filter,
             rows,
+            drive_menu=if supports_drives { Some(drive_menu) } else { None },
           )
         })
         let visible = visible_id.map(current => current == id)
@@ -106,6 +124,7 @@ fn Pane::pane_view(
   active : Bool,
   filter : String?,
   rows : Html,
+  drive_menu~ : Html?,
 ) -> Html {
   let sort_label = match sort {
     Name => "name"
@@ -119,6 +138,7 @@ fn Pane::pane_view(
       idx,
       emit,
       pane_header_style(active),
+      drive_menu~,
     ),
     "status": fragment(
       match pane.loading {
@@ -166,10 +186,15 @@ fn breadcrumbs_view(
   idx : PaneSide,
   emit : Emit[Msg],
   head_style : Array[String],
+  drive_menu~ : Html?,
 ) -> Html {
   let items : Array[Html] = []
   for pair in breadcrumb_segments(path) {
     let (part, target) = pair
+    if items.is_empty() && drive_menu is Some(menu) {
+      items.push(@rui.breadcrumb_item(menu))
+      continue
+    }
     if !items.is_empty() {
       items.push(@rui.breadcrumb_separator())
     }

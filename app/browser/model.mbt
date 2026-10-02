@@ -62,6 +62,7 @@ priv struct Model {
   theme : Theme
   icons : IconMode
   openers : @tuzi.OpenRegistry?
+  supports_drive_selection : Bool
   panes : (PaneStack, PaneStack)
   active : PaneSide
   sort : SortMode
@@ -120,6 +121,7 @@ fn Model::initialize() -> Model {
     theme: Theme::default_theme(),
     icons: IconMode::default_mode(),
     openers: None,
+    supports_drive_selection: false,
     panes: (PaneStack::initialize(Path("")), PaneStack::initialize(Path(""))),
     active: Left,
     sort: Name,

@@ -108,7 +108,14 @@ fn parse_server_config(
     }
     @shared.IconMode::parse(icons)
   }
-  { base, startup, theme, icons, openers, }
+  {
+    base,
+    startup,
+    theme,
+    icons,
+    openers,
+    supports_drive_selection: SupportsDriveSelection,
+  }
 }
 
 ///|
