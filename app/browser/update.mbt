@@ -74,6 +74,23 @@ fn Model::update_message(
     TaskEvent(msg) => model.update_tasks(msg, emit)
     RenameOpen => model.open_rename_dialog(emit)
     ZipOpen => (model.open_archive_dialog(), @rabbita.none)
+    ZipLevelChanged(value) => {
+      guard model.dialog is ZipInput(directory~, names~, input~, ..) else {
+        return (model, @rabbita.none)
+      }
+      let level = @string.parse_int(value, base=10) catch {
+        _ => return (model, @rabbita.none)
+      }
+      guard level >= 0 && level <= 9 else { return (model, @rabbita.none) }
+      (
+        {
+          ..model,
+          dialog: ZipInput(directory~, names~, input~, level~),
+          dialog_error: "",
+        },
+        @rabbita.none,
+      )
+    }
     ActivityOpen =>
       ({ ..model, dialog: Activity, dialog_error: "", }, @rabbita.none)
     MkdirOpen =>

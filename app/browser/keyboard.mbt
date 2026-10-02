@@ -114,8 +114,8 @@ fn Model::handle_keyboard_event(
 }
 
 ///|
-/// Handle Enter inside a dialog: submit explicitly for non-button targets and
-/// let a focused button or link activate natively. Stop propagation so the
+/// Handle Enter inside a dialog: let buttons, links, and selects activate
+/// natively, and submit explicitly for other targets. Stop propagation so the
 /// global Enter (open entry) never fires, and swallow IME/repeat Enter so a
 /// single keypress cannot submit twice.
 fn handle_dialog_keyboard_event(
@@ -139,7 +139,7 @@ fn handle_dialog_keyboard_event(
     "Enter" => {
       event.stop_propagation()
       guard !target.map_or(false, element => {
-        element.closest("button, a[href]") is Some(_)
+        element.closest("button, a[href], select") is Some(_)
       }) else {
         return @rabbita.none
       }

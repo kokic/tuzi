@@ -8,7 +8,12 @@ using @path {type Path}
 pub(all) enum FileOperation {
   Delete(target~ : Path)
   Rename(source~ : Path, new_name~ : String)
-  Zip(directory~ : Path, names~ : Array[String], output_name~ : String)
+  Zip(
+    directory~ : Path,
+    names~ : Array[String],
+    output_name~ : String,
+    level~ : Int
+  )
   Unzip(source~ : Path, destination~ : Path)
   Mkdir(parent~ : Path, name~ : String)
   Copy(source~ : Path, destination~ : Path)

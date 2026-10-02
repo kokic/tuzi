@@ -55,7 +55,7 @@ Each pane's bar shows the total number of items and the number of selected items
 - `d` delete, `r` rename, `n` new dir, `s` sort, `y` copy path, `f` filter
 - `i` shows information for the file or folder under the cursor: name, full path, type, file size in bytes, and modification time in UTC (including seconds). Folder sizes are neither calculated nor shown. `Esc`/Close/`×`/click outside closes the dialog.
   Unavailable metadata is shown as unknown; a failed modification-time lookup does not discard an available file size.
-- `z` compress the selected items (or the item under the cursor) into a ZIP archive in the same directory
+- `z` compress the selected items (or the item under the cursor) into a ZIP archive in the same directory. The dialog lets you set the archive name and compression level (0–9, default 6). Level 0 disables Deflate compression; higher levels favor smaller files over speed. Known compressed file types are stored without recompression at every level.
 - `?` opens the keymap help dialog (`Esc`/`×`/click outside closes it)
 
 File operations are logged to the server's stdout.

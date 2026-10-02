@@ -37,7 +37,12 @@ priv enum Dialog {
   GitInfo(GitContext)
   DeleteConfirm(directory~ : Path, names~ : Array[String])
   RenameInput(directory~ : Path, original~ : String, input~ : String)
-  ZipInput(directory~ : Path, names~ : Array[String], input~ : String)
+  ZipInput(
+    directory~ : Path,
+    names~ : Array[String],
+    input~ : String,
+    level~ : Int
+  )
   UnzipInput(source~ : Path, input~ : String)
   MkdirInput(directory~ : Path, input~ : String)
   GitRenameInput(context~ : GitContext, reference~ : String, input~ : String)
@@ -80,6 +85,7 @@ priv enum Msg {
   DeleteOpen
   RenameOpen
   ZipOpen
+  ZipLevelChanged(String)
   ActivityOpen
   MkdirOpen
   FilterFocus(Bool)

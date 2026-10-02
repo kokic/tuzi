@@ -48,6 +48,7 @@ fn Model::open_archive_dialog(model : Model) -> Model {
       directory=pane.path,
       names=items.map(item => item.name),
       input=default_archive_name(items, pane.path),
+      level=6,
     ),
     dialog_error: "",
   }
@@ -58,7 +59,8 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
   match self {
     RenameInput(directory~, original~, ..) =>
       RenameInput(directory~, original~, input~)
-    ZipInput(directory~, names~, ..) => ZipInput(directory~, names~, input~)
+    ZipInput(directory~, names~, level~, ..) =>
+      ZipInput(directory~, names~, input~, level~)
     UnzipInput(source~, ..) => UnzipInput(source~, input~)
     MkdirInput(directory~, ..) => MkdirInput(directory~, input~)
     GitRenameInput(context~, reference~, ..) =>
@@ -102,14 +104,14 @@ fn Model::submit_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
           ),
         ]
       })
-    ZipInput(directory~, names~, input~) =>
+    ZipInput(directory~, names~, input~, level~) =>
       match validate_dialog_name(input) {
         Err(message) => Err(message)
         Ok(name) => {
           guard names.all(name => @tuzi.is_valid_archive_name(name)) else {
             Err("A selected entry has an invalid archive name")
           }
-          Ok([FileOperation::Zip(directory~, names~, output_name=name)])
+          Ok([FileOperation::Zip(directory~, names~, output_name=name, level~)])
         }
       }
     UnzipInput(source~, input~) => {

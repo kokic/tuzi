@@ -4,6 +4,7 @@ priv suberror ArchiveError {
   EmptySelection
   UnsupportedEntry(String)
   OutputIsInput(String)
+  InvalidCompressionLevel(Int)
 }
 
 ///|
@@ -37,7 +38,9 @@ fn validate_archive_name(name : String) -> Unit raise ArchiveError {
 fn validate_zip_selection(
   names : Array[String],
   output_name : String,
+  level~ : Int,
 ) -> Unit raise {
+  guard level >= 0 && level <= 9 else { raise InvalidCompressionLevel(level) }
   validate_entry_name(output_name)
   guard !names.is_empty() else { raise EmptySelection }
   names.each(validate_archive_name)
@@ -45,7 +48,12 @@ fn validate_zip_selection(
 }
 
 ///|
-async fn zip_entries(path : Path, names : Array[String], name : String) -> Unit {
+async fn zip_entries(
+  path : Path,
+  names : Array[String],
+  name : String,
+  level~ : Int,
+) -> Unit {
   let output = path.join(Path("./\{name}")).to_string()
   let file = @async_fs.create(output, allow_existing=false)
   defer file.close()
@@ -54,7 +62,7 @@ async fn zip_entries(path : Path, names : Array[String], name : String) -> Unit 
     @async_fs.remove(output)
   }
   let sink : ZipOutput = { file, pending: [], }
-  let writer = @zip.Writer(bytes => sink.pending.push(bytes.to_owned()))
+  let writer = @zip.Writer(bytes => sink.pending.push(bytes.to_owned()), level~)
   for entry in names {
     add_archive_entry(writer, sink, path.join(Path("./\{entry}")), entry)
   }
@@ -127,7 +135,9 @@ let stored_archive_extensions : ReadOnlyArray[String] = [
 fn archive_compression(name : String) -> @zip.Compression {
   guard name.rev_find(".") is Some(dot) else { return Deflate }
   let extension = name.view(start_offset=dot + 1).to_owned().to_lower()
-  guard stored_archive_extensions.binary_search(extension) is Err(_) else {
+  guard stored_archive_extensions.binary_search_by(ext => {
+    ext.lexical_compare(extension)
+  }) is Err(_) else {
     return Store
   }
   return Deflate

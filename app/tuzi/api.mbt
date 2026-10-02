@@ -119,6 +119,8 @@ fn api_failure(error : Error) -> @shared.ApiFailure {
       (Unsupported, "Unsupported entry: " + path)
     PartialFailure(message) => (PartialFailure, message)
     EmptySelection => (InvalidRequest, "Select at least one entry")
+    InvalidCompressionLevel(level) =>
+      (InvalidRequest, "Compression level must be between 0 and 9: \{level}")
     ExtractionError::UnsafePath(_) as error =>
       (InvalidName, Show::to_string(error))
     ExtractionError::ChecksumMismatch(_) as error =>

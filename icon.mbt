@@ -15,7 +15,17 @@ let extension_icons : Map[String, String] = {
   let shell_icon = file_icon(".sh", fill="currentColor")
   Map::from_iter(
     [
-      shell_formats.iter().map(extension => (extension, shell_icon)),
+      shell_formats
+      .iter()
+      .map(extension => {
+        let icon = match extension {
+          "bash" => file_icon(".sh", fill="#4eaa25")
+          // https://github.com/PowerShell/PowerShell/blob/master/assets/powershell_128.svg
+          "ps1" => file_icon("ps1", fill="#5391fe")
+          _ => shell_icon
+        }
+        (extension, icon)
+      }),
       font_formats.iter().map(extension => (extension, SVG_FONT)),
       video_formats.iter().map(extension => (extension, SVG_VIDEO)),
       image_formats.iter().map(extension => (extension, SVG_IMAGE)),
@@ -67,7 +77,7 @@ let builtin_svg_icons : IconRegistry = {
     "changelog": file_icon("log", fill="#888888"),
     "makefile": file_icon("mk", fill="#dd6b20"),
     "gnumakefile": file_icon("mk", fill="#dd6b20"),
-    "cmakelists.txt": file_icon("cmk", fill="#dd6b20"),
+    "cmakelists.txt": file_icon("cmk", fill="#064f8c"),
     "dockerfile": file_icon("dock", fill="#2496ed"),
     "containerfile": file_icon("dock", fill="#2496ed"),
     ".dockerignore": file_icon("dock", fill="#2496ed"),
@@ -77,14 +87,14 @@ let builtin_svg_icons : IconRegistry = {
     ".env.development": file_icon("env", fill="#dd6b20"),
     ".env.production": file_icon("env", fill="#dd6b20"),
     ".env.test": file_icon("env", fill="#dd6b20"),
-    ".editorconfig": file_icon("cfg", fill="#dd6b20"),
+    ".editorconfig": file_icon("cfg", fill="currentColor"),
     ".npmrc": file_icon("npm", fill="#cb3837"),
-    ".nvmrc": file_icon("node", fill="#68a063"),
+    ".nvmrc": file_icon("nvm", fill="#f4dd4b"),
     ".yarnrc": file_icon("yarn", fill="#2c8ebb"),
-    ".prettierrc": file_icon("cfg", fill="#dd6b20"),
-    ".eslintrc": file_icon("cfg", fill="#dd6b20"),
-    ".bashrc": file_icon(".sh", fill="currentColor"),
-    ".bash_profile": file_icon(".sh", fill="currentColor"),
+    ".prettierrc": file_icon("cfg", fill="#f7b93e"),
+    ".eslintrc": file_icon("cfg", fill="#4b32c3"),
+    ".bashrc": file_icon(".sh", fill="#4eaa25"),
+    ".bash_profile": file_icon(".sh", fill="#4eaa25"),
     ".zshrc": file_icon(".sh", fill="currentColor"),
     ".zprofile": file_icon(".sh", fill="currentColor"),
     ".profile": file_icon(".sh", fill="currentColor"),
