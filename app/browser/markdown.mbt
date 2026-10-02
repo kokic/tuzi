@@ -77,16 +77,25 @@ fn MarkdownView::label(self : MarkdownView) -> String {
 
 ///|
 fn MarkdownView::icon(self : MarkdownView) -> Html {
-  let shape = match self {
-    Preview =>
-      "<path d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z'/><circle cx='12' cy='12' r='3'/>"
-    Code => "<path d='m8 5-7 7 7 7m8-14 7 7-7 7m-3-17-2 20'/>"
-  }
-  icon_view(
-    Some(
-      Svg(
-        "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'>\{shape}</svg>",
-      ),
+  span(
+    style=["display: inline-flex", "flex-shrink: 0"],
+    attrs=@html.Attrs::build().aria_hidden("true"),
+    @svg.svg(
+      width=14,
+      height=14,
+      view_box="0 0 24 24",
+      style=[
+        "fill: none", "stroke: currentColor", "stroke-width: 1.8", "stroke-linecap: round",
+        "stroke-linejoin: round",
+      ],
+      match self {
+        Preview =>
+          [
+            @svg.path(d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"),
+            @svg.circle(cx=12, cy=12, r=3),
+          ]
+        Code => [@svg.path(d="m8 5-7 7 7 7m8-14 7 7-7 7m-3-17-2 20")]
+      },
     ),
   )
 }
@@ -108,7 +117,7 @@ fn MarkdownContext::dialog(context : MarkdownContext, emit : Emit[Msg]) -> Html 
         [
           @rui.tabs_list(
             aria_label="Markdown view",
-            style=["flex-shrink: 0"],
+            style=["flex-shrink: 0", "min-height: 0", "padding: 2px"],
             [Preview, Code].map(view => {
               let label = view.label()
               @rui.tabs_trigger(
@@ -117,7 +126,16 @@ fn MarkdownContext::dialog(context : MarkdownContext, emit : Emit[Msg]) -> Html 
                 controls="markdown-panel-\{label}",
                 selected=context.view == view,
                 on_value_change=emit.map(_ => MarkdownEvent(ViewChanged(view))),
-                style=[UI_FONT_STYLE],
+                style=[
+                  UI_FONT_STYLE,
+                  "box-sizing: border-box",
+                  "height: 26px",
+                  "min-height: 0",
+                  "padding: 0 8px",
+                  "gap: 4px",
+                  "font-size: 0.75rem",
+                  "line-height: 18px",
+                ],
                 [view.icon(), span(label)],
               )
             }),
@@ -159,8 +177,8 @@ fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
             style=[
               CODE_FONT_STYLE,
               "margin: 0",
-              "white-space: pre",
-              "overflow-wrap: normal",
+              "white-space: pre-wrap",
+              "overflow-wrap: anywhere",
               "font-size: 0.8125rem",
               "line-height: 1.6",
             ],

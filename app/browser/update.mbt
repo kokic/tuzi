@@ -72,6 +72,33 @@ fn Model::update_message(
     DeleteOpen => (model.open_delete_dialog(), @rabbita.none)
     InfoOpen => model.open_info_dialog(emit)
     OpenWith(target, id) => model.execute_opener(target, id, emit)
+    EntryAction(idx, view_id, name, action) => {
+      let pane = model.pane_at(idx)
+      guard pane.id == view_id &&
+        pane
+        .visible_entries(filter?=model.entry_filter())
+        .any(entry => entry.name == name) else {
+        return (model, @rabbita.none)
+      }
+      let pane = {
+        ..pane,
+        cursor: Some(name),
+        selected: if pane.selected.contains(name) {
+          pane.selected
+        } else {
+          Set([])
+        },
+      }
+      let model = {
+        ..model,
+        active: idx,
+        panes: set_pane(model.panes, idx, pane),
+      }
+      model.update_message(action, emit, toast_send)
+    }
+    TransferSelection(kind) =>
+      model.transfer_selection_to_other_pane(kind, emit)
+    CopyPaths => model.copy_selected_paths_to_clipboard(emit)
     MarkdownEvent(msg) => (model.update_markdown(msg), @rabbita.none)
     GitEvent(msg) => model.update_git(msg, emit)
     TaskEvent(msg) => model.update_tasks(msg, emit)

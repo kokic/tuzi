@@ -1,11 +1,7 @@
 ///|
 let appearance_style : Array[String] = [
-  "--rui-radius: 6px", "--rui-background: light-dark(#fafafa, #202020)", "--rui-card: light-dark(#ffffff, #262626)",
-  "--rui-card-foreground: var(--rui-foreground)", "--rui-popover: var(--rui-card)",
-  "--rui-popover-foreground: var(--rui-foreground)", "--rui-input-background: var(--rui-card)",
-  "--rui-outline-background: var(--rui-card)", "--tuzi-header-background: light-dark(#fafafa, #242424)",
-  "--tuzi-selection-background: light-dark(#e5e5e5, #3a3a3a)", "--tuzi-selection-indicator: var(--rui-muted-foreground)",
-  "--tuzi-marked-background: light-dark(#f0f0f0, #303030)",
+  "--rui-radius: 6px", "--tuzi-selection-background: light-dark(#e5e5e5, #3a3a3a)",
+  "--tuzi-selection-indicator: var(--rui-muted-foreground)", "--tuzi-marked-background: light-dark(#f0f0f0, #303030)",
 ]
 
 ///|
@@ -56,6 +52,8 @@ fn pane_style(active : Bool) -> Array[String] {
     "box-sizing: border-box",
     "overflow: clip",
     "background: var(--rui-card)",
+    "container-type: inline-size",
+    "container-name: file-pane",
     ..if active {
       [
         "--tuzi-cursor-background: var(--tuzi-selection-background)", "--tuzi-cursor-indicator: var(--tuzi-selection-indicator)",
@@ -79,7 +77,7 @@ fn pane_header_style(active : Bool) -> Array[String] {
     "padding: 3px 8px",
     "min-height: 28px",
     "border-bottom: 1px solid var(--rui-border)",
-    "background: var(--tuzi-header-background)",
+    "background: var(--rui-background)",
     ..if active {
       ["background: var(--rui-muted)"]
     },
@@ -89,9 +87,19 @@ fn pane_header_style(active : Bool) -> Array[String] {
 ///|
 fn pane_list_style() -> Array[String] {
   [
-    "flex: 1", "display: grid", "grid-template-columns: max-content max-content max-content minmax(0, 1fr)",
-    "column-gap: 8px", "align-content: start", "overflow-y: auto", "margin: 0", "padding: 4px 0",
-    "list-style: none", "scrollbar-width: thin", "scrollbar-color: var(--rui-border) transparent",
+    CODE_FONT_STYLE,
+    "flex: 1",
+    "display: grid",
+    "grid-template-columns: max-content max-content minmax(0, 1fr) max-content calc(var(--tuzi-time-column, 17ch) + 10px)",
+    "font-size: var(--tuzi-entry-subtitle-size)",
+    "column-gap: 8px",
+    "align-content: start",
+    "overflow-y: auto",
+    "margin: 0",
+    "padding: 4px 0",
+    "list-style: none",
+    "scrollbar-width: thin",
+    "scrollbar-color: var(--rui-border) transparent",
   ]
 }
 
@@ -103,14 +111,14 @@ fn pane_status_style() -> Array[String] {
 ///|
 fn row_style(is_cursor : Bool, selected : Bool) -> Array[String] {
   [
+    UI_FONT_STYLE,
     "display: grid",
     "grid-column: 1 / -1",
     "grid-template-columns: subgrid",
     "align-items: center",
     "min-width: 0",
-    "padding: 4px 10px",
+    "padding: 0",
     "cursor: pointer",
-    // Only the filename child opts back into text selection.
     "-webkit-user-select: none",
     "user-select: none",
     "line-height: var(--tuzi-entry-line-height)",
@@ -131,45 +139,42 @@ fn row_style(is_cursor : Bool, selected : Bool) -> Array[String] {
 ///|
 fn entry_open_area_style() -> Array[String] {
   [
-    "grid-column: 3 / -1", "display: grid", "grid-template-columns: subgrid", "align-items: center",
-    "align-self: stretch", "min-width: 0",
+    "grid-column: 3 / -1", "display: grid", "grid-template-columns: subgrid", "align-items: baseline",
+    "min-width: 0",
   ]
 }
 
 ///|
-fn entry_content_style() -> Array[String] {
+fn entry_title_style(entry : Entry, color : String) -> Array[String] {
+  let foreground = match color {
+    "currentColor" if entry.name.has_prefix(".") =>
+      "var(--rui-muted-foreground)"
+    "currentColor" => "var(--rui-foreground)"
+    // Keep the matched hue, adjusting lightness for readable text in either theme.
+    _ =>
+      "light-dark(oklch(from \{color} min(l, 0.5) c h / 1), oklch(from \{color} max(l, 0.75) c h / 1))"
+  }
   [
-    "grid-column: 2", "display: flex", "flex-direction: column", "min-width: 0",
-    "content-visibility: auto", "contain-intrinsic-block-size: auto var(--tuzi-entry-height)",
-  ]
-}
-
-///|
-fn icon_box_style() -> Array[String] {
-  [
-    "position: relative", "content-visibility: auto", "align-self: center", "width: var(--tuzi-entry-height)",
-    "height: var(--tuzi-entry-height)", "display: inline-flex", "align-items: center",
-    "justify-content: center", "overflow: hidden",
-  ]
-}
-
-///|
-fn entry_title_style(entry : Entry) -> Array[String] {
-  [
+    "min-width: 0",
+    "grid-column: 1",
+    "display: flex",
+    "align-items: baseline",
     "overflow: hidden",
     "white-space: nowrap",
-    "text-overflow: ellipsis",
     "font-size: var(--tuzi-entry-title-size)",
-    ..if entry.name.has_prefix(".") {
-      ["color: var(--rui-muted-foreground)"]
-    },
+    "color: \{foreground}",
   ]
 }
 
 ///|
 fn entry_meta_style() -> Array[String] {
   [
-    "overflow: hidden", "white-space: nowrap", "text-overflow: ellipsis", "font-size: var(--tuzi-entry-subtitle-size)",
+    CODE_FONT_STYLE,
+    "min-width: 0",
+    "overflow: hidden",
+    "white-space: nowrap",
+    "text-overflow: ellipsis",
+    "font-size: var(--tuzi-entry-subtitle-size)",
     "color: var(--rui-muted-foreground)",
   ]
 }
@@ -179,7 +184,7 @@ fn entry_details_style() -> Array[String] {
   [
     "flex: none", "padding: 4px 10px", "font-size: var(--tuzi-footer-size)", "color: var(--rui-muted-foreground)",
     "white-space: nowrap", "overflow: hidden", "text-overflow: ellipsis", "min-height: 18px",
-    "line-height: 18px", "border-top: 1px solid var(--rui-border)", "background: var(--tuzi-header-background)",
+    "line-height: 18px", "border-top: 1px solid var(--rui-border)", "background: var(--rui-background)",
   ]
 }
 

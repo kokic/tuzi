@@ -83,6 +83,9 @@ priv enum Msg {
   HelpOpen
   InfoOpen
   OpenWith(OpenTarget, String)
+  EntryAction(PaneSide, Int, String, Msg)
+  TransferSelection(TransferKind)
+  CopyPaths
   MarkdownEvent(MarkdownMsg)
   GitEvent(GitMsg)
   TaskEvent(TaskMsg)

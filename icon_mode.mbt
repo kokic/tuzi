@@ -38,17 +38,3 @@ pub extend IconMode with ToJson::{to_json}
 
 ///|
 pub extend IconMode with FromJson::{from_json}
-
-///|
-pub(all) enum IconTheme {
-  None
-  Svg(IconRegistry)
-}
-
-///|
-pub fn icons_for(mode : IconMode) -> IconTheme {
-  match mode {
-    None => None
-    Svg => Svg(builtin_svg_icons)
-  }
-}

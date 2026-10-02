@@ -45,7 +45,6 @@ fn FontTheme::style(fonts : FontTheme) -> Array[String] {
     "--tuzi-pane-header-size: \{fonts.sizes.pane_header}",
     "--tuzi-footer-size: \{fonts.sizes.footer}",
     "--tuzi-entry-line-height: \{fonts.entry_line_height}",
-    "--tuzi-entry-height: calc((var(--tuzi-entry-title-size) + var(--tuzi-entry-subtitle-size)) * var(--tuzi-entry-line-height))",
     UI_FONT_STYLE,
   ]
 }

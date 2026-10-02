@@ -1,27 +1,28 @@
 ///|
-/// Content is trusted embedded SVG.
-pub(all) struct IconRegistry {
+/// File and directory matching rules for filename colors.
+priv struct EntryColorRegistry {
   /// Lowercase directory names, such as .git or _build.
   exact_folder : Map[String, String]
   /// Marker file names, such as .git or package.json.
-  folder_icons : Map[String, String]
+  marker_colors : Map[String, String]
   dot_folder : String
   folder : String
   filenames : Map[String, String]
   /// Lowercase extensions without a leading dot; "" means no extension.
   extensions : Map[String, String]
-  /// Receives the same normalized extension as extensions.
-  rules : Array[(String) -> String?]
   unknown_file : String
 }
 
 ///|
-pub fn IconRegistry::for_entry(self : IconRegistry, entry : Entry) -> String {
+fn EntryColorRegistry::for_entry(
+  self : EntryColorRegistry,
+  entry : Entry,
+) -> String {
   let name = entry.name.to_lower()
   guard !entry.is_dir else {
-    match () {
+    return match () {
       _ if self.exact_folder.get(name) is Some(content) => content
-      _ if self.folder_icons.get(entry.marker) is Some(content) => content
+      _ if self.marker_colors.get(entry.marker) is Some(content) => content
       _ if entry.name.has_prefix(".") => self.dot_folder
       _ => self.folder
     }
@@ -46,9 +47,13 @@ pub fn IconRegistry::for_entry(self : IconRegistry, entry : Entry) -> String {
   if self.extensions.get(extension) is Some(content) {
     return content
   }
-  for rule in self.rules {
-    guard rule(extension) is Some(content) else { continue }
-    return content
-  }
   self.unknown_file
+}
+
+///|
+pub fn entry_color(entry : Entry, mode : IconMode) -> String {
+  match mode {
+    None => "currentColor"
+    Svg => builtin_entry_colors.for_entry(entry)
+  }
 }

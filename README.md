@@ -51,7 +51,7 @@ Each pane's bar shows the total number of items and the number of selected items
 - `Tab`/`←`/`→` switch the active pane
 - `↑↓` move, `Enter` enter a directory or open the file under the cursor, `Esc` up, `Space` multi-select
 - Double-click also enters a directory or opens a file. Markdown (`.md` / `.markdown`, case-insensitive) opens in a dialog with Preview / Code icon tabs for rendered content and original text. Other known formats use the browser's native viewer in a new tab. Unknown formats up to and including 1 MiB (1,048,576 bytes) open as plain text; larger files show an unsupported-format toast without opening a tab or downloading. HTML and SVG documents are sandboxed with scripts disabled.
-- Right-click a file or folder to see its available opening methods in a context menu; click a method to open it immediately. Source/text files such as `.c` and `.md` can open in VSCode; folders can open in Tuzi, the system file manager (Explorer on Windows), or VSCode. External applications run on the computer hosting Tuzi and must be installed there.
+- Right-click a file or folder for opening methods, copy/move to the other pane, rename, copy path, ZIP compression, information, new directory, and delete. Actions use the clicked item, or the current selection when the clicked item is selected; rename requires a single item and information shows the clicked item. Delete opens the existing confirmation dialog. Source/text files such as `.c` and `.md` can open in VSCode; folders can open in Tuzi, the system file manager (Explorer on Windows), or VSCode. External applications run on the computer hosting Tuzi and must be installed there.
 - `c`/`m` copy/move to the other pane (drag & drop works too)
 - `d` delete, `r` rename, `n` new dir, `s` sort, `y` copy path, `f` filter
 - `i` shows information for the file or folder under the cursor: name, full path, type, file size in bytes, and modification time in UTC (including seconds). Folder sizes are neither calculated nor shown. `Esc`/Close/`×`/click outside closes the dialog.
@@ -64,7 +64,7 @@ File operations are logged to the server's stdout.
 ## Openers
 
 Configure opening methods in `app/tuzi/open_config.mbt`, like the code-defined
-icon registry. `configured_openers` defines each opener once with its label and
+file color registry. `configured_openers` defines each opener once with its label and
 built-in action or external program. External arguments are an array of
 `Literal("...")` and `Target` values, passed to the configured program.
 

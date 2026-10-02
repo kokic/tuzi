@@ -43,14 +43,7 @@ fn pane_stack_view(
     .map(stack => @vector.Vector::from_array([..stack.parents, stack.current]))
     .assoc_by(
       (id, pane) => {
-        let rows = pane_rows(
-          pane,
-          filter,
-          idx,
-          emit,
-          @tuzi.icons_for(icons),
-          openers,
-        )
+        let rows = pane_rows(pane, filter, idx, emit, icons, openers)
         let content = pane.view5(filter, sort, active, rows, (
           pane,
           filter,
@@ -110,56 +103,51 @@ fn Pane::pane_view(
     Size => "size"
     Time => "time"
   }
-  div(
-    id="pane-\{idx.index()}-view-\{pane.id}",
-    class=if active { "pane active" } else { "pane" },
-    style=pane_style(active),
-    {
-      "header": breadcrumbs_view(
-        pane.path,
-        sort_label,
-        idx,
-        emit,
-        pane_header_style(active),
-      ),
-      "status": fragment(
-        match pane.loading {
-          Unloaded | Loading =>
+  div(id="pane-\{idx.index()}-view-\{pane.id}", style=pane_style(active), {
+    "header": breadcrumbs_view(
+      pane.path,
+      sort_label,
+      idx,
+      emit,
+      pane_header_style(active),
+    ),
+    "status": fragment(
+      match pane.loading {
+        Unloaded | Loading =>
+          [
+            @rui.field_description(
+              style=pane_status_style(),
+              "Loading directory…",
+            ),
+          ]
+        LoadFailed(error) =>
+          [
+            div(style=pane_status_style(), [
+              @rui.field_error(error),
+              @rui.button(
+                style=[UI_FONT_STYLE],
+                variant=Outline,
+                on_click=emit(PaneEvent(ReloadPane(idx))),
+                "Retry",
+              ),
+            ]),
+          ]
+        Ready =>
+          if pane.entries.is_empty() {
             [
               @rui.field_description(
                 style=pane_status_style(),
-                "Loading directory…",
+                "Empty directory",
               ),
             ]
-          LoadFailed(error) =>
-            [
-              div(style=pane_status_style(), [
-                @rui.field_error(error),
-                @rui.button(
-                  style=[UI_FONT_STYLE],
-                  variant=Outline,
-                  on_click=emit(PaneEvent(ReloadPane(idx))),
-                  "Retry",
-                ),
-              ]),
-            ]
-          Ready =>
-            if pane.entries.is_empty() {
-              [
-                @rui.field_description(
-                  style=pane_status_style(),
-                  "Empty directory",
-                ),
-              ]
-            } else {
-              []
-            }
-        },
-      ),
-      "entries": rows,
-      "details": data.entry_details_view(),
-    },
-  )
+          } else {
+            []
+          }
+      },
+    ),
+    "entries": rows,
+    "details": data.entry_details_view(),
+  })
 }
 
 ///|
@@ -252,7 +240,7 @@ fn pane_rows(
   filter : Val[String?],
   idx : PaneSide,
   emit : Emit[Msg],
-  icons : IconTheme,
+  icons : IconMode,
   openers : @tuzi.OpenRegistry?,
 ) -> Val[Html] {
   let rows = pane
@@ -285,8 +273,8 @@ fn pane_rows(
             name,
             li(
               id="pane-\{idx.index()}-view-\{row.view_id}-row-\{row.row}",
-              class=if row.is_cursor { "entry-row sel" } else { "entry-row" },
-              style=[..row_style(row.is_cursor, row.selected), "padding: 0"],
+              class="entry-row",
+              style=row_style(row.is_cursor, row.selected),
               menu,
             ),
           )
@@ -305,7 +293,7 @@ fn entry_context_menu(
   item : EntryRow,
   idx : PaneSide,
   emit : Emit[Msg],
-  icons : IconTheme,
+  icons : IconMode,
   openers : @tuzi.OpenRegistry?,
 ) -> Val[Html] {
   let { entry, row, selected, .. } = item
@@ -322,7 +310,7 @@ fn entry_context_menu(
       attrs=@html.Attrs::build().aria_label("Select \{entry.name}"),
       style=[
         "accent-color: var(--rui-primary)", "width: 14px", "height: 14px", "margin: 0",
-        "cursor: pointer",
+        "cursor: pointer", "align-self: center",
       ],
       on_change=emit.map(_value => PaneEvent(Select(idx, entry.name))),
     ),
@@ -339,32 +327,18 @@ fn entry_context_menu(
         emit(PaneEvent(DblClick(idx, row)))
       }),
       [
-        icon_view(icons, entry),
-        div(style=entry_content_style(), [
-          span(
-            style=entry_title_style(entry) +
-              ["-webkit-user-select: text", "user-select: text"],
-            entry.name,
-          ),
-          span(style=entry_meta_style(), format_entry_meta(entry)),
-        ]),
+        entry_name_view(entry, @tuzi.entry_color(entry, icons)),
+        entry_size_view(entry),
+        entry_time_view(entry),
       ],
     ),
   ]
   let id = "pane-\{idx.index()}-view-\{item.view_id}-row-\{row}"
   let trigger_style = [
-    "display: grid", "grid-column: 1 / -1", "grid-template-columns: subgrid", "align-items: center",
+    "display: grid", "grid-column: 1 / -1", "grid-template-columns: subgrid", "align-items: baseline",
     "min-width: 0", "padding: 4px 10px",
   ]
-  guard openers is Some(registry) else {
-    return Val::constant(div(style=trigger_style, attrs=row_attrs, children))
-  }
-  let target : OpenTarget = {
-    pane: idx,
-    path: Path(item.directory).join(Path("./\{entry.name}")),
-    entry,
-  }
-  @rui.context_menu(id=id + "-open", style=["display: contents"], scope => {
+  @rui.context_menu(id=id + "-open", scope => {
     fragment([
       @rui.context_menu_trigger(
         scope,
@@ -373,7 +347,7 @@ fn entry_context_menu(
         style=trigger_style,
         children,
       ),
-      open_with_menu(scope, target, registry, emit),
+      entry_menu_content(scope, item, idx, openers, emit),
     ])
   })
 }
@@ -383,5 +357,5 @@ fn PaneViewData::entry_details_view(data : PaneViewData) -> Html {
   let info = data
     .cursor_entry()
     .map_or("", entry => "\{entry.name}  \{format_entry_meta(entry)}")
-  div(class="pinfo", style=entry_details_style(), info)
+  div(style=entry_details_style(), info)
 }

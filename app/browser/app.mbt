@@ -12,7 +12,6 @@ using @tuzi {
   type Entry,
   type Theme,
   type IconMode,
-  type IconTheme,
   type SortMode,
   type FileOperation,
   type GitOperation,

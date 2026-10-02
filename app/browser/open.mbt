@@ -153,12 +153,12 @@ fn Model::execute_opener(
 }
 
 ///|
-fn open_with_menu(
+fn open_with_items(
   scope : @rui.ContextMenuScope,
   target : OpenTarget,
   registry : @tuzi.OpenRegistry,
   emit : Emit[Msg],
-) -> Html {
+) -> Array[Html] {
   let association = registry.for_entry(
     target.entry.name,
     is_dir=target.entry.is_dir,
@@ -175,10 +175,5 @@ fn open_with_menu(
       ),
     )
   }
-  @rui.context_menu_content(
-    scope,
-    aria_label="Open with",
-    style=[UI_FONT_STYLE],
-    items,
-  )
+  items
 }

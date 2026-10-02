@@ -30,13 +30,32 @@
             outline-offset: 2px;
         }
 
+        @container file-pane (max-width: 32rem) {
+            #tuzi .plist {
+                --tuzi-time-column: 10ch;
+            }
+
+            #tuzi .entry-time-clock {
+                display: none;
+            }
+        }
+
+        @container file-pane (max-width: 23rem) {
+            #tuzi .plist {
+                --tuzi-time-column: 5ch;
+            }
+
+            #tuzi .entry-time-year {
+                display: none;
+            }
+        }
+
         #tuzi .phead [aria-current="page"] {
             font-weight: 600;
         }
 
         @media (hover: hover) {
             #tuzi .phead [data-slot="breadcrumb"] button:hover {
-                --rui-button-fg: light-dark(#000, #fff);
                 font-weight: 700 !important;
             }
         }
@@ -45,15 +64,6 @@
             #tuzi .entry-row {
                 transition: none;
             }
-        }
-
-        .file-icon-svg>svg {
-            position: absolute;
-            inset: 0;
-            margin: auto;
-            display: block;
-            width: 70%;
-            height: 70%;
         }
     </style>
 </head>

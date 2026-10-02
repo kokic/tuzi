@@ -56,7 +56,7 @@ fn build_command() -> @argparse.Command {
     options=[
       OptionArg(
         "icons",
-        about="file icons: none or svg, default \{@shared.IconMode::default_mode().to_string()}",
+        about="file type colors: none (disabled) or svg (enabled), default \{@shared.IconMode::default_mode().to_string()}",
       ),
       OptionArg("port", short='p', about="server port, default \{default_port}"),
       OptionArg(

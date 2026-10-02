@@ -6,6 +6,7 @@ import {
   "moonbit-community/rabbita/cmd",
   "moonbit-community/rabbita/dom",
   "moonbit-community/rabbita/html",
+  "moonbit-community/rabbita/svg",
   "moonbitlang/async/http",
   "moonbit-community/rabbita/js",
   "moonbit-community/rabbita/sub",
