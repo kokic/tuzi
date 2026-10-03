@@ -38,7 +38,27 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
     jobs.push(() => {
       let full = path.join(Path("./\{entry.name}"))
       let full_path = full.to_string()
-      let size = if entry.is_dir {
+      let is_symlink = !entry.is_dir &&
+        ((@async_fs.kind(full_path, follow_symlink=false) is SymLink) catch {
+          _ => false
+        })
+      // DirectoryEntry deliberately excludes links from is_dir. Resolve only
+      // links for browsing; unavailable targets must not break the listing.
+      let is_dir = if is_symlink {
+        (@async_fs.kind(full_path) is Directory) catch {
+          _ => false
+        }
+      } else {
+        entry.is_dir
+      }
+      let resolved_target = if is_symlink {
+        Some(Path::from_native(@async_fs.realpath(full_path))) catch {
+          _ => None
+        }
+      } else {
+        None
+      }
+      let size = if is_dir {
         None
       } else {
         // Metadata calls never open FIFOs/devices as input streams.
@@ -49,12 +69,20 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
       let mtime = Some(to_unix_seconds(@async_fs.mtime(full_path).0)) catch {
         _ => None
       }
-      let marker = if entry.is_dir && include_markers {
+      let marker = if is_dir && include_markers {
         detect_marker(full)
       } else {
         ""
       }
-      { name: entry.name, is_dir: entry.is_dir, size, mtime, marker, }
+      {
+        name: entry.name,
+        is_dir,
+        is_symlink,
+        resolved_target,
+        size,
+        mtime,
+        marker,
+      }
     })
   }
   @async.all(jobs[:], max_concurrent=8)

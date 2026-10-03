@@ -14,6 +14,15 @@ fn entry_name_view(entry : Entry, color : String) -> Html {
       } else {
         []
       },
+      ..if entry.is_symlink {
+        [
+          span(
+            style=["flex: none", "margin-left: 4px"],
+            title="Symbolic link",
+            "↗",
+          ),
+        ]
+      },
     ],
   )
 }
