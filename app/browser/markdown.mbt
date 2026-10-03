@@ -171,7 +171,8 @@ fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
     Loaded(Err(error)) => @rui.field_error(error)
     Loaded(Ok(source)) =>
       match context.view {
-        Preview => @markdown.markdown(source, escape_link=true)
+        Preview =>
+          @markdown.markdown(source, escape_link=true, heading_anchors=false)
         Code =>
           @html.pre(
             style=[
