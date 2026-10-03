@@ -54,3 +54,13 @@ fn Model::keyboard_command(
   }
   emit(Key(event))
 }
+
+///|
+fn Model::subscriptions(model : Model, emit : Emit[Msg]) -> @sub.Sub {
+  @sub.custom_sub(
+    "keyboard",
+    Local,
+    KeyboardSubscription::OnKeyDown(event => model.keyboard_command(event, emit)),
+    keyboard_subscription_loader,
+  )
+}

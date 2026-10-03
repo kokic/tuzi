@@ -99,3 +99,16 @@ fn TransferKind::operation(
     Move => Move(source~, destination~)
   }
 }
+
+///|
+priv enum TransferKind {
+  Copy
+  Move
+}
+
+///|
+priv struct DragSelection {
+  source_pane : PaneSide
+  directory : Path
+  names : Array[String]
+} derive(Eq)

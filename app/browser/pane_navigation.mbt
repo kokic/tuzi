@@ -120,3 +120,20 @@ fn Model::scroll_to_cursor(model : Model) -> Cmd {
     )
   })
 }
+
+///|
+fn Model::navigate_to_directory(
+  model : Model,
+  idx : PaneSide,
+  path : Path,
+) -> (Model, Cmd) {
+  let updated = {
+    ..model,
+    active: idx,
+    panes: match idx {
+      Left => (model.panes.0.navigate(path), model.panes.1)
+      Right => (model.panes.0, model.panes.1.navigate(path))
+    },
+  }
+  (updated, updated.save_browser_location())
+}
