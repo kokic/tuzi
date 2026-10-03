@@ -54,6 +54,7 @@ fn pane_stack_view(
               drive_menu_view(
                 "pane-\{idx.index()}-view-\{id}-drives",
                 root,
+                path,
                 idx,
                 emit,
               )

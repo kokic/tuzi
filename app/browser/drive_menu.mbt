@@ -15,6 +15,7 @@ priv enum DriveMenuMsg {
 fn drive_menu_view(
   id : String,
   root : Path,
+  directory : Path,
   idx : PaneSide,
   emit : Emit[Msg],
 ) -> Val[Html] {
@@ -52,9 +53,16 @@ fn drive_menu_view(
         scope => {
           let items = if state.listing is Some(listing) {
             match listing {
-              Ok(drives) =>
+              Ok(drives) => {
+                let current = current_storage_location(directory, drives)
                 if drives.is_empty() {
-                  [@rui.dropdown_menu_item(scope, disabled=true, "No drives")]
+                  [
+                    @rui.dropdown_menu_item(
+                      scope,
+                      disabled=true,
+                      "No storage locations",
+                    ),
+                  ]
                 } else {
                   drives.map(drive => {
                     @rui.dropdown_menu_item(
@@ -62,20 +70,21 @@ fn drive_menu_view(
                       on_select=emit(PaneEvent(GotoPath(idx, drive))),
                       [
                         span(drive.to_string()),
-                        ..if drive == root {
+                        ..if Some(drive) == current {
                           [@rui.dropdown_menu_shortcut("Current")]
                         },
                       ],
                     )
                   })
                 }
+              }
               Err(error) =>
                 [
                   @rui.dropdown_menu_item(
                     scope,
                     disabled=true,
                     title=error.message(),
-                    "Could not load drives",
+                    "Could not load storage locations",
                   ),
                   @rui.dropdown_menu_item(
                     scope,
@@ -86,15 +95,21 @@ fn drive_menu_view(
                 ]
             }
           } else {
-            [@rui.dropdown_menu_item(scope, disabled=true, "Loading drives…")]
+            [
+              @rui.dropdown_menu_item(
+                scope,
+                disabled=true,
+                "Loading storage locations…",
+              ),
+            ]
           }
           fragment([
             @rui.dropdown_menu_trigger(
               scope,
               variant=Ghost,
               size=Xs,
-              aria_label="Switch drive",
-              title="Switch drive",
+              aria_label="Switch storage location",
+              title="Switch storage location",
               style=[
                 UI_FONT_STYLE,
                 "font-size: inherit",
@@ -119,7 +134,7 @@ fn drive_menu_view(
             ),
             @rui.dropdown_menu_content(
               scope,
-              aria_label="Drives",
+              aria_label="Storage locations",
               style=[UI_FONT_STYLE],
               items,
             ),
@@ -129,6 +144,19 @@ fn drive_menu_view(
     },
     by=state => "\{state.request_id}-\{state.listing is Some(_)}",
   )
+}
+
+///|
+/// The deepest mount containing this directory is the current location.
+fn current_storage_location(directory : Path, locations : Array[Path]) -> Path? {
+  for current = directory {
+    if locations.contains(current) {
+      break Some(current)
+    }
+    let parent = current.dirname()
+    guard parent != current else { break None }
+    continue parent
+  }
 }
 
 ///|
