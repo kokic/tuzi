@@ -7,7 +7,7 @@ import {
   "moonbit-community/rabbita@0.16.3",
   "moonbitlang/moonback@0.8.6",
   "moonbitlang/x@0.5.5",
-  "moonbit-community/rui@0.3.4",
+  "moonbit-community/rui@0.3.5",
   "moonbit-community/flate@0.8.4",
   "kokic/uniform-path@0.1.2",
 }
