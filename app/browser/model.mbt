@@ -70,7 +70,7 @@ priv enum Msg {
 fn Model::initialize() -> Model {
   {
     startup: Starting,
-    theme: Theme::default_theme(),
+    theme: Theme::default(),
     icons: IconMode::default_mode(),
     openers: None,
     supports_drive_selection: false,
