@@ -1,6 +1,21 @@
 ///|
-/// Format a file size as `512B`, `1.5M`, `2.3G`, ... (base 1024, truncated).
-pub fn format_file_size(size : Int64) -> String {
+pub(all) struct FormattedFileSize {
+  value : String
+  unit : String
+}
+
+///|
+pub impl Show for FormattedFileSize with fn output(self, logger) {
+  logger.write_string(self.value)
+  logger.write_string(self.unit)
+}
+
+///|
+pub extend FormattedFileSize with Show::{to_string, output}
+
+///|
+/// Format the value and unit separately (base 1024, truncated).
+pub fn format_file_size(size : Int64) -> FormattedFileSize {
   let units = ["B", "K", "M", "G", "T"]
   let (scale, i) = for scale = 1L, i = 0 {
     let can_scale_up = size >= scale * 1024L && i + 1 < units.length()
@@ -9,8 +24,8 @@ pub fn format_file_size(size : Int64) -> String {
   }
   let whole = size / scale
   let frac = size % scale * 10L / scale
-  guard frac == 0L else { "\{whole}.\{frac}\{units[i]}" }
-  "\{whole}\{units[i]}"
+  let value = if frac == 0L { "\{whole}" } else { "\{whole}.\{frac}" }
+  { value, unit: units[i], }
 }
 
 ///|
@@ -50,14 +65,8 @@ fn calendar_date_from_epoch_days(days : Int64) -> (Int64, Int64, Int64) {
   let doy = doe - (365L * yoe + floor_divide(yoe, 4L) - floor_divide(yoe, 100L))
   let mp = floor_divide(5L * doy + 2L, 153L)
   let day = doy - floor_divide(153L * mp + 2L, 5L) + 1L
-  let m = {
-    guard mp < 10L else { mp - 9L }
-    mp + 3L
-  }
-  let y = {
-    guard m > 2L else { y + 1L }
-    y
-  }
+  let m = if mp < 10L { mp + 3L } else { mp - 9L }
+  let y = if m > 2L { y } else { y + 1L }
   (y, m, day)
 }
 
