@@ -1,9 +1,16 @@
 ///|
+let unknown_size : @tuzi.FormattedFileSize = { value: "???", unit: "B", }
+
+///|
 fn format_entry_meta(entry : Entry) -> String {
   let parts = [
     entry.mtime.map_or("", time => format_timestamp(time)),
     ..if !entry.is_dir {
-      [entry.size.map_or("Unknown size", size => format_file_size(size))]
+      [
+        entry.size
+        .map_or(unknown_size, size => format_file_size(size))
+        .to_string(),
+      ]
     },
   ]
   parts.filter(part => !part.is_empty()).join(" ")
@@ -13,20 +20,14 @@ fn format_entry_meta(entry : Entry) -> String {
 fn entry_size_view(entry : Entry) -> Html {
   let style = entry_meta_style() +
     [
-      "grid-column: 2", "text-align: right", "font-variant-numeric: tabular-nums",
+      "grid-column: 2 / 4", "display: grid", "grid-template-columns: subgrid", "column-gap: 0",
+      "text-align: right", "font-variant-numeric: tabular-nums",
     ]
   guard !entry.is_dir else { return span(style~, "") }
-  guard entry.size is Some(size) else {
-    return span(style~, title="Unknown size", "Unknown size")
-  }
-  let formatted = format_file_size(size)
-  let unit_offset = formatted.length() - 1
-  span(style~, title=formatted, [
-    span("\{formatted[:unit_offset]}"),
-    span(
-      style=["display: inline-block", "width: 1em", "text-align: left"],
-      "\{formatted[unit_offset:]}",
-    ),
+  let formatted = entry.size.map_or(unknown_size, size => format_file_size(size))
+  span(style~, title=formatted.to_string(), [
+    span(formatted.value),
+    span(style=["text-align: left"], formatted.unit),
   ])
 }
 
@@ -34,7 +35,7 @@ fn entry_size_view(entry : Entry) -> Html {
 fn entry_time_view(entry : Entry) -> Html {
   let style = entry_meta_style() +
     [
-      "grid-column: 3", "text-align: right", "font-variant-numeric: tabular-nums",
+      "grid-column: 4", "text-align: right", "font-variant-numeric: tabular-nums",
     ]
   guard entry.mtime is Some(time) else { return span(style~, "") }
   let formatted = format_timestamp(time)

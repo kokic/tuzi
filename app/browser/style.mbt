@@ -92,7 +92,7 @@ fn pane_list_style() -> Array[String] {
     CODE_FONT_STYLE,
     "flex: 1",
     "display: grid",
-    "grid-template-columns: max-content max-content minmax(0, 1fr) max-content calc(var(--tuzi-time-column, 17ch) + 10px)",
+    "grid-template-columns: max-content max-content minmax(0, 1fr) max-content minmax(1em, max-content) calc(var(--tuzi-time-column, 17ch) + 10px)",
     "font-size: var(--tuzi-entry-subtitle-size)",
     "column-gap: 8px",
     "align-content: start",
