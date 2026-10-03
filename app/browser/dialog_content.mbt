@@ -22,9 +22,10 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
       Activity => activity_dialog(model.jobs.items, emit)
       Progress(batch) => progress_dialog(batch, emit)
       TaskDetails(id) => task_details_dialog(model.jobs.items, id, emit)
-      Info(context) => context.dialog([], emit)
+      Info(context) => context.dialog([], emit, error=model.dialog_error)
       Markdown(context) => context.dialog(emit)
-      GitInfo(context) => git_info_dialog(context, model.jobs, emit)
+      GitInfo(context) =>
+        git_info_dialog(context, model.jobs, emit, error=model.dialog_error)
       DeleteConfirm(names~, ..) =>
         modal(
           "Delete \{names.length()} item(s)?",

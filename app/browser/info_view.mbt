@@ -2,34 +2,79 @@
 fn InfoContext::fields_view(
   context : InfoContext,
   emit : Emit[Msg],
+  error? : String = "",
 ) -> Array[Html] {
   let entry = context.entry
   let path = context.path.to_string()
   [
     InfoField::{ label: "Name", value: entry.name, }.view(),
-    InfoField::{ label: "Path", value: path, }.view(
-      action=@rui.button(
-        variant=Ghost,
-        size=Sm,
-        style=[UI_FONT_STYLE, "flex-shrink: 0"],
-        on_click=@clipboard.copy(
-          Text(path),
-          copied=emit(Toast("Path copied", Some(path), @rui.ToastSuccess)),
-          failed=error => {
-            emit(Toast("Clipboard error", Some(error), @rui.ToastDestructive))
-          },
+    ..if !entry.is_symlink {
+      [
+        InfoField::{ label: "Path", value: path, }.view(
+          action=@rui.button(
+            variant=Ghost,
+            size=Sm,
+            style=[UI_FONT_STYLE, "flex-shrink: 0"],
+            on_click=@clipboard.copy(
+              Text(path),
+              copied=emit(Toast("Path copied", Some(path), @rui.ToastSuccess)),
+              failed=error => {
+                emit(
+                  Toast("Clipboard error", Some(error), @rui.ToastDestructive),
+                )
+              },
+            ),
+            "Copy",
+          ),
         ),
-        "Copy",
-      ),
-    ),
+      ]
+    },
+    ..context.link.map_or([], fields => {
+      [
+        text_input_field_view(
+          id="link-path",
+          label="Full link path:",
+          value=fields.path,
+          error~,
+          autofocus=true,
+          on_input=emit.map(value => LinkPathInput(value)),
+        ),
+        text_input_field_view(
+          id="link-target",
+          label="Full target path:",
+          value=fields.target.unwrap_or(""),
+          error="",
+          on_input=emit.map(value => LinkTargetInput(value)),
+        ),
+        ..if fields.target is None && error.is_empty() {
+          [@rui.field_description("Loading target…")]
+        },
+      ]
+    }),
     InfoField::{
       label: "Type",
-      value: if entry.is_dir {
+      value: if entry.is_symlink {
+        if entry.is_dir {
+          "Folder link"
+        } else {
+          "Symbolic link"
+        }
+      } else if entry.is_dir {
         "Folder"
       } else {
         "File"
       },
     }.view(),
+    ..if entry.is_symlink {
+      [
+        InfoField::{
+          label: "Resolved target",
+          value: entry.resolved_target.map_or("Unable to resolve", target => {
+            target.to_string()
+          }),
+        }.view(),
+      ]
+    },
     ..if !entry.is_dir {
       [
         InfoField::{
@@ -89,13 +134,14 @@ fn InfoContext::dialog(
   additional_content : Array[Html],
   emit : Emit[Msg],
   expanded? : Bool = false,
+  error? : String = "",
 ) -> Html {
   let content = [
     ..if !context.entry.is_dir &&
       @tuzi.image_content_type(context.entry.name) is Some(_) {
       [context.image_view()]
     },
-    ..context.fields_view(emit),
+    ..context.fields_view(emit, error~),
     ..additional_content,
   ]
   modal(
@@ -121,7 +167,18 @@ fn InfoContext::dialog(
         ],
         content,
       ),
-      dialog_close_footer_view(),
+      if context.link is Some(_) {
+        @rui.dialog_footer([
+          dialog_close_button("Close"),
+          @rui.button(
+            style=[UI_FONT_STYLE],
+            on_click=emit(DialogSubmit),
+            "Save",
+          ),
+        ])
+      } else {
+        dialog_close_footer_view()
+      },
     ],
   )
 }

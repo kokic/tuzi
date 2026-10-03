@@ -45,6 +45,12 @@ fn Model::transfer_selection_to_other_pane(
   let dst = model.pane_at(model.active.other())
   let items = src.selected_items(filter?=model.entry_filter(model.active))
   guard !items.is_empty() else { return (model, @rabbita.none) }
+  guard !(kind is Move && items.any(entry => entry.is_symlink)) else {
+    return (
+      model,
+      emit(Toast("Edit the link path in Information", None, @rui.ToastDefault)),
+    )
+  }
   let operations = items.map(entry => {
     let from = src.path.join(Path("./\{entry.name}"))
     let to = dst.path.join(Path("./\{entry.name}"))

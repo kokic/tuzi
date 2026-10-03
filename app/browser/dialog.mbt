@@ -24,6 +24,18 @@ fn Model::open_rename_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
       emit(Toast("Select one item to rename", None, @rui.ToastDefault)),
     )
   }
+  guard !item.is_symlink else {
+    return (
+      model,
+      emit(
+        Toast(
+          "Edit the link path and target in Information",
+          None,
+          @rui.ToastDefault,
+        ),
+      ),
+    )
+  }
   (
     {
       ..model,
@@ -93,6 +105,8 @@ fn Model::submit_dialog(
   new_entry_kind? : NewEntryKind = Folder,
 ) -> (Model, Cmd) {
   let operations = match model.dialog {
+    Info(context) => return model.submit_info_link(context, emit)
+    GitInfo(context) => return model.submit_info_link(context.entry, emit)
     GitRenameInput(context~, reference~, input~) =>
       return model.submit_git_rename(context, reference, input, emit)
     DeleteConfirm(directory~, names~) =>
@@ -138,14 +152,8 @@ fn Model::submit_dialog(
           },
         ]
       })
-    None
-    | Help
-    | Activity
-    | TaskDetails(_)
-    | Info(_)
-    | GitInfo(_)
-    | Markdown(_)
-    | Progress(_) => return (model, @rabbita.none)
+    None | Help | Activity | TaskDetails(_) | Markdown(_) | Progress(_) =>
+      return (model, @rabbita.none)
   }
   match operations {
     Err(message) => ({ ..model, dialog_error: message, }, @rabbita.none)

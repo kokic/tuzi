@@ -113,6 +113,18 @@ fn Model::update_message(
     GitEvent(msg) => model.update_git(msg, emit)
     TaskEvent(msg) => model.update_tasks(msg, emit)
     RenameOpen => model.open_rename_dialog(emit)
+    LinkTargetLoaded(id, result) =>
+      (model.receive_link_target(id, result), @rabbita.none)
+    LinkPathInput(value) =>
+      (
+        model.update_link_fields(fields => { ..fields, path: value, }),
+        @rabbita.none,
+      )
+    LinkTargetInput(value) =>
+      (
+        model.update_link_fields(fields => { ..fields, target: Some(value), }),
+        @rabbita.none,
+      )
     ZipOpen => (model.open_archive_dialog(), @rabbita.none)
     ZipLevelChanged(value) => {
       guard model.dialog is ZipInput(directory~, names~, input~, ..) else {

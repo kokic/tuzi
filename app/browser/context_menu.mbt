@@ -19,11 +19,17 @@ fn entry_menu_content(
     EntryAction(idx, item.view_id, item.entry.name, action)
   })
   let actions : Array[(String, String, Msg)] = [
-    ("Copy to other pane", "c", TransferSelection(Copy)),
-    ("Move to other pane", "m", TransferSelection(Move)),
-    ("Rename…", "r", RenameOpen),
+    ..if !item.entry.is_symlink {
+      [
+        ("Copy to other pane", "c", TransferSelection(Copy)),
+        ("Move to other pane", "m", TransferSelection(Move)),
+        ("Rename…", "r", RenameOpen),
+      ]
+    },
     ("Copy path", "y", CopyPaths),
-    ("Compress to ZIP…", "z", ZipOpen),
+    ..if !item.entry.is_symlink {
+      [("Compress to ZIP…", "z", ZipOpen)]
+    },
     ("Information", "i", InfoOpen),
     ("New file or folder…", "n", NewEntryOpen),
   ]

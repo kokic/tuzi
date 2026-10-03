@@ -98,6 +98,9 @@ priv enum Msg {
   TaskEvent(TaskMsg)
   DeleteOpen
   RenameOpen
+  LinkTargetLoaded(Int, Result[Path, RequestFailure])
+  LinkPathInput(String)
+  LinkTargetInput(String)
   ZipOpen
   ZipLevelChanged(String)
   ActivityOpen
