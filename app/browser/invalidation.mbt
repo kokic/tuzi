@@ -18,7 +18,8 @@ fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
       )
     File(Copy(destination~, ..)) => directory_contains(destination, directory)
     File(Unzip(destination~, ..)) => directory_contains(destination, directory)
-    File(Move(source~, destination~)) =>
+    File(Move(source~, destination~))
+    | File(EditLink(source~, destination~, ..)) =>
       directory_contains(source, directory) ||
       directory_contains(destination, directory)
     File(Mkdir(parent~, name~)) => directory == parent.join(Path("./\{name}"))

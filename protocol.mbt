@@ -8,6 +8,7 @@ using @path {type Path}
 pub(all) enum FileOperation {
   Delete(target~ : Path)
   Rename(source~ : Path, new_name~ : String)
+  EditLink(source~ : Path, destination~ : Path, target~ : Path)
   Zip(
     directory~ : Path,
     names~ : Array[String],
@@ -175,6 +176,8 @@ pub fn FileOperation::description(operation : FileOperation) -> String {
     Delete(target~) => "delete \{target}"
     Rename(source~, new_name~) =>
       "rename \{source} -> \{source.dirname().join(Path("./\{new_name}"))}"
+    EditLink(source~, destination~, target~) =>
+      "edit link \{source} -> \{destination} (target: \{target})"
     Zip(directory~, output_name~, ..) =>
       "compress \{directory.join(Path("./\{output_name}"))}"
     Unzip(source~, destination~) => "extract \{source} -> \{destination}"
@@ -301,6 +304,8 @@ pub fn TaskKind::affected_directories(self : TaskKind) -> Array[Path] {
     File(Copy(destination~, ..)) => [destination.dirname()]
     File(Move(source~, destination~)) =>
       [source.dirname(), destination.dirname()]
+    File(EditLink(source~, destination~, ..)) =>
+      [source.dirname(), destination.dirname(), source, destination]
     Git(request) => [request.path.dirname()]
   }
 }

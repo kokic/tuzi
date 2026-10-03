@@ -30,6 +30,11 @@ fn validate_file_operation_input(
       validate_entry_name(source.basename())
       validate_entry_name(new_name)
     }
+    EditLink(source~, destination~, target~) => {
+      validate_link_path(source)
+      validate_link_path(destination)
+      validate_link_target(target)
+    }
     CreateFile(name~, ..) | Mkdir(name~, ..) => validate_entry_name(name)
     Zip(names~, output_name~, level~, ..) =>
       validate_zip_selection(names, output_name, level~)
@@ -53,11 +58,17 @@ async fn remove_entry(target : Path) -> Unit {
 async fn rename_entry(source : Path, new_name : String) -> Unit {
   let old_name = source.basename()
   guard old_name != new_name else { return }
-  @async_fs.rename(
-    source.to_string(),
-    source.dirname().join(Path("./\{new_name}")).to_string(),
-    replace=false,
-  )
+  rename_path(source, source.dirname().join(Path("./\{new_name}")))
+}
+
+///|
+/// Renaming and moving links are not supported file operations.
+async fn rename_path(from : Path, to : Path) -> Unit {
+  let source = from.to_string()
+  guard !(@async_fs.kind(source, follow_symlink=false) is SymLink) else {
+    raise FileError::UnsupportedEntry(source)
+  }
+  @async_fs.rename(source, to.to_string(), replace=false)
 }
 
 ///|
@@ -167,7 +178,7 @@ extern "C" fn is_cross_device_error(code : Int) -> Bool = "tuzi_is_cross_device_
 ///|
 async fn move_entry(from : Path, to : Path) -> Unit {
   validate_transfer(from, to)
-  @async_fs.rename(from.to_string(), to.to_string(), replace=false) catch {
+  rename_path(from, to) catch {
     @os_error.OSError(code, ..) as error => {
       guard is_cross_device_error(code) else { raise error }
       copy_tree(from, to)
@@ -187,6 +198,8 @@ async fn execute_file_operation(operation : @shared.FileOperation) -> Unit {
   match operation {
     Delete(target~) => remove_entry(target)
     Rename(source~, new_name~) => rename_entry(source, new_name)
+    EditLink(source~, destination~, target~) =>
+      edit_link(source, destination, target)
     CreateFile(parent~, name~) => create_file_entry(parent, name)
     Mkdir(parent~, name~) => mkdir_entry(parent, name)
     Zip(directory~, names~, output_name~, level~) =>

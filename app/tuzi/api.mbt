@@ -26,6 +26,12 @@ fn routes(
         list_entries(request.path, include_markers=request.include_markers)
       })
     })
+    ..post("/api/link", (req, res) => {
+      respond(res, () => {
+        let request : @shared.DirectoryRequest = decode_request(req)
+        read_link_target(request.path)
+      })
+    })
     ..get("/api/tasks", (_req, res) => respond(res, () => tasks.snapshot()))
     ..get("/api/tasks/events", (req, res) => task_events(req, res, tasks))
     ..post("/api/tasks", (req, res) => {
@@ -132,6 +138,12 @@ fn api_failure(error : Error) -> @shared.ApiFailure {
     FileError::UnsupportedEntry(path) | ArchiveError::UnsupportedEntry(path) =>
       (Unsupported, "Unsupported entry: " + path)
     PartialFailure(message) => (PartialFailure, message)
+    LinkError::AbsolutePathRequired(_) as error =>
+      (InvalidTarget, Show::to_string(error))
+    LinkError::RecoveryFailed(_, _) as error =>
+      (PartialFailure, Show::to_string(error))
+    LinkError::LinkCommandFailed(_, _, _) as error =>
+      (Io, Show::to_string(error))
     EmptySelection => (InvalidRequest, "Select at least one entry")
     InvalidCompressionLevel(level) =>
       (InvalidRequest, "Compression level must be between 0 and 9: \{level}")
