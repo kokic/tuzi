@@ -11,42 +11,41 @@ fn list_drives() -> Array[Path] raise {
   let mask = logical_drives_raw()
   guard mask >= 0 else { raise @os_error.OSError(-mask, context="list drives") }
   let drives = []
-  for index in 0..<26 {
-    if (mask & (1 << index)) != 0 {
-      let letter = (65 + index).to_char().unwrap()
-      drives.push(Path("\{letter}:/"))
-    }
+  for index = 0; index < 26; index = index + 1 {
+    guard (mask & (1 << index)) != 0 else { continue }
+    let letter = (65 + index).to_char().unwrap()
+    drives.push(Path("\{letter}:/"))
   }
   drives
 }
 
 ///|
-#cfg(platform="macos")
+#cfg(not(platform="windows"))
 #borrow(error)
 extern "C" fn mount_points_raw(error : FixedArray[Int]) -> FixedArray[Bytes] = "tuzi_mount_points"
 
 ///|
-#cfg(platform="macos")
-fn list_drives() -> Array[Path] raise {
-  let error = FixedArray::make(1, 0)
-  let data = mount_points_raw(error)
-  guard error[0] == 0 else {
-    raise @os_error.OSError(error[0], context="list storage locations")
-  }
-  let paths = []
-  for bytes in data {
-    if decode_mount_path(bytes[:]) is Some(path) {
-      paths.push(path)
-    }
-  }
-  storage_locations(paths)
-}
-
-///|
-#cfg(platform="linux")
+#cfg(not(platform="windows"))
 async fn list_drives() -> Array[Path] {
-  let data = @async_fs.read_file("/proc/self/mountinfo").to_bytes()
-  storage_locations(parse_mountinfo(data[:]))
+  match @async.platform {
+    MacOS => {
+      let error = FixedArray::make(1, 0)
+      let data = mount_points_raw(error)
+      guard error[0] == 0 else {
+        raise @os_error.OSError(error[0], context="list storage locations")
+      }
+      let paths = data
+        .iter()
+        .filter_map(bytes => decode_mount_path(bytes[:]))
+        .to_array()
+      storage_locations(paths)
+    }
+    Linux => {
+      let data = @async_fs.read_file("/proc/self/mountinfo").binary()
+      storage_locations(parse_mountinfo(data[:]))
+    }
+    Windows => panic()
+  }
 }
 
 ///|
@@ -55,16 +54,16 @@ async fn list_drives() -> Array[Path] {
 #cfg(not(platform="windows"))
 fn decode_mount_path(data : BytesView) -> String? {
   Some(@utf8.decode(data)) catch {
-    _ => None
+    @utf8.Malformed(_) => None
   }
 }
 
 ///|
-#cfg(platform="linux")
+#cfg(not(platform="windows"))
 fn split_mount_fields(data : BytesView, separator : Byte) -> Array[BytesView] {
   let parts = []
   let mut start = 0
-  for index in 0..<data.length() {
+  for index = 0; index < data.length(); index = index + 1 {
     if data[index] == separator {
       parts.push(data[start:index])
       start = index + 1
@@ -77,7 +76,7 @@ fn split_mount_fields(data : BytesView, separator : Byte) -> Array[BytesView] {
 ///|
 /// mountinfo escapes space, tab, newline and backslash as octal sequences.
 /// Decode backslash last so a literal "\\040" does not become a space.
-#cfg(platform="linux")
+#cfg(not(platform="windows"))
 fn parse_mountinfo(data : BytesView) -> Array[String] {
   let paths = []
   for line in split_mount_fields(data, b'\n') {
@@ -106,31 +105,29 @@ fn parse_mountinfo(data : BytesView) -> Array[String] {
 ///|
 /// These expose kernel interfaces, not file storage. In particular, tmpfs,
 /// overlay and FUSE mounts remain eligible, wherever the user mounted them.
-#cfg(platform="linux")
+#cfg(not(platform="windows"))
 fn is_system_filesystem(filesystem : String) -> Bool {
-  match filesystem {
-    "proc"
-    | "sysfs"
-    | "devtmpfs"
-    | "devpts"
-    | "cgroup"
-    | "cgroup2"
-    | "securityfs"
-    | "debugfs"
-    | "tracefs"
-    | "configfs"
-    | "pstore"
-    | "efivarfs"
-    | "mqueue"
-    | "hugetlbfs"
-    | "fusectl"
-    | "autofs"
-    | "binfmt_misc"
-    | "rpc_pipefs"
-    | "nsfs"
-    | "bpf" => true
-    _ => false
-  }
+  filesystem
+  is ("proc"
+  | "sysfs"
+  | "devtmpfs"
+  | "devpts"
+  | "cgroup"
+  | "cgroup2"
+  | "securityfs"
+  | "debugfs"
+  | "tracefs"
+  | "configfs"
+  | "pstore"
+  | "efivarfs"
+  | "mqueue"
+  | "hugetlbfs"
+  | "fusectl"
+  | "autofs"
+  | "binfmt_misc"
+  | "rpc_pipefs"
+  | "nsfs"
+  | "bpf")
 }
 
 ///|

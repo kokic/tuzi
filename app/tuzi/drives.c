@@ -42,4 +42,12 @@ MOONBIT_FFI_EXPORT void **tuzi_mount_points(int32_t *error) {
   }
   return result;
 }
+#elif defined(__linux__)
+#include <stdlib.h>
+
+// The shared Unix FFI must link on Linux; only the MacOS branch calls it.
+MOONBIT_FFI_EXPORT void **tuzi_mount_points(int32_t *error) {
+  (void)error;
+  abort();
+}
 #endif

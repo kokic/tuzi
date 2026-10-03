@@ -21,20 +21,19 @@ fn system_open_command(kind : SystemOpenKind) -> OpenCommand {
 }
 
 ///|
-#cfg(platform="macos")
+#cfg(not(platform="windows"))
 fn system_open_command(kind : SystemOpenKind) -> OpenCommand {
-  {
-    // Preserve URL opening through PATH and the directory opener's full path.
-    program: match kind {
-      Url => "open"
-      Directory => "/usr/bin/open"
-    },
-    arguments: [Target],
+  match @async.platform {
+    MacOS =>
+      {
+        // Preserve URL opening through PATH and the directory opener's full path.
+        program: match kind {
+          Url => "open"
+          Directory => "/usr/bin/open"
+        },
+        arguments: [Target],
+      }
+    Linux => { program: "xdg-open", arguments: [Target], }
+    Windows => panic()
   }
-}
-
-///|
-#cfg(platform="linux")
-fn system_open_command(_kind : SystemOpenKind) -> OpenCommand {
-  { program: "xdg-open", arguments: [Target], }
 }

@@ -1,4 +1,10 @@
 ///|
+let text_association : @shared.OpenAssociation = {
+  openers: ["preview", "vscode"],
+  default_opener: "preview",
+}
+
+///|
 /// Define each application once here; associations below refer to these IDs.
 /// Programs and arguments stay on the server and are never accepted from clients.
 fn configured_openers() -> Map[String, OpenDefinition] {
@@ -33,18 +39,17 @@ fn vscode_command() -> OpenCommand {
 }
 
 ///|
-#cfg(platform="macos")
+#cfg(not(platform="windows"))
 fn vscode_command() -> OpenCommand {
-  {
-    program: "/usr/bin/open",
-    arguments: [Literal("-a"), Literal("Visual Studio Code"), Target],
+  match @async.platform {
+    MacOS =>
+      {
+        program: "/usr/bin/open",
+        arguments: [Literal("-a"), Literal("Visual Studio Code"), Target],
+      }
+    Linux => { program: "code", arguments: [Literal("--"), Target], }
+    Windows => panic()
   }
-}
-
-///|
-#cfg(platform="linux")
-fn vscode_command() -> OpenCommand {
-  { program: "code", arguments: [Literal("--"), Target], }
 }
 
 ///|
@@ -52,7 +57,7 @@ fn vscode_command() -> OpenCommand {
 let file_manager_label : String = "Open in Windows Explorer"
 
 ///|
-#cfg(any(platform="macos", platform="linux"))
+#cfg(not(platform="windows"))
 let file_manager_label : String = "Open in system file manager"
 
 ///|
@@ -60,23 +65,6 @@ let file_manager_label : String = "Open in system file manager"
 fn configured_open_registry(
   openers : Map[String, @shared.Opener],
 ) -> @shared.OpenRegistry {
-  let text : @shared.OpenAssociation = {
-    openers: ["preview", "vscode"],
-    default_opener: "preview",
-  }
-  let extensions : Map[String, @shared.OpenAssociation] = Map([])
-  for
-    extension in [
-      "c", "h", "cpp", "hpp", "md", "mbt", "mbti", "txt", "rs", "go", "py", "js",
-      "mjs", "ts", "tsx", "jsx", "json", "html", "htm", "css", "xml", "toml", "yaml",
-      "yml", "ini", "conf", "sh",
-    ] {
-    extensions[extension] = text
-  }
-  extensions["zip"] = {
-    openers: ["extract", "preview"],
-    default_opener: "extract",
-  }
   {
     openers,
     folder: {
@@ -84,17 +72,46 @@ fn configured_open_registry(
       default_opener: "browse",
     },
     filenames: {
-      "moon.mod": text,
-      "moon.pkg": text,
-      "moon.work": text,
-      "makefile": text,
-      "dockerfile": text,
-      ".gitignore": text,
-      ".gitattributes": text,
-      ".env": text,
+      "moon.mod": text_association,
+      "moon.pkg": text_association,
+      "moon.work": text_association,
+      "makefile": text_association,
+      "dockerfile": text_association,
+      ".gitignore": text_association,
+      ".gitattributes": text_association,
+      ".env": text_association,
       ".zip": { openers: ["extract", "preview"], default_opener: "extract", },
     },
-    extensions,
+    extensions: {
+      "c": text_association,
+      "h": text_association,
+      "cpp": text_association,
+      "hpp": text_association,
+      "md": text_association,
+      "mbt": text_association,
+      "mbti": text_association,
+      "txt": text_association,
+      "rs": text_association,
+      "go": text_association,
+      "py": text_association,
+      "js": text_association,
+      "mjs": text_association,
+      "ts": text_association,
+      "tsx": text_association,
+      "jsx": text_association,
+      "json": text_association,
+      "html": text_association,
+      "htm": text_association,
+      "css": text_association,
+      "xml": text_association,
+      "toml": text_association,
+      "yaml": text_association,
+      "yml": text_association,
+      "ini": text_association,
+      "conf": text_association,
+      "sh": text_association,
+      "zip": { openers: ["extract", "preview"], default_opener: "extract", },
+    },
     other_file: { openers: ["preview"], default_opener: "preview", },
   }
 }
