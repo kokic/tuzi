@@ -34,33 +34,35 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
   let path = Path::from_native(@async_fs.realpath(path.to_string()))
   let dir = @async_fs.opendir(path.to_string())
   defer dir.close()
-  let jobs : Array[async () -> Entry] = []
+  let jobs : Array[async () -> Entry?] = []
   while dir.next(include_hidden=true, include_special=false) is Some(entry) {
     jobs.push(() => {
       let full = path.join(Path("./\{entry.name}"))
       let full_path = full.to_string()
-      let kind = read_entry_kind(full)
+      let kind = read_entry_kind(full) catch {
+        // The entry may disappear after directory enumeration.
+        @os_error.OSError(_, ..) as error if error.is_ENOENT() => return None
+        error => raise error
+      }
       let is_dir = kind.is_dir()
-      let size = if is_dir {
-        None
-      } else {
+      let size = {
+        guard !is_dir else { Ok(None) }
         // Metadata calls never open FIFOs/devices as input streams.
-        Some(@async_fs.file_size(full_path)) catch {
-          _ => None
+        Ok(Some(@async_fs.file_size(full_path))) catch {
+          error => Err(api_failure(error))
         }
       }
-      let mtime = Some(to_unix_seconds(@async_fs.mtime(full_path).0)) catch {
-        _ => None
+      let mtime = Ok(to_unix_seconds(@async_fs.mtime(full_path).0)) catch {
+        error => Err(api_failure(error))
       }
-      let marker = if is_dir && include_markers {
+      let marker = {
+        guard is_dir && include_markers else { "" }
         detect_marker(full)
-      } else {
-        ""
       }
-      { name: entry.name, kind, size, mtime, marker, }
+      Some({ name: entry.name, kind, size, mtime, marker, })
     })
   }
-  @async.all(jobs[:], max_concurrent=8)
+  @async.all(jobs[:], max_concurrent=8).filter_map(entry => entry)
 }
 
 ///|

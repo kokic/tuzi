@@ -82,17 +82,22 @@ fn InfoContext::fields_view(
       [
         InfoField::{
           label: "Size",
-          value: entry.size.map_or("Unknown", size => {
-            "\{format_file_size(size)} (\{size} bytes)"
-          }),
+          value: match entry.size {
+            Ok(size) =>
+              size.map_or("Not applicable", size => {
+                "\{format_file_size(size)} (\{size} bytes)"
+              })
+            Err(error) => error.message
+          },
         }.view(),
       ]
     },
     InfoField::{
       label: "Modified (UTC)",
-      value: entry.mtime.map_or("Unknown", time => {
-        format_timestamp(time, seconds=true).to_string()
-      }),
+      value: match entry.mtime {
+        Ok(time) => format_timestamp(time, seconds=true).to_string()
+        Err(error) => error.message
+      },
     }.view(),
   ]
 }

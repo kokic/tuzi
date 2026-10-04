@@ -26,10 +26,10 @@ pub extend EntryKind with ToJson::{to_json}
 pub(all) struct Entry {
   name : String
   kind : EntryKind
-  /// File size in bytes; absent for directories or unavailable metadata.
-  size : Int64?
-  /// Modification time in Unix seconds; absent when metadata is unavailable.
-  mtime : Int64?
+  /// File size in bytes; Ok(None) for directories, Err for failed reads.
+  size : Result[Int64?, ApiFailure]
+  /// Modification time in Unix seconds, or the metadata read failure.
+  mtime : Result[Int64, ApiFailure]
   /// The first name in `folder_markers` found directly inside this directory,
   /// or "" when none. Always "" for files.
   marker : String

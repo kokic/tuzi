@@ -39,9 +39,9 @@ fn OpenTarget::unavailable_reason(
         return Some("Directories cannot be previewed as files.")
       }
       // Missing listing metadata is checked by the existing file endpoint.
-      guard self.entry.size.map_or(true, size => {
-        preview_content_type(self.path, size) is Some(_)
-      }) else {
+      guard self.entry.size
+        .unwrap_or(None)
+        .map_or(true, size => preview_content_type(self.path, size) is Some(_)) else {
         return Some(
           "Unknown formats can only be opened as text when at most 1 MiB.",
         )

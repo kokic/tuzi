@@ -30,7 +30,8 @@ pub fn SortMode::compare_entries(
   }
   match sort {
     Name => left.name.lexical_compare(right.name)
-    Size => left.size.compare(right.size)
-    Time => left.mtime.compare(right.mtime)
+    // Unavailable metadata keeps its previous position before known values.
+    Size => left.size.unwrap_or(None).compare(right.size.unwrap_or(None))
+    Time => left.mtime.to_option().compare(right.mtime.to_option())
   }
 }
