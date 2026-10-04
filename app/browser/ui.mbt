@@ -2,10 +2,7 @@
 
 ///|
 fn kbd(key : String) -> Html {
-  @rui.kbd(
-    style=[CODE_FONT_STYLE, "font-weight: 500", "border-radius: 0.25rem"],
-    key,
-  )
+  @rui.kbd(style=[CODE_FONT_STYLE], key)
 }
 
 ///|
@@ -29,7 +26,7 @@ fn modal(
       .aria_labelledby(DialogTitleId)
       .on_keydown(event => handle_dialog_keyboard_event(event, emit)),
     on_close=_ => emit(DialogCancel),
-    style=[UI_FONT_STYLE, "background: var(--rui-card)", ..style],
+    style=[UI_FONT_STYLE, ..style],
     [
       @rui.dialog_header([@rui.dialog_title(id=DialogTitleId, title)]),
       ..children,

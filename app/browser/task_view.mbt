@@ -67,7 +67,7 @@ fn task_status_view(status : TaskStatus, description : String) -> Html {
         attrs=@html.Attrs::build().role("status"),
         "Queued",
       )
-    Running => @rui.progress(style=[UI_FONT_STYLE], aria_label=description)
+    Running => @rui.progress(aria_label=description)
     Completed(_) =>
       @rui.badge(
         style=[UI_FONT_STYLE],

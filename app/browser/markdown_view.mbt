@@ -48,7 +48,7 @@ fn MarkdownContext::dialog(context : MarkdownContext, emit : Emit[Msg]) -> Html 
         [
           @rui.tabs_list(
             aria_label="Markdown view",
-            style=["flex-shrink: 0", "min-height: 0", "padding: 2px"],
+            style=["flex-shrink: 0"],
             [Preview, Code].map(view => {
               let label = view.label()
               @rui.tabs_trigger(
@@ -57,16 +57,7 @@ fn MarkdownContext::dialog(context : MarkdownContext, emit : Emit[Msg]) -> Html 
                 controls="markdown-panel-\{label}",
                 selected=context.view == view,
                 on_value_change=emit.map(_ => MarkdownEvent(ViewChanged(view))),
-                style=[
-                  UI_FONT_STYLE,
-                  "box-sizing: border-box",
-                  "height: 26px",
-                  "min-height: 0",
-                  "padding: 0 8px",
-                  "gap: 4px",
-                  "font-size: 0.75rem",
-                  "line-height: 18px",
-                ],
+                style=[UI_FONT_STYLE],
                 [view.icon(), span(label)],
               )
             }),

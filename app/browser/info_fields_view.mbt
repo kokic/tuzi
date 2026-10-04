@@ -14,7 +14,7 @@ fn InfoContext::fields_view(
           action=@rui.button(
             variant=Ghost,
             size=Sm,
-            style=[UI_FONT_STYLE, "flex-shrink: 0"],
+            style=[UI_FONT_STYLE],
             on_click=@clipboard.copy(
               Text(path),
               copied=emit(Toast("Path copied", Some(path), @rui.ToastSuccess)),

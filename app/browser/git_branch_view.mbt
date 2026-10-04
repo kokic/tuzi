@@ -19,7 +19,7 @@ fn git_branch_controls(
               branch.reference == panel.selected &&
               !git_branch_is_current(branch, info)
             }),
-          style=[UI_FONT_STYLE, "flex-shrink: 0"],
+          style=[UI_FONT_STYLE],
           on_click=emit(
             GitEvent(GitRun(context.entry.id, Switch(panel.selected))),
           ),
@@ -32,7 +32,7 @@ fn git_branch_controls(
               branch.reference == panel.selected &&
               git_branch_can_rename(branch)
             }),
-          style=[UI_FONT_STYLE, "flex-shrink: 0"],
+          style=[UI_FONT_STYLE],
           title="git branch -m",
           on_click=emit(GitEvent(GitRenameOpen(context.entry.id))),
           "Rename",
@@ -44,7 +44,7 @@ fn git_branch_controls(
               branch.reference == panel.selected &&
               git_branch_can_delete(branch, info)
             }),
-          style=[UI_FONT_STYLE, "flex-shrink: 0"],
+          style=[UI_FONT_STYLE],
           title="git branch -D",
           on_click=emit(
             GitEvent(GitRun(context.entry.id, DeleteBranch(panel.selected))),

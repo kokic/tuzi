@@ -58,7 +58,7 @@ fn pane_filter_view(
         [
           @rui.input_group_addon(
             align=InputInlineEnd,
-            style=["padding: 0 2px"],
+            style=["padding: 0 2px", "font-size: inherit"],
             @rui.input_group_button(
               style=[
                 CODE_FONT_STYLE,

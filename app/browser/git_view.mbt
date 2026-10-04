@@ -59,7 +59,7 @@ fn git_info_content(
               variant=Ghost,
               size=Sm,
               disabled~,
-              style=[UI_FONT_STYLE, "flex-shrink: 0"],
+              style=[UI_FONT_STYLE],
               title="Reload branch information",
               on_click=emit(GitEvent(GitRefresh(context.entry.id))),
               "Refresh",

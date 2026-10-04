@@ -13,13 +13,9 @@ fn git_branch_select(
     aria_label="Select a branch",
     title=panel.selected,
     // Bound both the flex item and its control independently of option text.
-    wrapper_style=[
-      "flex: 1 1 200px", "width: 100%", "min-width: 0", "max-width: 100%",
-    ],
+    wrapper_style=["flex: 1 1 200px", "width: 100%", "min-width: 0"],
     style=[
       UI_FONT_STYLE,
-      "width: 100%",
-      "min-width: 0",
       "max-width: 100%",
       "overflow: hidden",
       "white-space: nowrap",

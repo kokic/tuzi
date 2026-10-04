@@ -13,7 +13,6 @@ fn row_style(is_cursor : Bool, selected : Bool) -> Array[String] {
     "user-select: none",
     "line-height: var(--tuzi-entry-line-height)",
     "background: var(--tuzi-row-background, var(--tuzi-row-hover, transparent))",
-    "transition: background-color 100ms ease",
     ..if is_cursor {
       [
         "--tuzi-row-background: var(--tuzi-cursor-background)", "box-shadow: inset 2px 0 var(--tuzi-cursor-indicator)",
@@ -82,11 +81,10 @@ fn entry_details_style() -> Array[String] {
     "display: flex",
     "align-items: center",
     "gap: 8px",
-    "padding: 4px 10px",
+    "padding: 4px",
     "font-size: var(--tuzi-footer-size)",
     "color: var(--rui-muted-foreground)",
     "min-width: 0",
-    "min-height: 18px",
     "line-height: 18px",
     "border-top: 1px solid var(--rui-border)",
     "background: var(--rui-background)",
