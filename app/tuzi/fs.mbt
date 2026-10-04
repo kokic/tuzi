@@ -56,8 +56,10 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
         error => Err(api_failure(error))
       }
       let marker = {
-        guard is_dir && include_markers else { "" }
-        detect_marker(full)
+        guard is_dir && include_markers else { Ok("") }
+        Ok(detect_marker(full)) catch {
+          error => Err(api_failure(error))
+        }
       }
       Some({ name: entry.name, kind, size, mtime, marker, })
     })
@@ -75,7 +77,7 @@ async fn read_entry_kind(path : Path) -> @shared.EntryKind {
         let target = Path::from_native(@async_fs.realpath(path.to_string()))
         SymbolicLink(target, read_entry_kind(target))
       } catch {
-        @os_error.OSError(_, ..) as error => UnresolvedLink(error.to_string())
+        @os_error.OSError(_, ..) as error => UnresolvedLink(api_failure(error))
         error => raise error
       }
     Socket => Socket
@@ -89,10 +91,7 @@ async fn read_entry_kind(path : Path) -> @shared.EntryKind {
 ///|
 async fn detect_marker(path : Path) -> String {
   for marker in @shared.folder_markers {
-    let found = @async_fs.exists(path.join(Path("./\{marker}")).to_string()) catch {
-      _ => false
-    }
-    if found {
+    guard !@async_fs.exists(path.join(Path("./\{marker}")).to_string()) else {
       return marker
     }
   }

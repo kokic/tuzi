@@ -5,7 +5,7 @@ pub(all) enum EntryKind {
   /// A symbolic link or Windows junction, carrying its final absolute target.
   SymbolicLink(Path, EntryKind)
   /// The link exists, but its target could not be resolved or inspected.
-  UnresolvedLink(String)
+  UnresolvedLink(ApiFailure)
   Socket
   Pipe
   BlockDevice
@@ -31,8 +31,8 @@ pub(all) struct Entry {
   /// Modification time in Unix seconds, or the metadata read failure.
   mtime : Result[Int64, ApiFailure]
   /// The first name in `folder_markers` found directly inside this directory,
-  /// or "" when none. Always "" for files.
-  marker : String
+  /// Ok("") when none, disabled, or not a directory; Err for failed detection.
+  marker : Result[String, ApiFailure]
 } derive(Eq, FromJson, ToJson)
 
 ///|

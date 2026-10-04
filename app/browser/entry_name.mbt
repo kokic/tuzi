@@ -44,8 +44,17 @@ fn entry_name_view(entry : Entry, color : String) -> Html {
         [
           span(
             style=["margin-left: 0.5em", "color: var(--rui-muted-foreground)"],
-            title=error,
+            title=error.message,
             "Target unavailable",
+          ),
+        ]
+      },
+      ..if entry.marker is Err(error) {
+        [
+          span(
+            style=["margin-left: 0.5em", "color: var(--rui-muted-foreground)"],
+            title=error.message,
+            "Marker unavailable",
           ),
         ]
       },

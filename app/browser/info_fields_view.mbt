@@ -76,7 +76,10 @@ fn InfoContext::fields_view(
       ]
     },
     ..if entry.kind is UnresolvedLink(error) {
-      [InfoField::{ label: "Target unavailable", value: error, }.view()]
+      [InfoField::{ label: "Target unavailable", value: error.message, }.view()]
+    },
+    ..if entry.marker is Err(error) {
+      [InfoField::{ label: "Marker unavailable", value: error.message, }.view()]
     },
     ..if !entry.is_dir() {
       [

@@ -22,7 +22,8 @@ fn EntryColorRegistry::for_entry(
   guard !entry.is_dir() else {
     return match () {
       _ if self.exact_folder.get(name) is Some(content) => content
-      _ if self.marker_colors.get(entry.marker) is Some(content) => content
+      _ if entry.marker is Ok(marker) &&
+        self.marker_colors.get(marker) is Some(content) => content
       _ if entry.name.has_prefix(".") => self.dot_folder
       _ => self.folder
     }
