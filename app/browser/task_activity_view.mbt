@@ -1,6 +1,6 @@
 ///|
 fn activity_dialog(tasks : Array[Task], emit : Emit[Msg]) -> Html {
-  modal("Activity", emit, [
+  modal("Activity", emit, style=["width: min(640px, calc(100% - 2rem))"], [
     @rui.scroll_area(
       @rui.item_group(
         [

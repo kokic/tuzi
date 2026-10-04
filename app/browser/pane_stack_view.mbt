@@ -69,10 +69,8 @@ fn pane_stack_view(
                 "display: flex",
                 "min-width: 0",
                 "min-height: 0",
-                if visible {
-                  "content-visibility: auto"
-                } else {
-                  "content-visibility: hidden"
+                ..if !visible {
+                  ["content-visibility: hidden"]
                 },
               ],
               content,

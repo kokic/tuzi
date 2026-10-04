@@ -2,7 +2,7 @@
 let appearance_style : Array[String] = [
   "--rui-radius: 6px", "--tuzi-selection-background: light-dark(#e5e5e5, #3a3a3a)",
   "--tuzi-selection-indicator: var(--rui-muted-foreground)", "--tuzi-marked-background: light-dark(#f0f0f0, #303030)",
-  "--tuzi-row-height: max(35px, calc(1.5rem + 7px))",
+  "--tuzi-row-height: 35px",
 ]
 
 ///|

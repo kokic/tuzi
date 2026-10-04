@@ -22,7 +22,7 @@ fn Model::toolbar_view(
       div(
         style=[
           "display: flex", "align-items: center", "gap: 6px", "font-size: var(--tuzi-footer-size)",
-          "color: var(--rui-muted-foreground)", "white-space: nowrap", "padding-right: 8px",
+          "color: var(--rui-muted-foreground)", "white-space: nowrap",
         ],
         [
           span(style=count_style(model.active == Left), "\{left}"),

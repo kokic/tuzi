@@ -16,30 +16,14 @@ fn task_indicator(status : TaskStatus) -> Html {
 }
 
 ///|
-/// Keep logs inside a bounded viewport so long lines cannot widen the card.
-fn task_output_view(message : String) -> Html {
+fn task_output_view(message : String, label? : String = "Task output") -> Html {
   @rui.scroll_area(
     orientation=Horizontal,
-    attrs=@html.Attrs::build().aria_label("Task output"),
+    attrs=@html.Attrs::build().aria_label(label),
     style=[
-      "min-width: 0", "max-width: 100%", "height: auto", "max-height: 160px", "overflow-y: auto",
-      "border-radius: var(--rui-radius)", "background: var(--rui-muted)",
+      "height: auto", "max-height: 160px", "overflow-y: auto", "overscroll-behavior-y: auto",
     ],
-    @html.pre(
-      style=[
-        "margin: 0",
-        "padding: 10px",
-        "box-sizing: border-box",
-        "width: max-content",
-        "min-width: 100%",
-        "white-space: pre",
-        "overflow-wrap: normal",
-        CODE_FONT_STYLE,
-        "font-size: 0.75rem",
-        "line-height: 1.6",
-      ],
-      message,
-    ),
+    @html.pre(style=[CODE_FONT_STYLE], message),
   )
 }
 

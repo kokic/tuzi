@@ -49,11 +49,7 @@ fn entry_title_style(entry : Entry, color : String) -> Array[String] {
     "grid-column: 1",
     "display: flex",
     "align-items: baseline",
-    if entry.kind.is_link() {
-      "overflow-x: auto"
-    } else {
-      "overflow: hidden"
-    },
+    "overflow: hidden",
     "white-space: nowrap",
     "font-size: var(--tuzi-entry-title-size)",
     "color: \{foreground}",

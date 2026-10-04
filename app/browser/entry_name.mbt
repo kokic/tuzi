@@ -7,11 +7,7 @@ fn entry_name_view(entry : Entry, color : String) -> Html {
     title=if entry.is_dir() { entry.name + "/" } else { entry.name },
     [
       span(
-        style=if entry.kind.is_link() {
-          ["flex: none"]
-        } else {
-          ["min-width: 0", "overflow: hidden", "text-overflow: ellipsis"]
-        },
+        style=["min-width: 0", "overflow: hidden", "text-overflow: ellipsis"],
         entry.name,
       ),
       ..if entry.is_dir() {

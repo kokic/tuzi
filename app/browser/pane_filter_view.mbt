@@ -29,7 +29,7 @@ fn pane_filter_view(
   @rui.input_group(
     style=[
       CODE_FONT_STYLE,
-      "width: 200px",
+      "width: 320px",
       "max-width: 50%",
       "min-width: 0",
       "flex: none",
