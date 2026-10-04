@@ -7,7 +7,11 @@ fn entry_name_view(entry : Entry, color : String) -> Html {
     title=if entry.is_dir { entry.name + "/" } else { entry.name },
     [
       span(
-        style=["min-width: 0", "overflow: hidden", "text-overflow: ellipsis"],
+        style=if entry.is_symlink {
+          ["flex: none"]
+        } else {
+          ["min-width: 0", "overflow: hidden", "text-overflow: ellipsis"]
+        },
         entry.name,
       ),
       ..if entry.is_dir {
@@ -23,14 +27,16 @@ fn entry_name_view(entry : Entry, color : String) -> Html {
           span(
             style=[
               "display: inline-flex", "flex: none", "align-self: center",
-              "width: 1em", "height: 1em", "margin: 0 0.25em",
+              "width: 1em", "height: 1em", "margin: 0 0.5em",
             ],
             // Only the static SVG constant is inserted as HTML.
             attrs=@html.Attrs::build().inner_html(SvgRightArrow),
             @html.nothing,
           ),
           span(
-            style=["min-width: 0", "overflow: hidden", "text-overflow: ellipsis"],
+            style=[
+              "min-width: 3ch", "overflow: hidden", "text-overflow: ellipsis",
+            ],
             title=target,
             target,
           ),
