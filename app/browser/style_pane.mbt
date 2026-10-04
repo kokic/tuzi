@@ -55,6 +55,8 @@ fn pane_list_style() -> Array[String] {
   [
     CODE_FONT_STYLE,
     "flex: 1",
+    // The list content width is the full row width, excluding the scrollbar.
+    "container-type: inline-size",
     "display: grid",
     "grid-template-columns: max-content max-content minmax(0, 1fr) max-content minmax(1em, max-content) calc(var(--tuzi-time-column, 17ch) + 10px)",
     "font-size: var(--tuzi-entry-subtitle-size)",

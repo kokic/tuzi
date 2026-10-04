@@ -113,7 +113,7 @@ fn entry_context_menu(
         emit(PaneEvent(DblClick(idx, row)))
       }),
       [
-        entry_name_view(entry, @tuzi.entry_color(entry, appearance)),
+        entry.name_view(@tuzi.entry_color(entry, appearance)),
         entry_size_view(entry),
         entry_time_view(entry),
       ],

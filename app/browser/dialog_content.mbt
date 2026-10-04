@@ -8,7 +8,7 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
       None => @html.nothing
       Help =>
         modal("Help", emit, size=Wide, [
-          @rui.table(@rui.table_body(help_lines())),
+          @rui.table([@rui.table_caption(""), @rui.table_body(help_lines())]),
         ])
       Activity => activity_dialog(model.jobs.items, emit)
       Progress(batch) => progress_dialog(batch, emit)
