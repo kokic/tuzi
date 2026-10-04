@@ -59,17 +59,7 @@ fn Pane::pane_view(
             ),
           ]
         LoadFailed(error) =>
-          [
-            div(style=pane_status_style(), [
-              @rui.field_error(error),
-              @rui.button(
-                style=[UI_FONT_STYLE],
-                variant=Outline,
-                on_click=emit(PaneEvent(ReloadPane(idx))),
-                "Retry",
-              ),
-            ]),
-          ]
+          [directory_failure_view(error, pane.entries.is_empty(), idx, emit)]
         Ready =>
           if pane.entries.is_empty() {
             [
@@ -83,7 +73,40 @@ fn Pane::pane_view(
           }
       },
     ),
-    "entries": rows,
+    "entries": if pane.loading is LoadFailed(_) && pane.entries.is_empty() {
+      @html.nothing
+    } else {
+      rows
+    },
     "details": data.entry_details_view(idx, pane.id, filter.unwrap_or(""), emit),
   })
+}
+
+///|
+fn directory_failure_view(
+  error : String,
+  centered : Bool,
+  idx : PaneSide,
+  emit : Emit[Msg],
+) -> Html {
+  let retry = @rui.button(
+    variant=Outline,
+    size=Sm,
+    on_click=emit(PaneEvent(ReloadPane(idx))),
+    "Retry",
+  )
+  guard !centered else {
+    @rui.empty(attrs=@html.Attrs::build().role("alert"), [
+      @rui.empty_header([
+        @rui.empty_title("Unable to read directory"),
+        @rui.empty_description(error),
+      ]),
+      @rui.empty_content(retry),
+    ])
+  }
+  @rui.alert(variant=Destructive, [
+    @rui.alert_title("Unable to refresh directory"),
+    @rui.alert_description(error),
+    @rui.alert_action(retry),
+  ])
 }
