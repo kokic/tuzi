@@ -16,15 +16,23 @@ fn entry_name_view(entry : Entry, color : String) -> Html {
         []
       },
       ..if entry.is_symlink {
+        let target = entry.resolved_target.map_or("Unable to resolve", target => {
+          target.to_string()
+        })
         [
           span(
             style=[
               "display: inline-flex", "flex: none", "align-self: center",
-              "width: 1em", "height: 1em", "margin-left: 4px",
+              "width: 1em", "height: 1em", "margin: 0 0.25em",
             ],
-            title="Symbolic link",
-            attrs=@html.Attrs::build().inner_html(SvgSymbolicLink),
+            // Only the static SVG constant is inserted as HTML.
+            attrs=@html.Attrs::build().inner_html(SvgRightArrow),
             @html.nothing,
+          ),
+          span(
+            style=["min-width: 0", "overflow: hidden", "text-overflow: ellipsis"],
+            title=target,
+            target,
           ),
         ]
       },
@@ -32,4 +40,4 @@ fn entry_name_view(entry : Entry, color : String) -> Html {
   )
 }
 
-const SvgSymbolicLink : String = #|<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-symlink preview-icon"><path d="M4 11V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h7"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="m10 18 3-3-3-3"/></svg>
+const SvgRightArrow : String = #|<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-right preview-icon"><path d="M18 8L22 12L18 16"/><path d="M2 12H22"/></svg>
