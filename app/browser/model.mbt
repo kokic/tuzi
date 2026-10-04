@@ -9,7 +9,7 @@ priv enum StartupState {
 priv struct Model {
   startup : StartupState
   theme : Theme
-  icons : IconMode
+  entry_appearance : EntryAppearance
   openers : @tuzi.OpenRegistry?
   supports_drive_selection : Bool
   panes : (PaneStack, PaneStack)
@@ -71,7 +71,7 @@ fn Model::initialize() -> Model {
   {
     startup: Starting,
     theme: Theme::default(),
-    icons: IconMode::default_mode(),
+    entry_appearance: EntryAppearance::default(),
     openers: None,
     supports_drive_selection: false,
     panes: (PaneStack::initialize(Path("")), PaneStack::initialize(Path(""))),

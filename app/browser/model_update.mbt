@@ -11,9 +11,9 @@ fn Model::update(
   } else {
     updated
   }
-  // Marker data depends on icon mode. Keep this at the update boundary so
+  // Marker data depends on entry appearance. Keep this at the update boundary so
   // every configuration change invalidates listings, including future controls.
-  let updated = if updated.icons != model.icons {
+  let updated = if updated.entry_appearance != model.entry_appearance {
     {
       ..updated,
       panes: (
@@ -47,7 +47,7 @@ fn Model::update_message(
         ..model,
         startup: Started,
         theme: config.theme,
-        icons: config.icons,
+        entry_appearance: config.entry_appearance,
         openers: Some(config.openers),
         supports_drive_selection: config.supports_drive_selection,
         active: if location.active == 0 {

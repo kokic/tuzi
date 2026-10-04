@@ -29,8 +29,8 @@ fn Model::receive_listing(
         pane.request_id == request_id else {
         return pane
       }
-      if include_markers != (model.icons != None) {
-        // A response for the previous icon mode cannot satisfy this view.
+      if include_markers != (model.entry_appearance != Plain) {
+        // A response for the previous entry appearance cannot satisfy this view.
         { ..pane, loading: Unloaded, refresh_pending: true, }
       } else {
         match result {
@@ -80,7 +80,7 @@ fn Model::load_pending_panes(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
         { pane: Right, view_id: right.id, request_id: right.request_id, },
       ],
       left.path,
-      model.icons != None,
+      model.entry_appearance != Plain,
       emit,
     )
   } else {
@@ -91,7 +91,7 @@ fn Model::load_pending_panes(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
             request_directory_listing(
               [{ pane: Left, view_id: left.id, request_id: left.request_id, }],
               left.path,
-              model.icons != None,
+              model.entry_appearance != Plain,
               emit,
             ),
           ]
@@ -107,7 +107,7 @@ fn Model::load_pending_panes(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
                 },
               ],
               right.path,
-              model.icons != None,
+              model.entry_appearance != Plain,
               emit,
             ),
           ]

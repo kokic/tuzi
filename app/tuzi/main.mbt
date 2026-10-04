@@ -55,14 +55,14 @@ fn build_command() -> @argparse.Command {
     ],
     options=[
       OptionArg(
-        "icons",
-        about="file type colors: none (disabled) or svg (enabled), default \{@shared.IconMode::default_mode().to_string()}",
+        "entry-appearance",
+        about="entry appearance: plain or decorated (file type colors), default \{@shared.EntryAppearance::default().to_string()}",
       ),
       OptionArg("port", short='p', about="server port, default \{default_port}"),
       OptionArg(
         "theme",
         short='t',
-        about="color theme: light or dark, default \{@shared.Theme::default_theme().to_string()}",
+        about="color theme: light or dark, default \{@shared.Theme::default().to_string()}",
       ),
     ],
     positionals=[
@@ -98,21 +98,21 @@ fn parse_server_config(
   let base = Path::from_native(path.resolve().to_string())
   let theme = {
     guard cmd.values.get("theme") is Some([theme]) else {
-      @shared.Theme::default_theme()
+      @shared.Theme::default()
     }
     @shared.Theme::parse(theme)
   }
-  let icons = {
-    guard cmd.values.get("icons") is Some([icons]) else {
-      @shared.IconMode::default_mode()
+  let entry_appearance = {
+    guard cmd.values.get("entry-appearance") is Some([appearance]) else {
+      @shared.EntryAppearance::default()
     }
-    @shared.IconMode::parse(icons)
+    @shared.EntryAppearance::parse(appearance)
   }
   {
     base,
     startup,
     theme,
-    icons,
+    entry_appearance,
     openers,
     supports_drive_selection: SupportsDriveSelection,
   }

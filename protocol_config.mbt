@@ -9,7 +9,7 @@ pub(all) struct ServerConfig {
   base : Path
   startup : StartupMode
   theme : Theme
-  icons : IconMode
+  entry_appearance : EntryAppearance
   openers : OpenRegistry
   supports_drive_selection : Bool
 } derive(ToJson, FromJson)

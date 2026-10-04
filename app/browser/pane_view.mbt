@@ -1,12 +1,21 @@
 ///|
 fn panes_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
   model
-  .map(model => (model.icons, model.openers, model.supports_drive_selection))
+  .map(model => {
+    (model.entry_appearance, model.openers, model.supports_drive_selection)
+  })
   .switch_by(
     configuration => {
-      let (icons, openers, supports_drives) = configuration
-      pane_stack_view(model, Left, emit, icons, openers, supports_drives).view2(
-        pane_stack_view(model, Right, emit, icons, openers, supports_drives),
+      let (appearance, openers, supports_drives) = configuration
+      pane_stack_view(model, Left, emit, appearance, openers, supports_drives).view2(
+        pane_stack_view(
+          model,
+          Right,
+          emit,
+          appearance,
+          openers,
+          supports_drives,
+        ),
         (left, right) => div(id="panes", style=panes_style(), [left, right]),
       )
     },

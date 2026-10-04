@@ -21,7 +21,7 @@ fn pane_rows(
   filter : Val[String?],
   idx : PaneSide,
   emit : Emit[Msg],
-  icons : IconMode,
+  appearance : EntryAppearance,
   openers : @tuzi.OpenRegistry?,
 ) -> Val[Html] {
   let rows = pane
@@ -42,7 +42,7 @@ fn pane_rows(
       (name, row) => {
         // Cursor movement only updates the row's appearance, keeping the double-click target mounted.
         let menu = row.switch_by(
-          row => entry_context_menu(row, idx, emit, icons, openers),
+          row => entry_context_menu(row, idx, emit, appearance, openers),
           by=row => {
             ToJson::to_json(
               (row.view_id, row.directory, row.row, row.entry, row.selected),
@@ -74,7 +74,7 @@ fn entry_context_menu(
   item : EntryRow,
   idx : PaneSide,
   emit : Emit[Msg],
-  icons : IconMode,
+  appearance : EntryAppearance,
   openers : @tuzi.OpenRegistry?,
 ) -> Val[Html] {
   let { entry, row, selected, .. } = item
@@ -113,7 +113,7 @@ fn entry_context_menu(
         emit(PaneEvent(DblClick(idx, row)))
       }),
       [
-        entry_name_view(entry, @tuzi.entry_color(entry, icons)),
+        entry_name_view(entry, @tuzi.entry_color(entry, appearance)),
         entry_size_view(entry),
         entry_time_view(entry),
       ],

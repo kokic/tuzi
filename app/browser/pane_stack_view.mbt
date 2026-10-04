@@ -3,7 +3,7 @@ fn pane_stack_view(
   model : Val[Model],
   idx : PaneSide,
   emit : Emit[Msg],
-  icons : IconMode,
+  appearance : EntryAppearance,
   openers : @tuzi.OpenRegistry?,
   supports_drives : Bool,
 ) -> Val[Html] {
@@ -21,7 +21,7 @@ fn pane_stack_view(
     .map(stack => @vector.Vector::from_array([..stack.parents, stack.current]))
     .assoc_by(
       (id, pane) => {
-        let rows = pane_rows(pane, filter, idx, emit, icons, openers)
+        let rows = pane_rows(pane, filter, idx, emit, appearance, openers)
         let drive_menu = pane
           .map(pane => pane.path)
           .switch_by(

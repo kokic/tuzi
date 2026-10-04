@@ -51,9 +51,9 @@ fn EntryColorRegistry::for_entry(
 }
 
 ///|
-pub fn entry_color(entry : Entry, mode : IconMode) -> String {
+pub fn entry_color(entry : Entry, mode : EntryAppearance) -> String {
   match mode {
-    None => "currentColor"
-    Svg => builtin_entry_colors.for_entry(entry)
+    Plain => "currentColor"
+    Decorated => builtin_entry_colors.for_entry(entry)
   }
 }

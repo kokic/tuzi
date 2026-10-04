@@ -11,7 +11,7 @@ using @path {type Path}
 using @tuzi {
   type Entry,
   type Theme,
-  type IconMode,
+  type EntryAppearance,
   type SortMode,
   type FileOperation,
   type GitOperation,
