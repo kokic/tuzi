@@ -29,10 +29,7 @@ async fn copy_tree(from : Path, to : Path) -> Unit {
 async fn cleanup_copy(path : Path) -> Unit nocancel {
   @async.protect_from_cancel(() => {
     remove_path(path) catch {
-      error =>
-        raise PartialFailure(
-          "Could not remove incomplete output at \{path}: \{error}",
-        )
+      error => raise CleanupFailed(path, error)
     }
   })
 }
@@ -64,10 +61,7 @@ async fn move_entry(from : Path, to : Path) -> Unit {
       guard is_cross_device_error(code) else { raise error }
       copy_tree(from, to)
       remove_path(from) catch {
-        error =>
-          raise PartialFailure(
-            "Copied to \{to}, but could not fully remove \{from}: \{error}",
-          )
+        error => raise SourceRemovalFailed(from, to, error)
       }
     }
     error => raise error

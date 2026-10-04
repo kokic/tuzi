@@ -45,7 +45,7 @@ fn Model::transfer_selection_to_other_pane(
   let dst = model.pane_at(model.active.other())
   let items = src.selected_items(filter?=model.entry_filter(model.active))
   guard !items.is_empty() else { return (model, @rabbita.none) }
-  guard !(kind is Move && items.any(entry => entry.kind is SymbolicLink(_, _))) else {
+  guard !(kind is Move && items.any(entry => entry.kind.is_link())) else {
     return (
       model,
       emit(Toast("Edit the link path in Information", None, @rui.ToastDefault)),

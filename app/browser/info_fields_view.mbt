@@ -8,7 +8,7 @@ fn InfoContext::fields_view(
   let path = context.path.to_string()
   [
     InfoField::{ label: "Name", value: entry.name, }.view(),
-    ..if !(entry.kind is SymbolicLink(_, _)) {
+    ..if !entry.kind.is_link() {
       [
         InfoField::{ label: "Path", value: path, }.view(
           action=@rui.button(
@@ -62,6 +62,7 @@ fn InfoContext::fields_view(
           } else {
             "Symbolic link"
           }
+        UnresolvedLink(_) => "Symbolic link (target unavailable)"
         Socket => "Socket"
         Pipe => "Pipe"
         BlockDevice => "Block device"
@@ -73,6 +74,9 @@ fn InfoContext::fields_view(
       [
         InfoField::{ label: "Resolved target", value: target.to_string(), }.view(),
       ]
+    },
+    ..if entry.kind is UnresolvedLink(error) {
+      [InfoField::{ label: "Target unavailable", value: error, }.view()]
     },
     ..if !entry.is_dir() {
       [
@@ -87,7 +91,7 @@ fn InfoContext::fields_view(
     InfoField::{
       label: "Modified (UTC)",
       value: entry.mtime.map_or("Unknown", time => {
-        format_timestamp(time, seconds=true)
+        format_timestamp(time, seconds=true).to_string()
       }),
     }.view(),
   ]

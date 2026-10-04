@@ -4,7 +4,7 @@ let unknown_size : @tuzi.FormattedFileSize = { value: "???", unit: "B", }
 ///|
 fn format_entry_meta(entry : Entry) -> String {
   let parts = [
-    entry.mtime.map_or("", time => format_timestamp(time)),
+    entry.mtime.map_or("", time => format_timestamp(time).to_string()),
     ..if !entry.is_dir() {
       [
         entry.size
@@ -39,12 +39,9 @@ fn entry_time_view(entry : Entry) -> Html {
     ]
   guard entry.mtime is Some(time) else { return span(style~, "") }
   let formatted = format_timestamp(time)
-  // The year can have more than four digits; MM-DD and HH:MM have fixed lengths.
-  let date_end = formatted.length() - 6
-  let month_start = date_end - 5
-  span(style~, title=formatted, [
-    span(class="entry-time-year", "\{formatted[:month_start]}"),
-    span("\{formatted[month_start:date_end]}"),
-    span(class="entry-time-clock", "\{formatted[date_end:]}"),
+  span(style~, title=formatted.to_string(), [
+    span(class="entry-time-year", formatted.year + "-"),
+    span(formatted.month_day),
+    span(class="entry-time-clock", " " + formatted.clock),
   ])
 }

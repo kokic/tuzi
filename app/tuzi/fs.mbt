@@ -68,10 +68,14 @@ async fn read_entry_kind(path : Path) -> @shared.EntryKind {
   match @async_fs.kind(path.to_string(), follow_symlink=false) {
     Regular => Regular
     Directory => Directory
-    SymLink => {
-      let target = Path::from_native(@async_fs.realpath(path.to_string()))
-      SymbolicLink(target, read_entry_kind(target))
-    }
+    SymLink =>
+      try {
+        let target = Path::from_native(@async_fs.realpath(path.to_string()))
+        SymbolicLink(target, read_entry_kind(target))
+      } catch {
+        @os_error.OSError(_, ..) as error => UnresolvedLink(error.to_string())
+        error => raise error
+      }
     Socket => Socket
     Pipe => Pipe
     BlockDevice => BlockDevice

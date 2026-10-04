@@ -19,7 +19,7 @@ fn entry_menu_content(
     EntryAction(idx, item.view_id, item.entry.name, action)
   })
   let actions : Array[(String, String, Msg)] = [
-    ..if !(item.entry.kind is SymbolicLink(_, _)) {
+    ..if !item.entry.kind.is_link() {
       [
         ("Copy to other pane", "c", TransferSelection(Copy)),
         ("Move to other pane", "m", TransferSelection(Move)),
@@ -27,7 +27,7 @@ fn entry_menu_content(
       ]
     },
     ("Copy path", "y", CopyPaths),
-    ..if !(item.entry.kind is SymbolicLink(_, _)) {
+    ..if !item.entry.kind.is_link() {
       [("Compress to ZIP…", "z", ZipOpen)]
     },
     ("Information", "i", InfoOpen),

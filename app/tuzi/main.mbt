@@ -2,6 +2,18 @@
 let default_port : UInt16 = 4000
 
 ///|
+priv suberror PortError {
+  OutOfRange(UInt)
+}
+
+///|
+impl Show for PortError with fn to_string(self) {
+  match self {
+    OutOfRange(port) => "Port must be between 1 and 65535: \{port}"
+  }
+}
+
+///|
 async fn main {
   let cmd = build_command().parse()
   let port = server_port(@env.get_env_vars(), cmd)
@@ -83,7 +95,9 @@ fn server_port(
     _ if cmd.values.get("port") is Some([port]) => port
     _ => return default_port
   }
-  @string.parse_uint(port).to_uint16()
+  let port = @string.parse_uint(port)
+  guard port >= 1U && port <= 65535U else { raise PortError::OutOfRange(port) }
+  port.to_uint16()
 }
 
 ///|

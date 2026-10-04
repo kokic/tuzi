@@ -29,16 +29,46 @@ pub fn format_file_size(size : Int64) -> FormattedFileSize {
 }
 
 ///|
+/// UTC display components; text is assembled only at the output boundary.
+pub(all) struct FormattedTimestamp {
+  year : String
+  month_day : String
+  clock : String
+}
+
+///|
+pub impl Show for FormattedTimestamp with fn output(self, logger) {
+  logger.write_string(self.year)
+  logger.write_string("-")
+  logger.write_string(self.month_day)
+  logger.write_string(" ")
+  logger.write_string(self.clock)
+}
+
+///|
+pub extend FormattedTimestamp with Show::{to_string, output}
+
+///|
 /// Format a Unix timestamp in UTC, optionally including seconds.
-pub fn format_timestamp(sec : Int64, seconds? : Bool = false) -> String {
+pub fn format_timestamp(
+  sec : Int64,
+  seconds? : Bool = false,
+) -> FormattedTimestamp {
   let days = floor_divide(sec, 86400L)
   let rem = sec - days * 86400L
   let hour = rem / 3600L
   let minute = rem % 3600L / 60L
   let (y, m, day) = calendar_date_from_epoch_days(days)
-  let timestamp = "\{y}-\{format_two_digits(m)}-\{format_two_digits(day)} \{format_two_digits(hour)}:\{format_two_digits(minute)}"
-  guard seconds else { return timestamp }
-  timestamp + ":" + format_two_digits(rem % 60L)
+  let clock = "\{format_two_digits(hour)}:\{format_two_digits(minute)}"
+  {
+    year: y.to_string(),
+    month_day: "\{format_two_digits(m)}-\{format_two_digits(day)}",
+    clock: if seconds {
+      clock + ":" + format_two_digits(rem % 60L)
+    } else {
+      clock
+    },
+  }
 }
 
 ///|

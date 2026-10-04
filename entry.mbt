@@ -4,6 +4,8 @@ pub(all) enum EntryKind {
   Directory
   /// A symbolic link or Windows junction, carrying its final absolute target.
   SymbolicLink(Path, EntryKind)
+  /// The link exists, but its target could not be resolved or inspected.
+  UnresolvedLink(String)
   Socket
   Pipe
   BlockDevice
@@ -54,4 +56,10 @@ pub fn EntryKind::is_dir(self : EntryKind) -> Bool {
 ///|
 pub fn Entry::is_dir(self : Entry) -> Bool {
   self.kind.is_dir()
+}
+
+///|
+/// Whether this entry is a link, including links whose target is unavailable.
+pub fn EntryKind::is_link(self : EntryKind) -> Bool {
+  self is (SymbolicLink(_, _) | UnresolvedLink(_))
 }

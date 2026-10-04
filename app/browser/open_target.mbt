@@ -24,6 +24,9 @@ fn OpenTarget::unavailable_reason(
   self : OpenTarget,
   action : @tuzi.OpenAction,
 ) -> String? {
+  guard !(self.entry.kind is UnresolvedLink(_)) else {
+    return Some("The link target is unavailable.")
+  }
   match action {
     Browse =>
       if self.entry.is_dir() {

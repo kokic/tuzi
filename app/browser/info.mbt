@@ -19,15 +19,13 @@ fn Model::open_info_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
     is Some(entry) else {
     return (model, @rabbita.none)
   }
+  let path = pane.path.join(Path("./\{entry.name}"))
   let context : InfoContext = {
     id: model.next_info_id,
     entry,
-    path: pane.path.join(Path("./\{entry.name}")),
-    link: if entry.kind is SymbolicLink(_, _) {
-      Some({
-        path: pane.path.join(Path("./\{entry.name}")).to_string(),
-        target: None,
-      })
+    path,
+    link: if entry.kind.is_link() {
+      Some({ path: path.to_string(), target: None, })
     } else {
       None
     },
@@ -37,7 +35,7 @@ fn Model::open_info_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
     next_info_id: model.next_info_id + 1,
     dialog_error: "",
   }
-  let link_request = if entry.kind is SymbolicLink(_, _) {
+  let link_request = if entry.kind.is_link() {
     request_link_target(context, emit)
   } else {
     @rabbita.none

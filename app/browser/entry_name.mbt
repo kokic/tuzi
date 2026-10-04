@@ -7,7 +7,7 @@ fn entry_name_view(entry : Entry, color : String) -> Html {
     title=if entry.is_dir() { entry.name + "/" } else { entry.name },
     [
       span(
-        style=if entry.kind is SymbolicLink(_, _) {
+        style=if entry.kind.is_link() {
           ["flex: none"]
         } else {
           ["min-width: 0", "overflow: hidden", "text-overflow: ellipsis"]
@@ -37,6 +37,15 @@ fn entry_name_view(entry : Entry, color : String) -> Html {
             ],
             title=target,
             target,
+          ),
+        ]
+      },
+      ..if entry.kind is UnresolvedLink(error) {
+        [
+          span(
+            style=["margin-left: 0.5em", "color: var(--rui-muted-foreground)"],
+            title=error,
+            "Target unavailable",
           ),
         ]
       },

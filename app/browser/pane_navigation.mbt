@@ -70,15 +70,15 @@ fn Model::update_panes(
         @rabbita.none,
       )
     GotoPath(idx, path) => model.navigate_to_directory(idx, path)
-    Click(idx, row) =>
+    Click(idx, row) => {
+      let pane = model.pane_at(idx)
       (
         {
           ..model,
           active: idx,
           panes: set_pane(model.panes, idx, {
-            ..model.pane_at(idx),
-            cursor: model
-            .pane_at(idx)
+            ..pane,
+            cursor: pane
             .visible_entries(filter?=model.entry_filter(idx))
             .get(row)
             .map(entry => entry.name),
@@ -86,6 +86,7 @@ fn Model::update_panes(
         },
         @rabbita.none,
       )
+    }
     DblClick(idx, row) => model.open_entry_at_row(idx, row, emit)
     Select(idx, name) =>
       (

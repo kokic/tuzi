@@ -53,9 +53,7 @@ async fn validate_transfer(from : Path, to : Path) -> Unit {
   let source_key = filesystem_path_key(source)
   for ancestor = destination {
     guard filesystem_path_key(ancestor) != source_key else {
-      raise InvalidTarget(
-        "Destination must not be the source or inside it: \{to}",
-      )
+      raise InvalidTarget(to)
     }
     let parent = ancestor.dirname()
     guard parent != ancestor else { break }

@@ -39,21 +39,26 @@ fn api_failure(error : Error) -> @shared.ApiFailure {
     OpenError::NotApplicable(_) | OpenError::UnsupportedTarget(_) as error =>
       (Unsupported, Show::to_string(error))
     OpenError::ProgramMissing(_) as error => (NotFound, Show::to_string(error))
-    FileError::InvalidName(name) | ArchiveError::InvalidName(name) =>
-      (InvalidName, "Invalid name: " + name)
-    InvalidTarget(message) | OutputIsInput(message) => (InvalidTarget, message)
-    FileError::UnsupportedEntry(path) | ArchiveError::UnsupportedEntry(path) =>
-      (Unsupported, "Unsupported entry: " + path)
-    PartialFailure(message) => (PartialFailure, message)
+    FileError::InvalidName(_) as error => (InvalidName, Show::to_string(error))
+    ArchiveError::InvalidName(_) as error =>
+      (InvalidName, Show::to_string(error))
+    FileError::InvalidTarget(_) as error =>
+      (InvalidTarget, Show::to_string(error))
+    OutputIsInput(_) as error => (InvalidTarget, Show::to_string(error))
+    FileError::UnsupportedEntry(_) as error =>
+      (Unsupported, Show::to_string(error))
+    ArchiveError::UnsupportedEntry(_) as error =>
+      (Unsupported, Show::to_string(error))
+    CleanupFailed(_, _) | SourceRemovalFailed(_, _, _) as error =>
+      (PartialFailure, Show::to_string(error))
     LinkError::AbsolutePathRequired(_) as error =>
       (InvalidTarget, Show::to_string(error))
     LinkError::RecoveryFailed(_, _) as error =>
       (PartialFailure, Show::to_string(error))
     LinkError::LinkCommandFailed(_, _, _) as error =>
       (Io, Show::to_string(error))
-    EmptySelection => (InvalidRequest, "Select at least one entry")
-    InvalidCompressionLevel(level) =>
-      (InvalidRequest, "Compression level must be between 0 and 9: \{level}")
+    EmptySelection | InvalidCompressionLevel(_) as error =>
+      (InvalidRequest, Show::to_string(error))
     ExtractionError::UnsafePath(_) as error =>
       (InvalidName, Show::to_string(error))
     ExtractionError::ChecksumMismatch(_) as error =>

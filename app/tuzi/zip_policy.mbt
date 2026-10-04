@@ -8,6 +8,19 @@ priv suberror ArchiveError {
 }
 
 ///|
+impl Show for ArchiveError with fn to_string(self) {
+  match self {
+    InvalidName(name) => "Invalid name: " + name
+    EmptySelection => "Select at least one entry"
+    UnsupportedEntry(path) => "Unsupported entry: " + path
+    OutputIsInput(name) =>
+      "Output archive must not be one of the selected entries: \{name}"
+    InvalidCompressionLevel(level) =>
+      "Compression level must be between 0 and 9: \{level}"
+  }
+}
+
+///|
 /// Keep both the output and selected entries inside the requested directory.
 fn validate_archive_name(name : String) -> Unit raise ArchiveError {
   guard @shared.is_valid_archive_name(name) else { raise InvalidName(name) }
