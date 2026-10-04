@@ -1,12 +1,4 @@
 ///|
-/// Stable id shared by every application dialog. The native `<dialog>` keeps
-/// the browser-owned open state across content changes between dialogs.
-const DialogId : String = "tuzi-dialog"
-
-///|
-const DialogTitleId : String = "tuzi-dialog-title"
-
-///|
 fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
   model.map(model => {
     let name_input = (title, prompt, input) => {
@@ -14,11 +6,7 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
     }
     match model.dialog {
       None => @html.nothing
-      Help =>
-        modal("Help", emit, [
-          @rui.item_group(help_lines()),
-          @rui.dialog_description("Esc to close"),
-        ])
+      Help => modal("Help", emit, [@rui.table(@rui.table_body(help_lines()))])
       Activity => activity_dialog(model.jobs.items, emit)
       Progress(batch) => progress_dialog(batch, emit)
       TaskDetails(id) => task_details_dialog(model.jobs.items, id, emit)
@@ -67,27 +55,6 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
 }
 
 ///|
-fn modal(
-  title : String,
-  emit : Emit[Msg],
-  children : Array[Html],
-  style? : Array[String] = [],
-) -> Html {
-  @rui.dialog(
-    id=DialogId,
-    attrs=@html.Attrs::build()
-      .aria_labelledby(DialogTitleId)
-      .on_keydown(event => handle_dialog_keyboard_event(event, emit)),
-    on_close=_ => emit(DialogCancel),
-    style=[UI_FONT_STYLE, "background: var(--rui-card)", ..style],
-    [
-      @rui.dialog_header([@rui.dialog_title(id=DialogTitleId, title)]),
-      ..children,
-    ],
-  )
-}
-
-///|
 fn help_lines() -> Array[Html] {
   let binds = [
     ("Tab/←/→", "switch pane"),
@@ -108,9 +75,9 @@ fn help_lines() -> Array[Html] {
   ]
   binds.map(pair => {
     let (key, desc) = pair
-    @rui.item(size=ItemSm, [
-      @rui.item_media(@rui.kbd(key)),
-      @rui.item_content(@rui.item_description(desc)),
+    @rui.table_row([
+      @rui.table_cell(style=["text-align: right"], kbd(key)),
+      @rui.table_cell(style=["text-align: left", "white-space: normal"], desc),
     ])
   })
 }

@@ -46,7 +46,7 @@ fn entry_menu_content(
         let (label, shortcut, message) = action
         @rui.context_menu_item(scope, on_select=action_emit(message), [
           span(label),
-          @rui.context_menu_shortcut(@rui.kbd(style=[UI_FONT_STYLE], shortcut)),
+          @rui.context_menu_shortcut(kbd(shortcut)),
         ])
       }),
       @rui.context_menu_separator(),
@@ -54,10 +54,7 @@ fn entry_menu_content(
         scope,
         destructive=true,
         on_select=action_emit(DeleteOpen),
-        [
-          span("Delete…"),
-          @rui.context_menu_shortcut(@rui.kbd(style=[UI_FONT_STYLE], "d")),
-        ],
+        [span("Delete…"), @rui.context_menu_shortcut(kbd("d"))],
       ),
     ],
   )

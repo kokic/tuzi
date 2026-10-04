@@ -1,3 +1,42 @@
+// Application-level wrappers for rui components.
+
+///|
+fn kbd(key : String) -> Html {
+  @rui.kbd(
+    style=[CODE_FONT_STYLE, "font-weight: 500", "border-radius: 0.25rem"],
+    key,
+  )
+}
+
+///|
+/// Stable id shared by every application dialog. The native `<dialog>` keeps
+/// the browser-owned open state across content changes between dialogs.
+const DialogId : String = "tuzi-dialog"
+
+///|
+const DialogTitleId : String = "tuzi-dialog-title"
+
+///|
+fn modal(
+  title : String,
+  emit : Emit[Msg],
+  children : Array[Html],
+  style? : Array[String] = [],
+) -> Html {
+  @rui.dialog(
+    id=DialogId,
+    attrs=@html.Attrs::build()
+      .aria_labelledby(DialogTitleId)
+      .on_keydown(event => handle_dialog_keyboard_event(event, emit)),
+    on_close=_ => emit(DialogCancel),
+    style=[UI_FONT_STYLE, "background: var(--rui-card)", ..style],
+    [
+      @rui.dialog_header([@rui.dialog_title(id=DialogTitleId, title)]),
+      ..children,
+    ],
+  )
+}
+
 ///|
 fn text_input_field_view(
   id~ : String,
