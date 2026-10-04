@@ -1,7 +1,25 @@
 ///|
 priv suberror GitError {
   GitMissing
-  CommandFailed(String)
+  InvalidGitPath(Path)
+  InvalidLocalReference(String)
+  InvalidSwitchReference(String)
+  CommandFailed(code~ : Int, stdout~ : String, stderr~ : String)
+}
+
+///|
+impl Show for GitError with fn to_string(self) {
+  match self {
+    GitMissing => "Install Git to enable this operation"
+    InvalidGitPath(_) => "Expected a .git file or directory"
+    InvalidLocalReference(_) => "Expected a local branch reference"
+    InvalidSwitchReference(_) => "Expected a local or remote branch reference"
+    CommandFailed(code~, stdout~, stderr~) => {
+      let output = (stdout + stderr).trim().to_owned()
+      guard !output.is_empty() else { "Git exited with status \{code}" }
+      output
+    }
+  }
 }
 
 ///|
@@ -30,24 +48,13 @@ async fn checked_git(
   let (code, stdout, stderr) = git_command(
     ["-C", directory.to_string(), "-c", "color.ui=false", ..arguments],
   )
-  guard code == 0 else {
-    let output = "\{stdout}\{stderr}".trim().to_owned()
-    raise CommandFailed(
-      if output.is_empty() {
-        "Git exited with status \{code}"
-      } else {
-        output
-      },
-    )
-  }
+  guard code == 0 else { raise CommandFailed(code~, stdout~, stderr~) }
   (stdout, stderr)
 }
 
 ///|
 async fn read_git_info(path : Path) -> @shared.GitInfo {
-  guard path.basename() == ".git" else {
-    raise CommandFailed("Expected a .git file or directory")
-  }
+  guard path.basename() == ".git" else { raise InvalidGitPath(path) }
   let directory = path.dirname()
   let (output, _) = checked_git(directory, [
     "for-each-ref", "--format=%(refname)%09%(refname:short)%09%(symref)", "refs/heads/",
@@ -72,6 +79,8 @@ async fn read_git_info(path : Path) -> @shared.GitInfo {
     "--short",
     "HEAD",
   ])
-  guard code == 0 || code == 1 else { raise CommandFailed(stderr) }
+  guard code == 0 || code == 1 else {
+    raise CommandFailed(code~, stdout=current, stderr~)
+  }
   { available: true, current: current.trim().to_owned(), branches, }
 }

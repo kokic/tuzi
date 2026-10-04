@@ -67,8 +67,12 @@ fn api_failure(error : Error) -> @shared.ApiFailure {
       (Unsupported, message)
     @zip.ZipError(_, message) => (InvalidRequest, message)
     GitBusy => (Busy, "A Git operation is already running for this repository")
-    GitMissing => (GitUnavailable, "Install Git to enable this operation")
-    CommandFailed(message) => (GitFailed, message)
+    GitMissing as error => (GitUnavailable, Show::to_string(error))
+    InvalidGitPath(_)
+    | InvalidLocalReference(_)
+    | InvalidSwitchReference(_) as error =>
+      (InvalidRequest, Show::to_string(error))
+    CommandFailed(..) as error => (GitFailed, Show::to_string(error))
     @os_error.OSError(_, ..) as error if error.is_EEXIST() =>
       (Conflict, error.to_string())
     @os_error.OSError(_, ..) as error if error.is_EACCES() =>

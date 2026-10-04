@@ -17,13 +17,13 @@ fn git_arguments(
     Prune => ["remote", "prune", "origin"]
     DeleteBranch(target) => {
       guard target.strip_prefix("refs/heads/") is Some(name) else {
-        raise CommandFailed("Expected a local branch reference")
+        raise InvalidLocalReference(target)
       }
       ["branch", "-D", "--", name.to_owned()]
     }
     RenameBranch(target, new_name) => {
       guard target.strip_prefix("refs/heads/") is Some(name) else {
-        raise CommandFailed("Expected a local branch reference")
+        raise InvalidLocalReference(target)
       }
       ["branch", "-m", "--", name.to_owned(), new_name]
     }
@@ -33,7 +33,7 @@ fn git_arguments(
           ["switch", "--track", "--", target]
         _ if target.strip_prefix("refs/heads/") is Some(name) =>
           ["switch", "--no-guess", "--", name.to_owned()]
-        _ => raise CommandFailed("Expected a local or remote branch reference")
+        _ => raise InvalidSwitchReference(target)
       }
   }
 }
