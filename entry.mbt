@@ -1,12 +1,29 @@
 ///|
+pub(all) enum EntryKind {
+  Regular
+  Directory
+  /// A symbolic link or Windows junction, carrying its final absolute target.
+  SymbolicLink(Path, EntryKind)
+  Socket
+  Pipe
+  BlockDevice
+  CharDevice
+  Unknown
+} derive(Eq, FromJson, ToJson)
+
+///|
+pub extend EntryKind with Eq::{equal, not_equal}
+
+///|
+pub extend EntryKind with FromJson::{from_json}
+
+///|
+pub extend EntryKind with ToJson::{to_json}
+
+///|
 pub(all) struct Entry {
   name : String
-  /// Whether the entry resolves to a directory, including directory links.
-  is_dir : Bool
-  /// The entry itself is a symbolic link (or a Windows junction).
-  is_symlink : Bool
-  /// Final absolute target of a link; absent for non-links or failed resolution.
-  resolved_target : Path?
+  kind : EntryKind
   /// File size in bytes; absent for directories or unavailable metadata.
   size : Int64?
   /// Modification time in Unix seconds; absent when metadata is unavailable.
@@ -24,3 +41,17 @@ pub extend Entry with FromJson::{from_json}
 
 ///|
 pub extend Entry with ToJson::{to_json}
+
+///|
+pub fn EntryKind::is_dir(self : EntryKind) -> Bool {
+  match self {
+    Directory => true
+    SymbolicLink(_, target_kind) => target_kind.is_dir()
+    _ => false
+  }
+}
+
+///|
+pub fn Entry::is_dir(self : Entry) -> Bool {
+  self.kind.is_dir()
+}

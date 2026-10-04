@@ -26,13 +26,13 @@ fn OpenTarget::unavailable_reason(
 ) -> String? {
   match action {
     Browse =>
-      if self.entry.is_dir {
+      if self.entry.is_dir() {
         None
       } else {
         Some("Select a directory to enter.")
       }
     Preview => {
-      guard !self.entry.is_dir else {
+      guard !self.entry.is_dir() else {
         return Some("Directories cannot be previewed as files.")
       }
       // Missing listing metadata is checked by the existing file endpoint.
@@ -46,7 +46,8 @@ fn OpenTarget::unavailable_reason(
       None
     }
     ExtractZip => {
-      guard !self.entry.is_dir && self.entry.name.to_lower().has_suffix(".zip") else {
+      guard !self.entry.is_dir() &&
+        self.entry.name.to_lower().has_suffix(".zip") else {
         return Some("Select a ZIP file to extract.")
       }
       None

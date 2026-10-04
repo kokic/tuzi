@@ -8,7 +8,7 @@ fn InfoContext::fields_view(
   let path = context.path.to_string()
   [
     InfoField::{ label: "Name", value: entry.name, }.view(),
-    ..if !entry.is_symlink {
+    ..if !(entry.kind is SymbolicLink(_, _)) {
       [
         InfoField::{ label: "Path", value: path, }.view(
           action=@rui.button(
@@ -53,29 +53,28 @@ fn InfoContext::fields_view(
     }),
     InfoField::{
       label: "Type",
-      value: if entry.is_symlink {
-        if entry.is_dir {
-          "Folder link"
-        } else {
-          "Symbolic link"
-        }
-      } else if entry.is_dir {
-        "Folder"
-      } else {
-        "File"
+      value: match entry.kind {
+        Regular => "File"
+        Directory => "Folder"
+        SymbolicLink(_, target_kind) =>
+          if target_kind.is_dir() {
+            "Folder link"
+          } else {
+            "Symbolic link"
+          }
+        Socket => "Socket"
+        Pipe => "Pipe"
+        BlockDevice => "Block device"
+        CharDevice => "Character device"
+        Unknown => "Unknown"
       },
     }.view(),
-    ..if entry.is_symlink {
+    ..if entry.kind is SymbolicLink(target, _) {
       [
-        InfoField::{
-          label: "Resolved target",
-          value: entry.resolved_target.map_or("Unable to resolve", target => {
-            target.to_string()
-          }),
-        }.view(),
+        InfoField::{ label: "Resolved target", value: target.to_string(), }.view(),
       ]
     },
-    ..if !entry.is_dir {
+    ..if !entry.is_dir() {
       [
         InfoField::{
           label: "Size",

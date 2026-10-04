@@ -4,30 +4,28 @@
 fn entry_name_view(entry : Entry, color : String) -> Html {
   span(
     style=entry_title_style(entry, color),
-    title=if entry.is_dir { entry.name + "/" } else { entry.name },
+    title=if entry.is_dir() { entry.name + "/" } else { entry.name },
     [
       span(
-        style=if entry.is_symlink {
+        style=if entry.kind is SymbolicLink(_, _) {
           ["flex: none"]
         } else {
           ["min-width: 0", "overflow: hidden", "text-overflow: ellipsis"]
         },
         entry.name,
       ),
-      ..if entry.is_dir {
+      ..if entry.is_dir() {
         [span(style=["flex: none"], "/")]
       } else {
         []
       },
-      ..if entry.is_symlink {
-        let target = entry.resolved_target.map_or("Unable to resolve", target => {
-          target.to_string()
-        })
+      ..if entry.kind is SymbolicLink(target, _) {
+        let target = target.to_string()
         [
           span(
             style=[
-              "display: inline-flex", "flex: none", "align-self: center",
-              "width: 1em", "height: 1em", "margin: 0 0.5em",
+              "display: inline-flex", "flex: none", "align-self: center", "width: 1em",
+              "height: 1em", "margin: 0 0.5em",
             ],
             // Only the static SVG constant is inserted as HTML.
             attrs=@html.Attrs::build().inner_html(SvgRightArrow),
@@ -46,4 +44,6 @@ fn entry_name_view(entry : Entry, color : String) -> Html {
   )
 }
 
-const SvgRightArrow : String = #|<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-right preview-icon"><path d="M18 8L22 12L18 16"/><path d="M2 12H22"/></svg>
+///|
+const SvgRightArrow : String =
+  #|<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-right preview-icon"><path d="M18 8L22 12L18 16"/><path d="M2 12H22"/></svg>

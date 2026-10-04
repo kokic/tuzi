@@ -19,7 +19,7 @@ fn EntryColorRegistry::for_entry(
   entry : Entry,
 ) -> String {
   let name = entry.name.to_lower()
-  guard !entry.is_dir else {
+  guard !entry.is_dir() else {
     return match () {
       _ if self.exact_folder.get(name) is Some(content) => content
       _ if self.marker_colors.get(entry.marker) is Some(content) => content

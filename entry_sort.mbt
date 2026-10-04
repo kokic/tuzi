@@ -24,8 +24,8 @@ pub fn SortMode::compare_entries(
   left : Entry,
   right : Entry,
 ) -> Int {
-  guard left.is_dir == right.is_dir else {
-    guard left.is_dir else { return 1 }
+  guard left.is_dir() == right.is_dir() else {
+    guard left.is_dir() else { return 1 }
     return -1
   }
   match sort {

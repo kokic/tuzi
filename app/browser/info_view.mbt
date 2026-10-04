@@ -7,7 +7,7 @@ fn InfoContext::dialog(
   error? : String = "",
 ) -> Html {
   let content = [
-    ..if !context.entry.is_dir &&
+    ..if !context.entry.is_dir() &&
       @tuzi.image_content_type(context.entry.name) is Some(_) {
       [context.image_view()]
     },

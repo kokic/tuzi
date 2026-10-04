@@ -31,6 +31,7 @@ fn to_unix_seconds(sec : Int64) -> Int64 {
 
 ///|
 async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
+  let path = Path::from_native(@async_fs.realpath(path.to_string()))
   let dir = @async_fs.opendir(path.to_string())
   defer dir.close()
   let jobs : Array[async () -> Entry] = []
@@ -38,26 +39,8 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
     jobs.push(() => {
       let full = path.join(Path("./\{entry.name}"))
       let full_path = full.to_string()
-      let is_symlink = !entry.is_dir &&
-        ((@async_fs.kind(full_path, follow_symlink=false) is SymLink) catch {
-          _ => false
-        })
-      // DirectoryEntry deliberately excludes links from is_dir. Resolve only
-      // links for browsing; unavailable targets must not break the listing.
-      let is_dir = if is_symlink {
-        (@async_fs.kind(full_path) is Directory) catch {
-          _ => false
-        }
-      } else {
-        entry.is_dir
-      }
-      let resolved_target = if is_symlink {
-        Some(Path::from_native(@async_fs.realpath(full_path))) catch {
-          _ => None
-        }
-      } else {
-        None
-      }
+      let kind = read_entry_kind(full)
+      let is_dir = kind.is_dir()
       let size = if is_dir {
         None
       } else {
@@ -74,18 +57,27 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
       } else {
         ""
       }
-      {
-        name: entry.name,
-        is_dir,
-        is_symlink,
-        resolved_target,
-        size,
-        mtime,
-        marker,
-      }
+      { name: entry.name, kind, size, mtime, marker, }
     })
   }
   @async.all(jobs[:], max_concurrent=8)
+}
+
+///|
+async fn read_entry_kind(path : Path) -> @shared.EntryKind {
+  match @async_fs.kind(path.to_string(), follow_symlink=false) {
+    Regular => Regular
+    Directory => Directory
+    SymLink => {
+      let target = Path::from_native(@async_fs.realpath(path.to_string()))
+      SymbolicLink(target, read_entry_kind(target))
+    }
+    Socket => Socket
+    Pipe => Pipe
+    BlockDevice => BlockDevice
+    CharDevice => CharDevice
+    Unknown => Unknown
+  }
 }
 
 ///|

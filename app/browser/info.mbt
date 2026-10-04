@@ -23,7 +23,7 @@ fn Model::open_info_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
     id: model.next_info_id,
     entry,
     path: pane.path.join(Path("./\{entry.name}")),
-    link: if entry.is_symlink {
+    link: if entry.kind is SymbolicLink(_, _) {
       Some({
         path: pane.path.join(Path("./\{entry.name}")).to_string(),
         target: None,
@@ -37,7 +37,7 @@ fn Model::open_info_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
     next_info_id: model.next_info_id + 1,
     dialog_error: "",
   }
-  let link_request = if entry.is_symlink {
+  let link_request = if entry.kind is SymbolicLink(_, _) {
     request_link_target(context, emit)
   } else {
     @rabbita.none

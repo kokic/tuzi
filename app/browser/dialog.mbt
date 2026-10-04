@@ -24,7 +24,7 @@ fn Model::open_rename_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
       emit(Toast("Select one item to rename", None, @rui.ToastDefault)),
     )
   }
-  guard !item.is_symlink else {
+  guard !(item.kind is SymbolicLink(_, _)) else {
     return (
       model,
       emit(

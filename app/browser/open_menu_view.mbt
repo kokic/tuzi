@@ -7,7 +7,7 @@ fn open_with_items(
 ) -> Array[Html] {
   let association = registry.for_entry(
     target.entry.name,
-    is_dir=target.entry.is_dir,
+    is_dir=target.entry.is_dir(),
   )
   let items : Array[Html] = []
   for id in association.openers {

@@ -7,7 +7,7 @@ fn Model::open_default(
   guard model.openers is Some(registry) else { return (model, @rabbita.none) }
   let association = registry.for_entry(
     target.entry.name,
-    is_dir=target.entry.is_dir,
+    is_dir=target.entry.is_dir(),
   )
   model.execute_opener(target, association.default_opener, emit)
 }
@@ -25,7 +25,7 @@ fn Model::execute_opener(
   }
   let association = registry.for_entry(
     target.entry.name,
-    is_dir=target.entry.is_dir,
+    is_dir=target.entry.is_dir(),
   )
   guard association.openers.contains(id) else { return (model, @rabbita.none) }
   if target.unavailable_reason(opener.action) is Some(reason) {
