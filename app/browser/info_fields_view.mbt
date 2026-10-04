@@ -47,7 +47,7 @@ fn InfoContext::fields_view(
           on_input=emit.map(value => LinkTargetInput(value)),
         ),
         ..if fields.target is None && error.is_empty() {
-          [@rui.field_description("Loading target…")]
+          [@rui.spinner(label="Loading target…")]
         },
       ]
     }),
@@ -107,34 +107,11 @@ fn InfoContext::fields_view(
 
 ///|
 fn InfoField::view(field : InfoField, action? : Html) -> Html {
-  div(
-    style=[
-      "display: grid", "grid-template-columns: minmax(72px, 96px) minmax(0, 1fr)",
-      "gap: 12px", "padding-block: 6px", "min-width: 0", "font-size: 0.8125rem",
-    ],
+  @rui.item(
+    size=ItemSm,
     [
-      p(
-        style=[
-          "margin: 0", "color: var(--rui-muted-foreground)", "line-height: 1.5",
-        ],
-        field.label,
-      ),
-      div(
-        style=[
-          "display: flex", "align-items: flex-start", "gap: 8px", "min-width: 0",
-        ],
-        [
-          p(
-            style=[
-              "margin: 0", "flex: 1", "min-width: 0", "max-height: 80px", "overflow: auto",
-              "line-height: 1.5", "white-space: pre-wrap", "overflow-wrap: anywhere",
-              "user-select: text",
-            ],
-            field.value,
-          ),
-          ..action.map_or([], action => [action]),
-        ],
-      ),
+      @rui.item_content([@rui.item_title(field.label), p(field.value)]),
+      ..action.map_or([], action => [@rui.item_actions(action)]),
     ],
   )
 }

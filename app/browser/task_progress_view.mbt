@@ -6,21 +6,13 @@ fn progress_dialog(batch : ProgressBatch, emit : Emit[Msg]) -> Html {
     })
   let rows = batch.items.map(item => {
     let description = item.operation.description()
-    div(
-      style=[
-        "display: grid", "gap: 10px", "padding: 14px", "border: 1px solid var(--rui-border)",
-        "border-radius: var(--rui-radius)", "min-width: 0",
-      ],
+    @rui.item(
+      variant=ItemOutline,
       [
+        @rui.item_content(@rui.item_title(description)),
         ..if batch.error is None {
-          [progress_state_view(item.state, description)]
+          [@rui.item_footer(progress_state_view(item.state, description))]
         },
-        p(
-          style=[
-            "margin: 0", "font-weight: 600", "line-height: 1.5", "overflow-wrap: anywhere",
-          ],
-          description,
-        ),
       ],
     )
   })
@@ -36,13 +28,7 @@ fn progress_dialog(batch : ProgressBatch, emit : Emit[Msg]) -> Html {
         }
         [task_error_view(title, error.submission_message())]
       }),
-      div(
-        style=[
-          "display: grid", "gap: 12px", "min-height: 0", "max-height: 60vh", "overflow-y: auto",
-          "align-content: start",
-        ],
-        rows,
-      ),
+      @rui.scroll_area(@rui.item_group(rows)),
       dialog_close_footer_view(
         label=if needs_attention { "Close" } else { "Hide" },
       ),
@@ -52,12 +38,10 @@ fn progress_dialog(batch : ProgressBatch, emit : Emit[Msg]) -> Html {
 
 ///|
 fn progress_state_view(state : ProgressState, description : String) -> Html {
-  let message = match state {
-    Rejected(error) =>
-      return task_error_view("Submission rejected", error.message)
-    Tracking(_, Some(status)) => return task_status_view(status, description)
-    Submitting => "Submitting…"
-    Tracking(_, None) => "Waiting for task status…"
+  match state {
+    Rejected(error) => task_error_view("Submission rejected", error.message)
+    Tracking(_, Some(status)) => task_status_view(status, description)
+    Submitting => @rui.spinner(label="Submitting…")
+    Tracking(_, None) => @rui.spinner(label="Waiting for task status…")
   }
-  @rui.field_description(style=["margin: 0", "line-height: 1.5"], message)
 }

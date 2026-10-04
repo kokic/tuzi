@@ -16,8 +16,8 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
       None => @html.nothing
       Help =>
         modal("Help", emit, [
-          div(style=help_list_style(), help_lines()),
-          @rui.field_description(style=["margin-top: 1rem"], "Esc to close"),
+          @rui.item_group(help_lines()),
+          @rui.dialog_description("Esc to close"),
         ])
       Activity => activity_dialog(model.jobs.items, emit)
       Progress(batch) => progress_dialog(batch, emit)
@@ -41,9 +41,11 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
         zip_dialog(input, level, model.dialog_error, emit)
       UnzipInput(source~, input~) =>
         modal("Extract ZIP", emit, [
-          @rui.field_description(
-            style=["overflow-wrap: anywhere"],
-            "Archive: \{source}",
+          @rui.item(
+            @rui.item_content([
+              @rui.item_title("Archive"),
+              @rui.item_description(source.to_string()),
+            ]),
           ),
           dialog_input(
             "Destination directory:",
@@ -106,9 +108,9 @@ fn help_lines() -> Array[Html] {
   ]
   binds.map(pair => {
     let (key, desc) = pair
-    div(style=help_row_style(), [
-      @rui.kbd(style=[UI_FONT_STYLE, "justify-self: start"], key),
-      @rui.field_description(desc),
+    @rui.item(size=ItemSm, [
+      @rui.item_media(@rui.kbd(key)),
+      @rui.item_content(@rui.item_description(desc)),
     ])
   })
 }

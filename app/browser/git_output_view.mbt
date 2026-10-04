@@ -18,18 +18,20 @@ fn git_output_view(panel : GitPanel, task : Task?) -> Html {
     }
   })
   let error = if panel.error.is_empty() { task_error } else { panel.error }
-  let output = if !error.is_empty() {
-    error
-  } else {
-    task.map_or("Git output will appear here.", task => {
-      match task.status {
-        Completed(output) => "Completed.\n" + output
-        Queued => "Queued…"
-        Running => "Running…"
-        Failed(error) => error.message
-      }
-    })
+  guard error.is_empty() else {
+    @rui.alert(variant=Destructive, [
+      @rui.alert_title("Git error"),
+      @rui.alert_description(task_output_view(error)),
+    ])
   }
+  let output = task.map_or("Git output will appear here.", task => {
+    match task.status {
+      Completed(output) => "Completed.\n" + output
+      Queued => "Queued…"
+      Running => "Running…"
+      Failed(error) => error.message
+    }
+  })
   div(style=["display: grid", "gap: 8px", "min-width: 0"], [
     div(
       style=[
@@ -48,17 +50,8 @@ fn git_output_view(panel : GitPanel, task : Task?) -> Html {
       // The frame owns the border and background; the scroll viewport is a
       // separate child, so the border can never sit on the final line.
       style=[
-        "width: 100%",
-        "min-width: 0",
-        "max-width: 100%",
-        "height: 144px",
-        "box-sizing: border-box",
-        "border-radius: var(--rui-radius)",
-        "background: var(--rui-muted)",
-        "border: 1px solid var(--rui-border)",
-        ..if !error.is_empty() {
-          ["border-color: var(--rui-destructive)"]
-        },
+        "width: 100%", "min-width: 0", "max-width: 100%", "height: 144px", "box-sizing: border-box",
+        "border-radius: var(--rui-radius)", "background: var(--rui-muted)", "border: 1px solid var(--rui-border)",
       ],
       [
         div(

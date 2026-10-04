@@ -21,16 +21,22 @@ fn Model::view(
         style=application_style(),
         [
           ..match model.startup {
-            Starting => [@rui.field_description("Connecting to server…")]
+            Starting => [@rui.spinner(label="Connecting to server…")]
             StartupFailed(error) =>
               [
-                @rui.field_error(error),
-                @rui.button(
-                  style=[UI_FONT_STYLE],
-                  variant=Outline,
-                  on_click=emit(BaseRetry),
-                  "Retry connection",
-                ),
+                @rui.empty(attrs=@html.Attrs::build().role("alert"), [
+                  @rui.empty_header([
+                    @rui.empty_title("Unable to connect to server"),
+                    @rui.empty_description(error),
+                  ]),
+                  @rui.empty_content(
+                    @rui.button(
+                      variant=Outline,
+                      on_click=emit(BaseRetry),
+                      "Retry connection",
+                    ),
+                  ),
+                ]),
               ]
             Started => {
               let data = (

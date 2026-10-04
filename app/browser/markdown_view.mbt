@@ -99,7 +99,11 @@ fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
         attrs=@html.Attrs::build().role("status"),
         [@rui.spinner(label="Loading Markdown"), span("Loading Markdown…")],
       )
-    Loaded(Err(error)) => @rui.field_error(error)
+    Loaded(Err(error)) =>
+      @rui.alert(variant=Destructive, [
+        @rui.alert_title("Unable to load Markdown"),
+        @rui.alert_description(error),
+      ])
     Loaded(Ok(source)) =>
       match context.view {
         Preview =>

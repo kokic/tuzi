@@ -51,29 +51,19 @@ fn Pane::pane_view(
     ),
     "status": fragment(
       match pane.loading {
-        Unloaded | Loading =>
-          [
-            @rui.field_description(
-              style=pane_status_style(),
-              "Loading directory…",
-            ),
-          ]
+        Unloaded | Loading => [@rui.spinner(label="Loading directory…")]
         LoadFailed(error) =>
           [directory_failure_view(error, pane.entries.is_empty(), idx, emit)]
         Ready =>
           if pane.entries.is_empty() {
-            [
-              @rui.field_description(
-                style=pane_status_style(),
-                "Empty directory",
-              ),
-            ]
+            [@rui.empty(@rui.empty_header(@rui.empty_title("Empty directory")))]
           } else {
             []
           }
       },
     ),
-    "entries": if pane.loading is LoadFailed(_) && pane.entries.is_empty() {
+    "entries": if pane.loading is (LoadFailed(_) | Ready) &&
+      pane.entries.is_empty() {
       @html.nothing
     } else {
       rows

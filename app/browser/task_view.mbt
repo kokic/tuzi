@@ -23,7 +23,6 @@ fn task_output_view(message : String) -> Html {
     attrs=@html.Attrs::build().aria_label("Task output"),
     style=[
       "min-width: 0", "max-width: 100%", "height: auto", "max-height: 160px", "overflow-y: auto",
-      "scrollbar-width: auto", "scrollbar-color: var(--rui-muted-foreground) var(--rui-muted)",
       "border-radius: var(--rui-radius)", "background: var(--rui-muted)",
     ],
     @html.pre(
@@ -82,7 +81,7 @@ fn task_status_view(status : TaskStatus, description : String) -> Html {
 
 ///|
 fn task_error_view(title : String, message : String) -> Html {
-  @rui.alert(style=[UI_FONT_STYLE], variant=Destructive, [
+  @rui.alert(variant=Destructive, [
     @rui.alert_title(title),
     @rui.alert_description(task_output_view(message)),
   ])

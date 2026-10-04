@@ -69,7 +69,10 @@ fn git_info_content(
         ..panel.info.map_or([], info => {
           guard info.available else {
             return [
-              @rui.field_description("Install Git to enable more features"),
+              @rui.alert([
+                @rui.alert_title("Git unavailable"),
+                @rui.alert_description("Install Git to enable more features"),
+              ]),
             ]
           }
           [git_branch_controls(context, panel, info, busy, emit)]

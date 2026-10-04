@@ -43,21 +43,6 @@ fn status_style() -> Array[String] {
 }
 
 ///|
-fn help_list_style() -> Array[String] {
-  [
-    "display: grid", "grid-template-columns: max-content minmax(0, 1fr)", "column-gap: 12px",
-  ]
-}
-
-///|
-fn help_row_style() -> Array[String] {
-  [
-    "display: grid", "grid-column: 1 / -1", "grid-template-columns: subgrid", "margin: 5px 0",
-    "align-items: baseline", "line-height: 1.5",
-  ]
-}
-
-///|
 fn status_text_style() -> Array[String] {
   [
     "min-width: 0", "white-space: nowrap", "overflow: hidden", "text-overflow: ellipsis",

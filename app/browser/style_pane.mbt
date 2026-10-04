@@ -64,12 +64,5 @@ fn pane_list_style() -> Array[String] {
     "margin: 0",
     "padding: 4px 0",
     "list-style: none",
-    "scrollbar-width: thin",
-    "scrollbar-color: var(--rui-border) transparent",
   ]
-}
-
-///|
-fn pane_status_style() -> Array[String] {
-  ["padding: 20px 16px", "margin: 0", "font-size: 0.8125rem"]
 }

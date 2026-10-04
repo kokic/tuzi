@@ -16,10 +16,7 @@ fn name_dialog(
 fn new_entry_dialog(input : String, error : String, emit : Emit[Msg]) -> Html {
   modal("New file or folder", emit, [
     dialog_input("Name:", input, error, emit),
-    @rui.field_description(
-      style=["margin-top: 1rem"],
-      "Enter to create folder · Esc to cancel",
-    ),
+    @rui.dialog_description("Enter to create folder · Esc to cancel"),
     @rui.dialog_footer([
       dialog_close_button("Cancel"),
       @rui.button(
@@ -86,10 +83,7 @@ fn dialog_footer(
   has_input? : Bool = false,
 ) -> Html {
   fragment([
-    @rui.field_description(
-      style=["margin-top: 1rem"],
-      "Enter to confirm · Esc to cancel",
-    ),
+    @rui.dialog_description("Enter to confirm · Esc to cancel"),
     dialog_confirm_footer_view(
       label=confirm,
       on_confirm=emit(DialogSubmit),
