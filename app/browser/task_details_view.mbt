@@ -1,7 +1,7 @@
 ///|
 fn task_details_dialog(tasks : Array[Task], id : Int, emit : Emit[Msg]) -> Html {
   guard tasks.iter().find_first(task => task.id == id) is Some(task) else {
-    modal("Task details", emit, [
+    modal("Task details", emit, size=Wide, [
       @rui.empty(
         @rui.empty_header([
           @rui.empty_title("Task unavailable"),
@@ -17,6 +17,7 @@ fn task_details_dialog(tasks : Array[Task], id : Int, emit : Emit[Msg]) -> Html 
   modal(
     "Task details",
     emit,
+    size=Wide,
     [
       @rui.item([
         @rui.item_content([

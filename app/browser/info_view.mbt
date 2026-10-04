@@ -17,9 +17,8 @@ fn InfoContext::dialog(
   modal(
     "Information",
     emit,
+    size=Wide,
     style=[
-      "width: 640px",
-      "max-width: 100%",
       "max-height: calc(100dvh - 32px)",
       "display: flex",
       "flex-direction: column",

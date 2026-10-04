@@ -7,7 +7,7 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
     match model.dialog {
       None => @html.nothing
       Help =>
-        modal("Help", emit, style=["width: min(640px, calc(100% - 2rem))"], [
+        modal("Help", emit, size=Wide, [
           @rui.table(@rui.table_body(help_lines())),
         ])
       Activity => activity_dialog(model.jobs.items, emit)

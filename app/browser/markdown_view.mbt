@@ -36,10 +36,10 @@ fn MarkdownContext::dialog(context : MarkdownContext, emit : Emit[Msg]) -> Html 
   modal(
     context.path.basename(),
     emit,
+    size=Reading,
     style=[
-      "width: 960px", "max-width: calc(100vw - 32px)", "height: min(780px, calc(100dvh - 32px))",
-      "max-height: calc(100dvh - 32px)", "display: flex", "flex-direction: column",
-      "overflow: hidden",
+      "height: min(780px, calc(100dvh - 32px))", "max-height: calc(100dvh - 32px)",
+      "display: flex", "flex-direction: column", "overflow: hidden",
     ],
     [
       @rui.tabs_root(

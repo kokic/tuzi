@@ -14,10 +14,18 @@ const DialogId : String = "tuzi-dialog"
 const DialogTitleId : String = "tuzi-dialog-title"
 
 ///|
+priv enum ModalSize {
+  Small
+  Wide
+  Reading
+}
+
+///|
 fn modal(
   title : String,
   emit : Emit[Msg],
   children : Array[Html],
+  size? : ModalSize = Small,
   style? : Array[String] = [],
 ) -> Html {
   @rui.dialog(
@@ -26,7 +34,15 @@ fn modal(
       .aria_labelledby(DialogTitleId)
       .on_keydown(event => handle_dialog_keyboard_event(event, emit)),
     on_close=_ => emit(DialogCancel),
-    style=[UI_FONT_STYLE, ..style],
+    style=[
+      UI_FONT_STYLE,
+      ..match size {
+        Small => []
+        Wide => ["width: min(640px, calc(100% - 2rem))"]
+        Reading => ["width: 960px", "max-width: calc(100vw - 32px)"]
+      },
+      ..style,
+    ],
     [
       @rui.dialog_header([@rui.dialog_title(id=DialogTitleId, title)]),
       ..children,

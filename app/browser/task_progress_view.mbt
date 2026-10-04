@@ -19,7 +19,7 @@ fn progress_dialog(batch : ProgressBatch, emit : Emit[Msg]) -> Html {
   modal(
     "In progress",
     emit,
-    style=["width: min(520px, 100%)"],
+    size=Wide,
     [
       ..batch.error.map_or([], error => {
         let title = match error {
