@@ -1,6 +1,6 @@
 import {
   "kokic/tuzi" @shared,
-  "kokic/tuzi/app/tuzi/internal/fsops",
+  "kokic/tuzi/app/tuzi/fsops",
   "kokic/uniform-path" @uniform_path,
   "moonbitlang/async",
   "moonbitlang/async/fs" @async_fs,

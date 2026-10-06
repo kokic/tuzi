@@ -1,6 +1,6 @@
 import {
   "kokic/tuzi",
-  "kokic/tuzi/app/browser/internal/presentation",
+  "kokic/tuzi/app/browser/presentation",
   "kokic/uniform-path" @path,
   "moonbit-community/rabbita",
   "moonbit-community/rabbita/clipboard",
