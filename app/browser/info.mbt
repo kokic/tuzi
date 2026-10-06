@@ -7,12 +7,6 @@ priv struct InfoContext {
 } derive(Eq)
 
 ///|
-priv struct InfoField {
-  label : String
-  value : String
-}
-
-///|
 fn Model::open_info_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
   let pane = model.pane_at(model.active)
   guard pane.cursor_entry(filter?=model.entry_filter(model.active))

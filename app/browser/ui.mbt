@@ -60,6 +60,10 @@ fn text_input_field_view(
   autofocus? : Bool = false,
 ) -> Html {
   let error_id = id + "-error"
+  let attrs = @html.Attrs::build()
+  if !error.is_empty() {
+    ignore(attrs.aria_describedby(error_id))
+  }
   @rui.field(
     invalid=!error.is_empty(),
     [
@@ -71,13 +75,7 @@ fn text_input_field_view(
         autofocus~,
         on_input~,
         invalid=!error.is_empty(),
-        attrs=@html.Attrs::build().aria_describedby(
-          if error.is_empty() {
-            ""
-          } else {
-            error_id
-          },
-        ),
+        attrs~,
       ),
       ..if !error.is_empty() {
         [@rui.field_error(id=error_id, error)]

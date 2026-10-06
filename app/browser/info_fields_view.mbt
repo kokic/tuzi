@@ -7,16 +7,25 @@ fn InfoContext::fields_view(
   let entry = context.entry
   let path = context.path.to_string()
   let rows = [
-    InfoField::{ label: "Name", value: entry.name, }.view(),
+    info_row("Name", entry.name),
     ..if !entry.kind.is_link() {
       [
-        InfoField::{ label: "Path", value: path, }.view(
-          on_click=@clipboard.copy(
-            Text(path),
-            copied=emit(Toast("Path copied", Some(path), @rui.ToastSuccess)),
-            failed=error => {
-              emit(Toast("Clipboard error", Some(error), @rui.ToastDestructive))
-            },
+        info_row(
+          "Path",
+          span(
+            title="Click to copy path",
+            attrs=@html.Attrs::build().on_click(_ => {
+              @clipboard.copy(
+                Text(path),
+                copied=emit(Toast("Path copied", Some(path), @rui.ToastSuccess)),
+                failed=error => {
+                  emit(
+                    Toast("Clipboard error", Some(error), @rui.ToastDestructive),
+                  )
+                },
+              )
+            }),
+            path,
           ),
         ),
       ]
@@ -41,9 +50,9 @@ fn InfoContext::fields_view(
         ),
       ]
     }),
-    InfoField::{
-      label: "Type",
-      value: match entry.kind {
+    info_row(
+      "Type",
+      match entry.kind {
         Regular => "File"
         Directory => "Folder"
         SymbolicLink(_, target_kind) =>
@@ -59,59 +68,46 @@ fn InfoContext::fields_view(
         CharDevice => "Character device"
         Unknown => "Unknown"
       },
-    }.view(),
+    ),
     ..if entry.kind is SymbolicLink(target, _) {
-      [
-        InfoField::{ label: "Resolved target", value: target.to_string(), }.view(),
-      ]
+      [info_row("Resolved target", target.to_string())]
     },
     ..if entry.kind is UnresolvedLink(error) {
-      [InfoField::{ label: "Target unavailable", value: error.message, }.view()]
+      [info_row("Target unavailable", error.message)]
     },
     ..if entry.marker is Err(error) {
-      [InfoField::{ label: "Marker unavailable", value: error.message, }.view()]
+      [info_row("Marker unavailable", error.message)]
     },
     ..if !entry.is_dir() {
       [
-        InfoField::{
-          label: "Size",
-          value: match entry.size {
+        info_row(
+          "Size",
+          match entry.size {
             Ok(size) =>
               size.map_or("Not applicable", size => {
                 "\{format_file_size(size)} (\{size} bytes)"
               })
             Err(error) => error.message
           },
-        }.view(),
+        ),
       ]
     },
-    InfoField::{
-      label: "Modified (UTC)",
-      value: match entry.mtime {
+    info_row(
+      "Modified (UTC)",
+      match entry.mtime {
         Ok(time) => format_timestamp(time, seconds=true).to_string()
         Err(error) => error.message
       },
-    }.view(),
+    ),
   ]
   [@rui.table(@rui.table_body(rows))]
 }
 
 ///|
-fn InfoField::view(field : InfoField, on_click? : Cmd) -> Html {
-  info_row(
-    span(field.label),
-    on_click.map_or(span(field.value), on_click => {
-      span(
-        title="Click to copy path",
-        attrs=@html.Attrs::build().on_click(_ => on_click),
-        field.value,
-      )
-    }),
-  )
-}
-
-///|
-fn info_row(label : Html, value : Html) -> Html {
+fn[L : @html.IsChildren, V : @html.IsChildren] info_row(
+  label : L,
+  value : V,
+) -> Html {
   @rui.table_row(style=["border-bottom: none"], [
     @rui.table_head(scope=Row, style=["width: 1%"], label),
     @rui.table_cell(
@@ -132,18 +128,23 @@ fn info_input_row(
   loading? : Bool = false,
 ) -> Html {
   let error_id = id + "-error"
+  let invalid = !error.is_empty()
+  let attrs = @html.Attrs::build()
+  if invalid {
+    ignore(attrs.aria_describedby(error_id))
+  }
   info_row(
     @rui.field_label(
       for_=id,
-      style=if error.is_empty() {
-        []
-      } else {
-        ["color: var(--rui-destructive, oklch(0.577 0.245 27.325))"]
-      },
+      style=[
+        ..if invalid {
+          ["color: var(--rui-destructive, oklch(0.577 0.245 27.325))"]
+        },
+      ],
       label,
     ),
     @rui.field(
-      invalid=!error.is_empty(),
+      invalid~,
       [
         @rui.input(
           style=[UI_FONT_STYLE],
@@ -151,16 +152,10 @@ fn info_input_row(
           value~,
           autofocus~,
           on_input~,
-          invalid=!error.is_empty(),
-          attrs=@html.Attrs::build().aria_describedby(
-            if error.is_empty() {
-              ""
-            } else {
-              error_id
-            },
-          ),
+          invalid~,
+          attrs~,
         ),
-        ..if !error.is_empty() {
+        ..if invalid {
           [@rui.field_error(id=error_id, error)]
         },
         ..if loading {
