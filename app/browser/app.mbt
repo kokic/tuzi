@@ -12,7 +12,6 @@ using @tuzi {
   type Entry,
   type Theme,
   type EntryAppearance,
-  type SortMode,
   type FileOperation,
   type GitOperation,
   type Task,
@@ -21,11 +20,25 @@ using @tuzi {
 }
 
 ///|
-using @tuzi {
+using @tuzi {preview_content_type, directory_contains}
+
+///|
+using @presentation {
+  type SortMode,
   format_file_size,
   format_timestamp,
   default_archive_name,
-  preview_content_type,
+  format_entry_meta,
+  entry_size_view,
+  entry_time_view,
+  row_style,
+  entry_open_area_style,
+  entry_title_style,
+  entry_details_style,
+  panes_style,
+  pane_style,
+  pane_header_style,
+  pane_list_style,
 }
 
 ///|

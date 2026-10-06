@@ -28,10 +28,10 @@ let default_font_theme : FontTheme = {
 }
 
 ///|
-const UI_FONT_STYLE : String = "font-family: var(--tuzi-font-ui)"
+const UI_FONT_STYLE : String = @presentation.UI_FONT_STYLE
 
 ///|
-const CODE_FONT_STYLE : String = "font-family: var(--tuzi-font-code)"
+const CODE_FONT_STYLE : String = @presentation.CODE_FONT_STYLE
 
 ///|
 /// Set typography once on the theme root. Rui controls must also receive

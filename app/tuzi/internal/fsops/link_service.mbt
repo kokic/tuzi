@@ -1,12 +1,15 @@
 ///|
-priv suberror LinkError {
+pub suberror LinkError {
   AbsolutePathRequired(Path)
   LinkCommandFailed(String, Int, String)
   RecoveryFailed(Path, Error)
 }
 
 ///|
-impl Show for LinkError with fn to_string(self) {
+pub extend LinkError with Show::{to_string, output}
+
+///|
+pub impl Show for LinkError with fn to_string(self) {
   match self {
     AbsolutePathRequired(path) => "An absolute path is required: \{path}"
     LinkCommandFailed(program, code, output) =>
@@ -17,7 +20,7 @@ impl Show for LinkError with fn to_string(self) {
 }
 
 ///|
-fn validate_link_target(path : Path) -> Unit raise {
+pub fn validate_link_target(path : Path) -> Unit raise {
   guard @path.Path(path.to_string()).is_absolute() &&
     !path.to_string().contains("\u0000") else {
     raise LinkError::AbsolutePathRequired(path)
@@ -25,7 +28,7 @@ fn validate_link_target(path : Path) -> Unit raise {
 }
 
 ///|
-fn validate_link_path(path : Path) -> Unit raise {
+pub fn validate_link_path(path : Path) -> Unit raise {
   validate_link_target(path)
   validate_entry_name(path.basename())
 }
@@ -57,21 +60,21 @@ async fn link_command(
 }
 
 ///|
-async fn read_link_target(path : Path) -> Path {
+pub async fn read_link_target(path : Path) -> Path {
   validate_link_path(path)
   guard @async_fs.kind(path.to_string(), follow_symlink=false) is SymLink else {
     raise FileError::UnsupportedEntry(path.to_string())
   }
-  let target = Path::from_native(read_link_text(path))
+  let target = path_from_native(read_link_text(path))
   // Resolve relative targets against the link's parent, preserving link chains.
-  Path::from_native(@async_fs.realpath(path.dirname().to_string())).resolve(
+  path_from_native(@async_fs.realpath(path.dirname().to_string())).resolve(
     target,
   )
 }
 
 ///|
 async fn canonical_link_path(path : Path) -> Path {
-  Path::from_native(@async_fs.realpath(path.dirname().to_string())).join(
+  path_from_native(@async_fs.realpath(path.dirname().to_string())).join(
     Path("./\{path.basename()}"),
   )
 }
@@ -79,14 +82,18 @@ async fn canonical_link_path(path : Path) -> Path {
 ///|
 /// Stage the replacement before touching the old link. The transaction is not
 /// cancelled between replacement and cleanup; failures restore the old entry.
-async fn edit_link(source : Path, destination : Path, target : Path) -> Unit {
+pub async fn edit_link(
+  source : Path,
+  destination : Path,
+  target : Path,
+) -> Unit {
   let source = canonical_link_path(source)
   let destination = canonical_link_path(destination)
   guard @async_fs.kind(source.to_string(), follow_symlink=false) is SymLink else {
     raise FileError::UnsupportedEntry(source.to_string())
   }
   @async.protect_from_cancel(() => {
-    let token = Path::from_native(@async_fs.tmpdir(prefix="tuzi-link"))
+    let token = path_from_native(@async_fs.tmpdir(prefix="tuzi-link"))
     defer @async_fs.rmdir(token.to_string())
     let staging = destination.dirname().join(Path("./.\{token.basename()}"))
     @async_fs.mkdir(staging.to_string())

@@ -13,13 +13,13 @@ priv struct OpenDefinition {
 }
 
 ///|
-priv struct OpenService {
+pub struct OpenService {
   registry : @shared.OpenRegistry
-  commands : Map[String, OpenCommand]
+  priv commands : Map[String, OpenCommand]
 }
 
 ///|
-priv suberror OpenError {
+pub suberror OpenError {
   UnknownOpener(String)
   DefaultNotListed(String)
   NotApplicable(String)
@@ -28,7 +28,10 @@ priv suberror OpenError {
 }
 
 ///|
-impl Show for OpenError with fn to_string(self) {
+pub extend OpenError with Show::{to_string, output}
+
+///|
+pub impl Show for OpenError with fn to_string(self) {
   match self {
     UnknownOpener(id) => "Unknown opener: \{id}"
     DefaultNotListed(id) =>
@@ -41,7 +44,7 @@ impl Show for OpenError with fn to_string(self) {
 }
 
 ///|
-fn OpenService::new() -> OpenService raise OpenError {
+pub fn OpenService::new() -> OpenService raise OpenError {
   let definitions = configured_openers()
   let openers : Map[String, @shared.Opener] = Map([])
   let commands : Map[String, OpenCommand] = Map([])
@@ -83,13 +86,13 @@ fn validate_open_association(
 }
 
 ///|
-async fn OpenService::open(
+pub async fn OpenService::open(
   self : OpenService,
   request : @shared.OpenRequest,
 ) -> Unit {
   // Resolve on the host and inspect the current target instead of trusting UI metadata.
   let native = @path.Path(request.path.to_string()).resolve().to_string()
-  let path = Path::from_native(native)
+  let path = @fsops.path_from_native(native)
   let is_dir = match @async_fs.kind(native) {
     Directory => true
     Regular => false

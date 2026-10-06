@@ -1,0 +1,12 @@
+import {
+  "moonbit-community/flate/zip",
+  "moonbit-community/flate/checksum",
+  "kokic/tuzi" @shared,
+  "kokic/tuzi/app/tuzi/internal/fsops",
+  "kokic/uniform-path" @uniform_path,
+  "moonbitlang/async/fs" @async_fs,
+  "moonbitlang/async",
+  "moonbitlang/x/path",
+}
+
+supported_targets = "native"

@@ -1,4 +1,7 @@
 ///|
+using @tuzi {type Entry, type EntryAppearance}
+
+///|
 pub(all) enum SortMode {
   Name
   Size

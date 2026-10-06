@@ -1,8 +1,28 @@
 ///|
+/// Directories whose immediate entries may change, including partial failure.
+/// Callers must account separately for metadata in parent listings and for
+/// subtrees created, removed, moved, or changed by a Git checkout.
+pub fn TaskKind::affected_directories(self : TaskKind) -> Array[Path] {
+  match self {
+    File(Delete(target~)) => [target.dirname()]
+    File(Rename(source~, ..)) => [source.dirname()]
+    File(CreateFile(parent~, ..)) | File(Mkdir(parent~, ..)) => [parent]
+    File(Zip(directory~, ..)) => [directory]
+    File(Unzip(destination~, ..)) => [destination.dirname(), destination]
+    File(Copy(destination~, ..)) => [destination.dirname()]
+    File(Move(source~, destination~)) =>
+      [source.dirname(), destination.dirname()]
+    File(EditLink(source~, destination~, ..)) =>
+      [source.dirname(), destination.dirname(), source, destination]
+    Git(request) => [request.path.dirname()]
+  }
+}
+
+///|
 /// A listing contains direct children and their metadata. Changing a directory
 /// also changes its entry in the parent listing (mtime and folder marker), but
 /// does not invalidate unrelated descendants of either directory.
-fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
+pub fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
   if kind
     .affected_directories()
     .any(changed => directory == changed || directory == changed.dirname()) {
@@ -35,7 +55,7 @@ fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
 }
 
 ///|
-fn directory_contains(directory : Path, path : Path) -> Bool {
+pub fn directory_contains(directory : Path, path : Path) -> Bool {
   for current = path {
     if current == directory {
       break true

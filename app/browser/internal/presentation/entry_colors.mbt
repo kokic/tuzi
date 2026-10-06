@@ -1,14 +1,18 @@
 ///|
-let folder_colors : Map[String, String] = {
-  "moon.mod": "#b84c90bb",
-  "moon.work": "#b84c90bb",
-  "Cargo.toml": "#ef4900",
-  "package.json": "#8ebf55",
-  ".git": "#808080",
-}
-
-///|
-pub let folder_markers : Array[String] = folder_colors.keys().to_array()
+let folder_colors : Map[String, String] = Map::from_iter(
+  @tuzi.folder_marker_kinds
+  .iter()
+  .map(entry => {
+    let (marker, kind) = entry
+    let color = match kind {
+      MoonBit => "#b84c90bb"
+      Rust => "#ef4900"
+      Node => "#8ebf55"
+      Git => "#808080"
+    }
+    (marker, color)
+  }),
+)
 
 ///|
 let extension_colors : Map[String, String] = Map::from_iter(

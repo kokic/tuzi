@@ -1,8 +1,14 @@
 ///|
-let unknown_size : @tuzi.FormattedFileSize = { value: "???", unit: "B", }
+using @rabbita {type Html}
 
 ///|
-fn format_entry_meta(entry : Entry) -> String {
+using @html {span}
+
+///|
+let unknown_size : FormattedFileSize = { value: "???", unit: "B", }
+
+///|
+pub fn format_entry_meta(entry : Entry) -> String {
   let parts = [
     match entry.mtime {
       Ok(time) => format_timestamp(time).to_string()
@@ -24,7 +30,7 @@ fn format_entry_meta(entry : Entry) -> String {
 }
 
 ///|
-fn entry_size_view(entry : Entry) -> Html {
+pub fn entry_size_view(entry : Entry) -> Html {
   let style = entry_meta_style() +
     [
       "grid-column: 2 / 4", "display: grid", "grid-template-columns: subgrid", "column-gap: 0",
@@ -42,7 +48,7 @@ fn entry_size_view(entry : Entry) -> Html {
 }
 
 ///|
-fn entry_time_view(entry : Entry) -> Html {
+pub fn entry_time_view(entry : Entry) -> Html {
   let style = entry_meta_style() +
     [
       "grid-column: 4", "text-align: right", "font-variant-numeric: tabular-nums",

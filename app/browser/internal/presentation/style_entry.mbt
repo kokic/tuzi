@@ -1,5 +1,5 @@
 ///|
-fn row_style(is_cursor : Bool, selected : Bool) -> Array[String] {
+pub fn row_style(is_cursor : Bool, selected : Bool) -> Array[String] {
   [
     UI_FONT_STYLE,
     "display: grid",
@@ -26,7 +26,7 @@ fn row_style(is_cursor : Bool, selected : Bool) -> Array[String] {
 }
 
 ///|
-fn entry_open_area_style() -> Array[String] {
+pub fn entry_open_area_style() -> Array[String] {
   [
     "grid-column: 3 / -1", "display: grid", "grid-template-columns: subgrid", "align-items: baseline",
     "min-width: 0",
@@ -34,7 +34,7 @@ fn entry_open_area_style() -> Array[String] {
 }
 
 ///|
-fn entry_title_style(entry : Entry, color : String) -> Array[String] {
+pub fn entry_title_style(entry : Entry, color : String) -> Array[String] {
   let foreground = match color {
     "currentColor" if entry.name.has_prefix(".") =>
       "var(--rui-muted-foreground)"
@@ -70,7 +70,7 @@ fn entry_meta_style() -> Array[String] {
 }
 
 ///|
-fn entry_details_style() -> Array[String] {
+pub fn entry_details_style() -> Array[String] {
   [
     CODE_FONT_STYLE,
     "flex: none",

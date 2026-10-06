@@ -30,7 +30,7 @@ async fn stream_file(path : Path, res : @moonback.Responder) -> Unit {
   }
   defer file.close()
   let size = file.size()
-  guard preview_content_type(path, size) is Some(content_type) else {
+  guard @shared.preview_content_type(path, size) is Some(content_type) else {
     res.send_text(
       "Unsupported file format: unknown files must be at most 1 MiB",
       status=415,

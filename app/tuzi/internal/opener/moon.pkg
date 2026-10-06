@@ -1,0 +1,11 @@
+import {
+  "kokic/tuzi" @shared,
+  "kokic/tuzi/app/tuzi/internal/fsops",
+  "moonbitlang/async",
+  "moonbitlang/async/fs" @async_fs,
+  "moonbitlang/async/os_error",
+  "moonbitlang/async/process",
+  "moonbitlang/x/path",
+}
+
+supported_targets = "native"

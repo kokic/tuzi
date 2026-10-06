@@ -17,7 +17,7 @@ impl Show for PortError with fn to_string(self) {
 async fn main {
   let cmd = build_command().parse()
   let port = server_port(@env.get_env_vars(), cmd)
-  let openers = OpenService::new()
+  let openers = @opener.OpenService::new()
   let config = parse_server_config(cmd, openers.registry)
   let headless = cmd.flags.get("headless").unwrap_or(false)
   let log = !cmd.flags.get("silent").unwrap_or(false)
@@ -109,7 +109,7 @@ fn parse_server_config(
     { "path": [path], .. } => (Path(path), OpenDirectory)
     _ => (Path("."), RestoreHistory)
   }
-  let base = Path::from_native(path.resolve().to_string())
+  let base = @fsops.path_from_native(path.resolve().to_string())
   let theme = {
     guard cmd.values.get("theme") is Some([theme]) else {
       @shared.Theme::default()
@@ -128,7 +128,7 @@ fn parse_server_config(
     theme,
     entry_appearance,
     openers,
-    supports_drive_selection: SupportsDriveSelection,
+    supports_drive_selection: @fsops.SupportsDriveSelection,
   }
 }
 
@@ -136,5 +136,5 @@ fn parse_server_config(
 async fn launch_browser(port : UInt16) -> Unit {
   let url = "http://127.0.0.1:\{port}/"
   @stdio.stdout.write("tuzi: \{url}\n")
-  system_open_command(Url).launch(url)
+  @opener.open_url(url)
 }

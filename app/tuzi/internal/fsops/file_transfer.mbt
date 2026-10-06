@@ -1,5 +1,5 @@
 ///|
-async fn copy_entry(from : Path, to : Path) -> Unit {
+pub async fn copy_entry(from : Path, to : Path) -> Unit {
   validate_transfer(from, to)
   copy_tree(from, to)
 }
@@ -26,7 +26,7 @@ async fn copy_tree(from : Path, to : Path) -> Unit {
 }
 
 ///|
-async fn cleanup_copy(path : Path) -> Unit nocancel {
+pub async fn cleanup_copy(path : Path) -> Unit nocancel {
   @async.protect_from_cancel(() => {
     remove_path(path) catch {
       error => raise CleanupFailed(path, error)
@@ -54,7 +54,7 @@ async fn copy_file(from : Path, to : Path) -> Unit {
 extern "C" fn is_cross_device_error(code : Int) -> Bool = "tuzi_is_cross_device_error"
 
 ///|
-async fn move_entry(from : Path, to : Path) -> Unit {
+pub async fn move_entry(from : Path, to : Path) -> Unit {
   validate_transfer(from, to)
   rename_path(from, to) catch {
     @os_error.OSError(code, ..) as error => {

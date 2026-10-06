@@ -4,12 +4,12 @@ fn routes(
   log : Bool,
   tasks : TaskService,
   group : @async.TaskGroup[Unit],
-  openers : OpenService,
+  openers : @opener.OpenService,
 ) -> @moonback.Module {
   ctx => {
     ctx
     ..get("/api/base", (_req, res) => respond(res, () => config))
-    ..get("/api/drives", (_req, res) => respond(res, () => list_drives()))
+    ..get("/api/drives", (_req, res) => respond(res, () => @fsops.list_drives()))
     ..get("/api/image", serve_image)
     ..get("/api/file/:name", serve_file)
     ..post("/api/open", (req, res) => {
@@ -29,7 +29,7 @@ fn routes(
     ..post("/api/link", (req, res) => {
       respond(res, () => {
         let request : @shared.DirectoryRequest = decode_request(req)
-        read_link_target(request.path)
+        @fsops.read_link_target(request.path)
       })
     })
     ..get("/api/tasks", (_req, res) => respond(res, () => tasks.snapshot()))
@@ -51,7 +51,7 @@ fn routes(
     .post("/api/git/info", (req, res) => {
       respond(res, () => {
         let request : @shared.DirectoryRequest = decode_request(req)
-        read_git_info(request.path)
+        @git.read_git_info(request.path)
       })
     })
   }

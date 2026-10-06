@@ -16,8 +16,8 @@ fn prepare_task(kind : @shared.TaskKind) -> PreparedTask raise {
       }
     }
     Git(request) => {
-      let arguments = git_arguments(request.operation)
-      () => run_git(request.path, arguments)
+      let arguments = @git.git_arguments(request.operation)
+      () => @git.run_git(request.path, arguments)
     }
   }
   { kind, execute, }

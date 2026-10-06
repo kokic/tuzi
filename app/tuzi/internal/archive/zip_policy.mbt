@@ -1,5 +1,5 @@
 ///|
-priv suberror ArchiveError {
+pub suberror ArchiveError {
   InvalidName(String)
   EmptySelection
   UnsupportedEntry(String)
@@ -8,7 +8,10 @@ priv suberror ArchiveError {
 }
 
 ///|
-impl Show for ArchiveError with fn to_string(self) {
+pub extend ArchiveError with Show::{to_string, output}
+
+///|
+pub impl Show for ArchiveError with fn to_string(self) {
   match self {
     InvalidName(name) => "Invalid name: " + name
     EmptySelection => "Select at least one entry"
@@ -28,13 +31,13 @@ fn validate_archive_name(name : String) -> Unit raise ArchiveError {
 
 ///|
 /// The output is a host filename; only stored entries use ZIP path rules.
-fn validate_zip_selection(
+pub fn validate_zip_selection(
   names : Array[String],
   output_name : String,
   level~ : Int,
 ) -> Unit raise {
   guard level >= 0 && level <= 9 else { raise InvalidCompressionLevel(level) }
-  validate_entry_name(output_name)
+  @fsops.validate_entry_name(output_name)
   guard !names.is_empty() else { raise EmptySelection }
   names.each(validate_archive_name)
   guard !names.contains(output_name) else { raise OutputIsInput(output_name) }

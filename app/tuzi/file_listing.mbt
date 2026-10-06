@@ -1,37 +1,12 @@
 ///|
-using @shared {type Entry, preview_content_type}
+using @shared {type Entry}
 
 ///|
 using @uniform_path {type Path}
 
 ///|
-/// Filesystem APIs return host syntax; the protocol uses uniform syntax.
-fn Path::from_native(input : String) -> Path {
-  if @path.sep == '\\' {
-    Path::from_windows(input)
-  } else {
-    Path(input)
-  }
-}
-
-///|
-/// The async runtime reports Windows FILETIME seconds (since 1601-01-01) on
-/// Windows, and Unix epoch seconds elsewhere. Normalize to Unix epoch so the
-/// browser formats every host's timestamps identically.
-#cfg(platform="windows")
-fn to_unix_seconds(sec : Int64) -> Int64 {
-  sec - 11644473600L
-}
-
-///|
-#cfg(not(platform="windows"))
-fn to_unix_seconds(sec : Int64) -> Int64 {
-  sec
-}
-
-///|
 async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
-  let path = Path::from_native(@async_fs.realpath(path.to_string()))
+  let path = @fsops.path_from_native(@async_fs.realpath(path.to_string()))
   let dir = @async_fs.opendir(path.to_string())
   defer dir.close()
   let jobs : Array[async () -> Entry?] = []
@@ -52,7 +27,7 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
           error => Err(api_failure(error))
         }
       }
-      let mtime = Ok(to_unix_seconds(@async_fs.mtime(full_path).0)) catch {
+      let mtime = Ok(@fsops.to_unix_seconds(@async_fs.mtime(full_path).0)) catch {
         error => Err(api_failure(error))
       }
       let marker = {
@@ -74,7 +49,9 @@ async fn read_entry_kind(path : Path) -> @shared.EntryKind {
     Directory => Directory
     SymLink =>
       try {
-        let target = Path::from_native(@async_fs.realpath(path.to_string()))
+        let target = @fsops.path_from_native(
+          @async_fs.realpath(path.to_string()),
+        )
         SymbolicLink(target, read_entry_kind(target))
       } catch {
         @os_error.OSError(_, ..) as error => UnresolvedLink(api_failure(error))
@@ -96,14 +73,4 @@ async fn detect_marker(path : Path) -> String {
     }
   }
   ""
-}
-
-///|
-#cfg(not(platform="windows"))
-async fn remove_path(full : Path) -> Unit {
-  let kind = @async_fs.kind(full.to_string(), follow_symlink=false)
-  match kind {
-    Directory => @async_fs.rmdir(full.to_string(), recursive=true)
-    _ => @async_fs.remove(full.to_string())
-  }
 }

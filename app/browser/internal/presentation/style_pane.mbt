@@ -1,5 +1,5 @@
 ///|
-fn panes_style() -> Array[String] {
+pub fn panes_style() -> Array[String] {
   [
     "flex: 1", "min-height: 0", "display: flex", "gap: 1px", "overflow: clip", "border: 1px solid var(--rui-border)",
     "border-radius: var(--rui-radius)", "background: var(--rui-border)",
@@ -7,7 +7,7 @@ fn panes_style() -> Array[String] {
 }
 
 ///|
-fn pane_style(active : Bool) -> Array[String] {
+pub fn pane_style(active : Bool) -> Array[String] {
   [
     "flex: 1",
     "min-width: 0",
@@ -32,7 +32,7 @@ fn pane_style(active : Bool) -> Array[String] {
 }
 
 ///|
-fn pane_header_style(active : Bool) -> Array[String] {
+pub fn pane_header_style(active : Bool) -> Array[String] {
   [
     "flex: none",
     "display: flex",
@@ -51,7 +51,7 @@ fn pane_header_style(active : Bool) -> Array[String] {
 }
 
 ///|
-fn pane_list_style() -> Array[String] {
+pub fn pane_list_style() -> Array[String] {
   [
     CODE_FONT_STYLE,
     "flex: 1",

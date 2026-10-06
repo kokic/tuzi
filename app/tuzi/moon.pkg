@@ -1,7 +1,10 @@
 import {
   "moonbit-community/flate/zip",
-  "moonbit-community/flate/checksum",
   "kokic/tuzi" @shared,
+  "kokic/tuzi/app/tuzi/internal/fsops",
+  "kokic/tuzi/app/tuzi/internal/archive",
+  "kokic/tuzi/app/tuzi/internal/opener",
+  "kokic/tuzi/app/tuzi/internal/git",
   "kokic/uniform-path" @uniform_path,
   "moonbitlang/async/fs" @async_fs,
   "moonbitlang/async/os_error",
@@ -9,20 +12,14 @@ import {
   "moonbitlang/moonback/middlewares/unstable_static" @static,
   "moonbitlang/async",
   "moonbitlang/async/aqueue",
-  "moonbitlang/async/process",
   "moonbitlang/async/stdio",
   "moonbitlang/core/argparse",
   "moonbitlang/core/env",
   "moonbitlang/core/json",
   "moonbitlang/core/string",
-  "moonbitlang/core/encoding/utf8",
   "moonbitlang/x/path",
 }
 
 supported_targets = "native"
 
 pkgtype(kind: "executable")
-
-options(
-  "native-stub": [ "remove_windows.c", "file_error.c", "drives.c" ],
-)

@@ -1,5 +1,8 @@
 ///|
-priv suberror GitError {
+using @uniform_path {type Path}
+
+///|
+pub suberror GitError {
   GitMissing
   InvalidGitPath(Path)
   InvalidLocalReference(String)
@@ -8,7 +11,10 @@ priv suberror GitError {
 }
 
 ///|
-impl Show for GitError with fn to_string(self) {
+pub extend GitError with Show::{to_string, output}
+
+///|
+pub impl Show for GitError with fn to_string(self) {
   match self {
     GitMissing => "Install Git to enable this operation"
     InvalidGitPath(_) => "Expected a .git file or directory"
@@ -53,7 +59,7 @@ async fn checked_git(
 }
 
 ///|
-async fn read_git_info(path : Path) -> @shared.GitInfo {
+pub async fn read_git_info(path : Path) -> @shared.GitInfo {
   guard path.basename() == ".git" else { raise InvalidGitPath(path) }
   let directory = path.dirname()
   let (output, _) = checked_git(directory, [

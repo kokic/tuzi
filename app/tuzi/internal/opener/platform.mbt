@@ -1,4 +1,9 @@
 ///|
+pub async fn open_url(url : String) -> Unit {
+  system_open_command(Url).launch(url)
+}
+
+///|
 /// URL opening and directory browsing have different Windows commands.
 priv enum SystemOpenKind {
   Url

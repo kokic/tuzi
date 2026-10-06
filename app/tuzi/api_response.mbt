@@ -34,45 +34,51 @@ async fn[T : ToJson] respond(
 fn api_failure(error : Error) -> @shared.ApiFailure {
   let (code, message) : (@shared.ApiErrorCode, String) = match error {
     InvalidRequest(message) => (InvalidRequest, message)
-    OpenError::UnknownOpener(_) | OpenError::DefaultNotListed(_) as error =>
+    @opener.OpenError::UnknownOpener(_)
+    | @opener.OpenError::DefaultNotListed(_) as error =>
       (InvalidRequest, Show::to_string(error))
-    OpenError::NotApplicable(_) | OpenError::UnsupportedTarget(_) as error =>
+    @opener.OpenError::NotApplicable(_)
+    | @opener.OpenError::UnsupportedTarget(_) as error =>
       (Unsupported, Show::to_string(error))
-    OpenError::ProgramMissing(_) as error => (NotFound, Show::to_string(error))
-    FileError::InvalidName(_) as error => (InvalidName, Show::to_string(error))
-    ArchiveError::InvalidName(_) as error =>
+    @opener.OpenError::ProgramMissing(_) as error =>
+      (NotFound, Show::to_string(error))
+    @fsops.FileError::InvalidName(_) as error =>
       (InvalidName, Show::to_string(error))
-    FileError::InvalidTarget(_) as error =>
+    @archive.ArchiveError::InvalidName(_) as error =>
+      (InvalidName, Show::to_string(error))
+    @fsops.FileError::InvalidTarget(_) as error =>
       (InvalidTarget, Show::to_string(error))
-    OutputIsInput(_) as error => (InvalidTarget, Show::to_string(error))
-    FileError::UnsupportedEntry(_) as error =>
-      (Unsupported, Show::to_string(error))
-    ArchiveError::UnsupportedEntry(_) as error =>
-      (Unsupported, Show::to_string(error))
-    CleanupFailed(_, _) | SourceRemovalFailed(_, _, _) as error =>
-      (PartialFailure, Show::to_string(error))
-    LinkError::AbsolutePathRequired(_) as error =>
+    @archive.OutputIsInput(_) as error =>
       (InvalidTarget, Show::to_string(error))
-    LinkError::RecoveryFailed(_, _) as error =>
+    @fsops.FileError::UnsupportedEntry(_) as error =>
+      (Unsupported, Show::to_string(error))
+    @archive.ArchiveError::UnsupportedEntry(_) as error =>
+      (Unsupported, Show::to_string(error))
+    @fsops.CleanupFailed(_, _) | @fsops.SourceRemovalFailed(_, _, _) as error =>
       (PartialFailure, Show::to_string(error))
-    LinkError::LinkCommandFailed(_, _, _) as error =>
+    @fsops.LinkError::AbsolutePathRequired(_) as error =>
+      (InvalidTarget, Show::to_string(error))
+    @fsops.LinkError::RecoveryFailed(_, _) as error =>
+      (PartialFailure, Show::to_string(error))
+    @fsops.LinkError::LinkCommandFailed(_, _, _) as error =>
       (Io, Show::to_string(error))
-    EmptySelection | InvalidCompressionLevel(_) as error =>
+    @archive.EmptySelection | @archive.InvalidCompressionLevel(_) as error =>
       (InvalidRequest, Show::to_string(error))
-    ExtractionError::UnsafePath(_) as error =>
+    @archive.ExtractionError::UnsafePath(_) as error =>
       (InvalidName, Show::to_string(error))
-    ExtractionError::ChecksumMismatch(_) as error =>
+    @archive.ExtractionError::ChecksumMismatch(_) as error =>
       (InvalidRequest, Show::to_string(error))
     @zip.ZipError(UnsupportedCompression(_) | UnsupportedFeature, message) =>
       (Unsupported, message)
     @zip.ZipError(_, message) => (InvalidRequest, message)
-    GitBusy => (Busy, "A Git operation is already running for this repository")
-    GitMissing as error => (GitUnavailable, Show::to_string(error))
-    InvalidGitPath(_)
-    | InvalidLocalReference(_)
-    | InvalidSwitchReference(_) as error =>
+    @git.GitBusy =>
+      (Busy, "A Git operation is already running for this repository")
+    @git.GitMissing as error => (GitUnavailable, Show::to_string(error))
+    @git.InvalidGitPath(_)
+    | @git.InvalidLocalReference(_)
+    | @git.InvalidSwitchReference(_) as error =>
       (InvalidRequest, Show::to_string(error))
-    CommandFailed(..) as error => (GitFailed, Show::to_string(error))
+    @git.CommandFailed(..) as error => (GitFailed, Show::to_string(error))
     @os_error.OSError(_, ..) as error if error.is_EEXIST() =>
       (Conflict, error.to_string())
     @os_error.OSError(_, ..) as error if error.is_EACCES() =>

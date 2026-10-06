@@ -1,0 +1,16 @@
+import {
+  "kokic/uniform-path" @uniform_path,
+  "moonbitlang/async/fs" @async_fs,
+  "moonbitlang/async/os_error",
+  "moonbitlang/async",
+  "moonbitlang/async/process",
+  "moonbitlang/core/json",
+  "moonbitlang/core/encoding/utf8",
+  "moonbitlang/x/path",
+}
+
+supported_targets = "native"
+
+options(
+  "native-stub": [ "remove_windows.c", "file_error.c", "drives.c" ],
+)

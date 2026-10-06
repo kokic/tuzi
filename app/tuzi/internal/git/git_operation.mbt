@@ -1,5 +1,5 @@
 ///|
-priv suberror GitBusy {
+pub suberror GitBusy {
   GitBusy
 }
 
@@ -8,7 +8,7 @@ let git_locks : Map[String, @async.Mutex] = Map([])
 
 ///|
 /// Build arguments and check reference kinds without accessing a repository.
-fn git_arguments(
+pub fn git_arguments(
   operation : @shared.GitOperation,
 ) -> Array[String] raise GitError {
   match operation {
@@ -39,13 +39,13 @@ fn git_arguments(
 }
 
 ///|
-async fn run_git(path : Path, arguments : Array[String]) -> String {
+pub async fn run_git(path : Path, arguments : Array[String]) -> String {
   // Linked worktrees share refs: lock their common Git directory, not the UI path.
   let (common, _) = checked_git(path.dirname(), [
     "rev-parse", "--path-format=absolute", "--git-common-dir",
   ])
-  let key = filesystem_path_key(
-    Path::from_native(@async_fs.realpath(common.trim().to_owned())),
+  let key = @fsops.filesystem_path_key(
+    @fsops.path_from_native(@async_fs.realpath(common.trim().to_owned())),
   )
   let lock = git_locks.get_or_init(key, () => @async.Mutex())
   guard lock.try_acquire() else { raise GitBusy }

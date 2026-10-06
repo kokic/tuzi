@@ -1,4 +1,7 @@
 ///|
+using @uniform_path {type Path}
+
+///|
 /// Bridge the synchronous ZIP sink to async writes. Drain after every writer
 /// operation so file payloads never accumulate beyond one input chunk plus
 /// codec buffers. ZIP central-directory metadata still scales with entry count.
@@ -19,7 +22,7 @@ async fn ZipOutput::flush(self : ZipOutput) -> Unit {
 }
 
 ///|
-async fn zip_entries(
+pub async fn zip_entries(
   path : Path,
   names : Array[String],
   name : String,
