@@ -71,3 +71,19 @@ fn Pane::visible_entries(pane : Pane, filter? : String) -> Array[Entry] {
   guard filter is Some(query) else { return pane.entries }
   pane.entries.filter(entry => entry.name.contains(query))
 }
+
+///|
+fn Model::update_filter_focus(
+  model : Model,
+  idx : PaneSide,
+  focused : Bool,
+) -> (Model, Cmd) {
+  let model = if focused {
+    { ..model, active: idx, editing: true, }
+  } else if model.active == idx {
+    { ..model, editing: false, }
+  } else {
+    model
+  }
+  (model, @rabbita.none)
+}

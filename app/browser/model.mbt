@@ -88,3 +88,12 @@ fn Model::initialize() -> Model {
     next_info_id: 0,
   }
 }
+
+///|
+fn Model::toggle_theme(model : Model) -> (Model, Cmd) {
+  let theme : Theme = match model.theme {
+    Light => Dark
+    Dark => Light
+  }
+  ({ ..model, theme, }, @rabbita.none)
+}

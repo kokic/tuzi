@@ -93,3 +93,28 @@ fn request_startup(emit : Emit[Msg]) -> Cmd {
     )
   })
 }
+
+///|
+fn Model::apply_server_config(
+  model : Model,
+  config : @tuzi.ServerConfig,
+) -> (Model, Cmd) {
+  let location = load_browser_location(config.base, config.startup)
+  let left = Path(location.left)
+  let right = Path(location.right)
+  let updated = {
+    ..model,
+    startup: Started,
+    theme: config.theme,
+    entry_appearance: config.entry_appearance,
+    openers: Some(config.openers),
+    supports_drive_selection: config.supports_drive_selection,
+    active: if location.active == 0 {
+      Left
+    } else {
+      Right
+    },
+    panes: (model.panes.0.navigate(left), model.panes.1.navigate(right)),
+  }
+  (updated, updated.save_browser_location())
+}

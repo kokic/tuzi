@@ -39,74 +39,18 @@ fn Model::update_message(
     BaseFailed(error) =>
       ({ ..model, startup: StartupFailed(error), }, @rabbita.none)
     BaseRetry => ({ ..model, startup: Starting, }, request_startup(emit))
-    BaseLoaded(config) => {
-      let location = load_browser_location(config.base, config.startup)
-      let left = Path(location.left)
-      let right = Path(location.right)
-      let updated = {
-        ..model,
-        startup: Started,
-        theme: config.theme,
-        entry_appearance: config.entry_appearance,
-        openers: Some(config.openers),
-        supports_drive_selection: config.supports_drive_selection,
-        active: if location.active == 0 {
-          Left
-        } else {
-          Right
-        },
-        panes: (model.panes.0.navigate(left), model.panes.1.navigate(right)),
-      }
-      (updated, updated.save_browser_location())
-    }
+    BaseLoaded(config) => model.apply_server_config(config)
     PaneEvent(msg) => model.update_panes(msg, emit)
     SyncPanePath => model.sync_other_pane_path()
     Key(kb) => model.handle_keyboard_event(kb, emit)
     SortCycle => (model.cycle_sort_order(), @rabbita.none)
-    ThemeToggle => {
-      let theme : Theme = match model.theme {
-        Light => Dark
-        Dark => Light
-      }
-      ({ ..model, theme, }, @rabbita.none)
-    }
-    FilterFocus(idx, focused) => {
-      let model = if focused {
-        { ..model, active: idx, editing: true, }
-      } else if model.active == idx {
-        { ..model, editing: false, }
-      } else {
-        model
-      }
-      (model, @rabbita.none)
-    }
+    ThemeToggle => model.toggle_theme()
+    FilterFocus(idx, focused) => model.update_filter_focus(idx, focused)
     DeleteOpen => (model.open_delete_dialog(), @rabbita.none)
     InfoOpen => model.open_info_dialog(emit)
     OpenWith(target, id) => model.execute_opener(target, id, emit)
-    EntryAction(idx, view_id, name, action) => {
-      let pane = model.pane_at(idx)
-      guard pane.id == view_id &&
-        pane
-        .visible_entries(filter?=model.entry_filter(idx))
-        .any(entry => entry.name == name) else {
-        return (model, @rabbita.none)
-      }
-      let pane = {
-        ..pane,
-        cursor: Some(name),
-        selected: if pane.selected.contains(name) {
-          pane.selected
-        } else {
-          Set([])
-        },
-      }
-      let model = {
-        ..model,
-        active: idx,
-        panes: set_pane(model.panes, idx, pane),
-      }
-      model.update_message(action, emit, toast_send)
-    }
+    EntryAction(idx, view_id, name, action) =>
+      model.execute_entry_action(idx, view_id, name, action, emit, toast_send)
     TransferSelection(kind) =>
       model.transfer_selection_to_other_pane(kind, emit)
     CopyPaths => model.copy_selected_paths_to_clipboard(emit)
@@ -127,37 +71,10 @@ fn Model::update_message(
         @rabbita.none,
       )
     ZipOpen => (model.open_archive_dialog(), @rabbita.none)
-    ZipLevelChanged(value) => {
-      guard model.dialog is ZipInput(directory~, names~, input~, ..) else {
-        return (model, @rabbita.none)
-      }
-      let level = @string.parse_int(value, base=10) catch {
-        _ => return (model, @rabbita.none)
-      }
-      guard level >= 0 && level <= 9 else { return (model, @rabbita.none) }
-      (
-        {
-          ..model,
-          dialog: ZipInput(directory~, names~, input~, level~),
-          dialog_error: "",
-        },
-        @rabbita.none,
-      )
-    }
+    ZipLevelChanged(value) => model.set_archive_compression_level(value)
     ActivityOpen =>
       ({ ..model, dialog: Activity, dialog_error: "", }, @rabbita.none)
-    NewEntryOpen =>
-      (
-        {
-          ..model,
-          dialog: NewEntryInput(
-            directory=model.pane_at(model.active).path,
-            input="",
-          ),
-          dialog_error: "",
-        },
-        @rabbita.none,
-      )
+    NewEntryOpen => (model.open_new_entry_dialog(), @rabbita.none)
     NewEntrySubmit(kind) => model.submit_dialog(emit, new_entry_kind=kind)
     HelpOpen => ({ ..model, dialog: Help, dialog_error: "", }, @rabbita.none)
     FilterChanged(idx, text) => (model.with_filter(idx, text), @rabbita.none)
@@ -166,38 +83,9 @@ fn Model::update_message(
         { ..model, dialog: model.dialog.with_input(text), dialog_error: "", },
         @rabbita.none,
       )
-    DialogCancel => {
-      // The native dialog has already closed and raised its close event. Going
-      // back to the Git panel keeps a dialog open, so reopen the host element.
-      let dialog = match model.dialog {
-        GitRenameInput(context~, ..) => GitInfo(context)
-        _ => None
-      }
-      let command = if dialog is GitInfo(_) {
-        @dialog.show(DialogId)
-      } else {
-        @rabbita.none
-      }
-      ({ ..model, dialog, dialog_error: "", }, command)
-    }
+    DialogCancel => model.cancel_dialog()
     DialogSubmit => model.submit_dialog(emit)
-    DragStart(idx, name) => {
-      let pane = model.pane_at(idx)
-      let names = if pane.selected.contains(name) {
-        pane
-        .selected_items(filter?=model.entry_filter(idx))
-        .map(entry => entry.name)
-      } else {
-        [name]
-      }
-      (
-        {
-          ..model,
-          dragging: Some({ source_pane: idx, directory: pane.path, names, }),
-        },
-        @rabbita.none,
-      )
-    }
+    DragStart(idx, name) => model.start_entry_drag(idx, name)
     Drop(idx) => model.copy_dropped_entries(idx, emit)
     DragEnd => ({ ..model, dragging: None, }, @rabbita.none)
     Toast(title, description, variant) =>

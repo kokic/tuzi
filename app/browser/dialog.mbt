@@ -68,6 +68,15 @@ fn Model::open_archive_dialog(model : Model) -> Model {
 }
 
 ///|
+fn Model::open_new_entry_dialog(model : Model) -> Model {
+  {
+    ..model,
+    dialog: NewEntryInput(directory=model.pane_at(model.active).path, input=""),
+    dialog_error: "",
+  }
+}
+
+///|
 fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
   match self {
     RenameInput(directory~, original~, ..) =>
@@ -88,4 +97,42 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     | Progress(_)
     | DeleteConfirm(..) => self
   }
+}
+
+///|
+fn Model::set_archive_compression_level(
+  model : Model,
+  value : String,
+) -> (Model, Cmd) {
+  guard model.dialog is ZipInput(directory~, names~, input~, ..) else {
+    return (model, @rabbita.none)
+  }
+  let level = @string.parse_int(value, base=10) catch {
+    _ => return (model, @rabbita.none)
+  }
+  guard level >= 0 && level <= 9 else { return (model, @rabbita.none) }
+  (
+    {
+      ..model,
+      dialog: ZipInput(directory~, names~, input~, level~),
+      dialog_error: "",
+    },
+    @rabbita.none,
+  )
+}
+
+///|
+fn Model::cancel_dialog(model : Model) -> (Model, Cmd) {
+  // The native dialog has already closed and raised its close event. Going
+  // back to the Git panel keeps a dialog open, so reopen the host element.
+  let dialog = match model.dialog {
+    GitRenameInput(context~, ..) => GitInfo(context)
+    _ => None
+  }
+  let command = if dialog is GitInfo(_) {
+    @dialog.show(DialogId)
+  } else {
+    @rabbita.none
+  }
+  ({ ..model, dialog, dialog_error: "", }, command)
 }

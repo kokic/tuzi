@@ -59,3 +59,33 @@ fn entry_menu_content(
     ],
   )
 }
+
+///|
+fn Model::execute_entry_action(
+  model : Model,
+  idx : PaneSide,
+  view_id : Int,
+  name : String,
+  action : Msg,
+  emit : Emit[Msg],
+  toast_send : Ref[ToastSender?],
+) -> (Model, Cmd) {
+  let pane = model.pane_at(idx)
+  guard pane.id == view_id &&
+    pane
+    .visible_entries(filter?=model.entry_filter(idx))
+    .any(entry => entry.name == name) else {
+    return (model, @rabbita.none)
+  }
+  let pane = {
+    ..pane,
+    cursor: Some(name),
+    selected: if pane.selected.contains(name) {
+      pane.selected
+    } else {
+      Set([])
+    },
+  }
+  let model = { ..model, active: idx, panes: set_pane(model.panes, idx, pane), }
+  model.update_message(action, emit, toast_send)
+}

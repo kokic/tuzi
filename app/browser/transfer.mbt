@@ -112,3 +112,26 @@ priv struct DragSelection {
   directory : Path
   names : Array[String]
 } derive(Eq)
+
+///|
+fn Model::start_entry_drag(
+  model : Model,
+  idx : PaneSide,
+  name : String,
+) -> (Model, Cmd) {
+  let pane = model.pane_at(idx)
+  let names = if pane.selected.contains(name) {
+    pane
+    .selected_items(filter?=model.entry_filter(idx))
+    .map(entry => entry.name)
+  } else {
+    [name]
+  }
+  (
+    {
+      ..model,
+      dragging: Some({ source_pane: idx, directory: pane.path, names, }),
+    },
+    @rabbita.none,
+  )
+}
