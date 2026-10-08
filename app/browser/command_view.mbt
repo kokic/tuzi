@@ -30,6 +30,7 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
               "Contribution: New issue",
               "https://github.com/kokic/tuzi/releases",
             ),
+            @rui.command_separator(),
             // Navigation
             command_link_item(
               scope~,
