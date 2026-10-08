@@ -1,6 +1,7 @@
 ///|
 fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
-  model.map(model => {
+  let activity = activity_dialog(model.map(model => model.jobs), emit)
+  model.view2(activity, (model, activity) => {
     let name_input = (title, prompt, input) => {
       name_dialog(title, prompt, input, model.dialog_error, emit)
     }
@@ -13,7 +14,7 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
             @rui.table_body(help_lines()),
           ]),
         ])
-      Activity => activity_dialog(model.jobs.items, emit)
+      Activity => activity
       Progress(batch) => progress_dialog(batch, emit)
       TaskDetails(id) => task_details_dialog(model.jobs.items, id, emit)
       Info(context) => context.dialog([], emit, error=model.dialog_error)

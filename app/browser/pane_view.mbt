@@ -96,7 +96,7 @@ fn directory_failure_view(
   }
   @rui.alert(variant=Destructive, [
     @rui.alert_title("Unable to refresh directory"),
-    @rui.alert_description(error),
+    @rui.alert_description(style=["overflow-wrap: anywhere"], error),
     @rui.alert_action(retry),
   ])
 }

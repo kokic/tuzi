@@ -69,7 +69,11 @@ fn drive_menu_view(
                       scope,
                       on_select=emit(PaneEvent(GotoPath(idx, drive))),
                       [
-                        span(drive.to_string()),
+                        span(
+                          style=status_text_style(),
+                          title=drive.to_string(),
+                          drive.to_string(),
+                        ),
                         ..if Some(drive) == current {
                           [@rui.dropdown_menu_shortcut("Current")]
                         },
@@ -112,6 +116,8 @@ fn drive_menu_view(
               title="Switch storage location",
               style=[
                 UI_FONT_STYLE,
+                "min-width: 0",
+                "flex-shrink: 1",
                 "font-size: inherit",
                 "line-height: inherit",
                 "--rui-button-base-fg: var(--rui-muted-foreground)",
@@ -130,7 +136,14 @@ fn drive_menu_view(
                     @rabbita.none
                   }
                 }),
-              "\{root} ▾",
+              [
+                span(
+                  style=status_text_style(),
+                  title=root.to_string(),
+                  "\{root}",
+                ),
+                span(style=["flex: none"], "▾"),
+              ],
             ),
             @rui.dropdown_menu_content(
               scope,

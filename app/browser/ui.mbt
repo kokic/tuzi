@@ -36,6 +36,7 @@ fn modal(
     on_close=_ => emit(DialogCancel),
     style=[
       UI_FONT_STYLE,
+      "overflow-wrap: anywhere",
       ..match size {
         Small => []
         Wide => ["width: min(640px, calc(100% - 2rem))"]

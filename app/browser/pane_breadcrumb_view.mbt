@@ -11,7 +11,7 @@ fn breadcrumbs_view(
   for pair in breadcrumb_segments(path) {
     let (part, target) = pair
     if items.is_empty() && drive_menu is Some(menu) {
-      items.push(@rui.breadcrumb_item(menu))
+      items.push(@rui.breadcrumb_item(style=["max-width: 100%"], menu))
       continue
     }
     if !items.is_empty() {
@@ -25,18 +25,22 @@ fn breadcrumbs_view(
     }
     items.push(
       @rui.breadcrumb_item(
+        style=["max-width: 100%"],
         @rui.button(
           variant=Ghost,
           size=Xs,
+          title=part,
           style=[
             UI_FONT_STYLE,
+            "min-width: 0",
+            "flex-shrink: 1",
             "font-size: inherit",
             "line-height: inherit",
             "--rui-button-base-fg: var(--rui-muted-foreground)",
           ],
           attrs~,
           on_click=emit(PaneEvent(GotoPath(idx, target))),
-          part,
+          span(style=status_text_style(), part),
         ),
       ),
     )
