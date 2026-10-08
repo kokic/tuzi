@@ -66,7 +66,7 @@ fn create_file_browser() -> Val[Html] {
     },
     subscriptions=Model::subscriptions,
   )
-  let dialog = dialog_view(model, emit).view2(global_command_view(), (
+  let dialog = dialog_view(model, emit).view2(global_command_view(emit), (
     dialog,
     command,
   ) => @html.fragment([dialog, command]))

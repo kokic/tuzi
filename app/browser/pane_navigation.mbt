@@ -123,14 +123,28 @@ fn Model::scroll_to_cursor(model : Model) -> Cmd {
 }
 
 ///|
+fn Model::sync_other_pane_path(model : Model) -> (Model, Cmd) {
+  model.navigate_to_directory(
+    model.active.other(),
+    model.pane_at(model.active).path,
+    activate=false,
+  )
+}
+
+///|
 fn Model::navigate_to_directory(
   model : Model,
   idx : PaneSide,
   path : Path,
+  activate? : Bool = true,
 ) -> (Model, Cmd) {
   let updated = {
     ..model,
-    active: idx,
+    active: if activate {
+      idx
+    } else {
+      model.active
+    },
     panes: match idx {
       Left => (model.panes.0.navigate(path), model.panes.1)
       Right => (model.panes.0, model.panes.1.navigate(path))

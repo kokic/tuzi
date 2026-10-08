@@ -2,7 +2,7 @@
 const CommandDialogId : String = "tuzi-command-dialog"
 
 ///|
-fn global_command_view() -> Val[Html] {
+fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
   @rui.command_dialog(
     id=CommandDialogId,
     aria_label="Command",
@@ -20,6 +20,11 @@ fn global_command_view() -> Val[Html] {
         @rui.command_list(scope~, [
           @rui.command_empty(scope~, "No matching commands."),
           @rui.command_group(scope~, [
+            command_action_item(
+              scope~,
+              "Navigation: Sync path to other pane",
+              emit(SyncPanePath),
+            ),
             command_link_item(
               scope~,
               "Contribution: New issue",
@@ -64,10 +69,19 @@ fn command_link_item(
   label : String,
   url : String,
 ) -> Html {
+  command_action_item(scope~, label, open_command_url(url))
+}
+
+///|
+fn command_action_item(
+  scope~ : @rui.CommandScope,
+  label : String,
+  action : Cmd,
+) -> Html {
   @rui.command_item(
     scope~,
     value=label,
-    on_click=open_command_url(url),
+    on_click=action,
     style=[UI_FONT_STYLE],
     label,
   )

@@ -33,6 +33,7 @@ priv enum Msg {
   BaseFailed(String)
   BaseRetry
   PaneEvent(PaneMsg)
+  SyncPanePath
   Key(@dom.KeyboardEvent)
   SortCycle
   ThemeToggle

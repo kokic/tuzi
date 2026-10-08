@@ -60,6 +60,7 @@ fn Model::update_message(
       (updated, updated.save_browser_location())
     }
     PaneEvent(msg) => model.update_panes(msg, emit)
+    SyncPanePath => model.sync_other_pane_path()
     Key(kb) => model.handle_keyboard_event(kb, emit)
     SortCycle => (model.cycle_sort_order(), @rabbita.none)
     ThemeToggle => {
