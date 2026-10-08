@@ -66,7 +66,10 @@ fn create_file_browser() -> Val[Html] {
     },
     subscriptions=Model::subscriptions,
   )
-  let dialog = dialog_view(model, emit)
+  let dialog = dialog_view(model, emit).view2(global_command_view(), (
+    dialog,
+    command,
+  ) => @html.fragment([dialog, command]))
   let panes = panes_view(model, emit)
   let toaster = @rui.sonner(max_toasts=3, position="bottom-right", scope => {
     toast_send.val = Some((title, description, variant) => {

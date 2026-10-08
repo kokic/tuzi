@@ -40,6 +40,13 @@ fn Model::toolbar_view(
           ),
         ]
       },
+      @rui.button(
+        style=[UI_FONT_STYLE],
+        variant=Ghost,
+        size=Sm,
+        on_click=@dialog.show(CommandDialogId),
+        "Command",
+      ),
       model.status_view(emit),
       @rui.button(
         style=[UI_FONT_STYLE, "margin-left: auto"],
