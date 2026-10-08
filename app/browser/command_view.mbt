@@ -22,7 +22,7 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
           @rui.command_group(scope~, [
             command_action_item(
               scope~,
-              "Navigation: Sync path to other pane",
+              "View: Synchronize to Current Panel Path",
               emit(SyncPanePath),
             ),
             command_link_item(
