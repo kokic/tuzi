@@ -43,11 +43,21 @@ fn Pane::pane_view(
   div(id="pane-\{idx.index()}-view-\{pane.id}", style=pane_style(active), {
     "header": breadcrumbs_view(
       pane.path,
-      sort_label,
       idx,
       emit,
       pane_header_style(active),
       drive_menu~,
+    ),
+    "sort": div(
+      style=[..pane_header_style(active), "justify-content: flex-end"],
+      @rui.button(
+        variant=Ghost,
+        size=Xs,
+        style=[UI_FONT_STYLE, "flex: none"],
+        title="Change sort order",
+        on_click=emit(SortCycle),
+        sort_label,
+      ),
     ),
     "status": fragment(
       match pane.loading {

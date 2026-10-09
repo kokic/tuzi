@@ -17,7 +17,7 @@ fn configured_openers() -> Map[String, OpenDefinition] {
       execution: External(vscode_command()),
     },
     "explorer": {
-      label: file_manager_label,
+      label: "Open in system file manager",
       execution: External(system_open_command(Directory)),
     },
   }
@@ -51,14 +51,6 @@ fn vscode_command() -> OpenCommand {
     Windows => panic()
   }
 }
-
-///|
-#cfg(platform="windows")
-let file_manager_label : String = "Open in Windows Explorer"
-
-///|
-#cfg(not(platform="windows"))
-let file_manager_label : String = "Open in system file manager"
 
 ///|
 /// Complete filenames override extensions. Each association owns its whole menu.

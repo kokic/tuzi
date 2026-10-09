@@ -43,6 +43,7 @@ fn Model::transfer_selection_to_other_pane(
 ) -> (Model, Cmd) {
   let src = model.pane_at(model.active)
   let dst = model.pane_at(model.active.other())
+  guard src.path != dst.path else { return (model, @rabbita.none) }
   let items = src.selected_items(filter?=model.entry_filter(model.active))
   guard !items.is_empty() else { return (model, @rabbita.none) }
   guard !(kind is Move && items.any(entry => entry.kind.is_link())) else {
@@ -67,28 +68,6 @@ fn Model::transfer_selection_to_other_pane(
 }
 
 ///|
-fn Model::copy_dropped_entries(
-  model : Model,
-  idx : PaneSide,
-  emit : Emit[Msg],
-) -> (Model, Cmd) {
-  guard model.dragging is Some(selection) && selection.source_pane != idx else {
-    return (model, @rabbita.none)
-  }
-  let dst = model.pane_at(idx)
-  let operations = selection.names.map(name => {
-    FileOperation::Copy(
-      source=selection.directory.join(Path("./\{name}")),
-      destination=dst.path.join(Path("./\{name}")),
-    )
-  })
-  let (updated, command) = model
-    .start_file_operations(operations, emit)
-    .unwrap_or((model, @rabbita.none))
-  ({ ..updated, dragging: None, }, command)
-}
-
-///|
 fn TransferKind::operation(
   kind : TransferKind,
   source : Path,
@@ -104,34 +83,4 @@ fn TransferKind::operation(
 priv enum TransferKind {
   Copy
   Move
-}
-
-///|
-priv struct DragSelection {
-  source_pane : PaneSide
-  directory : Path
-  names : Array[String]
-} derive(Eq)
-
-///|
-fn Model::start_entry_drag(
-  model : Model,
-  idx : PaneSide,
-  name : String,
-) -> (Model, Cmd) {
-  let pane = model.pane_at(idx)
-  let names = if pane.selected.contains(name) {
-    pane
-    .selected_items(filter?=model.entry_filter(idx))
-    .map(entry => entry.name)
-  } else {
-    [name]
-  }
-  (
-    {
-      ..model,
-      dragging: Some({ source_pane: idx, directory: pane.path, names, }),
-    },
-    @rabbita.none,
-  )
 }

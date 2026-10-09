@@ -1,7 +1,6 @@
 ///|
 fn breadcrumbs_view(
   path : Path,
-  sort_label : String,
   idx : PaneSide,
   emit : Emit[Msg],
   head_style : Array[String],
@@ -58,14 +57,6 @@ fn breadcrumbs_view(
         style=["font-size: inherit", "line-height: inherit"],
         items,
       ),
-    ),
-    @rui.button(
-      variant=Ghost,
-      size=Xs,
-      style=[UI_FONT_STYLE, "flex: none"],
-      title="Change sort order",
-      on_click=emit(SortCycle),
-      sort_label,
     ),
   ])
 }
