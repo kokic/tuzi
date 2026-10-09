@@ -15,7 +15,7 @@ fn pane_stack_view(
   })
   let visible_id = stack.map(stack => stack.current.id)
   let filter = model.map(model => model.entry_filter(idx))
-  let sort = model.map(model => model.sort)
+  let sort = stack.map(stack => stack.sort)
   let active = model.map(model => model.active == idx)
   let other_path = model.map(model => model.pane_at(idx.other()).path)
   let views = stack

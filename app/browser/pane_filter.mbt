@@ -38,19 +38,28 @@ fn Model::with_filter(model : Model, idx : PaneSide, text : String) -> Model {
 }
 
 ///|
-fn Model::cycle_sort_order(model : Model) -> Model {
-  let sort = model.sort.next()
+fn Model::sort_order(model : Model, idx : PaneSide) -> SortMode {
+  match idx {
+    Left => model.panes.0.sort
+    Right => model.panes.1.sort
+  }
+}
+
+///|
+fn Model::cycle_sort_order(model : Model, idx : PaneSide) -> Model {
+  let sort = model.sort_order(idx).next()
+  let cycle = (stack : PaneStack) => {
+    ..stack.map_views(pane => {
+      pane.with_entries(pane.entries, sort, filter?=model.entry_filter(idx))
+    }),
+    sort,
+  }
   {
     ..model,
-    sort,
-    panes: (
-      model.panes.0.map_views(pane => {
-        pane.with_entries(pane.entries, sort, filter?=model.entry_filter(Left))
-      }),
-      model.panes.1.map_views(pane => {
-        pane.with_entries(pane.entries, sort, filter?=model.entry_filter(Right))
-      }),
-    ),
+    panes: match idx {
+      Left => (cycle(model.panes.0), model.panes.1)
+      Right => (model.panes.0, cycle(model.panes.1))
+    },
   }
 }
 

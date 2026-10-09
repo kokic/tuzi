@@ -43,7 +43,7 @@ fn Model::update_message(
     PaneEvent(msg) => model.update_panes(msg, emit)
     SyncPanePath => model.sync_other_pane_path()
     Key(kb) => model.handle_keyboard_event(kb, emit)
-    SortCycle => (model.cycle_sort_order(), @rabbita.none)
+    SortCycle(idx) => (model.cycle_sort_order(idx), @rabbita.none)
     ThemeToggle => model.toggle_theme()
     FilterFocus(idx, focused) => model.update_filter_focus(idx, focused)
     DeleteOpen => (model.open_delete_dialog(), @rabbita.none)

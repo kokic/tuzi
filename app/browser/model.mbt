@@ -14,7 +14,6 @@ priv struct Model {
   supports_drive_selection : Bool
   panes : (PaneStack, PaneStack)
   active : PaneSide
-  sort : SortMode
   filters : (String, String)
   editing : Bool
   dialog : Dialog
@@ -34,7 +33,7 @@ priv enum Msg {
   PaneEvent(PaneMsg)
   SyncPanePath
   Key(@dom.KeyboardEvent)
-  SortCycle
+  SortCycle(PaneSide)
   ThemeToggle
   HelpOpen
   InfoOpen
@@ -73,7 +72,6 @@ fn Model::initialize() -> Model {
     supports_drive_selection: false,
     panes: (PaneStack::initialize(Path("")), PaneStack::initialize(Path(""))),
     active: Left,
-    sort: Name,
     filters: ("", ""),
     editing: false,
     dialog: None,

@@ -2,6 +2,7 @@
 /// Each mounted directory owns its listing and DOM for the lifetime of this
 /// stack entry. IDs are never reused, including after an entry is popped.
 priv struct PaneStack {
+  sort : SortMode
   current : Pane
   parents : Array[Pane]
   next_id : Int
@@ -9,7 +10,7 @@ priv struct PaneStack {
 
 ///|
 fn PaneStack::initialize(path : Path) -> PaneStack {
-  { current: Pane::initialize(path), parents: [], next_id: 1, }
+  { sort: Name, current: Pane::initialize(path), parents: [], next_id: 1, }
 }
 
 ///|
@@ -31,6 +32,7 @@ fn PaneStack::navigate(stack : PaneStack, path : Path) -> PaneStack {
     []
   }
   {
+    ..stack,
     current: {
       ..Pane::initialize(path, id=stack.next_id),
       refresh_pending: true,

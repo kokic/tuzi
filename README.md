@@ -22,6 +22,7 @@ I would also like to thank the Web UI framework [Rabbita](https://moonbit-commun
 - Use the two panes to work across folders: `c` copies selected items to the other pane, and `m` moves them.
 - Use `Tab` to switch panes, `↑` / `↓` to move through items, and `Space` to select multiple items. `Enter` opens an item; `Esc` goes up a folder.
 - Press `f` to filter files by name.
+- Press `s` or click a pane's sort button to change its sort order independently.
 - Press `?` to see all keyboard shortcuts.
 
 ## Build & Run

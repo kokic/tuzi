@@ -65,7 +65,7 @@ fn Model::handle_keyboard_event(
         "c" => (model, emit(TransferSelection(Copy)))
         "m" => (model, emit(TransferSelection(Move)))
         "y" => (model, emit(CopyPaths))
-        "s" => (model, emit(SortCycle))
+        "s" => (model, emit(SortCycle(model.active)))
         "f" =>
           (
             model,

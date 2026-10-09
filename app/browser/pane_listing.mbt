@@ -38,7 +38,7 @@ fn Model::receive_listing(
             {
               ..pane.with_entries(
                 entries,
-                model.sort,
+                model.sort_order(idx),
                 filter?=model.entry_filter(idx),
               ),
               loading: Ready,

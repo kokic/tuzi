@@ -55,7 +55,7 @@ fn Pane::pane_view(
         size=Xs,
         style=[UI_FONT_STYLE, "flex: none"],
         title="Change sort order",
-        on_click=emit(SortCycle),
+        on_click=emit(SortCycle(idx)),
         sort_label,
       ),
     ),

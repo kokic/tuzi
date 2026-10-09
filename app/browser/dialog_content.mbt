@@ -76,7 +76,7 @@ fn help_lines() -> Array[Html] {
     ("i", "file / folder information"),
     ("z", "compress to ZIP"),
     ("n", "new file / folder"),
-    ("s", "sort"),
+    ("s", "sort active pane"),
     ("y", "copy path"),
     ("f", "filter active pane"),
   ]
