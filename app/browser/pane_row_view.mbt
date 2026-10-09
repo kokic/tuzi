@@ -1,11 +1,4 @@
 ///|
-#cfg(target="js")
-fn allow_drop(drag : @dom.DragEvent) -> Cmd {
-  drag.prevent_default()
-  @rabbita.none
-}
-
-///|
 priv struct EntryRow {
   view_id : Int
   directory : String
@@ -88,12 +81,9 @@ fn entry_context_menu(
   openers : @tuzi.OpenRegistry?,
 ) -> Val[Html] {
   let { entry, row, selected, .. } = item
-  let row_attrs = @html.Attrs::build()
-    .on_click(_event => emit(PaneEvent(Click(idx, row))))
-    .on_dragstart(_drag => emit(DragStart(idx, entry.name)))
-    .on_dragover(allow_drop)
-    .on_drop(_drag => emit(Drop(idx)))
-    .on_dragend(_drag => emit(DragEnd))
+  let row_attrs = @html.Attrs::build().on_click(_event => {
+    emit(PaneEvent(Click(idx, row)))
+  })
   let children = [
     input(
       input_type=Checkbox,

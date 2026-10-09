@@ -22,7 +22,6 @@ priv struct Model {
   dialog_revision : Int
   // Validation message shown inside the open dialog; cleared on input/cancel.
   dialog_error : String
-  dragging : DragSelection?
   jobs : TaskState
   next_info_id : Int
 } derive(Eq)
@@ -61,9 +60,6 @@ priv enum Msg {
   DialogInput(String)
   DialogCancel
   DialogSubmit
-  DragStart(PaneSide, String)
-  Drop(PaneSide)
-  DragEnd
   Toast(String, String?, @rui.ToastVariant)
 }
 
@@ -83,7 +79,6 @@ fn Model::initialize() -> Model {
     dialog: None,
     dialog_revision: 0,
     dialog_error: "",
-    dragging: None,
     jobs: TaskState::initialize(),
     next_info_id: 0,
   }

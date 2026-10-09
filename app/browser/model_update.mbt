@@ -85,9 +85,6 @@ fn Model::update_message(
       )
     DialogCancel => model.cancel_dialog()
     DialogSubmit => model.submit_dialog(emit)
-    DragStart(idx, name) => model.start_entry_drag(idx, name)
-    Drop(idx) => model.copy_dropped_entries(idx, emit)
-    DragEnd => ({ ..model, dragging: None, }, @rabbita.none)
     Toast(title, description, variant) =>
       (
         model,
