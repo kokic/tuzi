@@ -17,11 +17,14 @@ fn pane_stack_view(
   let filter = model.map(model => model.entry_filter(idx))
   let sort = model.map(model => model.sort)
   let active = model.map(model => model.active == idx)
+  let other_path = model.map(model => model.pane_at(idx.other()).path)
   let views = stack
     .map(stack => @vector.Vector::from_array([..stack.parents, stack.current]))
     .assoc_by(
       (id, pane) => {
-        let rows = pane_rows(pane, filter, idx, emit, appearance, openers)
+        let rows = pane_rows(
+          pane, filter, other_path, idx, emit, appearance, openers,
+        )
         let drive_menu = pane
           .map(pane => pane.path)
           .switch_by(

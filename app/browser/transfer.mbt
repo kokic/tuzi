@@ -43,6 +43,7 @@ fn Model::transfer_selection_to_other_pane(
 ) -> (Model, Cmd) {
   let src = model.pane_at(model.active)
   let dst = model.pane_at(model.active.other())
+  guard src.path != dst.path else { return (model, @rabbita.none) }
   let items = src.selected_items(filter?=model.entry_filter(model.active))
   guard !items.is_empty() else { return (model, @rabbita.none) }
   guard !(kind is Move && items.any(entry => entry.kind.is_link())) else {

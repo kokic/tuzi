@@ -44,10 +44,12 @@ fn entry_menu_content(
       },
       ..actions.map(action => {
         let (label, shortcut, message) = action
-        @rui.context_menu_item(scope, on_select=action_emit(message), [
-          span(label),
-          @rui.context_menu_shortcut(kbd(shortcut)),
-        ])
+        @rui.context_menu_item(
+          scope,
+          disabled=item.transfer_disabled && message is TransferSelection(_),
+          on_select=action_emit(message),
+          [span(label), @rui.context_menu_shortcut(kbd(shortcut))],
+        )
       }),
       @rui.context_menu_separator(),
       @rui.context_menu_item(

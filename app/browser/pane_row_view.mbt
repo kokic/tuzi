@@ -13,19 +13,21 @@ priv struct EntryRow {
   entry : Entry
   selected : Bool
   is_cursor : Bool
+  transfer_disabled : Bool
 } derive(Eq)
 
 ///|
 fn pane_rows(
   pane : Val[Pane],
   filter : Val[String?],
+  other_path : Val[Path],
   idx : PaneSide,
   emit : Emit[Msg],
   appearance : EntryAppearance,
   openers : @tuzi.OpenRegistry?,
 ) -> Val[Html] {
   let rows = pane
-    .map2(filter, (pane, filter) => {
+    .map3(filter, other_path, (pane, filter, other_path) => {
       let entries = pane.view_data(filter?).entries
       @vector.Vector::from_array(
         entries.mapi((row, entry) => EntryRow::{
@@ -35,6 +37,7 @@ fn pane_rows(
           entry,
           selected: pane.selected.contains(entry.name),
           is_cursor: Some(entry.name) == pane.cursor,
+          transfer_disabled: pane.path == other_path,
         }),
       )
     })
@@ -45,7 +48,14 @@ fn pane_rows(
           row => entry_context_menu(row, idx, emit, appearance, openers),
           by=row => {
             ToJson::to_json(
-              (row.view_id, row.directory, row.row, row.entry, row.selected),
+              (
+                row.view_id,
+                row.directory,
+                row.row,
+                row.entry,
+                row.selected,
+                row.transfer_disabled,
+              ),
             ).stringify()
           },
         )
