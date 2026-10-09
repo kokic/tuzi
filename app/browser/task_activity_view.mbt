@@ -7,12 +7,7 @@ fn activity_dialog(jobs : Val[TaskState], emit : Emit[Msg]) -> Val[Html] {
       )
     })
     .assoc((key, task) => {
-      // Keep each task's collapsible state when other tasks change or reorder.
-      task
-      .switch_by(task => activity_item_view(task, emit), by=task => {
-        ToJson::to_json(task).stringify()
-      })
-      .map(row => (key, row))
+      task.map(task => (key, activity_item_view(task, emit)))
     })
   rows.view(rows => {
     modal("Activity", emit, size=Wide, [
@@ -28,73 +23,61 @@ fn activity_dialog(jobs : Val[TaskState], emit : Emit[Msg]) -> Val[Html] {
 }
 
 ///|
-fn activity_item_view(task : Task, emit : Emit[Msg]) -> Val[Html] {
-  let (label, message) = match task.status {
-    Completed(output) => ("Output", output)
-    Failed(error) => ("Error details", error.message)
-    Queued | Running => ("", "")
+fn activity_item_view(task : Task, emit : Emit[Msg]) -> Html {
+  let (label, variant) : (String, @rui.BadgeVariant) = match task.status {
+    Queued => ("Queued", Secondary)
+    Running => ("Running", Secondary)
+    Completed(_) => ("Completed", Secondary)
+    Failed(_) => ("Failed", Destructive)
   }
-  let output = if message.is_empty() {
-    Val::constant([])
-  } else {
-    @rui.collapsible(
-      id="activity-task-\{task.id}-output",
-      trigger_style=[UI_FONT_STYLE],
-      trigger=label,
-      content=@rui.scroll_area(
-        orientation=Horizontal,
-        attrs=@html.Attrs::build().aria_label(label),
-        style=["height: auto"],
-        @html.pre(
-          style=[
-            CODE_FONT_STYLE,
-            "margin: 0",
-            "white-space: pre",
-            "overflow-wrap: normal",
-          ],
-          message,
-        ),
-      ),
-    ).map(output => [@rui.item_footer(style=["min-width: 0"], output)])
-  }
-  output.view(output => {
-    @rui.item(
-      variant=ItemOutline,
+  let actions = [
+    ..task
+    .history_output()
+    .map_or([], output => {
+      let (label, _) = output
       [
-        activity_description_view(task),
-        @rui.item_footer(
-          match task.status {
-            Failed(_) =>
-              badge(
-                variant=Destructive,
-                attrs=@html.Attrs::build().role("status"),
-                "Failed",
-              )
-            _ => task_status_view(task.status, task.description)
-          },
+        @rui.button(
+          variant=Ghost,
+          size=Sm,
+          style=[UI_FONT_STYLE],
+          on_click=emit(TaskEvent(TaskOutputOpen(task.id))),
+          label,
         ),
-        ..output,
-        ..match (task.kind, task.status) {
-          (File(Zip(..) | Unzip(..)) | Git(_), Queued | Running | Failed(_)) =>
-            [
-              @rui.item_actions(
-                @rui.button(
-                  variant=Ghost,
-                  size=Sm,
-                  on_click=emit(TaskEvent(TaskOpen(task.id))),
-                  if task.status.is_active() {
-                    "View progress"
-                  } else {
-                    "View details"
-                  },
-                ),
-              ),
-            ]
-          _ => []
-        },
-      ],
-    )
-  })
+      ]
+    }),
+    ..match (task.kind, task.status) {
+      (File(Zip(..) | Unzip(..)) | Git(_), Queued | Running | Failed(_)) =>
+        [
+          @rui.button(
+            variant=Ghost,
+            size=Sm,
+            style=[UI_FONT_STYLE],
+            on_click=emit(TaskEvent(TaskOpen(task.id))),
+            if task.status.is_active() {
+              "View progress"
+            } else {
+              "View details"
+            },
+          ),
+        ]
+      _ => []
+    },
+  ]
+  @rui.item(
+    variant=ItemOutline,
+    style=["flex-wrap: nowrap"],
+    [
+      @rui.item_media(
+        badge(variant~, attrs=@html.Attrs::build().role("status"), label),
+      ),
+      activity_description_view(task),
+      ..if actions.is_empty() {
+        []
+      } else {
+        [@rui.item_actions(actions)]
+      },
+    ],
+  )
 }
 
 ///|

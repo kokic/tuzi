@@ -54,6 +54,14 @@ fn Model::update_tasks(
       }
       ({ ..model, dialog: TaskDetails(id), dialog_error: "", }, @rabbita.none)
     }
+    TaskOutputOpen(id) => {
+      guard model.jobs.items.any(task => {
+        task.id == id && task.history_output() is Some(_)
+      }) else {
+        return (model, @rabbita.none)
+      }
+      ({ ..model, dialog: TaskOutput(id), dialog_error: "", }, @rabbita.none)
+    }
     TaskSocket(generation, event) =>
       model.handle_task_socket(generation, event, emit)
     TaskSocketFailed(generation, error) =>
@@ -110,7 +118,7 @@ fn Model::receive_tasks(
     // monitors whose ids belong to the previous session.
     dialog: if restarted {
       match model.dialog {
-        TaskDetails(_) => None
+        TaskDetails(_) | TaskOutput(_) => None
         Progress(batch) if batch.session != jobs.session => None
         other => other
       }
