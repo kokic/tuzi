@@ -9,7 +9,9 @@ priv enum Dialog {
   None
   Help
   Activity
+  Bookmarks(PaneSide)
   TaskDetails(Int)
+  TaskOutput(Int)
   Info(InfoContext)
   Markdown(MarkdownContext)
   GitInfo(GitContext)

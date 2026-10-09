@@ -64,7 +64,9 @@ fn Dialog::file_operations(
     None
     | Help
     | Activity
+    | Bookmarks(_)
     | TaskDetails(_)
+    | TaskOutput(_)
     | Markdown(_)
     | Progress(_)
     | Info(_)

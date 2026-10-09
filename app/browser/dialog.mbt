@@ -90,7 +90,9 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     None
     | Help
     | Activity
+    | Bookmarks(_)
     | TaskDetails(_)
+    | TaskOutput(_)
     | Info(_)
     | Markdown(_)
     | GitInfo(_)

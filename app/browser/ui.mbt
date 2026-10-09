@@ -28,6 +28,9 @@ const DialogId : String = "tuzi-dialog"
 const DialogTitleId : String = "tuzi-dialog-title"
 
 ///|
+const DialogDescriptionId : String = "tuzi-dialog-description"
+
+///|
 priv enum ModalSize {
   Small
   Wide
@@ -41,12 +44,17 @@ fn modal(
   children : Array[Html],
   size? : ModalSize = Small,
   style? : Array[String] = [],
+  description? : String,
 ) -> Html {
+  let attrs = @html.Attrs::build()
+    .aria_labelledby(DialogTitleId)
+    .on_keydown(event => handle_dialog_keyboard_event(event, emit))
+  if description is Some(_) {
+    ignore(attrs.aria_describedby(DialogDescriptionId))
+  }
   @rui.dialog(
     id=DialogId,
-    attrs=@html.Attrs::build()
-      .aria_labelledby(DialogTitleId)
-      .on_keydown(event => handle_dialog_keyboard_event(event, emit)),
+    attrs~,
     on_close=_ => emit(DialogCancel),
     style=[
       UI_FONT_STYLE,
@@ -59,7 +67,14 @@ fn modal(
       ..style,
     ],
     [
-      @rui.dialog_header([@rui.dialog_title(id=DialogTitleId, title)]),
+      @rui.dialog_header(
+        [
+          @rui.dialog_title(id=DialogTitleId, title),
+          ..description.map_or([], description => {
+            [@rui.dialog_description(id=DialogDescriptionId, description)]
+          }),
+        ],
+      ),
       ..children,
     ],
   )

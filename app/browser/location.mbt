@@ -15,14 +15,10 @@ fn Model::browser_location(model : Model) -> BrowserLocation {
 }
 
 ///|
-/// One saved location per browser origin, independent of the startup directory.
-let location_storage_key : String = "tuzi.location"
-
-///|
 fn read_browser_location() -> BrowserLocation? raise {
   let value : @js.Value = @js.Error_::wrap(() => {
     let storage : @js.Value = @js.globalThis.get_with_string("localStorage")
-    storage.apply_with_string("getItem", [location_storage_key])
+    storage.apply_with_string("getItem", [LocationStorageKey])
   })
   guard value.is_string() else { return None }
   let location : BrowserLocation = @json.from_json(
@@ -60,7 +56,7 @@ fn Model::save_browser_location(model : Model) -> Cmd {
     @js.Error_::wrap(
       () => {
         let storage : @js.Value = @js.globalThis.get_with_string("localStorage")
-        storage.apply_with_string("setItem", [location_storage_key, value])
+        storage.apply_with_string("setItem", [LocationStorageKey, value])
       },
       map_ok=_ => (),
     ) catch {

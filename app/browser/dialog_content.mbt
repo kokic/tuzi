@@ -7,16 +7,12 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
     }
     match model.dialog {
       None => @html.nothing
-      Help =>
-        modal("Help", emit, size=Wide, [
-          @rui.table([
-            @rui.table_caption(style=["color: currentColor"], HelpTableCaption),
-            @rui.table_body(help_lines()),
-          ]),
-        ])
+      Help => help_dialog(emit)
       Activity => activity
+      Bookmarks(side) => bookmarks_dialog(model.bookmarks, side, emit)
       Progress(batch) => progress_dialog(batch, emit)
       TaskDetails(id) => task_details_dialog(model.jobs.items, id, emit)
+      TaskOutput(id) => task_output_dialog(model.jobs.items, id, emit)
       Info(context) => context.dialog([], emit, error=model.dialog_error)
       Markdown(context) => context.dialog(emit)
       GitInfo(context) =>
@@ -60,34 +56,3 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
     }
   })
 }
-
-///|
-fn help_lines() -> Array[Html] {
-  let binds = [
-    ("Tab/←/→", "switch pane"),
-    ("↑↓", "move cursor"),
-    ("Space", "select"),
-    ("Enter", "open file / enter directory / extract ZIP"),
-    ("a / Right-click", "open file / folder actions"),
-    ("Esc", "up / cancel"),
-    ("c/m", "copy / move to other pane"),
-    ("d", "delete"),
-    ("r", "rename"),
-    ("i", "file / folder information"),
-    ("z", "compress to ZIP"),
-    ("n", "new file / folder"),
-    ("s", "sort active pane"),
-    ("y", "copy path"),
-    ("f", "filter active pane"),
-  ]
-  binds.map(pair => {
-    let (key, desc) = pair
-    @rui.table_row([
-      @rui.table_cell(style=["text-align: right"], kbd(key)),
-      @rui.table_cell(style=["text-align: left", "white-space: normal"], desc),
-    ])
-  })
-}
-
-///|
-const HelpTableCaption : String = "ONLY APPLE CAN'T DO"

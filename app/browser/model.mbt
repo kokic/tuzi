@@ -14,6 +14,7 @@ priv struct Model {
   supports_drive_selection : Bool
   panes : (PaneStack, PaneStack)
   active : PaneSide
+  bookmarks : Array[Path]
   filters : (String, String)
   editing : Bool
   dialog : Dialog
@@ -32,6 +33,7 @@ priv enum Msg {
   BaseRetry
   PaneEvent(PaneMsg)
   SyncPanePath
+  BookmarkEvent(BookmarkMsg)
   Key(@dom.KeyboardEvent)
   SortCycle(PaneSide)
   ThemeToggle
@@ -72,6 +74,9 @@ fn Model::initialize() -> Model {
     supports_drive_selection: false,
     panes: (PaneStack::initialize(Path("")), PaneStack::initialize(Path(""))),
     active: Left,
+    bookmarks: load_bookmarks() catch {
+      _ => []
+    },
     filters: ("", ""),
     editing: false,
     dialog: None,

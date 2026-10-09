@@ -42,6 +42,7 @@ fn Model::update_message(
     BaseLoaded(config) => model.apply_server_config(config)
     PaneEvent(msg) => model.update_panes(msg, emit)
     SyncPanePath => model.sync_other_pane_path()
+    BookmarkEvent(msg) => model.update_bookmarks(msg, emit)
     Key(kb) => model.handle_keyboard_event(kb, emit)
     SortCycle(idx) => (model.cycle_sort_order(idx), @rabbita.none)
     ThemeToggle => model.toggle_theme()

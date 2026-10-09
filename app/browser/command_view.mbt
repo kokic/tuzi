@@ -19,6 +19,20 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
         ]),
         @rui.command_list(scope~, [
           @rui.command_empty(scope~, "No matching commands."),
+          @rui.command_group(scope~, heading="Bookmarks", [
+            command_action_item(
+              scope~,
+              "Bookmarks: Add Current Panel Path",
+              emit(BookmarkEvent(AddCurrent)),
+            ),
+            command_action_item(
+              scope~,
+              "Bookmarks: View All",
+              // Let the command palette close before opening the next dialog.
+              @rabbita.delay(emit(BookmarkEvent(Open)), 0),
+            ),
+          ]),
+          @rui.command_separator(),
           @rui.command_group(scope~, [
             command_action_item(
               scope~,
