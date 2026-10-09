@@ -18,7 +18,7 @@ I would also like to thank the Web UI framework [Rabbita](https://moonbit-commun
 
 ## Usage
 
-- Double-click a folder or file to open it. Right-click for actions such as copy, move, rename, delete, and ZIP compression.
+- Double-click a folder or file to open it. Right-click or press `a` on the current item for actions such as copy, move, rename, delete, and ZIP compression.
 - Use the two panes to work across folders: `c` copies selected items to the other pane, and `m` moves them.
 - Use `Tab` to switch panes, `↑` / `↓` to move through items, and `Space` to select multiple items. `Enter` opens an item; `Esc` goes up a folder.
 - Press `f` to filter files by name.

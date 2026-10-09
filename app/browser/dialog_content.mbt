@@ -68,7 +68,7 @@ fn help_lines() -> Array[Html] {
     ("↑↓", "move cursor"),
     ("Space", "select"),
     ("Enter", "open file / enter directory / extract ZIP"),
-    ("Right-click", "open file / folder actions"),
+    ("a / Right-click", "open file / folder actions"),
     ("Esc", "up / cancel"),
     ("c/m", "copy / move to other pane"),
     ("d", "delete"),

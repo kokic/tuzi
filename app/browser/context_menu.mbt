@@ -1,4 +1,39 @@
 ///|
+/// Reuse the row's right-click handler so actions and menu focus stay identical.
+fn Model::open_cursor_context_menu(model : Model) -> Cmd {
+  let pane = model.pane_at(model.active)
+  guard pane.view_data(filter?=model.entry_filter(model.active)).cursor_index
+    is Some(row) else {
+    return @rabbita.none
+  }
+  let id = "pane-\{model.active.index()}-view-\{pane.id}-row-\{row}-open-trigger"
+  @cmd.custom_cmd(kind=AfterRender, _ => {
+    guard @dom.document().get_element_by_id(id).to_option() is Some(trigger) else {
+      return
+    }
+    trigger.scroll_into_view_with_options(
+      block="nearest",
+      inline="nearest",
+      container="nearest",
+    )
+    dispatch_entry_context_menu(trigger)
+  })
+}
+
+///|
+extern "js" fn dispatch_entry_context_menu(trigger : @dom.Element) -> Unit =
+  #| (trigger) => {
+  #|   const rect = trigger.getBoundingClientRect();
+  #|   trigger.dispatchEvent(new MouseEvent("contextmenu", {
+  #|     bubbles: true,
+  #|     cancelable: true,
+  #|     button: 2,
+  #|     clientX: rect.left + 8,
+  #|     clientY: rect.top + 8,
+  #|   }));
+  #| }
+
+///|
 fn entry_menu_content(
   scope : @rui.ContextMenuScope,
   item : EntryRow,

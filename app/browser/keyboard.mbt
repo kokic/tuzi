@@ -55,6 +55,8 @@ fn Model::handle_keyboard_event(
           let updated = model.toggle_selection_and_advance_cursor()
           (updated, updated.scroll_to_cursor())
         }
+        "a" if !kb.repeat() && !kb.is_composing() =>
+          (model, model.open_cursor_context_menu())
         "d" => (model, emit(DeleteOpen))
         "i" => (model, emit(InfoOpen))
         "r" => (model, emit(RenameOpen))
