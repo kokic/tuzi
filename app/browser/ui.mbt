@@ -6,6 +6,20 @@ fn kbd(key : String) -> Html {
 }
 
 ///|
+fn[C : @html.IsChildren] badge(
+  variant~ : @rui.BadgeVariant,
+  attrs? : @html.Attrs,
+  children : C,
+) -> Html {
+  @rui.badge(
+    variant~,
+    attrs?,
+    style=[UI_FONT_STYLE, "border-radius: 4px"],
+    children,
+  )
+}
+
+///|
 /// Stable id shared by every application dialog. The native `<dialog>` keeps
 /// the browser-owned open state across content changes between dialogs.
 const DialogId : String = "tuzi-dialog"

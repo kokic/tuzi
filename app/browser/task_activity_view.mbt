@@ -65,8 +65,7 @@ fn activity_item_view(task : Task, emit : Emit[Msg]) -> Val[Html] {
         @rui.item_footer(
           match task.status {
             Failed(_) =>
-              @rui.badge(
-                style=[UI_FONT_STYLE],
+              badge(
                 variant=Destructive,
                 attrs=@html.Attrs::build().role("status"),
                 "Failed",

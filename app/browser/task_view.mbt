@@ -2,8 +2,7 @@
 fn task_indicator(status : TaskStatus) -> Html {
   match status {
     Queued =>
-      @rui.badge(
-        style=[UI_FONT_STYLE, "flex-shrink: 0"],
+      badge(
         variant=Secondary,
         attrs=@html.Attrs::build().aria_label("Queued"),
         "Queued",
@@ -45,16 +44,14 @@ fn task_details(task : Task) -> Array[Html] {
 fn task_status_view(status : TaskStatus, description : String) -> Html {
   match status {
     Queued =>
-      @rui.badge(
-        style=[UI_FONT_STYLE],
+      badge(
         variant=Secondary,
         attrs=@html.Attrs::build().role("status"),
         "Queued",
       )
     Running => @rui.progress(aria_label=description)
     Completed(_) =>
-      @rui.badge(
-        style=[UI_FONT_STYLE],
+      badge(
         variant=Secondary,
         attrs=@html.Attrs::build().role("status"),
         "Completed",

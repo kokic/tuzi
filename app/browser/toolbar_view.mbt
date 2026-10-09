@@ -33,8 +33,7 @@ fn Model::toolbar_view(
       ),
       ..if sel > 0 {
         [
-          @rui.badge(
-            style=[UI_FONT_STYLE],
+          badge(
             variant=Secondary,
             "\{sel} selected",
           ),
@@ -72,8 +71,7 @@ fn Model::status_view(model : Model, emit : Emit[Msg]) -> Html {
       (
         error,
         Some(
-          @rui.badge(
-            style=[UI_FONT_STYLE, "flex-shrink: 0"],
+          badge(
             variant=Destructive,
             "Error",
           ),
