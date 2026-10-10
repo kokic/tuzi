@@ -93,5 +93,5 @@ fn Model::toggle_theme(model : Model) -> (Model, Cmd) {
     Light => Dark
     Dark => Light
   }
-  ({ ..model, theme, }, @rabbita.none)
+  ({ ..model, theme, }, save_browser_theme(theme))
 }

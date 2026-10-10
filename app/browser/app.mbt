@@ -100,12 +100,13 @@ fn Model::apply_server_config(
   config : @tuzi.ServerConfig,
 ) -> (Model, Cmd) {
   let location = load_browser_location(config.base, config.startup)
+  let saved_theme = read_browser_theme() catch { _ => None }
   let left = Path(location.left)
   let right = Path(location.right)
   let updated = {
     ..model,
     startup: Started,
-    theme: config.theme,
+    theme: saved_theme.unwrap_or(config.theme),
     entry_appearance: config.entry_appearance,
     openers: Some(config.openers),
     supports_drive_selection: config.supports_drive_selection,
