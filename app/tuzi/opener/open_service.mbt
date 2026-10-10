@@ -89,6 +89,7 @@ fn validate_open_association(
 pub async fn OpenService::open(
   self : OpenService,
   request : @shared.OpenRequest,
+  write_launch_log~ : async (String) -> Unit,
 ) -> Unit {
   // Resolve on the host and inspect the current target instead of trusting UI metadata.
   let native = request.path.to_native()
@@ -111,7 +112,11 @@ pub async fn OpenService::open(
     guard request.opener == "explorer" && !is_dir else { native }
     path.dirname().to_native()
   }
-  command.launch(target, no_console_window=true) catch {
+  command.launch(
+    target,
+    write_launch_log=Some(write_launch_log),
+    no_console_window=true,
+  ) catch {
     @os_error.OSError(_, ..) as error if error.is_ENOENT() =>
       raise ProgramMissing(command.program)
     error => raise error

@@ -56,7 +56,7 @@ fn TaskService::submit(
       }
       self.finish(id, status)
       if status is Completed(_) {
-        log_op(log, description)
+        write_operation_log(log, description)
       }
     })
     @shared.ApiResponse::Success(id)

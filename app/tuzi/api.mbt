@@ -15,14 +15,15 @@ fn routes(
     ..post("/api/open", (req, res) => {
       respond(res, () => {
         let request : @shared.OpenRequest = decode_request(req)
-        log_op(log, "open: \{request.opener}: \{request.path}")
-        openers.open(request)
+        openers.open(request, write_launch_log=message => {
+          write_operation_log(log, message)
+        })
       })
     })
     ..post("/api/list", (req, res) => {
       respond(res, () => {
         let request : @shared.ListingRequest = decode_request(req)
-        log_op(log, "list: \{request.path}")
+        write_operation_log(log, "list: \{request.path}")
         list_entries(request.path, include_markers=request.include_markers)
       })
     })
@@ -62,9 +63,9 @@ fn routes(
 let log_mutex : @async.Mutex = Mutex()
 
 ///|
-async fn log_op(enabled : Bool, msg : String) -> Unit {
+async fn write_operation_log(enabled : Bool, message : String) -> Unit {
   guard enabled else { return }
   log_mutex.acquire()
   defer log_mutex.release()
-  @stdio.stdout.write("[tuzi] \{msg}\n")
+  @stdio.stdout.write("[tuzi] \{message}\n")
 }
