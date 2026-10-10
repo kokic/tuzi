@@ -6,7 +6,7 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
   @rui.command_dialog(
     id=CommandDialogId,
     aria_label="Command",
-    style=[UI_FONT_STYLE],
+    style=[UI_FONT_STYLE, "width: min(40rem, calc(100vw - 2rem))"],
     attrs=@html.Attrs::build().on_keydown(event => {
       // Keep palette input and navigation out of the file-manager shortcuts.
       event.stop_propagation()
@@ -17,42 +17,46 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
         @rui.command_input(scope~, placeholder="Type a command…", input_style=[
           UI_FONT_STYLE,
         ]),
-        @rui.command_list(scope~, [
-          @rui.command_empty(scope~, "No matching commands."),
-          @rui.command_group(scope~, heading="Bookmarks", [
-            command_action_item(
-              scope~,
-              "Bookmarks: Add Current Panel Path",
-              emit(BookmarkEvent(AddCurrent)),
-            ),
-            command_action_item(
-              scope~,
-              "Bookmarks: View All",
-              // Let the command palette close before opening the next dialog.
-              @rabbita.delay(emit(BookmarkEvent(Open)), 0),
-            ),
-          ]),
-          @rui.command_separator(),
-          @rui.command_group(
-            scope~,
-            [
+        @rui.command_list(
+          scope~,
+          style=["max-height: min(28rem, calc(100dvh - 6rem))"],
+          [
+            @rui.command_empty(scope~, "No matching commands."),
+            @rui.command_group(scope~, heading="Bookmarks", [
               command_action_item(
                 scope~,
-                "View: Synchronize to Current Panel Path",
-                emit(SyncPanePath),
+                "Bookmarks: Add Current Panel Path",
+                emit(BookmarkEvent(AddCurrent)),
               ),
-              command_link_item(
+              command_action_item(
                 scope~,
-                "Contribution: New issue",
-                "https://github.com/kokic/tuzi/releases",
+                "Bookmarks: View All",
+                // Let the command palette close before opening the next dialog.
+                @rabbita.delay(emit(BookmarkEvent(Open)), 0),
               ),
-              @rui.command_separator(),
-              ..navigation_links.map(link => {
-                command_link_item(scope~, link.label, link.url)
-              }),
-            ],
-          ),
-        ]),
+            ]),
+            @rui.command_separator(),
+            @rui.command_group(
+              scope~,
+              [
+                command_action_item(
+                  scope~,
+                  "View: Synchronize to Current Panel Path",
+                  emit(SyncPanePath),
+                ),
+                command_link_item(
+                  scope~,
+                  "Contribution: New issue",
+                  "https://github.com/kokic/tuzi/releases",
+                ),
+                @rui.command_separator(),
+                ..navigation_links.map(link => {
+                  command_link_item(scope~, link.label, link.url)
+                }),
+              ],
+            ),
+          ],
+        ),
       ])
     },
   )
