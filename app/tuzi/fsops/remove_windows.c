@@ -3,7 +3,6 @@
 #ifdef _WIN32
 #include <windows.h>
 
-// MoonBit strings are NUL-terminated UTF-16 and borrowed for this call only.
 MOONBIT_FFI_EXPORT int32_t tuzi_clear_readonly(moonbit_string_t path) {
   DWORD attrs = GetFileAttributesW((LPCWSTR)path);
   if (attrs == INVALID_FILE_ATTRIBUTES)
