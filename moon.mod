@@ -9,7 +9,7 @@ import {
   "moonbitlang/x@0.5.5",
   "moonbit-community/rui@0.3.5",
   "moonbit-community/flate@0.8.4",
-  "kokic/uniform-path@0.1.3",
+  "kokic/uniform-path@0.1.5",
 }
 
 readme = "README.md"

@@ -52,7 +52,7 @@ async fn checked_git(
   arguments : Array[String],
 ) -> (String, String) {
   let (code, stdout, stderr) = git_command(
-    ["-C", directory.to_string(), "-c", "color.ui=false", ..arguments],
+    ["-C", directory.to_native(), "-c", "color.ui=false", ..arguments],
   )
   guard code == 0 else { raise CommandFailed(code~, stdout~, stderr~) }
   (stdout, stderr)
@@ -79,7 +79,7 @@ pub async fn read_git_info(path : Path) -> @shared.GitInfo {
   }
   let (code, current, stderr) = git_command([
     "-C",
-    directory.to_string(),
+    directory.to_native(),
     "symbolic-ref",
     "--quiet",
     "--short",

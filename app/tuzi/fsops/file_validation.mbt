@@ -6,7 +6,10 @@ pub fn validate_entry_name(name : String) -> Unit raise FileError {
     name != ".." &&
     !name.contains("/") &&
     !name.contains("\u0000") &&
-    (@path.sep != '\\' || (!name.contains("\\") && !name.contains(":"))) else {
+    (
+      !(@async.platform is Windows) ||
+      (!name.contains("\\") && !name.contains(":"))
+    ) else {
     raise InvalidName(name)
   }
 }
@@ -14,11 +17,11 @@ pub fn validate_entry_name(name : String) -> Unit raise FileError {
 ///|
 /// Resolve parent aliases before comparing paths, without following the source entry.
 async fn validate_transfer(from : Path, to : Path) -> Unit {
-  let source = path_from_native(@async_fs.realpath(from.dirname().to_string())).join(
+  let source = path_from_native(@async_fs.realpath(from.dirname().to_native())).join(
     Path("./\{from.basename()}"),
   )
   let destination = path_from_native(
-    @async_fs.realpath(to.dirname().to_string()),
+    @async_fs.realpath(to.dirname().to_native()),
   ).join(Path("./\{to.basename()}"))
   let source_key = filesystem_path_key(source)
   for ancestor = destination {

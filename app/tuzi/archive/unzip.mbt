@@ -29,18 +29,17 @@ fn extraction_components(name : String) -> Array[String] raise ExtractionError {
     guard @shared.is_valid_archive_name(component) else {
       raise UnsafePath(name)
     }
-    if @path.sep == '\\' {
-      guard !component.has_suffix(".") && !component.has_suffix(" ") else {
-        raise UnsafePath(name)
-      }
-      let stem = component.split(".").next().unwrap().to_owned().to_lower()
-      guard ![
-        "con", "prn", "aux", "nul", "com1", "com2", "com3", "com4", "com5", "com6",
-        "com7", "com8", "com9", "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7",
-        "lpt8", "lpt9", "com¹", "com²", "com³", "lpt¹", "lpt²", "lpt³",
-      ].contains(stem) else {
-        raise UnsafePath(name)
-      }
+    guard @async.platform is Windows else { continue }
+    guard !component.has_suffix(".") && !component.has_suffix(" ") else {
+      raise UnsafePath(name)
+    }
+    let stem = component.split(".").next().unwrap().to_owned().to_lower()
+    guard ![
+      "con", "prn", "aux", "nul", "com1", "com2", "com3", "com4", "com5", "com6",
+      "com7", "com8", "com9", "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7",
+      "lpt8", "lpt9", "com¹", "com²", "com³", "lpt¹", "lpt²", "lpt³",
+    ].contains(stem) else {
+      raise UnsafePath(name)
     }
   }
   components
@@ -51,12 +50,12 @@ fn extraction_components(name : String) -> Array[String] raise ExtractionError {
 /// files. The ZIP reader materializes entries in memory and checks structure;
 /// CRC verification is the caller's responsibility.
 pub async fn unzip_entries(source : Path, destination : Path) -> Unit {
-  guard @async_fs.kind(source.to_string(), follow_symlink=false) is Regular else {
+  guard @async_fs.kind(source.to_native(), follow_symlink=false) is Regular else {
     raise ArchiveError::UnsupportedEntry(source.to_string())
   }
-  @async_fs.mkdir(destination.to_string(), allow_exist=false)
+  @async_fs.mkdir(destination.to_native(), allow_exist=false)
   errdefer @fsops.cleanup_copy(destination)
-  let data = @async_fs.read_file(source.to_string())
+  let data = @async_fs.read_file(source.to_native())
   let archive = @zip.read(data.binary())
   for entry in archive.entries() {
     let name = entry.name()
@@ -69,14 +68,14 @@ pub async fn unzip_entries(source : Path, destination : Path) -> Unit {
     }
     let output = destination.join(Path(components.join("/")))
     if name.has_suffix("/") {
-      @async_fs.mkdir(output.to_string(), recursive=true, allow_exist=true)
+      @async_fs.mkdir(output.to_native(), recursive=true, allow_exist=true)
     } else {
       @async_fs.mkdir(
-        output.dirname().to_string(),
+        output.dirname().to_native(),
         recursive=true,
         allow_exist=true,
       )
-      let file = @async_fs.create(output.to_string(), allow_existing=false)
+      let file = @async_fs.create(output.to_native(), allow_existing=false)
       defer file.close()
       let bytes = entry.data()
       for offset = 0; offset < bytes.length(); offset = offset + 64 * 1024 {

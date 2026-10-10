@@ -28,7 +28,7 @@ pub async fn zip_entries(
   name : String,
   level~ : Int,
 ) -> Unit {
-  let output = path.join(Path("./\{name}")).to_string()
+  let output = path.join(Path("./\{name}")).to_native()
   let file = @async_fs.create(output, allow_existing=false)
   defer file.close()
   errdefer {
@@ -55,12 +55,12 @@ async fn add_archive_entry(
 ) -> Unit {
   let basename = path.basename()
   guard basename != ".DS_Store" && basename != "__MACOSX" else { return }
-  let kind = @async_fs.kind(path.to_string(), follow_symlink=false)
+  let kind = @async_fs.kind(path.to_native(), follow_symlink=false)
   match kind {
     Directory => {
       writer.add(name + "/", b"", compression=Store)
       sink.flush()
-      let dir = @async_fs.opendir(path.to_string())
+      let dir = @async_fs.opendir(path.to_native())
       defer dir.close()
       while dir.next(include_hidden=true, include_special=false) is Some(entry) {
         validate_archive_name(entry.name)
@@ -73,7 +73,7 @@ async fn add_archive_entry(
       }
     }
     Regular => {
-      let file = @async_fs.open(path.to_string(), mode=ReadOnly)
+      let file = @async_fs.open(path.to_native(), mode=ReadOnly)
       defer file.close()
       writer.begin_entry(
         name,

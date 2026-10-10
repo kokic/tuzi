@@ -24,7 +24,7 @@ async fn read_link_text(path : Path) -> String {
       #|  ConvertTo-Json -InputObject ([string]$item.Target[0]) -Compress
       #|} catch { [Console]::Error.WriteLine($_.Exception.Message); exit 1 }
     ),
-    { "TUZI_LINK_SOURCE": path.to_string() },
+    { "TUZI_LINK_SOURCE": path.to_native() },
   )
   @json.from_json(@json.parse(output))
 }
@@ -49,9 +49,9 @@ async fn create_link_like(
         #|} catch { [Console]::Error.WriteLine($_.Exception.Message); exit 1 }
       ),
       {
-        "TUZI_LINK_SOURCE": source.to_string(),
-        "TUZI_LINK_DESTINATION": destination.to_string(),
-        "TUZI_LINK_TARGET": target.to_string(),
+        "TUZI_LINK_SOURCE": source.to_native(),
+        "TUZI_LINK_DESTINATION": destination.to_native(),
+        "TUZI_LINK_TARGET": target.to_native(),
       },
     ),
   )
@@ -73,8 +73,8 @@ async fn relocate_link(source : Path, destination : Path) -> Unit {
         #|} catch { [Console]::Error.WriteLine($_.Exception.Message); exit 1 }
       ),
       {
-        "TUZI_LINK_SOURCE": source.to_string(),
-        "TUZI_LINK_DESTINATION": destination.to_string(),
+        "TUZI_LINK_SOURCE": source.to_native(),
+        "TUZI_LINK_DESTINATION": destination.to_native(),
       },
     ),
   )

@@ -6,14 +6,14 @@ using @uniform_path {type Path}
 
 ///|
 async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
-  let path = @fsops.path_from_native(@async_fs.realpath(path.to_string()))
-  let dir = @async_fs.opendir(path.to_string())
+  let path = @fsops.path_from_native(@async_fs.realpath(path.to_native()))
+  let dir = @async_fs.opendir(path.to_native())
   defer dir.close()
   let jobs : Array[async () -> Entry?] = []
   while dir.next(include_hidden=true, include_special=false) is Some(entry) {
     jobs.push(() => {
       let full = path.join(Path("./\{entry.name}"))
-      let full_path = full.to_string()
+      let full_path = full.to_native()
       let kind = read_entry_kind(full) catch {
         // The entry may disappear after directory enumeration.
         @os_error.OSError(_, ..) as error if error.is_ENOENT() => return None
@@ -44,13 +44,13 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
 
 ///|
 async fn read_entry_kind(path : Path) -> @shared.EntryKind {
-  match @async_fs.kind(path.to_string(), follow_symlink=false) {
+  match @async_fs.kind(path.to_native(), follow_symlink=false) {
     Regular => Regular
     Directory => Directory
     SymLink =>
       try {
         let target = @fsops.path_from_native(
-          @async_fs.realpath(path.to_string()),
+          @async_fs.realpath(path.to_native()),
         )
         SymbolicLink(target, read_entry_kind(target))
       } catch {
@@ -68,7 +68,7 @@ async fn read_entry_kind(path : Path) -> @shared.EntryKind {
 ///|
 async fn detect_marker(path : Path) -> String {
   for marker in @shared.folder_markers {
-    guard !@async_fs.exists(path.join(Path("./\{marker}")).to_string()) else {
+    guard !@async_fs.exists(path.join(Path("./\{marker}")).to_native()) else {
       return marker
     }
   }

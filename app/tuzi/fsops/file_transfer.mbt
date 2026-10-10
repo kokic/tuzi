@@ -8,12 +8,12 @@ pub async fn copy_entry(from : Path, to : Path) -> Unit {
 /// Only regular files and directories are copied; links are never dereferenced.
 /// Exclusive creation means cleanup only removes output owned by this operation.
 async fn copy_tree(from : Path, to : Path) -> Unit {
-  let kind = @async_fs.kind(from.to_string(), follow_symlink=false)
+  let kind = @async_fs.kind(from.to_native(), follow_symlink=false)
   match kind {
     Directory => {
-      @async_fs.mkdir(to.to_string())
+      @async_fs.mkdir(to.to_native())
       errdefer cleanup_copy(to)
-      let dir = @async_fs.opendir(from.to_string())
+      let dir = @async_fs.opendir(from.to_native())
       defer dir.close()
       while dir.next(include_hidden=true, include_special=false) is Some(entry) {
         let child = Path("./\{entry.name}")
@@ -36,9 +36,9 @@ pub async fn cleanup_copy(path : Path) -> Unit nocancel {
 
 ///|
 async fn copy_file(from : Path, to : Path) -> Unit {
-  let src = @async_fs.open(from.to_string(), mode=ReadOnly)
+  let src = @async_fs.open(from.to_native(), mode=ReadOnly)
   defer src.close()
-  let dst = @async_fs.create(to.to_string(), allow_existing=false)
+  let dst = @async_fs.create(to.to_native(), allow_existing=false)
   defer dst.close()
   errdefer {
     dst.close()

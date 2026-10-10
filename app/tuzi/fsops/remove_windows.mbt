@@ -25,7 +25,7 @@ fn has_git_dir_ancestor(path : Path) -> Bool {
 /// Carry the Git policy through recursion without traversing links or junctions.
 #cfg(platform="windows")
 async fn remove_tree_windows(path : Path, inside_git_dir~ : Bool) -> Unit {
-  let path_string = path.to_string()
+  let path_string = path.to_native()
   guard @async_fs.kind(path_string, follow_symlink=false) is Directory else {
     remove_file_windows(
       path_string,
@@ -45,7 +45,7 @@ async fn remove_tree_windows(path : Path, inside_git_dir~ : Bool) -> Unit {
         remove_tree_windows(child_path, inside_git_dir=children_inside_git_dir)
       } else {
         remove_file_windows(
-          child_path.to_string(),
+          child_path.to_native(),
           clear_readonly_before_delete=children_inside_git_dir,
         )
       }

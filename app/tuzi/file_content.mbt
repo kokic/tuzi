@@ -11,11 +11,11 @@ async fn serve_file(req : @moonback.Request, res : @moonback.Responder) -> Unit 
 ///|
 async fn stream_file(path : Path, res : @moonback.Responder) -> Unit {
   let file = try {
-    guard @async_fs.kind(path.to_string()) is Regular else {
+    guard @async_fs.kind(path.to_native()) is Regular else {
       res.send_text("Not a regular file", status=415)
       return
     }
-    @async_fs.open(path.to_string(), mode=ReadOnly)
+    @async_fs.open(path.to_native(), mode=ReadOnly)
   } catch {
     error => {
       let failure = api_failure(error)

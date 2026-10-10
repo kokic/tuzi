@@ -91,7 +91,11 @@ pub async fn OpenService::open(
   request : @shared.OpenRequest,
 ) -> Unit {
   // Resolve on the host and inspect the current target instead of trusting UI metadata.
-  let native = @path.Path(request.path.to_string()).resolve().to_string()
+  let native = request.path.to_native()
+  let native = {
+    guard !@path.Path(native).is_absolute() else { native }
+    @path.Path(native).resolve().to_string()
+  }
   let path = @fsops.path_from_native(native)
   let is_dir = match @async_fs.kind(native) {
     Directory => true
