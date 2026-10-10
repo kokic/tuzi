@@ -1,6 +1,6 @@
 ///|
 let text_association : @shared.OpenAssociation = {
-  openers: ["preview", "vscode"],
+  openers: ["preview", "vscode", "explorer"],
   default_opener: "preview",
 }
 
@@ -72,7 +72,10 @@ fn configured_open_registry(
       ".gitignore": text_association,
       ".gitattributes": text_association,
       ".env": text_association,
-      ".zip": { openers: ["extract", "preview"], default_opener: "extract", },
+      ".zip": {
+        openers: ["extract", "preview", "explorer"],
+        default_opener: "extract",
+      },
     },
     extensions: {
       "c": text_association,
@@ -102,8 +105,11 @@ fn configured_open_registry(
       "ini": text_association,
       "conf": text_association,
       "sh": text_association,
-      "zip": { openers: ["extract", "preview"], default_opener: "extract", },
+      "zip": {
+        openers: ["extract", "preview", "explorer"],
+        default_opener: "extract",
+      },
     },
-    other_file: { openers: ["preview"], default_opener: "preview", },
+    other_file: { openers: ["preview", "explorer"], default_opener: "preview", },
   }
 }

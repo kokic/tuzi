@@ -107,7 +107,11 @@ pub async fn OpenService::open(
     self.commands.get(request.opener) is Some(command) else {
     raise NotApplicable(request.opener)
   }
-  command.launch(native, no_console_window=true) catch {
+  let target = {
+    guard request.opener == "explorer" && !is_dir else { native }
+    path.dirname().to_native()
+  }
+  command.launch(target, no_console_window=true) catch {
     @os_error.OSError(_, ..) as error if error.is_ENOENT() =>
       raise ProgramMissing(command.program)
     error => raise error
