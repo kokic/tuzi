@@ -33,45 +33,25 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
             ),
           ]),
           @rui.command_separator(),
-          @rui.command_group(scope~, [
-            command_action_item(
-              scope~,
-              "View: Synchronize to Current Panel Path",
-              emit(SyncPanePath),
-            ),
-            command_link_item(
-              scope~,
-              "Contribution: New issue",
-              "https://github.com/kokic/tuzi/releases",
-            ),
-            @rui.command_separator(),
-            // Navigation
-            command_link_item(
-              scope~,
-              "Navigation: Compiler Explorer",
-              "https://godbolt.org/",
-            ),
-            command_link_item(
-              scope~,
-              "Navigation: Excalidraw",
-              "https://excalidraw.com/",
-            ),
-            command_link_item(
-              scope~,
-              "Navigation: HexEd.it",
-              "https://https://hexed.it/",
-            ),
-            command_link_item(
-              scope~,
-              "Navigation: KaTeX Supported Functions",
-              "https://katex.org/docs/supported.html",
-            ),
-            command_link_item(
-              scope~,
-              "Navigation: Try Pandoc!",
-              "https://pandoc.org/try/",
-            ),
-          ]),
+          @rui.command_group(
+            scope~,
+            [
+              command_action_item(
+                scope~,
+                "View: Synchronize to Current Panel Path",
+                emit(SyncPanePath),
+              ),
+              command_link_item(
+                scope~,
+                "Contribution: New issue",
+                "https://github.com/kokic/tuzi/releases",
+              ),
+              @rui.command_separator(),
+              ..navigation_links.map(link => {
+                command_link_item(scope~, link.label, link.url)
+              }),
+            ],
+          ),
         ]),
       ])
     },
