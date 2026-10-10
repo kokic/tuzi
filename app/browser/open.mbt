@@ -5,10 +5,19 @@ fn Model::open_default(
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
   guard model.openers is Some(registry) else { return (model, @rabbita.none) }
-  let association = registry.for_entry(
-    target.entry.name,
-    is_dir=target.entry.is_dir(),
-  )
+  guard target.entry.kind is Ok(kind) else {
+    return (
+      model,
+      emit(
+        Toast(
+          "Cannot open entry",
+          Some(target.entry.kind.unwrap_err().message),
+          @rui.ToastDestructive,
+        ),
+      ),
+    )
+  }
+  let association = registry.for_entry(target.entry.name, is_dir=kind.is_dir())
   model.execute_opener(target, association.default_opener, emit)
 }
 
@@ -23,17 +32,17 @@ fn Model::execute_opener(
     registry.openers.get(id) is Some(opener) else {
     return (model, @rabbita.none)
   }
+  if target.unavailable_reason(opener.action) is Some(reason) {
+    return (
+      model,
+      emit(Toast("Cannot open entry", Some(reason), @rui.ToastDestructive)),
+    )
+  }
   let association = registry.for_entry(
     target.entry.name,
     is_dir=target.entry.is_dir(),
   )
   guard association.openers.contains(id) else { return (model, @rabbita.none) }
-  if target.unavailable_reason(opener.action) is Some(reason) {
-    return (
-      model,
-      emit(Toast("Cannot open file", Some(reason), @rui.ToastDestructive)),
-    )
-  }
   let model = { ..model, dialog: None, dialog_error: "", }
   match opener.action {
     Browse => model.navigate_to_directory(target.pane, target.path)

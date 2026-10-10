@@ -1,15 +1,25 @@
 ///|
 fn Entry::name_view(entry : Entry, color : String) -> Html {
   match entry.kind {
-    SymbolicLink(target, target_kind) =>
+    Err(error) =>
+      entry.name_container(color, title=entry.name, [
+        truncated_name_view(entry.name),
+        @rui.badge(
+          variant=Secondary,
+          style=["margin-left: 0.5em", "flex: none"],
+          title=error.message,
+          "Type unavailable",
+        ),
+      ])
+    Ok(SymbolicLink(target, target_kind)) =>
       entry.symbolic_link_name_view(
         color,
         target.to_string(),
         directory=target_kind.is_dir(),
       )
-    UnresolvedLink(error) =>
+    Ok(UnresolvedLink(error)) =>
       entry.unresolved_link_name_view(color, error.message)
-    Directory => entry.directory_name_view(color)
+    Ok(Directory) => entry.directory_name_view(color)
     _ => entry.file_name_view(color)
   }
 }
@@ -82,7 +92,7 @@ fn Entry::name_container(
     title~,
     [
       ..children,
-      ..if entry.marker is Err(error) {
+      ..if entry.kind is Ok(_) && entry.marker is Err(error) {
         [
           span(
             style=["margin-left: 0.5em", "color: var(--rui-muted-foreground)"],

@@ -10,6 +10,9 @@ let unknown_size : FormattedFileSize = { value: "???", unit: "B", }
 ///|
 pub fn format_entry_meta(entry : Entry) -> String {
   let parts = [
+    ..if entry.kind is Err(error) {
+      ["Type unavailable: " + error.message]
+    },
     match entry.mtime {
       Ok(time) => format_timestamp(time).to_string()
       Err(error) => "Modified time unavailable: " + error.message

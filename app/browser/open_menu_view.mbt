@@ -5,10 +5,8 @@ fn open_with_items(
   registry : @tuzi.OpenRegistry,
   emit : Emit[Msg],
 ) -> Array[Html] {
-  let association = registry.for_entry(
-    target.entry.name,
-    is_dir=target.entry.is_dir(),
-  )
+  guard target.entry.kind is Ok(kind) else { return [] }
+  let association = registry.for_entry(target.entry.name, is_dir=kind.is_dir())
   let items : Array[Html] = []
   for id in association.openers {
     let opener = registry.openers[id]

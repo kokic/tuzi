@@ -25,7 +25,8 @@ pub extend EntryKind with ToJson::{to_json}
 ///|
 pub(all) struct Entry {
   name : String
-  kind : EntryKind
+  /// Entry type, or the failure to inspect this entry.
+  kind : Result[EntryKind, ApiFailure]
   /// File size in bytes; Ok(None) for directories, Err for failed reads.
   size : Result[Int64?, ApiFailure]
   /// Modification time in Unix seconds, or the metadata read failure.
@@ -54,8 +55,15 @@ pub fn EntryKind::is_dir(self : EntryKind) -> Bool {
 }
 
 ///|
+/// Whether this entry is known to be a directory. False also covers failed lookups.
 pub fn Entry::is_dir(self : Entry) -> Bool {
-  self.kind.is_dir()
+  self.kind is Ok(kind) && kind.is_dir()
+}
+
+///|
+/// Whether this entry is known to be a link.
+pub fn Entry::is_link(self : Entry) -> Bool {
+  self.kind is Ok(kind) && kind.is_link()
 }
 
 ///|

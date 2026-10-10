@@ -14,12 +14,13 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
     jobs.push(() => {
       let full = path.join(Path("./\{entry.name}"))
       let full_path = full.to_native()
-      let kind = read_entry_kind(full) catch {
+      let kind = Ok(read_entry_kind(full)) catch {
         // The entry may disappear after directory enumeration.
         @os_error.OSError(_, ..) as error if error.is_ENOENT() => return None
+        @os_error.OSError(_, ..) as error => Err(api_failure(error))
         error => raise error
       }
-      let is_dir = kind.is_dir()
+      let is_dir = kind is Ok(kind) && kind.is_dir()
       let size = {
         guard !is_dir else { Ok(None) }
         // Metadata calls never open FIFOs/devices as input streams.
@@ -31,9 +32,15 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
         error => Err(api_failure(error))
       }
       let marker = {
-        guard is_dir && include_markers else { Ok("") }
-        Ok(detect_marker(full)) catch {
-          error => Err(api_failure(error))
+        guard include_markers else { Ok("") }
+        match kind {
+          Err(error) => Err(error)
+          Ok(_) => {
+            guard is_dir else { Ok("") }
+            Ok(detect_marker(full)) catch {
+              error => Err(api_failure(error))
+            }
+          }
         }
       }
       Some({ name: entry.name, kind, size, mtime, marker, })

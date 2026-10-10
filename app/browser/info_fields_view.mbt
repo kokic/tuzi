@@ -8,7 +8,7 @@ fn InfoContext::fields_view(
   let path = context.path.to_string()
   let rows = [
     info_row("Name", entry.name),
-    ..if !entry.kind.is_link() {
+    ..if !entry.is_link() {
       [
         info_row(
           "Path",
@@ -62,26 +62,30 @@ fn InfoContext::fields_view(
     info_row(
       "Type",
       match entry.kind {
-        Regular => "File"
-        Directory => "Folder"
-        SymbolicLink(_, target_kind) =>
+        Ok(Regular) => "File"
+        Ok(Directory) => "Folder"
+        Ok(SymbolicLink(_, target_kind)) =>
           if target_kind.is_dir() {
             "Folder link"
           } else {
             "Symbolic link"
           }
-        UnresolvedLink(_) => "Symbolic link (target unavailable)"
-        Socket => "Socket"
-        Pipe => "Pipe"
-        BlockDevice => "Block device"
-        CharDevice => "Character device"
-        Unknown => "Unknown"
+        Ok(UnresolvedLink(_)) => "Symbolic link (target unavailable)"
+        Ok(Socket) => "Socket"
+        Ok(Pipe) => "Pipe"
+        Ok(BlockDevice) => "Block device"
+        Ok(CharDevice) => "Character device"
+        Ok(Unknown) => "Unknown"
+        Err(_) => "Unavailable"
       },
     ),
-    ..if entry.kind is SymbolicLink(target, _) {
+    ..if entry.kind is Err(error) {
+      [info_row("Type unavailable", error.message)]
+    },
+    ..if entry.kind is Ok(SymbolicLink(target, _)) {
       [info_row("Resolved target", target.to_string())]
     },
-    ..if entry.kind is UnresolvedLink(error) {
+    ..if entry.kind is Ok(UnresolvedLink(error)) {
       [info_row("Target unavailable", error.message)]
     },
     ..if entry.marker is Err(error) {

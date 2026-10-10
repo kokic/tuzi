@@ -18,7 +18,7 @@ fn Model::open_info_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
     id: model.next_info_id,
     entry,
     path,
-    link: if entry.kind.is_link() {
+    link: if entry.is_link() {
       Some({ path: path.to_string(), target: None, })
     } else {
       None
@@ -29,7 +29,7 @@ fn Model::open_info_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
     next_info_id: model.next_info_id + 1,
     dialog_error: "",
   }
-  let link_request = if entry.kind.is_link() {
+  let link_request = if entry.is_link() {
     request_link_target(context, emit)
   } else {
     @rabbita.none

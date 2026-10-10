@@ -24,18 +24,21 @@ fn OpenTarget::unavailable_reason(
   self : OpenTarget,
   action : @tuzi.OpenAction,
 ) -> String? {
-  guard !(self.entry.kind is UnresolvedLink(_)) else {
+  guard self.entry.kind is Ok(kind) else {
+    return Some(self.entry.kind.unwrap_err().message)
+  }
+  guard !(kind is UnresolvedLink(_)) else {
     return Some("The link target is unavailable.")
   }
   match action {
     Browse =>
-      if self.entry.is_dir() {
+      if kind.is_dir() {
         None
       } else {
         Some("Select a directory to enter.")
       }
     Preview => {
-      guard !self.entry.is_dir() else {
+      guard !kind.is_dir() else {
         return Some("Directories cannot be previewed as files.")
       }
       // Missing listing metadata is checked by the existing file endpoint.
@@ -49,8 +52,7 @@ fn OpenTarget::unavailable_reason(
       None
     }
     ExtractZip => {
-      guard !self.entry.is_dir() &&
-        self.entry.name.to_lower().has_suffix(".zip") else {
+      guard !kind.is_dir() && self.entry.name.to_lower().has_suffix(".zip") else {
         return Some("Select a ZIP file to extract.")
       }
       None

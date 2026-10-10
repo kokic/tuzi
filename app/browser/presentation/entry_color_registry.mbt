@@ -18,6 +18,7 @@ fn EntryColorRegistry::for_entry(
   self : EntryColorRegistry,
   entry : Entry,
 ) -> String {
+  guard entry.kind is Ok(_) else { return "currentColor" }
   let name = entry.name.to_lower()
   guard !entry.is_dir() else {
     return match () {

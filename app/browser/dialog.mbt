@@ -24,7 +24,7 @@ fn Model::open_rename_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
       emit(Toast("Select one item to rename", None, @rui.ToastDefault)),
     )
   }
-  guard !item.kind.is_link() else {
+  guard !item.is_link() else {
     return (
       model,
       emit(
