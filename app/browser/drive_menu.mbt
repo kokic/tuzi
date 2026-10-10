@@ -75,7 +75,7 @@ fn drive_menu_view(
                           drive.to_string(),
                         ),
                         ..if Some(drive) == current {
-                          [@rui.dropdown_menu_shortcut("Current")]
+                          [badge(variant=Secondary, "Current")]
                         },
                       ],
                     )

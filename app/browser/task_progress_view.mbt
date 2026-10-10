@@ -8,6 +8,7 @@ fn progress_dialog(batch : ProgressBatch, emit : Emit[Msg]) -> Html {
     let description = item.operation.description()
     @rui.item(
       variant=ItemOutline,
+      attrs=@html.Attrs::build().role("listitem"),
       [
         @rui.item_content(@rui.item_title(description)),
         ..if batch.error is None {

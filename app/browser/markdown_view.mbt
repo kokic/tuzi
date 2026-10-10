@@ -62,18 +62,25 @@ fn MarkdownContext::dialog(context : MarkdownContext, emit : Emit[Msg]) -> Html 
               )
             }),
           ),
-          @rui.tabs_content(
-            value=context.view.label(),
-            id="markdown-panel-\{context.view.label()}",
-            labelledby="markdown-tab-\{context.view.label()}",
-            selected=true,
-            style=[
-              "min-height: 0", "overflow: auto", "overscroll-behavior: contain",
-              "padding: 12px", "border: 1px solid var(--rui-border)", "user-select: text",
-              "overflow-wrap: anywhere",
-            ],
-            [context.content_view()],
-          ),
+          ..[Preview, Code].map(view => {
+            let selected = context.view == view
+            @rui.tabs_content(
+              value=view.label(),
+              id="markdown-panel-\{view.label()}",
+              labelledby="markdown-tab-\{view.label()}",
+              selected~,
+              style=[
+                "min-height: 0", "overflow: auto", "overscroll-behavior: contain",
+                "padding: 12px", "border: 1px solid var(--rui-border)", "user-select: text",
+                "overflow-wrap: anywhere",
+              ],
+              if selected {
+                context.content_view()
+              } else {
+                @html.nothing
+              },
+            )
+          }),
         ],
       ),
       dialog_close_footer_view(),

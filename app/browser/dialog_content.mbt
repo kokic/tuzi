@@ -43,9 +43,7 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
             input,
             model.dialog_error,
             emit,
-          ),
-          @rui.field_description(
-            "Creates a new directory; existing directories are not overwritten. Relative paths start from the archive's directory. Use / as the path separator.",
+            description="Creates a new directory; existing directories are not overwritten. Relative paths start from the archive's directory. Use / as the path separator.",
           ),
           dialog_footer(emit, "Extract", Default, has_input=true),
         ])

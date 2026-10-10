@@ -88,11 +88,17 @@ fn text_input_field_view(
   error~ : String,
   on_input~ : Emit[String],
   autofocus? : Bool = false,
+  description? : String,
 ) -> Html {
   let error_id = id + "-error"
+  let description_id = id + "-description"
   let attrs = @html.Attrs::build()
+  let describedby = description.map_or([], _ => [description_id])
   if !error.is_empty() {
-    ignore(attrs.aria_describedby(error_id))
+    describedby.push(error_id)
+  }
+  if !describedby.is_empty() {
+    ignore(attrs.aria_describedby(describedby.join(" ")))
   }
   @rui.field(
     invalid=!error.is_empty(),
@@ -107,6 +113,9 @@ fn text_input_field_view(
         invalid=!error.is_empty(),
         attrs~,
       ),
+      ..description.map_or([], description => {
+        [@rui.field_description(id=description_id, description)]
+      }),
       ..if !error.is_empty() {
         [@rui.field_error(id=error_id, error)]
       },
@@ -128,6 +137,17 @@ fn dialog_close_button(label : String, autofocus? : Bool = false) -> Html {
 }
 
 ///|
+fn dialog_keyboard_hint_view(action : String) -> Html {
+  p(
+    style=[
+      "margin: 0", "width: 100%", "color: var(--rui-muted-foreground)", "font-size: 0.875rem",
+      "line-height: 1.5",
+    ],
+    [kbd("Enter"), span(" to \{action} · "), kbd("Esc"), span(" to cancel")],
+  )
+}
+
+///|
 fn dialog_confirm_footer_view(
   label~ : String,
   on_confirm~ : Cmd,
@@ -135,6 +155,7 @@ fn dialog_confirm_footer_view(
   autofocus? : Bool = false,
 ) -> Html {
   @rui.dialog_footer([
+    dialog_keyboard_hint_view("confirm"),
     dialog_close_button("Cancel"),
     @rui.button(
       style=[UI_FONT_STYLE],

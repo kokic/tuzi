@@ -48,7 +48,7 @@ fn bookmark_item(path : Path, emit : Emit[Msg]) -> Html {
   } else {
     path.basename()
   }
-  @rui.item(variant=ItemOutline, [
+  @rui.item(variant=ItemOutline, attrs=@html.Attrs::build().role("listitem"), [
     @rui.item_content(style=["min-width: 0"], [
       @rui.item_title(label),
       @rui.item_description(style=["overflow-wrap: anywhere"], path.to_string()),

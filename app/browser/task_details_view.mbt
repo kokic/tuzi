@@ -14,10 +14,18 @@ fn task_details_dialog(tasks : Array[Task], id : Int, emit : Emit[Msg]) -> Html 
     ])
   }
   let active = task.status.is_active()
+  let description = if active {
+    Some(
+      "This operation continues on the server when this window is hidden or the page is refreshed.",
+    )
+  } else {
+    None
+  }
   modal(
     "Task details",
     emit,
     size=Wide,
+    description?,
     [
       @rui.item([
         @rui.item_content([
@@ -27,13 +35,6 @@ fn task_details_dialog(tasks : Array[Task], id : Int, emit : Emit[Msg]) -> Html 
         @rui.item_footer(task_status_view(task.status, task.description)),
       ]),
       ..task_details(task),
-      ..if active {
-        [
-          @rui.dialog_description(
-            "This operation continues on the server when this window is hidden or the page is refreshed.",
-          ),
-        ]
-      },
       dialog_close_footer_view(label=if active { "Hide" } else { "Close" }),
     ],
   )

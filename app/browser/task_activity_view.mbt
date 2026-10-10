@@ -65,6 +65,7 @@ fn activity_item_view(task : Task, emit : Emit[Msg]) -> Html {
   ]
   @rui.item(
     variant=ItemOutline,
+    attrs=@html.Attrs::build().role("listitem"),
     style=["flex-wrap: nowrap"],
     [
       @rui.item_media(

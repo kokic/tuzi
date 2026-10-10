@@ -12,19 +12,28 @@ fn InfoContext::fields_view(
       [
         info_row(
           "Path",
-          span(
+          @rui.button(
+            variant=Link,
+            style=[
+              UI_FONT_STYLE,
+              "height: auto",
+              "max-width: 100%",
+              "padding: 0",
+              "white-space: normal",
+              "text-align: start",
+              "font-weight: inherit",
+            ],
             title="Click to copy path",
-            attrs=@html.Attrs::build().on_click(_ => {
-              @clipboard.copy(
-                Text(path),
-                copied=emit(Toast("Path copied", Some(path), @rui.ToastSuccess)),
-                failed=error => {
-                  emit(
-                    Toast("Clipboard error", Some(error), @rui.ToastDestructive),
-                  )
-                },
-              )
-            }),
+            attrs=@html.Attrs::build().aria_label("Copy path: \{path}"),
+            on_click=@clipboard.copy(
+              Text(path),
+              copied=emit(Toast("Path copied", Some(path), @rui.ToastSuccess)),
+              failed=error => {
+                emit(
+                  Toast("Clipboard error", Some(error), @rui.ToastDestructive),
+                )
+              },
+            ),
             path,
           ),
         ),

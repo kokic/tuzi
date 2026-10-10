@@ -67,6 +67,7 @@ fn pane_filter_view(
                 "line-height: inherit",
               ],
               title="Clear filter",
+              attrs=@html.Attrs::build().aria_label("Clear filter"),
               on_click=emit(FilterChanged(idx, "")),
               "×",
             ),
