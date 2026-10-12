@@ -27,6 +27,12 @@ fn routes(
         list_entries(request.path, include_markers=request.include_markers)
       })
     })
+    ..post("/api/entry", (req, res) => {
+      respond(res, () => {
+        let request : @shared.DirectoryRequest = decode_request(req)
+        read_entry(request.path, include_markers=false)
+      })
+    })
     ..post("/api/link", (req, res) => {
       respond(res, () => {
         let request : @shared.DirectoryRequest = decode_request(req)

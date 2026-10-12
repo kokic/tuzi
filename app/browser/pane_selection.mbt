@@ -47,13 +47,6 @@ fn Pane::selected_items(pane : Pane, filter? : String) -> Array[Entry] {
 }
 
 ///|
-fn Pane::selected_entry(pane : Pane, filter? : String) -> Entry? {
-  let items = pane.selected_items(filter?)
-  guard items.length() == 1 else { return None }
-  items.get(0)
-}
-
-///|
 fn Pane::move_cursor(pane : Pane, filter? : String, delta : Int) -> Pane {
   let data = pane.view_data(filter?)
   let entries = data.entries

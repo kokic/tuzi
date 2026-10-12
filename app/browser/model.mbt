@@ -41,6 +41,7 @@ priv enum Msg {
   InfoOpen
   OpenWith(OpenTarget, String)
   EntryAction(PaneSide, Int, String, Msg)
+  BreadcrumbAction(OpenTarget, Msg)
   TransferSelection(TransferKind)
   CopyPaths
   MarkdownEvent(MarkdownMsg)

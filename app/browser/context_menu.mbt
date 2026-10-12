@@ -36,25 +36,18 @@ extern "js" fn dispatch_entry_context_menu(trigger : @dom.Element) -> Unit =
 ///|
 fn entry_menu_content(
   scope : @rui.ContextMenuScope,
-  item : EntryRow,
-  idx : PaneSide,
+  target : OpenTarget,
   openers : @tuzi.OpenRegistry?,
   emit : Emit[Msg],
+  action_emit : Emit[Msg],
+  transfer_disabled~ : Bool,
 ) -> Html {
-  let target : OpenTarget = {
-    pane: idx,
-    path: Path(item.directory).join(Path("./\{item.entry.name}")),
-    entry: item.entry,
-  }
   let open_items = openers.map_or([], registry => {
     open_with_items(scope, target, registry, emit)
   })
-  // Resolve the clicked file and run the existing action in one model update.
-  let action_emit = emit.map(action => {
-    EntryAction(idx, item.view_id, item.entry.name, action)
-  })
+  let root = target.path.dirname() == target.path
   let actions : Array[(String, String, Msg)] = [
-    ..if !item.entry.is_link() {
+    ..if !target.entry.is_link() {
       [
         ("Copy to other pane", "c", TransferSelection(Copy)),
         ("Move to other pane", "m", TransferSelection(Move)),
@@ -62,7 +55,7 @@ fn entry_menu_content(
       ]
     },
     ("Copy path", "y", CopyPaths),
-    ..if !item.entry.is_link() {
+    ..if !target.entry.is_link() {
       [("Compress to ZIP…", "z", ZipOpen)]
     },
     ("Information", "i", InfoOpen),
@@ -81,7 +74,8 @@ fn entry_menu_content(
         let (label, shortcut, message) = action
         @rui.context_menu_item(
           scope,
-          disabled=item.transfer_disabled && message is TransferSelection(_),
+          disabled=(transfer_disabled && message is TransferSelection(_)) ||
+            (root && message is (TransferSelection(_) | RenameOpen | ZipOpen)),
           on_select=action_emit(message),
           [span(label), @rui.context_menu_shortcut(kbd(shortcut))],
         )
@@ -90,6 +84,7 @@ fn entry_menu_content(
       @rui.context_menu_item(
         scope,
         destructive=true,
+        disabled=root,
         on_select=action_emit(DeleteOpen),
         [span("Delete…"), @rui.context_menu_shortcut(kbd("d"))],
       ),
@@ -125,4 +120,58 @@ fn Model::execute_entry_action(
   }
   let model = { ..model, active: idx, panes: set_pane(model.panes, idx, pane), }
   model.update_message(action, emit, toast_send)
+}
+
+///|
+/// Capture explicit targets so breadcrumb actions never depend on row selection.
+priv struct FileActionContext {
+  items : Array[OpenTarget]
+  cursor : OpenTarget?
+  directory : Path
+  selection : SelectionSubmission?
+}
+
+///|
+fn Model::file_action_context(model : Model) -> FileActionContext {
+  let pane = model.pane_at(model.active)
+  let target = (entry : Entry) => OpenTarget::{
+    pane: model.active,
+    path: pane.path.join(Path("./\{entry.name}")),
+    entry,
+  }
+  let items = pane.selected_items(filter?=model.entry_filter(model.active))
+  {
+    items: items.map(target),
+    cursor: pane
+    .cursor_entry(filter?=model.entry_filter(model.active))
+    .map(target),
+    directory: pane.path,
+    selection: Some({
+      pane: model.active,
+      view_id: pane.id,
+      selected: pane.selected,
+      names: items.map(item => item.name),
+    }),
+  }
+}
+
+///|
+fn Model::execute_file_action(
+  model : Model,
+  action : Msg,
+  context : FileActionContext,
+  emit : Emit[Msg],
+) -> (Model, Cmd) {
+  match action {
+    DeleteOpen => (model.open_delete_dialog(context), @rabbita.none)
+    InfoOpen => model.open_info_dialog(context, emit)
+    TransferSelection(kind) =>
+      model.transfer_selection_to_other_pane(kind, context, emit)
+    CopyPaths => model.copy_selected_paths_to_clipboard(context, emit)
+    RenameOpen => model.open_rename_dialog(context, emit)
+    ZipOpen => (model.open_archive_dialog(context), @rabbita.none)
+    NewEntryOpen =>
+      (model.open_new_entry_dialog(context.directory), @rabbita.none)
+    _ => (model, @rabbita.none)
+  }
 }

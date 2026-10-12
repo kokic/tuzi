@@ -41,13 +41,30 @@ fn pane_stack_view(
             },
             by=path => path.to_string(),
           )
-        let content = pane.view6(filter, sort, active, rows, drive_menu, (
+        let breadcrumbs = pane
+          .map(pane => (pane.path, pane.request_id))
+          .switch_by(
+            listing => {
+              let (path, _) = listing
+              breadcrumbs_view(
+                path,
+                id,
+                idx,
+                emit,
+                openers,
+                other_path,
+                drive_menu=if supports_drives { Some(drive_menu) } else { None },
+              )
+            },
+            by=listing => ToJson::to_json(listing).stringify(),
+          )
+        let content = pane.view6(filter, sort, active, rows, breadcrumbs, (
           pane,
           filter,
           sort,
           active,
           rows,
-          drive_menu,
+          breadcrumbs,
         ) => {
           pane.pane_view(
             pane.view_data(filter?),
@@ -57,7 +74,7 @@ fn pane_stack_view(
             active,
             filter,
             rows,
-            drive_menu=if supports_drives { Some(drive_menu) } else { None },
+            breadcrumbs,
           )
         })
         let visible = visible_id.map(current => current == id)

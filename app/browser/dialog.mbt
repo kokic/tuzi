@@ -1,29 +1,35 @@
 ///|
 /// Capture operation targets when opening, so later pane updates cannot retarget it.
-fn Model::open_delete_dialog(model : Model) -> Model {
-  let pane = model.pane_at(model.active)
-  let items = pane.selected_items(filter?=model.entry_filter(model.active))
+fn Model::open_delete_dialog(
+  model : Model,
+  context : FileActionContext,
+) -> Model {
+  let items = context.items
   guard !items.is_empty() else { return model }
   {
     ..model,
     dialog: DeleteConfirm(
-      directory=pane.path,
-      names=items.map(item => item.name),
+      directory=items[0].path.dirname(),
+      names=items.map(item => item.entry.name),
     ),
     dialog_error: "",
   }
 }
 
 ///|
-fn Model::open_rename_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
-  let pane = model.pane_at(model.active)
-  guard pane.selected_entry(filter?=model.entry_filter(model.active))
-    is Some(item) else {
+fn Model::open_rename_dialog(
+  model : Model,
+  context : FileActionContext,
+  emit : Emit[Msg],
+) -> (Model, Cmd) {
+  guard context.items.length() == 1 else {
     return (
       model,
       emit(Toast("Select one item to rename", None, @rui.ToastDefault)),
     )
   }
+  let target = context.items[0]
+  let item = target.entry
   guard !item.is_link() else {
     return (
       model,
@@ -40,7 +46,7 @@ fn Model::open_rename_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
     {
       ..model,
       dialog: RenameInput(
-        directory=pane.path,
+        directory=target.path.dirname(),
         original=item.name,
         input=item.name,
       ),
@@ -51,16 +57,21 @@ fn Model::open_rename_dialog(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
 }
 
 ///|
-fn Model::open_archive_dialog(model : Model) -> Model {
-  let pane = model.pane_at(model.active)
-  let items = pane.selected_items(filter?=model.entry_filter(model.active))
+fn Model::open_archive_dialog(
+  model : Model,
+  context : FileActionContext,
+) -> Model {
+  let items = context.items
   guard !items.is_empty() else { return model }
   {
     ..model,
     dialog: ZipInput(
-      directory=pane.path,
-      names=items.map(item => item.name),
-      input=default_archive_name(items, pane.path),
+      directory=items[0].path.dirname(),
+      names=items.map(item => item.entry.name),
+      input=default_archive_name(
+        items.map(item => item.entry),
+        items[0].path.dirname(),
+      ),
       level=6,
     ),
     dialog_error: "",
@@ -68,12 +79,8 @@ fn Model::open_archive_dialog(model : Model) -> Model {
 }
 
 ///|
-fn Model::open_new_entry_dialog(model : Model) -> Model {
-  {
-    ..model,
-    dialog: NewEntryInput(directory=model.pane_at(model.active).path, input=""),
-    dialog_error: "",
-  }
+fn Model::open_new_entry_dialog(model : Model, directory : Path) -> Model {
+  { ..model, dialog: NewEntryInput(directory~, input=""), dialog_error: "", }
 }
 
 ///|

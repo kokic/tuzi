@@ -39,31 +39,27 @@ fn Model::clear_accepted_selection(
 fn Model::transfer_selection_to_other_pane(
   model : Model,
   kind : TransferKind,
+  context : FileActionContext,
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
-  let src = model.pane_at(model.active)
   let dst = model.pane_at(model.active.other())
-  guard src.path != dst.path else { return (model, @rabbita.none) }
-  let items = src.selected_items(filter?=model.entry_filter(model.active))
+  let items = context.items
+  guard items.all(item => item.path.dirname() != dst.path) else {
+    return (model, @rabbita.none)
+  }
   guard !items.is_empty() else { return (model, @rabbita.none) }
-  guard !(kind is Move && items.any(entry => entry.is_link())) else {
+  guard !(kind is Move && items.any(item => item.entry.is_link())) else {
     return (
       model,
       emit(Toast("Edit the link path in Information", None, @rui.ToastDefault)),
     )
   }
-  let operations = items.map(entry => {
-    let from = src.path.join(Path("./\{entry.name}"))
-    let to = dst.path.join(Path("./\{entry.name}"))
-    kind.operation(from, to)
+  let operations = items.map(item => {
+    let to = dst.path.join(Path("./\{item.entry.name}"))
+    kind.operation(item.path, to)
   })
   model
-  .start_file_operations(operations, emit, selection={
-    pane: model.active,
-    view_id: src.id,
-    selected: src.selected,
-    names: items.map(item => item.name),
-  })
+  .start_file_operations(operations, emit, selection?=context.selection)
   .unwrap_or((model, @rabbita.none))
 }
 

@@ -134,7 +134,18 @@ fn entry_context_menu(
         style=trigger_style,
         children,
       ),
-      entry_menu_content(scope, item, idx, openers, emit),
+      entry_menu_content(
+        scope,
+        {
+          pane: idx,
+          path: Path(item.directory).join(Path("./\{entry.name}")),
+          entry,
+        },
+        openers,
+        emit,
+        emit.map(action => EntryAction(idx, item.view_id, entry.name, action)),
+        transfer_disabled=item.transfer_disabled,
+      ),
     ])
   })
 }

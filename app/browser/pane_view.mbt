@@ -33,7 +33,7 @@ fn Pane::pane_view(
   active : Bool,
   filter : String?,
   rows : Html,
-  drive_menu~ : Html?,
+  breadcrumbs : Html,
 ) -> Html {
   let sort_label = match sort {
     Name => "name"
@@ -41,13 +41,7 @@ fn Pane::pane_view(
     Time => "time"
   }
   div(id="pane-\{idx.index()}-view-\{pane.id}", style=pane_style(active), {
-    "header": breadcrumbs_view(
-      pane.path,
-      idx,
-      emit,
-      pane_header_style(active),
-      drive_menu~,
-    ),
+    "header": div(class="phead", style=pane_header_style(active), breadcrumbs),
     "sort": div(
       style=[..pane_header_style(active), "justify-content: flex-end"],
       @rui.button(

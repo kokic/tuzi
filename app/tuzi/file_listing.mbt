@@ -13,40 +13,48 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
   while dir.next(include_hidden=true, include_special=false) is Some(entry) {
     jobs.push(() => {
       let full = path.join(Path("./\{entry.name}"))
-      let full_path = full.to_native()
-      let kind = Ok(read_entry_kind(full)) catch {
+      Some(read_entry(full, include_markers~)) catch {
         // The entry may disappear after directory enumeration.
-        @os_error.OSError(_, ..) as error if error.is_ENOENT() => return None
-        @os_error.OSError(_, ..) as error => Err(api_failure(error))
+        @os_error.OSError(_, ..) as error if error.is_ENOENT() => None
         error => raise error
       }
-      let is_dir = kind is Ok(kind) && kind.is_dir()
-      let size = {
-        guard !is_dir else { Ok(None) }
-        // Metadata calls never open FIFOs/devices as input streams.
-        Ok(Some(@async_fs.file_size(full_path))) catch {
-          error => Err(api_failure(error))
-        }
-      }
-      let mtime = Ok(@fsops.to_unix_seconds(@async_fs.mtime(full_path).0)) catch {
-        error => Err(api_failure(error))
-      }
-      let marker = {
-        guard include_markers else { Ok("") }
-        match kind {
-          Err(error) => Err(error)
-          Ok(_) => {
-            guard is_dir else { Ok("") }
-            Ok(detect_marker(full)) catch {
-              error => Err(api_failure(error))
-            }
-          }
-        }
-      }
-      Some({ name: entry.name, kind, size, mtime, marker, })
     })
   }
   @async.all(jobs[:], max_concurrent=8).filter_map(entry => entry)
+}
+
+///|
+async fn read_entry(path : Path, include_markers~ : Bool) -> Entry {
+  let full_path = path.to_native()
+  let kind = Ok(read_entry_kind(path)) catch {
+    @os_error.OSError(_, ..) as error if error.is_ENOENT() => raise error
+    @os_error.OSError(_, ..) as error => Err(api_failure(error))
+    error => raise error
+  }
+  let is_dir = kind is Ok(kind) && kind.is_dir()
+  let size = {
+    guard !is_dir else { Ok(None) }
+    // Metadata calls never open FIFOs/devices as input streams.
+    Ok(Some(@async_fs.file_size(full_path))) catch {
+      error => Err(api_failure(error))
+    }
+  }
+  let mtime = Ok(@fsops.to_unix_seconds(@async_fs.mtime(full_path).0)) catch {
+    error => Err(api_failure(error))
+  }
+  let marker = {
+    guard include_markers else { Ok("") }
+    match kind {
+      Err(error) => Err(error)
+      Ok(_) => {
+        guard is_dir else { Ok("") }
+        Ok(detect_marker(path)) catch {
+          error => Err(api_failure(error))
+        }
+      }
+    }
+  }
+  { name: path.basename(), kind, size, mtime, marker, }
 }
 
 ///|

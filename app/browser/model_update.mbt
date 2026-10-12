@@ -47,18 +47,33 @@ fn Model::update_message(
     SortCycle(idx) => (model.cycle_sort_order(idx), @rabbita.none)
     ThemeToggle => model.toggle_theme()
     FilterFocus(idx, focused) => model.update_filter_focus(idx, focused)
-    DeleteOpen => (model.open_delete_dialog(), @rabbita.none)
-    InfoOpen => model.open_info_dialog(emit)
+    DeleteOpen
+    | InfoOpen
+    | TransferSelection(_)
+    | CopyPaths
+    | RenameOpen
+    | ZipOpen
+    | NewEntryOpen as action =>
+      model.execute_file_action(action, model.file_action_context(), emit)
+    BreadcrumbAction(target, action) => {
+      let model = { ..model, active: target.pane, }
+      model.execute_file_action(
+        action,
+        {
+          items: [target],
+          cursor: Some(target),
+          directory: target.path,
+          selection: None,
+        },
+        emit,
+      )
+    }
     OpenWith(target, id) => model.execute_opener(target, id, emit)
     EntryAction(idx, view_id, name, action) =>
       model.execute_entry_action(idx, view_id, name, action, emit, toast_send)
-    TransferSelection(kind) =>
-      model.transfer_selection_to_other_pane(kind, emit)
-    CopyPaths => model.copy_selected_paths_to_clipboard(emit)
     MarkdownEvent(msg) => (model.update_markdown(msg), @rabbita.none)
     GitEvent(msg) => model.update_git(msg, emit)
     TaskEvent(msg) => model.update_tasks(msg, emit)
-    RenameOpen => model.open_rename_dialog(emit)
     LinkTargetLoaded(id, result) =>
       (model.receive_link_target(id, result), @rabbita.none)
     LinkPathInput(value) =>
@@ -71,11 +86,9 @@ fn Model::update_message(
         model.update_link_fields(fields => { ..fields, target: Some(value), }),
         @rabbita.none,
       )
-    ZipOpen => (model.open_archive_dialog(), @rabbita.none)
     ZipLevelChanged(value) => model.set_archive_compression_level(value)
     ActivityOpen =>
       ({ ..model, dialog: Activity, dialog_error: "", }, @rabbita.none)
-    NewEntryOpen => (model.open_new_entry_dialog(), @rabbita.none)
     NewEntrySubmit(kind) => model.submit_dialog(emit, new_entry_kind=kind)
     HelpOpen => ({ ..model, dialog: Help, dialog_error: "", }, @rabbita.none)
     FilterChanged(idx, text) => (model.with_filter(idx, text), @rabbita.none)

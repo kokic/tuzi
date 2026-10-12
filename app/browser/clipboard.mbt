@@ -1,15 +1,11 @@
 ///|
 fn Model::copy_selected_paths_to_clipboard(
   model : Model,
+  context : FileActionContext,
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
-  let pane = model.pane_at(model.active)
-  let items = pane.selected_items(filter?=model.entry_filter(model.active))
-  guard !items.is_empty() else { return (model, @rabbita.none) }
-  let full = items
-    .iter()
-    .map(entry => pane.path.join(Path("./\{entry.name}")).to_string())
-    .join("\n")
+  guard !context.items.is_empty() else { return (model, @rabbita.none) }
+  let full = context.items.iter().map(item => item.path.to_string()).join("\n")
   (
     model,
     @clipboard.copy(
