@@ -10,6 +10,7 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
       Help => help_dialog(emit)
       Activity => activity
       Bookmarks(side) => bookmarks_dialog(model.bookmarks, side, emit)
+      Goto(context) => goto_dialog(context, model.dialog_error, emit)
       Progress(batch) => progress_dialog(batch, emit)
       TaskDetails(id) => task_details_dialog(model.jobs.items, id, emit)
       TaskOutput(id) => task_output_dialog(model.jobs.items, id, emit)

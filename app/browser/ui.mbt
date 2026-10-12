@@ -153,6 +153,7 @@ fn dialog_confirm_footer_view(
   on_confirm~ : Cmd,
   variant? : @rui.ButtonVariant = Default,
   autofocus? : Bool = false,
+  disabled? : Bool = false,
 ) -> Html {
   @rui.dialog_footer([
     dialog_keyboard_hint_view("confirm"),
@@ -161,6 +162,7 @@ fn dialog_confirm_footer_view(
       style=[UI_FONT_STYLE],
       variant~,
       autofocus~,
+      disabled~,
       on_click=on_confirm,
       label,
     ),

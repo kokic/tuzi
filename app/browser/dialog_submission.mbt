@@ -65,6 +65,7 @@ fn Dialog::file_operations(
     | Help
     | Activity
     | Bookmarks(_)
+    | Goto(_)
     | TaskDetails(_)
     | TaskOutput(_)
     | Markdown(_)
@@ -83,6 +84,7 @@ fn Model::submit_dialog(
   new_entry_kind? : NewEntryKind = Folder,
 ) -> (Model, Cmd) {
   match model.dialog {
+    Goto(context) => return model.submit_goto(context, emit)
     Info(context) => return model.submit_info_link(context, emit)
     GitInfo(context) => return model.submit_info_link(context.entry, emit)
     GitRenameInput(context~, reference~, input~) =>

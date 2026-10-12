@@ -44,14 +44,24 @@ fn Pane::pane_view(
     "header": div(class="phead", style=pane_header_style(active), breadcrumbs),
     "sort": div(
       style=[..pane_header_style(active), "justify-content: flex-end"],
-      @rui.button(
-        variant=Ghost,
-        size=Xs,
-        style=[UI_FONT_STYLE, "flex: none"],
-        title="Change sort order",
-        on_click=emit(SortCycle(idx)),
-        sort_label,
-      ),
+      [
+        @rui.button(
+          variant=Ghost,
+          size=Xs,
+          style=[UI_FONT_STYLE, "flex: none"],
+          title="Go to directory",
+          on_click=emit(GotoEvent(Open(idx, pane.path))),
+          "goto",
+        ),
+        @rui.button(
+          variant=Ghost,
+          size=Xs,
+          style=[UI_FONT_STYLE, "flex: none"],
+          title="Change sort order",
+          on_click=emit(SortCycle(idx)),
+          sort_label,
+        ),
+      ],
     ),
     "status": fragment(
       match pane.loading {

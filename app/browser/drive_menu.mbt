@@ -110,6 +110,7 @@ fn drive_menu_view(
           fragment([
             @rui.dropdown_menu_trigger(
               scope,
+              class="breadcrumb-path",
               variant=Ghost,
               size=Xs,
               aria_label="Switch storage location",

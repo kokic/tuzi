@@ -43,6 +43,7 @@ fn Model::update_message(
     PaneEvent(msg) => model.update_panes(msg, emit)
     SyncPanePath => model.sync_other_pane_path()
     BookmarkEvent(msg) => model.update_bookmarks(msg, emit)
+    GotoEvent(msg) => model.update_goto(msg)
     Key(kb) => model.handle_keyboard_event(kb, emit)
     SortCycle(idx) => (model.cycle_sort_order(idx), @rabbita.none)
     ThemeToggle => model.toggle_theme()

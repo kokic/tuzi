@@ -27,6 +27,7 @@ fn breadcrumbs_view(
             @html.Attrs::build()
           }
           let button = @rui.button(
+            class="breadcrumb-path",
             variant=Ghost,
             size=Xs,
             title=part,

@@ -86,6 +86,7 @@ fn Model::open_new_entry_dialog(model : Model, directory : Path) -> Model {
 ///|
 fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
   match self {
+    Goto(context) => Goto({ ..context, input, pending: false, })
     RenameInput(directory~, original~, ..) =>
       RenameInput(directory~, original~, input~)
     ZipInput(directory~, names~, level~, ..) =>

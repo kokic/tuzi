@@ -34,6 +34,7 @@ priv enum Msg {
   PaneEvent(PaneMsg)
   SyncPanePath
   BookmarkEvent(BookmarkMsg)
+  GotoEvent(GotoMsg)
   Key(@dom.KeyboardEvent)
   SortCycle(PaneSide)
   ThemeToggle

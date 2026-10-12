@@ -10,6 +10,7 @@ priv enum Dialog {
   Help
   Activity
   Bookmarks(PaneSide)
+  Goto(GotoContext)
   TaskDetails(Int)
   TaskOutput(Int)
   Info(InfoContext)

@@ -57,6 +57,13 @@ fn Model::handle_keyboard_event(
         }
         "a" if !kb.repeat() && !kb.is_composing() =>
           (model, model.open_cursor_context_menu())
+        "g" if !kb.repeat() && !kb.is_composing() =>
+          (
+            model,
+            emit(
+              GotoEvent(Open(model.active, model.pane_at(model.active).path)),
+            ),
+          )
         "d" => (model, emit(DeleteOpen))
         "i" => (model, emit(InfoOpen))
         "r" => (model, emit(RenameOpen))

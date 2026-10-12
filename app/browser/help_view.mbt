@@ -46,6 +46,7 @@ fn help_lines() -> Array[Html] {
     ("s", "Cycle the active pane's sort order"),
     ("y", "Copy selected items' full paths"),
     ("f", "Focus the active pane's file filter"),
+    ("g", "Go to a directory in the active pane"),
     ("?", "Open Help"),
   ]
   binds.map(pair => {
@@ -64,7 +65,7 @@ fn help_sections() -> Array[Html] {
       "Browsing and selection", "Click an item to activate its pane and move the cursor. Double-click its name to open it; use the checkboxes or Space to select multiple items. Copy, move, delete, ZIP compression, and path copying use selected items, or the cursor item when nothing is selected. Rename requires one item. Information and opening use the cursor item. File shortcuts apply while browsing, rather than while typing in an input or using a dialog or menu.",
     ),
     (
-      "Directory paths", "Click a directory name in the path at the top of a pane to navigate to it. Click the current directory name to reload it. Where storage locations are available, click or right-click the root dropdown to choose a drive or mount. Command → View: Synchronize to Current Panel Path opens the active pane's directory in the other pane. Your last directories and active pane are restored on the next launch without an explicit startup path.",
+      "Directory paths", "Click a directory name in the path at the top of a pane to navigate to it. Click the current directory name to reload it. Press g to enter an absolute or relative directory path in the active pane, or click goto before a pane's sort button to navigate that pane. Relative paths start from the chosen pane's directory. Invalid or unreadable paths keep the dialog open with an error. Where storage locations are available, click or right-click the root dropdown to choose a drive or mount. Command → View: Synchronize to Current Panel Path opens the active pane's directory in the other pane. Your last directories and active pane are restored on the next launch without an explicit startup path.",
     ),
     (
       "Filtering and sorting", "Type in the filter at the bottom of a pane to match file names; filtering is case-sensitive. Click × to clear it. Esc leaves the input without clearing the filter. Operations only include selected items visible under the filter. Click a pane's sort button, or press s in the active pane, to cycle name → size → time. Folders appear first; sizes sort largest first and dates newest first. Each pane keeps its own filter and sort order.",
