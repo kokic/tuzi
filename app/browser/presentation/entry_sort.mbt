@@ -26,7 +26,7 @@ pub fn SortMode::compare_entries(
   sort : SortMode,
   left : Entry,
   right : Entry,
-) -> Int {
+) -> Int32 {
   guard left.is_dir() == right.is_dir() else {
     guard left.is_dir() else { return 1 }
     return -1

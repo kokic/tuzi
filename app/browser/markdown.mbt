@@ -12,7 +12,7 @@ priv enum MarkdownContent {
 
 ///|
 priv struct MarkdownContext {
-  id : Int
+  id : Int32
   path : Path
   view : MarkdownView
   content : MarkdownContent
@@ -20,7 +20,7 @@ priv struct MarkdownContext {
 
 ///|
 priv enum MarkdownMsg {
-  Loaded(Int, Result[String, String])
+  Loaded(Int32, Result[String, String])
   ViewChanged(MarkdownView)
 }
 

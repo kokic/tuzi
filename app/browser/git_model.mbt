@@ -1,10 +1,10 @@
 ///|
 priv enum GitMsg {
-  GitRefresh(Int)
-  GitLoaded(Int, Int, Result[@tuzi.GitInfo, RequestFailure])
-  GitSelectBranch(Int, String)
-  GitRun(Int, GitOperation)
-  GitRenameOpen(Int)
+  GitRefresh(Int32)
+  GitLoaded(Int32, Int32, Result[@tuzi.GitInfo, RequestFailure])
+  GitSelectBranch(Int32, String)
+  GitRun(Int32, GitOperation)
+  GitRenameOpen(Int32)
 }
 
 ///|
@@ -17,7 +17,7 @@ priv struct GitContext {
 priv struct GitPanel {
   info : @tuzi.GitInfo?
   loading : Bool
-  request_id : Int
+  request_id : Int32
   selected : String
   error : String
 } derive(Eq)

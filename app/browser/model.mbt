@@ -19,11 +19,11 @@ priv struct Model {
   editing : Bool
   dialog : Dialog
   // Late submission replies only update the dialog that initiated them.
-  dialog_revision : Int
+  dialog_revision : Int32
   // Validation message shown inside the open dialog; cleared on input/cancel.
   dialog_error : String
   jobs : TaskState
-  next_info_id : Int
+  next_info_id : Int32
 } derive(Eq)
 
 ///|
@@ -41,7 +41,7 @@ priv enum Msg {
   HelpOpen
   InfoOpen
   OpenWith(OpenTarget, String)
-  EntryAction(PaneSide, Int, String, Msg)
+  EntryAction(PaneSide, Int32, String, Msg)
   BreadcrumbAction(OpenTarget, Msg)
   TransferSelection(TransferKind)
   CopyPaths
@@ -50,7 +50,7 @@ priv enum Msg {
   TaskEvent(TaskMsg)
   DeleteOpen
   RenameOpen
-  LinkTargetLoaded(Int, Result[Path, RequestFailure])
+  LinkTargetLoaded(Int32, Result[Path, RequestFailure])
   LinkPathInput(String)
   LinkTargetInput(String)
   ZipOpen

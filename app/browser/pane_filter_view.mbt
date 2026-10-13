@@ -2,7 +2,7 @@
 fn PaneViewData::entry_details_view(
   data : PaneViewData,
   idx : PaneSide,
-  view_id : Int,
+  view_id : Int32,
   filter : String,
   emit : Emit[Msg],
 ) -> Html {
@@ -18,7 +18,7 @@ fn PaneViewData::entry_details_view(
 ///|
 fn pane_filter_view(
   idx : PaneSide,
-  view_id : Int,
+  view_id : Int32,
   filter : String,
   emit : Emit[Msg],
 ) -> Html {

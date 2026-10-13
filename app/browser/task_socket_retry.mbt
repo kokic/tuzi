@@ -3,7 +3,7 @@
 /// retry, and a failed connection backs off up to thirty seconds.
 fn Model::retry_task_socket(
   model : Model,
-  generation : Int,
+  generation : Int32,
   error : String,
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
@@ -38,7 +38,7 @@ fn Model::retry_task_socket(
 ///|
 fn Model::reconnect_tasks(
   model : Model,
-  generation : Int,
+  generation : Int32,
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
   let connection = model.jobs.connection
@@ -63,7 +63,7 @@ fn Model::reconnect_tasks(
 /// watchdog per connection rather than scheduling a timer for every message.
 fn Model::check_task_connection(
   model : Model,
-  generation : Int,
+  generation : Int32,
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
   let connection = model.jobs.connection

@@ -1,8 +1,8 @@
 ///|
 priv struct EntryRow {
-  view_id : Int
+  view_id : Int32
   directory : String
-  row : Int
+  row : Int32
   entry : Entry
   selected : Bool
   is_cursor : Bool

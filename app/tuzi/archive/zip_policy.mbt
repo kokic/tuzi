@@ -4,7 +4,7 @@ pub suberror ArchiveError {
   EmptySelection
   UnsupportedEntry(String)
   OutputIsInput(String)
-  InvalidCompressionLevel(Int)
+  InvalidCompressionLevel(Int32)
 }
 
 ///|
@@ -34,7 +34,7 @@ fn validate_archive_name(name : String) -> Unit raise ArchiveError {
 pub fn validate_zip_selection(
   names : Array[String],
   output_name : String,
-  level~ : Int,
+  level~ : Int32,
 ) -> Unit raise {
   guard level >= 0 && level <= 9 else { raise InvalidCompressionLevel(level) }
   @fsops.validate_entry_name(output_name)

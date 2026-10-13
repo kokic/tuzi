@@ -1,6 +1,6 @@
 ///|
 fn git_branch_select(
-  context_id : Int,
+  context_id : Int32,
   panel : GitPanel,
   info : @tuzi.GitInfo,
   busy : Bool,

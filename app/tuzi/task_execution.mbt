@@ -29,7 +29,7 @@ fn TaskService::submit(
   prepared : Array[Result[PreparedTask, @shared.ApiFailure]],
   group : @async.TaskGroup[Unit],
   log : Bool,
-) -> Array[@shared.ApiResponse[Int]] raise {
+) -> Array[@shared.ApiResponse[Int32]] raise {
   let results = prepared.map(result => {
     let task = match result {
       Ok(task) => task

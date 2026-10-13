@@ -2,7 +2,7 @@
 priv enum ProgressState {
   Submitting
   Rejected(@tuzi.ApiFailure)
-  Tracking(Int, TaskStatus?)
+  Tracking(Int32, TaskStatus?)
 } derive(Eq)
 
 ///|
@@ -55,7 +55,7 @@ fn ProgressBatch::submitted(
 ///|
 fn ProgressState::receive(
   self : ProgressState,
-  statuses : Map[Int, TaskStatus],
+  statuses : Map[Int32, TaskStatus],
 ) -> ProgressState {
   guard self is Tracking(id, _) else { return self }
   if statuses.get(id) is Some(status) {

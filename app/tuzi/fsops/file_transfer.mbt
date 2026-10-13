@@ -51,7 +51,7 @@ async fn copy_file(from : Path, to : Path) -> Unit {
 }
 
 ///|
-extern "C" fn is_cross_device_error(code : Int) -> Bool = "tuzi_is_cross_device_error"
+extern "C" fn is_cross_device_error(code : Int32) -> Bool = "tuzi_is_cross_device_error"
 
 ///|
 pub async fn move_entry(from : Path, to : Path) -> Unit {

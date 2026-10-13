@@ -1,7 +1,7 @@
 ///|
 fn breadcrumbs_view(
   path : Path,
-  view_id : Int,
+  view_id : Int32,
   idx : PaneSide,
   emit : Emit[Msg],
   openers : @tuzi.OpenRegistry?,

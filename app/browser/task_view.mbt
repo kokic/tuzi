@@ -15,7 +15,7 @@ fn task_indicator(status : TaskStatus) -> Html {
 }
 
 ///|
-fn task_output_view(message : String, label? : String = "Task output") -> Html {
+fn task_output_view(message : String, label~ : String = "Task output") -> Html {
   @rui.scroll_area(
     orientation=Horizontal,
     attrs=@html.Attrs::build().aria_label(label),

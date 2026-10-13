@@ -96,7 +96,7 @@ fn entry_menu_content(
 fn Model::execute_entry_action(
   model : Model,
   idx : PaneSide,
-  view_id : Int,
+  view_id : Int32,
   name : String,
   action : Msg,
   emit : Emit[Msg],

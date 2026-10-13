@@ -79,7 +79,7 @@ async fn remove_file_windows(
 /// Win32 error code on failure.
 #cfg(platform="windows")
 #borrow(path)
-extern "C" fn clear_file_readonly_attribute_raw(path : String) -> Int = "tuzi_clear_readonly"
+extern "C" fn clear_file_readonly_attribute_raw(path : String) -> Int32 = "tuzi_clear_readonly"
 
 ///|
 /// Returns whether the bit changed; propagates the original Win32 error code.

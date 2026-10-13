@@ -10,7 +10,11 @@ fn Task::history_output(task : Task) -> (String, String)? {
 }
 
 ///|
-fn task_output_dialog(tasks : Array[Task], id : Int, emit : Emit[Msg]) -> Html {
+fn task_output_dialog(
+  tasks : Array[Task],
+  id : Int32,
+  emit : Emit[Msg],
+) -> Html {
   guard tasks.iter().find_first(task => task.id == id) is Some(task) &&
     task.history_output() is Some((label, message)) else {
     return modal("Task output", emit, size=Wide, [

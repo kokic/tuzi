@@ -23,7 +23,7 @@ pub fn TaskStatus::is_active(self : TaskStatus) -> Bool {
 
 ///|
 pub(all) struct Task {
-  id : Int
+  id : Int32
   kind : TaskKind
   description : String
   status : TaskStatus
@@ -33,7 +33,7 @@ pub(all) struct Task {
 /// Complete task history for the current server session.
 pub(all) struct TaskSnapshot {
   session : String
-  revision : Int
+  revision : Int32
   tasks : Array[Task]
 } derive(Eq, ToJson, FromJson)
 
@@ -78,7 +78,7 @@ pub extend TaskSnapshot with FromJson::{from_json}
 /// Results correspond to submitted operations in order. Rejected items have no id.
 pub(all) struct TaskSubmission {
   session : String
-  results : Array[ApiResponse[Int]]
+  results : Array[ApiResponse[Int32]]
 } derive(ToJson, FromJson)
 
 ///|

@@ -13,7 +13,7 @@ pub(all) enum FileOperation {
     directory~ : Path,
     names~ : Array[String],
     output_name~ : String,
-    level~ : Int
+    level~ : Int32
   )
   Unzip(source~ : Path, destination~ : Path)
   CreateFile(parent~ : Path, name~ : String)

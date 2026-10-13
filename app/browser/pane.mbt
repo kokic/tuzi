@@ -8,24 +8,24 @@ priv enum PaneMsg {
   )
   ReloadPane(PaneSide)
   GotoPath(PaneSide, Path)
-  Click(PaneSide, Int)
-  DblClick(PaneSide, Int)
+  Click(PaneSide, Int32)
+  DblClick(PaneSide, Int32)
   Select(PaneSide, String)
 }
 
 ///|
 priv struct ListingTarget {
   pane : PaneSide
-  view_id : Int
-  request_id : Int
+  view_id : Int32
+  request_id : Int32
 }
 
 ///|
 priv struct Pane {
-  id : Int
+  id : Int32
   path : Path
   cursor : String?
-  request_id : Int
+  request_id : Int32
   loading : ListingState
   // Coalesce invalidations during a request into one subsequent reload.
   refresh_pending : Bool
@@ -44,7 +44,7 @@ priv enum ListingState {
 } derive(Eq)
 
 ///|
-fn Pane::initialize(path : Path, id? : Int = 0) -> Pane {
+fn Pane::initialize(path : Path, id~ : Int32 = 0) -> Pane {
   {
     id,
     path,

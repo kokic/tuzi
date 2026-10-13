@@ -3,7 +3,7 @@ let default_port : UInt16 = 4000
 
 ///|
 priv suberror PortError {
-  OutOfRange(UInt)
+  OutOfRange(UInt32)
 }
 
 ///|

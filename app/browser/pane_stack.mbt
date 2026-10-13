@@ -5,7 +5,7 @@ priv struct PaneStack {
   sort : SortMode
   current : Pane
   parents : Array[Pane]
-  next_id : Int
+  next_id : Int32
 } derive(Eq)
 
 ///|

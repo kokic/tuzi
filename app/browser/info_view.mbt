@@ -3,8 +3,8 @@ fn InfoContext::dialog(
   context : InfoContext,
   additional_content : Array[Html],
   emit : Emit[Msg],
-  expanded? : Bool = false,
-  error? : String = "",
+  expanded~ : Bool = false,
+  error~ : String = "",
 ) -> Html {
   let content = [
     ..if context.entry.kind is Ok(kind) &&

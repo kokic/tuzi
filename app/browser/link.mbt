@@ -43,7 +43,7 @@ fn Model::update_link_fields(
 ///|
 fn Model::receive_link_target(
   model : Model,
-  request_id : Int,
+  request_id : Int32,
   result : Result[Path, RequestFailure],
 ) -> Model {
   let context = match model.dialog {

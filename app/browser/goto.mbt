@@ -9,7 +9,7 @@ priv struct GotoContext {
 ///|
 priv enum GotoMsg {
   Open(PaneSide, Path)
-  Loaded(Int, Path, Bool, Result[Array[Entry], RequestFailure])
+  Loaded(Int32, Path, Bool, Result[Array[Entry], RequestFailure])
 }
 
 ///|

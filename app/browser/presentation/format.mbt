@@ -52,7 +52,7 @@ pub extend FormattedTimestamp with Show::{to_string, output}
 /// Format a Unix timestamp in UTC, optionally including seconds.
 pub fn format_timestamp(
   sec : Int64,
-  seconds? : Bool = false,
+  seconds~ : Bool = false,
 ) -> FormattedTimestamp {
   let days = floor_divide(sec, 86400L)
   let rem = sec - days * 86400L

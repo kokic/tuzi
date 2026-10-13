@@ -1,7 +1,7 @@
 ///|
 priv struct SelectionSubmission {
   pane : PaneSide
-  view_id : Int
+  view_id : Int32
   selected : Set[String]
   names : Array[String]
 }

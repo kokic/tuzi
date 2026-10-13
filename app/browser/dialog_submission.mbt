@@ -81,7 +81,7 @@ fn Dialog::file_operations(
 fn Model::submit_dialog(
   model : Model,
   emit : Emit[Msg],
-  new_entry_kind? : NewEntryKind = Folder,
+  new_entry_kind~ : NewEntryKind = Folder,
 ) -> (Model, Cmd) {
   match model.dialog {
     Goto(context) => return model.submit_goto(context, emit)

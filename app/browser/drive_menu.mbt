@@ -1,14 +1,14 @@
 ///|
 priv struct DriveMenuState {
   open : Bool
-  request_id : Int
+  request_id : Int32
   listing : Result[Array[Path], RequestFailure]?
 } derive(Eq)
 
 ///|
 priv enum DriveMenuMsg {
   SetOpen(Bool)
-  Loaded(Int, Result[Array[Path], RequestFailure])
+  Loaded(Int32, Result[Array[Path], RequestFailure])
 }
 
 ///|

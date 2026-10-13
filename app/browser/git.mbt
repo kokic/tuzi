@@ -68,7 +68,7 @@ fn Model::git_busy(model : Model, path : Path) -> Bool {
 ///|
 fn Model::run_git_operation(
   model : Model,
-  id : Int,
+  id : Int32,
   operation : GitOperation,
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
@@ -88,7 +88,7 @@ fn Model::run_git_operation(
 ///|
 fn Model::refresh_git(
   model : Model,
-  id : Int,
+  id : Int32,
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
   guard model.dialog is GitInfo(context) &&

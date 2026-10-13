@@ -42,8 +42,8 @@ fn modal(
   title : String,
   emit : Emit[Msg],
   children : Array[Html],
-  size? : ModalSize = Small,
-  style? : Array[String] = [],
+  size~ : ModalSize = Small,
+  style~ : Array[String] = [],
   description? : String,
 ) -> Html {
   let attrs = @html.Attrs::build()
@@ -87,7 +87,7 @@ fn text_input_field_view(
   value~ : String,
   error~ : String,
   on_input~ : Emit[String],
-  autofocus? : Bool = false,
+  autofocus~ : Bool = false,
   description? : String,
 ) -> Html {
   let error_id = id + "-error"
@@ -124,7 +124,7 @@ fn text_input_field_view(
 }
 
 ///|
-fn dialog_close_button(label : String, autofocus? : Bool = false) -> Html {
+fn dialog_close_button(label : String, autofocus~ : Bool = false) -> Html {
   form(method_="dialog", [
     @rui.button(
       style=[UI_FONT_STYLE],
@@ -151,9 +151,9 @@ fn dialog_keyboard_hint_view(action : String) -> Html {
 fn dialog_confirm_footer_view(
   label~ : String,
   on_confirm~ : Cmd,
-  variant? : @rui.ButtonVariant = Default,
-  autofocus? : Bool = false,
-  disabled? : Bool = false,
+  variant~ : @rui.ButtonVariant = Default,
+  autofocus~ : Bool = false,
+  disabled~ : Bool = false,
 ) -> Html {
   @rui.dialog_footer([
     dialog_keyboard_hint_view("confirm"),
@@ -171,8 +171,8 @@ fn dialog_confirm_footer_view(
 
 ///|
 fn dialog_close_footer_view(
-  label? : String = "Close",
-  actions? : Array[Html] = [],
+  label~ : String = "Close",
+  actions~ : Array[Html] = [],
 ) -> Html {
   @rui.dialog_footer([..actions, dialog_close_button(label, autofocus=true)])
 }

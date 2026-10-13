@@ -1,7 +1,7 @@
 ///|
 pub suberror LinkError {
   AbsolutePathRequired(Path)
-  LinkCommandFailed(String, Int, String)
+  LinkCommandFailed(String, Int32, String)
   RecoveryFailed(Path, Error)
 }
 
@@ -38,7 +38,7 @@ pub fn validate_link_path(path : Path) -> Unit raise {
 async fn link_command(
   program : String,
   arguments : Array[String],
-  extra_env? : Map[String, String] = {},
+  extra_env~ : Map[String, String] = {},
 ) -> String {
   let (stdin, writer) = @process.write_to_process()
   writer.close()

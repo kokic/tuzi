@@ -37,7 +37,7 @@ fn new_entry_dialog(input : String, error : String, emit : Emit[Msg]) -> Html {
 ///|
 fn zip_dialog(
   input : String,
-  level : Int,
+  level : Int32,
   error : String,
   emit : Emit[Msg],
 ) -> Html {
@@ -82,7 +82,7 @@ fn dialog_footer(
   emit : Emit[Msg],
   confirm : String,
   variant : @rui.ButtonVariant,
-  has_input? : Bool = false,
+  has_input~ : Bool = false,
 ) -> Html {
   dialog_confirm_footer_view(
     label=confirm,

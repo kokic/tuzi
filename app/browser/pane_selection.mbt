@@ -2,7 +2,7 @@
 /// A projection for one render or cursor operation, never stored in Model.
 priv struct PaneViewData {
   entries : Array[Entry]
-  cursor_index : Int?
+  cursor_index : Int32?
 }
 
 ///|
@@ -20,7 +20,7 @@ fn PaneViewData::cursor_entry(self : PaneViewData) -> Entry? {
 }
 
 ///|
-fn Pane::cursor_index(pane : Pane, filter? : String) -> Int {
+fn Pane::cursor_index(pane : Pane, filter? : String) -> Int32 {
   pane.view_data(filter?).cursor_index.unwrap_or(0)
 }
 
@@ -47,7 +47,7 @@ fn Pane::selected_items(pane : Pane, filter? : String) -> Array[Entry] {
 }
 
 ///|
-fn Pane::move_cursor(pane : Pane, filter? : String, delta : Int) -> Pane {
+fn Pane::move_cursor(pane : Pane, filter? : String, delta : Int32) -> Pane {
   let data = pane.view_data(filter?)
   let entries = data.entries
   guard !entries.is_empty() else { return { ..pane, cursor: None, } }

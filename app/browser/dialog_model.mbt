@@ -11,8 +11,8 @@ priv enum Dialog {
   Activity
   Bookmarks(PaneSide)
   Goto(GotoContext)
-  TaskDetails(Int)
-  TaskOutput(Int)
+  TaskDetails(Int32)
+  TaskOutput(Int32)
   Info(InfoContext)
   Markdown(MarkdownContext)
   GitInfo(GitContext)
@@ -22,7 +22,7 @@ priv enum Dialog {
     directory~ : Path,
     names~ : Array[String],
     input~ : String,
-    level~ : Int
+    level~ : Int32
   )
   UnzipInput(source~ : Path, input~ : String)
   NewEntryInput(directory~ : Path, input~ : String)

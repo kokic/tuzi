@@ -16,8 +16,8 @@ priv struct OpenCommand {
 async fn OpenCommand::launch(
   self : OpenCommand,
   target : String,
-  write_launch_log? : (async (String) -> Unit)? = None,
-  no_console_window? : Bool = false,
+  write_launch_log~ : (async (String) -> Unit)? = None,
+  no_console_window~ : Bool = false,
 ) -> Unit {
   let arguments = self.arguments.map(argument => {
     match argument {
@@ -26,7 +26,7 @@ async fn OpenCommand::launch(
     }
   })
   if write_launch_log is Some(write_launch_log) {
-    write_launch_log("open: \{self.program} \{arguments.to_json().stringify()}")
+    write_launch_log("open: \{self.program} \{Json(arguments).stringify()}")
   }
   ignore(@process.spawn_orphan(self.program, arguments, no_console_window~))
 }

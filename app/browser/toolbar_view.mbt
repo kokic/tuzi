@@ -32,12 +32,7 @@ fn Model::toolbar_view(
         ],
       ),
       ..if sel > 0 {
-        [
-          badge(
-            variant=Secondary,
-            "\{sel} selected",
-          ),
-        ]
+        [badge(variant=Secondary, "\{sel} selected")]
       },
       @rui.button(
         style=[UI_FONT_STYLE],
@@ -67,16 +62,7 @@ fn Model::status_view(model : Model, emit : Emit[Msg]) -> Html {
   let latest = model.jobs.items.get(0)
   let error = model.jobs.error()
   let (message, indicator) : (String, Html?) = match () {
-    _ if !error.is_empty() =>
-      (
-        error,
-        Some(
-          badge(
-            variant=Destructive,
-            "Error",
-          ),
-        ),
-      )
+    _ if !error.is_empty() => (error, Some(badge(variant=Destructive, "Error")))
     _ if model.jobs.submitting =>
       (
         "Submitting operation…",

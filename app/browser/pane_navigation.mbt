@@ -10,7 +10,7 @@ fn Model::open_cursor_entry(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
 fn Model::open_entry_at_row(
   model : Model,
   idx : PaneSide,
-  row : Int,
+  row : Int32,
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
   let pane = model.pane_at(idx)
@@ -136,7 +136,7 @@ fn Model::navigate_to_directory(
   model : Model,
   idx : PaneSide,
   path : Path,
-  activate? : Bool = true,
+  activate~ : Bool = true,
 ) -> (Model, Cmd) {
   let updated = {
     ..model,

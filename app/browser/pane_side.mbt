@@ -13,7 +13,7 @@ fn PaneSide::other(self : PaneSide) -> PaneSide {
 }
 
 ///|
-fn PaneSide::index(self : PaneSide) -> Int {
+fn PaneSide::index(self : PaneSide) -> Int32 {
   match self {
     Left => 0
     Right => 1

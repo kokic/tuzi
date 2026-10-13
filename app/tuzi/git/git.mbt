@@ -7,7 +7,7 @@ pub suberror GitError {
   InvalidGitPath(Path)
   InvalidLocalReference(String)
   InvalidSwitchReference(String)
-  CommandFailed(code~ : Int, stdout~ : String, stderr~ : String)
+  CommandFailed(code~ : Int32, stdout~ : String, stderr~ : String)
 }
 
 ///|
@@ -30,7 +30,7 @@ pub impl Show for GitError with fn to_string(self) {
 
 ///|
 /// Argument arrays keep paths and branch names out of shell syntax.
-async fn git_command(arguments : Array[String]) -> (Int, String, String) {
+async fn git_command(arguments : Array[String]) -> (Int32, String, String) {
   let (stdin, writer) = @process.write_to_process()
   writer.close()
   let (code, stdout, stderr) = @process.collect_output(

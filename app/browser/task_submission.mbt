@@ -56,13 +56,13 @@ fn Model::submit_tasks(
   model : Model,
   kinds : Array[TaskKind],
   emit : Emit[Msg],
-  context? : SubmissionContext = Background,
+  context~ : SubmissionContext = Background,
 ) -> (Model, Cmd)? {
   guard !model.jobs.submitting && !kinds.is_empty() else { return None }
   Some(
     (
       { ..model, jobs: { ..model.jobs, submitting: true, submit_error: "", }, },
-      request_api("/api/tasks", body=kinds.to_json(), result => {
+      request_api("/api/tasks", body=Json(kinds), result => {
         emit(TaskEvent(TasksSubmitted(context, result)))
       }),
     ),

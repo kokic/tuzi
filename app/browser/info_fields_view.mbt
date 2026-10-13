@@ -2,7 +2,7 @@
 fn InfoContext::fields_view(
   context : InfoContext,
   emit : Emit[Msg],
-  error? : String = "",
+  error~ : String = "",
 ) -> Array[Html] {
   let entry = context.entry
   let path = context.path.to_string()
@@ -137,8 +137,8 @@ fn info_input_row(
   value~ : String,
   error~ : String,
   on_input~ : Emit[String],
-  autofocus? : Bool = false,
-  loading? : Bool = false,
+  autofocus~ : Bool = false,
+  loading~ : Bool = false,
 ) -> Html {
   let error_id = id + "-error"
   let invalid = !error.is_empty()

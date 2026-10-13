@@ -1,5 +1,9 @@
 ///|
-fn task_details_dialog(tasks : Array[Task], id : Int, emit : Emit[Msg]) -> Html {
+fn task_details_dialog(
+  tasks : Array[Task],
+  id : Int32,
+  emit : Emit[Msg],
+) -> Html {
   guard tasks.iter().find_first(task => task.id == id) is Some(task) else {
     modal("Task details", emit, size=Wide, [
       @rui.empty(

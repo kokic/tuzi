@@ -3,7 +3,7 @@ fn git_info_dialog(
   context : GitContext,
   jobs : TaskState,
   emit : Emit[Msg],
-  error? : String = "",
+  error~ : String = "",
 ) -> Html {
   let content = git_info_content(
     context,

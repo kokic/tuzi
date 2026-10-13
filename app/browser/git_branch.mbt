@@ -22,7 +22,7 @@ fn git_branch_can_rename(branch : @tuzi.GitBranch) -> Bool {
 }
 
 ///|
-fn Model::open_git_rename(model : Model, id : Int) -> Model {
+fn Model::open_git_rename(model : Model, id : Int32) -> Model {
   guard model.dialog is GitInfo(context) &&
     context.entry.id == id &&
     !context.panel.loading &&

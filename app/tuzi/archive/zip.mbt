@@ -26,7 +26,7 @@ pub async fn zip_entries(
   path : Path,
   names : Array[String],
   name : String,
-  level~ : Int,
+  level~ : Int32,
 ) -> Unit {
   let output = path.join(Path("./\{name}")).to_native()
   let file = @async_fs.create(output, allow_existing=false)

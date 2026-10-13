@@ -4,12 +4,12 @@ priv enum TaskMsg {
     SubmissionContext,
     Result[@tuzi.TaskSubmission, RequestFailure]
   )
-  TaskOpen(Int)
-  TaskOutputOpen(Int)
-  TaskSocket(Int, @websocket.Event)
-  TaskSocketFailed(Int, String)
-  TaskReconnect(Int)
-  TaskConnectionCheck(Int)
+  TaskOpen(Int32)
+  TaskOutputOpen(Int32)
+  TaskSocket(Int32, @websocket.Event)
+  TaskSocketFailed(Int32, String)
+  TaskReconnect(Int32)
+  TaskConnectionCheck(Int32)
 }
 
 ///|
@@ -17,7 +17,7 @@ priv enum SubmissionContext {
   Background
   Files(FileSubmission)
   GitRename(
-    dialog_revision~ : Int,
+    dialog_revision~ : Int32,
     context~ : GitContext,
     input_dialog~ : Dialog
   )
@@ -25,7 +25,7 @@ priv enum SubmissionContext {
 
 ///|
 priv struct FileSubmission {
-  dialog_revision : Int
+  dialog_revision : Int32
   progress : ProgressBatch
   input_dialog : Dialog?
   selection : SelectionSubmission?
@@ -35,7 +35,7 @@ priv struct FileSubmission {
 priv struct TaskState {
   items : Array[Task]
   session : String
-  revision : Int
+  revision : Int32
   connection : TaskConnection
   submitting : Bool
   sync_error : String

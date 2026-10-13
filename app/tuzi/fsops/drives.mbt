@@ -3,7 +3,7 @@ pub const SupportsDriveSelection : Bool = true
 
 ///|
 #cfg(platform="windows")
-extern "C" fn logical_drives_raw() -> Int = "tuzi_logical_drives"
+extern "C" fn logical_drives_raw() -> Int32 = "tuzi_logical_drives"
 
 ///|
 #cfg(platform="windows")
@@ -22,7 +22,7 @@ pub fn list_drives() -> Array[Path] raise {
 ///|
 #cfg(not(platform="windows"))
 #borrow(error)
-extern "C" fn mount_points_raw(error : FixedArray[Int]) -> FixedArray[Bytes] = "tuzi_mount_points"
+extern "C" fn mount_points_raw(error : FixedArray[Int32]) -> FixedArray[Bytes] = "tuzi_mount_points"
 
 ///|
 #cfg(not(platform="windows"))

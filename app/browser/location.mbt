@@ -2,7 +2,7 @@
 priv struct BrowserLocation {
   left : String
   right : String
-  active : Int
+  active : Int32
 } derive(ToJson, @json.FromJson)
 
 ///|

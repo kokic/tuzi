@@ -2,14 +2,14 @@
 /// Task ownership is tied to the server scope, never an HTTP connection.
 priv struct TaskService {
   session : String
-  mut revision : Int
-  mut next_id : Int
+  mut revision : Int32
+  mut next_id : Int32
   /// Tasks remain available for the lifetime of this server session.
   mut tasks : Array[@shared.Task]
   slots : @async.Semaphore
   /// Each subscriber retains at most one notification to read the latest state.
-  mut subscribers : Array[(Int, @async.Queue[Unit])]
-  mut next_subscriber : Int
+  mut subscribers : Array[(Int32, @async.Queue[Unit])]
+  mut next_subscriber : Int32
 }
 
 ///|
@@ -29,7 +29,7 @@ fn TaskService::new() -> TaskService {
 fn TaskService::subscribe(
   self : TaskService,
   queue : @async.Queue[Unit],
-) -> Int {
+) -> Int32 {
   let id = self.next_subscriber
   self.next_subscriber += 1
   self.subscribers.push((id, queue))
@@ -37,7 +37,7 @@ fn TaskService::subscribe(
 }
 
 ///|
-fn TaskService::unsubscribe(self : TaskService, id : Int) -> Unit {
+fn TaskService::unsubscribe(self : TaskService, id : Int32) -> Unit {
   self.subscribers = self.subscribers.filter(pair => pair.0 != id)
 }
 
@@ -54,7 +54,7 @@ fn TaskService::snapshot(self : TaskService) -> @shared.TaskSnapshot {
 
 ///|
 /// Starting a task changes its status without reordering the activity history.
-fn TaskService::start(self : TaskService, id : Int) -> Unit raise {
+fn TaskService::start(self : TaskService, id : Int32) -> Unit raise {
   self.tasks = self.tasks.map(task => {
     if task.id == id {
       { ..task, status: Running, }
@@ -69,7 +69,7 @@ fn TaskService::start(self : TaskService, id : Int) -> Unit raise {
 ///|
 fn TaskService::finish(
   self : TaskService,
-  id : Int,
+  id : Int32,
   status : @shared.TaskStatus,
 ) -> Unit raise {
   let task = self.tasks.iter().find_first(task => task.id == id).unwrap()

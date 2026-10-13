@@ -1,6 +1,6 @@
 ///|
 priv struct InfoContext {
-  id : Int
+  id : Int32
   entry : Entry
   path : Path
   link : LinkFields?

@@ -1,5 +1,5 @@
 ///|
-fn Model::move_active_pane_cursor(model : Model, delta : Int) -> Model {
+fn Model::move_active_pane_cursor(model : Model, delta : Int32) -> Model {
   {
     ..model,
     panes: set_pane(

@@ -7,14 +7,14 @@ priv enum TaskConnectionPhase {
 
 ///|
 priv struct TaskConnection {
-  generation : Int
+  generation : Int32
   phase : TaskConnectionPhase
-  retry_delay : Int
+  retry_delay : Int32
   received : Bool
 } derive(Eq)
 
 ///|
-fn task_socket_cmd(generation : Int, emit : Emit[Msg]) -> Cmd {
+fn task_socket_cmd(generation : Int32, emit : Emit[Msg]) -> Cmd {
   @rabbita.batch([
     @websocket.connect(
       "tuzi-tasks",
@@ -31,7 +31,7 @@ fn task_socket_cmd(generation : Int, emit : Emit[Msg]) -> Cmd {
 /// from replaced sockets; HTTP responses never replace this stream's state.
 fn Model::handle_task_socket(
   model : Model,
-  generation : Int,
+  generation : Int32,
   event : @websocket.Event,
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
