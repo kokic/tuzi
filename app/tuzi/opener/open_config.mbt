@@ -18,7 +18,7 @@ fn configured_openers() -> Map[String, OpenDefinition] {
     },
     "explorer": {
       label: "Open in system file manager",
-      execution: External(system_open_command(Directory)),
+      execution: FileManager(system_open_command(Directory)),
     },
   }
 }

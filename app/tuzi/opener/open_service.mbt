@@ -4,6 +4,7 @@ priv enum OpenExecution {
   Preview
   ExtractZip
   External(OpenCommand)
+  FileManager(OpenCommand)
 }
 
 ///|
@@ -15,7 +16,7 @@ priv struct OpenDefinition {
 ///|
 pub struct OpenService {
   registry : @shared.OpenRegistry
-  priv commands : Map[String, OpenCommand]
+  priv definitions : Map[String, OpenDefinition]
 }
 
 ///|
@@ -47,16 +48,12 @@ pub impl Show for OpenError with fn to_string(self) {
 pub fn OpenService::new() -> OpenService raise OpenError {
   let definitions = configured_openers()
   let openers : Map[String, @shared.Opener] = Map([])
-  let commands : Map[String, OpenCommand] = Map([])
   for id, definition in definitions {
     let action : @shared.OpenAction = match definition.execution {
       Browse => Browse
       Preview => Preview
       ExtractZip => ExtractZip
-      External(command) => {
-        commands[id] = command
-        External
-      }
+      External(_) | FileManager(_) => External
     }
     openers[id] = { label: definition.label, action, }
   }
@@ -69,7 +66,7 @@ pub fn OpenService::new() -> OpenService raise OpenError {
   for _, association in registry.extensions {
     validate_open_association(association, openers)
   }
-  { registry, commands, }
+  { registry, definitions, }
 }
 
 ///|
@@ -105,12 +102,14 @@ pub async fn OpenService::open(
   }
   let association = self.registry.for_entry(path.basename(), is_dir~)
   guard association.openers.contains(request.opener) &&
-    self.commands.get(request.opener) is Some(command) else {
+    self.definitions.get(request.opener) is Some(definition) else {
     raise NotApplicable(request.opener)
   }
-  let target = {
-    guard request.opener == "explorer" && !is_dir else { native }
-    path.dirname().to_native()
+  let (command, target) = match definition.execution {
+    External(command) => (command, native)
+    FileManager(command) =>
+      (command, if is_dir { native } else { path.dirname().to_native() })
+    Browse | Preview | ExtractZip => raise NotApplicable(request.opener)
   }
   command.launch(
     target,
