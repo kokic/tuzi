@@ -80,6 +80,21 @@ fn Model::run_git_operation(
     info.available else {
     return (model, @rabbita.none)
   }
+  if operation is DeleteBranch(reference) {
+    guard info.branches.any(branch => {
+      branch.reference == reference && git_branch_can_delete(branch, info)
+    }) else {
+      return (model, @rabbita.none)
+    }
+    return (
+      {
+        ..model,
+        dialog: GitDeleteConfirm(context~, reference~),
+        dialog_error: "",
+      },
+      @rabbita.none,
+    )
+  }
   model
   .submit_tasks([Git({ path: context.entry.path, operation, })], emit)
   .unwrap_or((model, @rabbita.none))

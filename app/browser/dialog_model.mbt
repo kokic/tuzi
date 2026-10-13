@@ -10,6 +10,7 @@ priv enum Dialog {
   Help
   Activity
   Bookmarks(PaneSide)
+  BookmarkDeleteConfirm(side~ : PaneSide, path~ : Path)
   Goto(GotoContext)
   TaskDetails(Int32)
   TaskOutput(Int32)
@@ -17,6 +18,7 @@ priv enum Dialog {
   Markdown(MarkdownContext)
   GitInfo(GitContext)
   DeleteConfirm(directory~ : Path, names~ : Array[String])
+  GitDeleteConfirm(context~ : GitContext, reference~ : String)
   RenameInput(directory~ : Path, original~ : String, input~ : String)
   ZipInput(
     directory~ : Path,

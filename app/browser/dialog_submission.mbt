@@ -65,6 +65,8 @@ fn Dialog::file_operations(
     | Help
     | Activity
     | Bookmarks(_)
+    | BookmarkDeleteConfirm(..)
+    | GitDeleteConfirm(..)
     | Goto(_)
     | TaskDetails(_)
     | TaskOutput(_)
@@ -84,6 +86,10 @@ fn Model::submit_dialog(
   new_entry_kind~ : NewEntryKind = Folder,
 ) -> (Model, Cmd) {
   match model.dialog {
+    BookmarkDeleteConfirm(side~, path~) =>
+      return model.confirm_bookmark_delete(side, path, emit)
+    GitDeleteConfirm(context~, reference~) =>
+      return model.submit_git_delete(context, reference, emit)
     Goto(context) => return model.submit_goto(context, emit)
     Info(context) => return model.submit_info_link(context, emit)
     GitInfo(context) => return model.submit_info_link(context.entry, emit)

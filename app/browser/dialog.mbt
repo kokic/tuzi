@@ -99,13 +99,15 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     | Help
     | Activity
     | Bookmarks(_)
+    | BookmarkDeleteConfirm(..)
     | TaskDetails(_)
     | TaskOutput(_)
     | Info(_)
     | Markdown(_)
     | GitInfo(_)
     | Progress(_)
-    | DeleteConfirm(..) => self
+    | DeleteConfirm(..)
+    | GitDeleteConfirm(..) => self
   }
 }
 
@@ -134,12 +136,14 @@ fn Model::set_archive_compression_level(
 ///|
 fn Model::cancel_dialog(model : Model) -> (Model, Cmd) {
   // The native dialog has already closed and raised its close event. Going
-  // back to the Git panel keeps a dialog open, so reopen the host element.
+  // back to a parent panel keeps a dialog open, so reopen the host element.
   let dialog = match model.dialog {
     GitRenameInput(context~, ..) => GitInfo(context)
+    BookmarkDeleteConfirm(side~, ..) => Bookmarks(side)
+    GitDeleteConfirm(context~, ..) => GitInfo(context)
     _ => None
   }
-  let command = if dialog is GitInfo(_) {
+  let command = if dialog != None {
     @dialog.show(DialogId)
   } else {
     @rabbita.none

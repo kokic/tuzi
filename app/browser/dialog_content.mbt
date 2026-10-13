@@ -18,14 +18,31 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
       Markdown(context) => context.dialog(emit)
       GitInfo(context) =>
         git_info_dialog(context, model.jobs, emit, error=model.dialog_error)
-      DeleteConfirm(names~, ..) =>
-        modal(
+      DeleteConfirm(directory~, names~) =>
+        delete_confirm_dialog(
           "Delete \{names.length()} item(s)?",
+          "The selected files and directories will be permanently deleted, including directory contents.",
+          names.map(name => {
+            (name, directory.join(Path("./\{name}")).to_string())
+          }),
           emit,
+        )
+      BookmarkDeleteConfirm(path~, ..) =>
+        delete_confirm_dialog(
+          "Delete bookmark?",
+          "Only the bookmark will be removed. The directory and its files will be kept.",
+          [("Bookmarked directory", path.to_string())],
+          emit,
+        )
+      GitDeleteConfirm(context~, reference~) =>
+        delete_confirm_dialog(
+          "Delete branch?",
+          "The local branch will be forcibly deleted, even if it has unmerged commits.",
           [
-            ..names.map(name => p(name)),
-            dialog_footer(emit, "Delete", Destructive),
+            ("Repository", context.entry.path.to_string()),
+            ("Branch", reference),
           ],
+          emit,
         )
       RenameInput(original~, input~, ..) =>
         name_input("Rename", "Rename \{original} to:", input)

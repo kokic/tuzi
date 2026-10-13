@@ -37,11 +37,17 @@ fn Model::update_bookmarks(
         @rabbita.none,
       )
     Remove(path) => {
-      guard model.dialog is Bookmarks(_) && model.bookmarks.contains(path) else {
+      guard model.dialog is Bookmarks(side) && model.bookmarks.contains(path) else {
         return (model, @rabbita.none)
       }
-      let bookmarks = model.bookmarks.filter(bookmark => bookmark != path)
-      ({ ..model, bookmarks, }, save_bookmarks(bookmarks, emit))
+      (
+        {
+          ..model,
+          dialog: BookmarkDeleteConfirm(side~, path~),
+          dialog_error: "",
+        },
+        @rabbita.none,
+      )
     }
     Jump(path) => {
       guard model.dialog is Bookmarks(side) && model.bookmarks.contains(path) else {
@@ -52,4 +58,18 @@ fn Model::update_bookmarks(
       (updated, @rabbita.batch([@dialog.close(DialogId), command]))
     }
   }
+}
+
+///|
+fn Model::confirm_bookmark_delete(
+  model : Model,
+  side : PaneSide,
+  path : Path,
+  emit : Emit[Msg],
+) -> (Model, Cmd) {
+  let bookmarks = model.bookmarks.filter(bookmark => bookmark != path)
+  (
+    { ..model, bookmarks, dialog: Bookmarks(side), dialog_error: "", },
+    save_bookmarks(bookmarks, emit),
+  )
 }
