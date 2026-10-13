@@ -39,14 +39,14 @@ fn entry_menu_content(
   target : OpenTarget,
   openers : @tuzi.OpenRegistry?,
   emit : Emit[Msg],
-  action_emit : Emit[Msg],
+  action_emit : Emit[FileAction],
   transfer_disabled~ : Bool,
 ) -> Html {
   let open_items = openers.map_or([], registry => {
     open_with_items(scope, target, registry, emit)
   })
   let root = target.path.dirname() == target.path
-  let actions : Array[(String, String, Msg)] = [
+  let actions : Array[(String, String, FileAction)] = [
     ..if !target.entry.is_link() {
       [
         ("Copy to other pane", "c", TransferSelection(Copy)),
@@ -98,9 +98,8 @@ fn Model::execute_entry_action(
   idx : PaneSide,
   view_id : Int32,
   name : String,
-  action : Msg,
+  action : FileAction,
   emit : Emit[Msg],
-  toast_send : Ref[ToastSender?],
 ) -> (Model, Cmd) {
   let pane = model.pane_at(idx)
   guard pane.id == view_id &&
@@ -119,7 +118,18 @@ fn Model::execute_entry_action(
     },
   }
   let model = { ..model, active: idx, panes: set_pane(model.panes, idx, pane), }
-  model.update_message(action, emit, toast_send)
+  model.execute_file_action(action, model.file_action_context(), emit)
+}
+
+///|
+priv enum FileAction {
+  DeleteOpen
+  InfoOpen
+  TransferSelection(TransferKind)
+  CopyPaths
+  RenameOpen
+  ZipOpen
+  NewEntryOpen
 }
 
 ///|
@@ -158,7 +168,7 @@ fn Model::file_action_context(model : Model) -> FileActionContext {
 ///|
 fn Model::execute_file_action(
   model : Model,
-  action : Msg,
+  action : FileAction,
   context : FileActionContext,
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
@@ -172,6 +182,5 @@ fn Model::execute_file_action(
     ZipOpen => (model.open_archive_dialog(context), @rabbita.none)
     NewEntryOpen =>
       (model.open_new_entry_dialog(context.directory), @rabbita.none)
-    _ => (model, @rabbita.none)
   }
 }

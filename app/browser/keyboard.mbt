@@ -64,14 +64,14 @@ fn Model::handle_keyboard_event(
               GotoEvent(Open(model.active, model.pane_at(model.active).path)),
             ),
           )
-        "d" => (model, emit(DeleteOpen))
-        "i" => (model, emit(InfoOpen))
-        "r" => (model, emit(RenameOpen))
-        "z" => (model, emit(ZipOpen))
-        "n" => (model, emit(NewEntryOpen))
-        "c" => (model, emit(TransferSelection(Copy)))
-        "m" => (model, emit(TransferSelection(Move)))
-        "y" => (model, emit(CopyPaths))
+        "d" => (model, emit(FileActionEvent(DeleteOpen)))
+        "i" => (model, emit(FileActionEvent(InfoOpen)))
+        "r" => (model, emit(FileActionEvent(RenameOpen)))
+        "z" => (model, emit(FileActionEvent(ZipOpen)))
+        "n" => (model, emit(FileActionEvent(NewEntryOpen)))
+        "c" => (model, emit(FileActionEvent(TransferSelection(Copy))))
+        "m" => (model, emit(FileActionEvent(TransferSelection(Move))))
+        "y" => (model, emit(FileActionEvent(CopyPaths)))
         "s" => (model, emit(SortCycle(model.active)))
         "f" =>
           (

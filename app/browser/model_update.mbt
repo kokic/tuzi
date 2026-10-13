@@ -48,13 +48,7 @@ fn Model::update_message(
     SortCycle(idx) => (model.cycle_sort_order(idx), @rabbita.none)
     ThemeToggle => model.toggle_theme()
     FilterFocus(idx, focused) => model.update_filter_focus(idx, focused)
-    DeleteOpen
-    | InfoOpen
-    | TransferSelection(_)
-    | CopyPaths
-    | RenameOpen
-    | ZipOpen
-    | NewEntryOpen as action =>
+    FileActionEvent(action) =>
       model.execute_file_action(action, model.file_action_context(), emit)
     BreadcrumbAction(target, action) => {
       let model = { ..model, active: target.pane, }
@@ -71,7 +65,7 @@ fn Model::update_message(
     }
     OpenWith(target, id) => model.execute_opener(target, id, emit)
     EntryAction(idx, view_id, name, action) =>
-      model.execute_entry_action(idx, view_id, name, action, emit, toast_send)
+      model.execute_entry_action(idx, view_id, name, action, emit)
     MarkdownEvent(msg) => (model.update_markdown(msg), @rabbita.none)
     GitEvent(msg) => model.update_git(msg, emit)
     TaskEvent(msg) => model.update_tasks(msg, emit)

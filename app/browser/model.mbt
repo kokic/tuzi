@@ -39,24 +39,18 @@ priv enum Msg {
   SortCycle(PaneSide)
   ThemeToggle
   HelpOpen
-  InfoOpen
+  FileActionEvent(FileAction)
   OpenWith(OpenTarget, String)
-  EntryAction(PaneSide, Int32, String, Msg)
-  BreadcrumbAction(OpenTarget, Msg)
-  TransferSelection(TransferKind)
-  CopyPaths
+  EntryAction(PaneSide, Int32, String, FileAction)
+  BreadcrumbAction(OpenTarget, FileAction)
   MarkdownEvent(MarkdownMsg)
   GitEvent(GitMsg)
   TaskEvent(TaskMsg)
-  DeleteOpen
-  RenameOpen
   LinkTargetLoaded(Int32, Result[Path, RequestFailure])
   LinkPathInput(String)
   LinkTargetInput(String)
-  ZipOpen
   ZipLevelChanged(String)
   ActivityOpen
-  NewEntryOpen
   NewEntrySubmit(NewEntryKind)
   FilterFocus(PaneSide, Bool)
   FilterChanged(PaneSide, String)
