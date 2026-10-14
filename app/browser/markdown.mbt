@@ -66,3 +66,30 @@ fn Model::update_markdown(model : Model, msg : MarkdownMsg) -> Model {
   }
   { ..model, dialog: Markdown(context), }
 }
+
+///|
+fn MarkdownContext::resolve_link(
+  context : MarkdownContext,
+  destination : String,
+) -> String {
+  guard !destination.is_empty() &&
+    !destination.has_prefix("/") &&
+    !destination.has_prefix("#") else {
+    return destination
+  }
+  let (reference, fragment) = destination
+    .split_once("#")
+    .map_or((destination[:], ""), pair => (pair.0, "#\{pair.1}"))
+  let (path, query) = reference
+    .split_once("?")
+    .map_or((reference, ""), pair => (pair.0, "&\{pair.1}"))
+  let first_segment = path.split_once("/").map_or(path, pair => pair.0)
+  // Preserve schemes so the Markdown renderer retains its URL safety checks.
+  guard !first_segment.contains(":") else { return destination }
+  let path = @percent.decode(path) catch { _ => return destination }
+  let target = {
+    guard !path.is_empty() else { context.path }
+    context.path.dirname().join(Path("./\{path}"))
+  }
+  target.file_url() + query + fragment
+}

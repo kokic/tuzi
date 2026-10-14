@@ -105,7 +105,9 @@ fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
     Loaded(Ok(source)) =>
       match context.view {
         Preview =>
-          @markdown.markdown(source, escape_link=true, heading_anchors=false)
+          @markdown.markdown(source, escape_link=true, heading_anchors=false, transform_link=destination => {
+            context.resolve_link(destination)
+          })
         Code =>
           @html.pre(
             style=[
