@@ -15,31 +15,6 @@ fn git_branch_can_delete(
 }
 
 ///|
-fn Model::submit_git_delete(
-  model : Model,
-  context : GitContext,
-  reference : String,
-  emit : Emit[Msg],
-) -> (Model, Cmd) {
-  guard !context.panel.loading &&
-    !model.git_busy(context.entry.path) &&
-    context.panel.info is Some(info) &&
-    info.available &&
-    info.branches.any(branch => {
-      branch.reference == reference && git_branch_can_delete(branch, info)
-    }) else {
-    return (model, @rabbita.none)
-  }
-  let updated = { ..model, dialog: GitInfo(context), dialog_error: "", }
-  updated
-  .submit_tasks(
-    [Git({ path: context.entry.path, operation: DeleteBranch(reference), })],
-    emit,
-  )
-  .unwrap_or((model, @rabbita.none))
-}
-
-///|
 /// Only local branches can be renamed; `git branch -m` works on the current
 /// branch too.
 fn git_branch_can_rename(branch : @tuzi.GitBranch) -> Bool {

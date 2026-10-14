@@ -86,14 +86,6 @@ fn Model::run_git_operation(
     }) else {
       return (model, @rabbita.none)
     }
-    return (
-      {
-        ..model,
-        dialog: GitDeleteConfirm(context~, reference~),
-        dialog_error: "",
-      },
-      @rabbita.none,
-    )
   }
   model
   .submit_tasks([Git({ path: context.entry.path, operation, })], emit)

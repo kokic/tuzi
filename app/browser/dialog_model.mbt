@@ -19,7 +19,6 @@ priv enum Dialog {
   TextPreview(TextPreviewContext)
   GitInfo(GitContext)
   DeleteConfirm(directory~ : Path, names~ : Array[String])
-  GitDeleteConfirm(context~ : GitContext, reference~ : String)
   RenameInput(directory~ : Path, original~ : String, input~ : String)
   ZipInput(
     directory~ : Path,

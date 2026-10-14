@@ -35,16 +35,6 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
           [("Bookmarked directory", path.to_string())],
           emit,
         )
-      GitDeleteConfirm(context~, reference~) =>
-        delete_confirm_dialog(
-          "Delete branch?",
-          "The local branch will be forcibly deleted, even if it has unmerged commits.",
-          [
-            ("Repository", context.entry.path.to_string()),
-            ("Branch", reference),
-          ],
-          emit,
-        )
       RenameInput(original~, input~, ..) =>
         name_input("Rename", "Rename \{original} to:", input)
       ZipInput(input~, level~, ..) =>

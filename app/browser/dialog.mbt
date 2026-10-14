@@ -107,8 +107,7 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     | TextPreview(_)
     | GitInfo(_)
     | Progress(_)
-    | DeleteConfirm(..)
-    | GitDeleteConfirm(..) => self
+    | DeleteConfirm(..) => self
   }
 }
 
@@ -141,7 +140,6 @@ fn Model::cancel_dialog(model : Model) -> (Model, Cmd) {
   let dialog = match model.dialog {
     GitRenameInput(context~, ..) => GitInfo(context)
     BookmarkDeleteConfirm(side~, ..) => Bookmarks(side)
-    GitDeleteConfirm(context~, ..) => GitInfo(context)
     _ => None
   }
   let command = if dialog != None {
