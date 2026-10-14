@@ -28,7 +28,7 @@ extern "js" fn dispatch_entry_context_menu(trigger : @dom.Element) -> Unit =
   #|     bubbles: true,
   #|     cancelable: true,
   #|     button: 2,
-  #|     clientX: rect.left + 8,
+  #|     clientX: rect.left + rect.width / 3,
   #|     clientY: rect.top + 8,
   #|   }));
   #| }
