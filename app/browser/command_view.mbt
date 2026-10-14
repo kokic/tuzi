@@ -47,7 +47,7 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
                 command_link_item(
                   scope~,
                   "Contribution: New issue",
-                  "https://github.com/kokic/tuzi/releases",
+                  "https://github.com/kokic/tuzi/issues/new",
                 ),
                 @rui.command_separator(),
                 ..navigation_links.map(link => {
