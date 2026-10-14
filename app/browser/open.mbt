@@ -1,4 +1,10 @@
 ///|
+priv enum OpenSource {
+  Default
+  Menu
+}
+
+///|
 fn Model::open_default(
   model : Model,
   target : OpenTarget,
@@ -18,7 +24,7 @@ fn Model::open_default(
     )
   }
   let association = registry.for_entry(target.entry.name, is_dir=kind.is_dir())
-  model.execute_opener(target, association.default_opener, emit)
+  model.execute_opener(target, association.default_opener, emit, source=Default)
 }
 
 ///|
@@ -27,6 +33,7 @@ fn Model::execute_opener(
   target : OpenTarget,
   id : String,
   emit : Emit[Msg],
+  source~ : OpenSource = Menu,
 ) -> (Model, Cmd) {
   guard model.openers is Some(registry) &&
     registry.openers.get(id) is Some(opener) else {
@@ -49,6 +56,8 @@ fn Model::execute_opener(
     Preview if target.entry.name.to_lower().has_suffix(".md") ||
       target.entry.name.to_lower().has_suffix(".markdown") =>
       model.open_markdown(target.path, emit)
+    Preview if source is Default && is_text_preview_file(target.entry.name) =>
+      model.open_text_preview(target.path, emit)
     Preview =>
       (
         model,

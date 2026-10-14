@@ -16,6 +16,7 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
       TaskOutput(id) => task_output_dialog(model.jobs.items, id, emit)
       Info(context) => context.dialog([], emit, error=model.dialog_error)
       Markdown(context) => context.dialog(emit)
+      TextPreview(context) => context.dialog(emit)
       GitInfo(context) =>
         git_info_dialog(context, model.jobs, emit, error=model.dialog_error)
       DeleteConfirm(directory~, names~) =>

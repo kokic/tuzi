@@ -104,6 +104,7 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     | TaskOutput(_)
     | Info(_)
     | Markdown(_)
+    | TextPreview(_)
     | GitInfo(_)
     | Progress(_)
     | DeleteConfirm(..)

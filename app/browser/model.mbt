@@ -44,6 +44,7 @@ priv enum Msg {
   EntryAction(PaneSide, Int32, String, FileAction)
   BreadcrumbAction(OpenTarget, FileAction)
   MarkdownEvent(MarkdownMsg)
+  TextPreviewLoaded(Int32, Result[String, String])
   GitEvent(GitMsg)
   TaskEvent(TaskMsg)
   LinkTargetLoaded(Int32, Result[Path, RequestFailure])

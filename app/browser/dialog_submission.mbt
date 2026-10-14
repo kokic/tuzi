@@ -71,6 +71,7 @@ fn Dialog::file_operations(
     | TaskDetails(_)
     | TaskOutput(_)
     | Markdown(_)
+    | TextPreview(_)
     | Progress(_)
     | Info(_)
     | GitInfo(_)

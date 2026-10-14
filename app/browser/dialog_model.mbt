@@ -16,6 +16,7 @@ priv enum Dialog {
   TaskOutput(Int32)
   Info(InfoContext)
   Markdown(MarkdownContext)
+  TextPreview(TextPreviewContext)
   GitInfo(GitContext)
   DeleteConfirm(directory~ : Path, names~ : Array[String])
   GitDeleteConfirm(context~ : GitContext, reference~ : String)

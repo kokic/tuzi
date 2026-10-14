@@ -67,6 +67,8 @@ fn Model::update_message(
     EntryAction(idx, view_id, name, action) =>
       model.execute_entry_action(idx, view_id, name, action, emit)
     MarkdownEvent(msg) => (model.update_markdown(msg), @rabbita.none)
+    TextPreviewLoaded(id, result) =>
+      (model.receive_text_preview(id, result), @rabbita.none)
     GitEvent(msg) => model.update_git(msg, emit)
     TaskEvent(msg) => model.update_tasks(msg, emit)
     LinkTargetLoaded(id, result) =>
