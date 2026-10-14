@@ -37,6 +37,7 @@ priv enum Msg {
   GotoEvent(GotoMsg)
   Key(@dom.KeyboardEvent)
   SortCycle(PaneSide)
+  SortChanged(PaneSide, SortMode)
   ThemeToggle
   HelpOpen
   FileActionEvent(FileAction)

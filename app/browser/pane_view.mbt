@@ -29,17 +29,12 @@ fn Pane::pane_view(
   data : PaneViewData,
   idx : PaneSide,
   emit : Emit[Msg],
-  sort : SortMode,
   active : Bool,
   filter : String?,
   rows : Html,
   breadcrumbs : Html,
+  sort_select : Html,
 ) -> Html {
-  let sort_label = match sort {
-    Name => "name"
-    Size => "size"
-    Time => "time"
-  }
   div(id="pane-\{idx.index()}-view-\{pane.id}", style=pane_style(active), {
     "header": div(class="phead", style=pane_header_style(active), breadcrumbs),
     "sort": div(
@@ -54,14 +49,7 @@ fn Pane::pane_view(
           on_click=emit(GotoEvent(Open(idx, pane.path))),
           "goto",
         ),
-        @rui.button(
-          variant=Ghost,
-          size=Xs,
-          style=[UI_FONT_STYLE, "flex: none"],
-          title="Change sort order",
-          on_click=emit(SortCycle(idx)),
-          sort_label,
-        ),
+        sort_select,
       ],
     ),
     "status": fragment(

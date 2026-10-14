@@ -58,25 +58,36 @@ fn pane_stack_view(
             },
             by=listing => ToJson::to_json(listing).stringify(),
           )
-        let content = pane.view6(filter, sort, active, rows, breadcrumbs, (
-          pane,
+        let sort_select = sort.switch_by(
+          sort => {
+            pane_sort_select(
+              "pane-\{idx.index()}-view-\{id}-sort",
+              idx,
+              sort,
+              emit,
+            )
+          },
+          by=sort => sort.label(),
+        )
+        let content = pane.view6(
           filter,
-          sort,
           active,
           rows,
           breadcrumbs,
-        ) => {
-          pane.pane_view(
-            pane.view_data(filter?),
-            idx,
-            emit,
-            sort,
-            active,
-            filter,
-            rows,
-            breadcrumbs,
-          )
-        })
+          sort_select,
+          (pane, filter, active, rows, breadcrumbs, sort_select) => {
+            pane.pane_view(
+              pane.view_data(filter?),
+              idx,
+              emit,
+              active,
+              filter,
+              rows,
+              breadcrumbs,
+              sort_select,
+            )
+          },
+        )
         let visible = visible_id.map(current => current == id)
         visible.map2(content, (visible, content) => {
           (

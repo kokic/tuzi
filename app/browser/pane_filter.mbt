@@ -47,8 +47,17 @@ fn Model::sort_order(model : Model, idx : PaneSide) -> SortMode {
 
 ///|
 fn Model::cycle_sort_order(model : Model, idx : PaneSide) -> Model {
-  let sort = model.sort_order(idx).next()
-  let cycle = (stack : PaneStack) => {
+  model.with_sort_order(idx, model.sort_order(idx).next())
+}
+
+///|
+fn Model::with_sort_order(
+  model : Model,
+  idx : PaneSide,
+  sort : SortMode,
+) -> Model {
+  guard model.sort_order(idx) != sort else { return model }
+  let reorder = (stack : PaneStack) => {
     ..stack.map_views(pane => {
       pane.with_entries(pane.entries, sort, filter?=model.entry_filter(idx))
     }),
@@ -57,8 +66,8 @@ fn Model::cycle_sort_order(model : Model, idx : PaneSide) -> Model {
   {
     ..model,
     panes: match idx {
-      Left => (cycle(model.panes.0), model.panes.1)
-      Right => (model.panes.0, cycle(model.panes.1))
+      Left => (reorder(model.panes.0), model.panes.1)
+      Right => (model.panes.0, reorder(model.panes.1))
     },
   }
 }

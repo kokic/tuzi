@@ -37,7 +37,9 @@ fn Model::keyboard_command(
     !event
     .target()
     .to_element()
-    .map_or(false, element => element.closest("[role=menu]") is Some(_)) else {
+    .map_or(false, element => {
+      element.closest("[role=menu], [role=combobox], [role=listbox]") is Some(_)
+    }) else {
     return @rabbita.none
   }
   guard !event.is_composing() else { return @rabbita.none }

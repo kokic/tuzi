@@ -45,7 +45,9 @@ pub fn pane_header_style(active : Bool) -> Array[String] {
     "border-bottom: 1px solid var(--rui-border)",
     "background: var(--rui-background)",
     ..if active {
-      ["background: var(--rui-muted)"]
+      [
+        "background: var(--rui-muted)", "--rui-ghost-hover-bg: color-mix(in oklab, var(--rui-muted) 90%, var(--rui-foreground))",
+      ]
     },
   ]
 }

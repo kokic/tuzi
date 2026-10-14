@@ -46,6 +46,7 @@ fn Model::update_message(
     GotoEvent(msg) => model.update_goto(msg)
     Key(kb) => model.handle_keyboard_event(kb, emit)
     SortCycle(idx) => (model.cycle_sort_order(idx), @rabbita.none)
+    SortChanged(idx, sort) => (model.with_sort_order(idx, sort), @rabbita.none)
     ThemeToggle => model.toggle_theme()
     FilterFocus(idx, focused) => model.update_filter_focus(idx, focused)
     FileActionEvent(action) =>
