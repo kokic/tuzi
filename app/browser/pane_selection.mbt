@@ -25,25 +25,19 @@ fn Pane::cursor_index(pane : Pane, filter? : String) -> Int32 {
 }
 
 ///|
-fn Pane::cursor_entry(pane : Pane, filter? : String) -> Entry? {
-  guard pane.cursor is Some(name) &&
-    filter.map_or(true, query => name.contains(query)) else {
-    return None
-  }
+fn Pane::cursor_entry(pane : Pane) -> Entry? {
+  guard pane.cursor is Some(name) else { return None }
   pane.entries.iter().find_first(entry => entry.name == name)
 }
 
 ///|
 /// Entries to operate on: the current selection, or the cursor entry when
 /// nothing is selected.
-fn Pane::selected_items(pane : Pane, filter? : String) -> Array[Entry] {
+fn Pane::selected_items(pane : Pane) -> Array[Entry] {
   guard !pane.selected.is_empty() else {
-    return pane.cursor_entry(filter?).map_or([], entry => [entry])
+    return pane.cursor_entry().map_or([], entry => [entry])
   }
-  pane.entries.filter(entry => {
-    pane.selected.contains(entry.name) &&
-    filter.map_or(true, query => entry.name.contains(query))
-  })
+  pane.entries.filter(entry => pane.selected.contains(entry.name))
 }
 
 ///|

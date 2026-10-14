@@ -87,7 +87,8 @@ fn Pane::with_filter(pane : Pane, filter? : String) -> Pane {
 /// Entries are sorted when stored. With no filter, reuse them without allocation.
 fn Pane::visible_entries(pane : Pane, filter? : String) -> Array[Entry] {
   guard filter is Some(query) else { return pane.entries }
-  pane.entries.filter(entry => entry.name.contains(query))
+  let query = query.to_lower()
+  pane.entries.filter(entry => entry.name.to_lower().contains(query))
 }
 
 ///|

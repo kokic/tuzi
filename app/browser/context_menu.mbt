@@ -149,12 +149,10 @@ fn Model::file_action_context(model : Model) -> FileActionContext {
     path: pane.path.join(Path("./\{entry.name}")),
     entry,
   }
-  let items = pane.selected_items(filter?=model.entry_filter(model.active))
+  let items = pane.selected_items()
   {
     items: items.map(target),
-    cursor: pane
-    .cursor_entry(filter?=model.entry_filter(model.active))
-    .map(target),
+    cursor: pane.cursor_entry().map(target),
     directory: pane.path,
     selection: Some({
       pane: model.active,
