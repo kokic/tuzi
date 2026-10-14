@@ -48,6 +48,7 @@ fn Model::keyboard_command(
     match event.key() {
       "Tab" => event.prevent_default()
       " " if !model.editing => event.prevent_default()
+      "/" if !model.editing && !event.repeat() => event.prevent_default()
       "Escape" if model.editing => event.prevent_default()
       _ => ()
     }

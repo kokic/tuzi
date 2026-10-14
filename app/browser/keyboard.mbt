@@ -78,6 +78,8 @@ fn Model::handle_keyboard_event(
             model,
             focus_filter_input(model.active, model.pane_at(model.active).id),
           )
+        "/" if !kb.repeat() && !kb.is_composing() =>
+          (model, @dialog.show(CommandDialogId))
         "?" => (model, emit(HelpOpen))
         _ => (model, @rabbita.none)
       }
