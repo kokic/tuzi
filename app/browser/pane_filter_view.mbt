@@ -26,6 +26,7 @@ fn pane_filter_view(
       "max-width: 50%",
       "min-width: 0",
       "flex: none",
+      "margin-left: 4px",
       "margin-right: auto",
       "height: 24px",
       "min-height: 0",
