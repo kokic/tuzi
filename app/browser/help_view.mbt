@@ -30,8 +30,8 @@ fn help_lines() -> Array[Html] {
     ("y", "copy path"),
     ("f", "filter active pane"),
     ("g", "go to directory"),
-    ("/", "open Command"),
-    ("?", "open Help"),
+    ("/", "open [command]"),
+    ("?", "open [help]"),
   ]
   binds.map(pair => {
     let (key, desc) = pair
