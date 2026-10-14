@@ -5,9 +5,7 @@ fn Model::move_active_pane_cursor(model : Model, delta : Int32) -> Model {
     panes: set_pane(
       model.panes,
       model.active,
-      model
-      .pane_at(model.active)
-      .move_cursor(delta, filter?=model.entry_filter(model.active)),
+      model.pane_at(model.active).move_cursor(delta),
     ),
   }
 }
@@ -19,9 +17,7 @@ fn Model::toggle_selection_and_advance_cursor(model : Model) -> Model {
     panes: set_pane(
       model.panes,
       model.active,
-      model
-      .pane_at(model.active)
-      .toggle_cursor_selection(filter?=model.entry_filter(model.active)),
+      model.pane_at(model.active).toggle_cursor_selection(),
     ),
   }
 }

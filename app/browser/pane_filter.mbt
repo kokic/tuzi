@@ -15,6 +15,7 @@ fn Model::entry_filter(model : Model, idx : PaneSide) -> String? {
 
 ///|
 fn Model::with_filter(model : Model, idx : PaneSide, text : String) -> Model {
+  guard text != model.filter_text(idx) else { return model }
   let filter : String? = if text.is_empty() { None } else { Some(text) }
   {
     ..model,
@@ -74,21 +75,16 @@ fn Model::with_sort_order(
 
 ///|
 fn Pane::with_filter(pane : Pane, filter? : String) -> Pane {
-  let entries = pane.visible_entries(filter?)
+  let entries = filter.map_or(pane.entries, query => {
+    let query = query.to_lower()
+    pane.entries.filter(entry => entry.name.to_lower().contains(query))
+  })
   let cursor = if entries.any(entry => Some(entry.name) == pane.cursor) {
     pane.cursor
   } else {
     entries.get(0).map(entry => entry.name)
   }
-  { ..pane, cursor, }
-}
-
-///|
-/// Entries are sorted when stored. With no filter, reuse them without allocation.
-fn Pane::visible_entries(pane : Pane, filter? : String) -> Array[Entry] {
-  guard filter is Some(query) else { return pane.entries }
-  let query = query.to_lower()
-  pane.entries.filter(entry => entry.name.to_lower().contains(query))
+  { ..pane, visible_entries: entries, cursor, }
 }
 
 ///|

@@ -31,6 +31,7 @@ priv struct Pane {
   refresh_pending : Bool
   // Stored in display order; readers must not mutate this array.
   entries : Array[Entry]
+  visible_entries : Array[Entry]
   // Copy before mutation: retained models share selection membership.
   selected : Set[String]
 } derive(Eq)
@@ -53,6 +54,7 @@ fn Pane::initialize(path : Path, id~ : Int32 = 0) -> Pane {
     loading: Unloaded,
     refresh_pending: false,
     entries: [],
+    visible_entries: [],
     selected: Set([]),
   }
 }
@@ -90,21 +92,20 @@ fn Pane::with_entries(
         .map(entry => entry.name),
       )
     },
-  }
-  let data = updated.view_data(filter?)
-  guard data.cursor_index is None else { return updated }
-  let previous = pane.view_data(filter?)
-  guard previous.cursor_index is Some(index) else {
-    return updated.with_filter(filter?)
-  }
+  }.with_filter(filter?)
+  guard updated.cursor != pane.cursor else { return updated }
+  let previous = pane.view_data()
+  guard previous.cursor_index is Some(index) else { return updated }
   // Keep the cursor near the removed entry in the previous visible order.
-  let names = Set::from_iter(data.entries.iter().map(entry => entry.name))
+  let names = Set::from_iter(
+    updated.visible_entries.iter().map(entry => entry.name),
+  )
   guard previous.entries[index + 1:]
     .iter()
     .concat(previous.entries[:index].rev_iter())
     .find_first(entry => names.contains(entry.name))
     is Some(entry) else {
-    return updated.with_filter(filter?)
+    return updated
   }
   { ..updated, cursor: Some(entry.name), }
 }

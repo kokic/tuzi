@@ -1,11 +1,7 @@
 ///|
-fn Model::toolbar_view(
-  model : Model,
-  panes : (PaneViewData, PaneViewData),
-  emit : Emit[Msg],
-) -> Html {
-  let left = panes.0.entries.length()
-  let right = panes.1.entries.length()
+fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
+  let left = model.panes.0.current.visible_entries.length()
+  let right = model.panes.1.current.visible_entries.length()
   let sel = model.panes.0.current.selected.length() +
     model.panes.1.current.selected.length()
   div(

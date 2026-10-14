@@ -12,7 +12,6 @@ priv struct EntryRow {
 ///|
 fn pane_rows(
   pane : Val[Pane],
-  filter : Val[String?],
   other_path : Val[Path],
   idx : PaneSide,
   emit : Emit[Msg],
@@ -20,8 +19,8 @@ fn pane_rows(
   openers : @tuzi.OpenRegistry?,
 ) -> Val[Html] {
   let rows = pane
-    .map3(filter, other_path, (pane, filter, other_path) => {
-      let entries = pane.view_data(filter?).entries
+    .map2(other_path, (pane, other_path) => {
+      let entries = pane.visible_entries
       @vector.Vector::from_array(
         entries.mapi((row, entry) => EntryRow::{
           view_id: pane.id,

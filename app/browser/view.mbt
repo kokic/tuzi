@@ -38,17 +38,7 @@ fn Model::view(
                   ),
                 ]),
               ]
-            Started => {
-              let data = (
-                model.panes.0.current.view_data(
-                  filter?=model.entry_filter(Left),
-                ),
-                model.panes.1.current.view_data(
-                  filter?=model.entry_filter(Right),
-                ),
-              )
-              [model.toolbar_view(data, emit), panes]
-            }
+            Started => [model.toolbar_view(emit), panes]
           },
           dialog,
         ],

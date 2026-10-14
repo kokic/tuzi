@@ -22,9 +22,7 @@ fn pane_stack_view(
     .map(stack => @vector.Vector::from_array([..stack.parents, stack.current]))
     .assoc_by(
       (id, pane) => {
-        let rows = pane_rows(
-          pane, filter, other_path, idx, emit, appearance, openers,
-        )
+        let rows = pane_rows(pane, other_path, idx, emit, appearance, openers)
         let drive_menu = pane
           .map(pane => pane.path)
           .switch_by(
@@ -77,7 +75,7 @@ fn pane_stack_view(
           sort_select,
           (pane, filter, active, rows, breadcrumbs, sort_select) => {
             pane.pane_view(
-              pane.view_data(filter?),
+              pane.view_data(),
               idx,
               emit,
               active,

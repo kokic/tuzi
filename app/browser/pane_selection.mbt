@@ -6,8 +6,8 @@ priv struct PaneViewData {
 }
 
 ///|
-fn Pane::view_data(pane : Pane, filter? : String) -> PaneViewData {
-  let entries = pane.visible_entries(filter?)
+fn Pane::view_data(pane : Pane) -> PaneViewData {
+  let entries = pane.visible_entries
   {
     entries,
     cursor_index: entries.search_by(entry => Some(entry.name) == pane.cursor),
@@ -20,8 +20,8 @@ fn PaneViewData::cursor_entry(self : PaneViewData) -> Entry? {
 }
 
 ///|
-fn Pane::cursor_index(pane : Pane, filter? : String) -> Int32 {
-  pane.view_data(filter?).cursor_index.unwrap_or(0)
+fn Pane::cursor_index(pane : Pane) -> Int32 {
+  pane.view_data().cursor_index.unwrap_or(0)
 }
 
 ///|
@@ -41,8 +41,8 @@ fn Pane::selected_items(pane : Pane) -> Array[Entry] {
 }
 
 ///|
-fn Pane::move_cursor(pane : Pane, filter? : String, delta : Int32) -> Pane {
-  let data = pane.view_data(filter?)
+fn Pane::move_cursor(pane : Pane, delta : Int32) -> Pane {
+  let data = pane.view_data()
   let entries = data.entries
   guard !entries.is_empty() else { return { ..pane, cursor: None, } }
   let index = (data.cursor_index.unwrap_or(0) + delta).clamp(
@@ -53,8 +53,8 @@ fn Pane::move_cursor(pane : Pane, filter? : String, delta : Int32) -> Pane {
 }
 
 ///|
-fn Pane::toggle_cursor_selection(pane : Pane, filter? : String) -> Pane {
-  let data = pane.view_data(filter?)
+fn Pane::toggle_cursor_selection(pane : Pane) -> Pane {
+  let data = pane.view_data()
   guard data.cursor_index is Some(index) else { return pane }
   let entry = data.entries[index]
   let next = data.entries.get(index + 1).unwrap_or(entry)

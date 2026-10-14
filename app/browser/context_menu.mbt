@@ -2,10 +2,7 @@
 /// Reuse the row's right-click handler so actions and menu focus stay identical.
 fn Model::open_cursor_context_menu(model : Model) -> Cmd {
   let pane = model.pane_at(model.active)
-  guard pane.view_data(filter?=model.entry_filter(model.active)).cursor_index
-    is Some(row) else {
-    return @rabbita.none
-  }
+  guard pane.view_data().cursor_index is Some(row) else { return @rabbita.none }
   let id = "pane-\{model.active.index()}-view-\{pane.id}-row-\{row}-open-trigger"
   @cmd.custom_cmd(kind=AfterRender, _ => {
     guard @dom.document().get_element_by_id(id).to_option() is Some(trigger) else {
@@ -103,9 +100,7 @@ fn Model::execute_entry_action(
 ) -> (Model, Cmd) {
   let pane = model.pane_at(idx)
   guard pane.id == view_id &&
-    pane
-    .visible_entries(filter?=model.entry_filter(idx))
-    .any(entry => entry.name == name) else {
+    pane.visible_entries.any(entry => entry.name == name) else {
     return (model, @rabbita.none)
   }
   let pane = {
