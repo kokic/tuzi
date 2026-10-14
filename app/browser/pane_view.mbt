@@ -45,6 +45,7 @@ fn Pane::pane_view(
     "sort": div(
       style=[..pane_header_style(active), "justify-content: flex-end"],
       [
+        pane_filter_view(idx, pane.id, filter.unwrap_or(""), emit),
         @rui.button(
           variant=Ghost,
           size=Xs,
@@ -82,7 +83,7 @@ fn Pane::pane_view(
     } else {
       rows
     },
-    "details": data.entry_details_view(idx, pane.id, filter.unwrap_or(""), emit),
+    "details": data.entry_details_view(),
   })
 }
 

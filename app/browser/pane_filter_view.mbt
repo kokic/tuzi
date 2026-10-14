@@ -1,17 +1,10 @@
 ///|
-fn PaneViewData::entry_details_view(
-  data : PaneViewData,
-  idx : PaneSide,
-  view_id : Int32,
-  filter : String,
-  emit : Emit[Msg],
-) -> Html {
+fn PaneViewData::entry_details_view(data : PaneViewData) -> Html {
   let info = data
     .cursor_entry()
     .map_or("", entry => "\{entry.name}  \{format_entry_meta(entry)}")
   div(style=entry_details_style(), [
     span(style=["flex: 1", ..status_text_style()], title=info, info),
-    pane_filter_view(idx, view_id, filter, emit),
   ])
 }
 
@@ -33,6 +26,7 @@ fn pane_filter_view(
       "max-width: 50%",
       "min-width: 0",
       "flex: none",
+      "margin-right: auto",
       "height: 24px",
       "min-height: 0",
     ],
