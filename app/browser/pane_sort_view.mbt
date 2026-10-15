@@ -37,6 +37,7 @@ fn pane_sort_select(
       "grid-template-columns: max-content",
       "width: max-content",
       "flex: none",
+      "margin-inline-end: 4px",
       "font-size: 0.75rem",
       "font-weight: 500",
       "line-height: 1rem",

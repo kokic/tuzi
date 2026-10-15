@@ -16,6 +16,9 @@ fn pane_stack_view(
   let visible_id = stack.map(stack => stack.current.id)
   let filter = model.map(model => model.entry_filter(idx))
   let sort = stack.map(stack => stack.sort)
+  let history = stack.map(stack => {
+    (stack.current.id, stack.current.path, stack.history)
+  })
   let active = model.map(model => model.active == idx)
   let other_path = model.map(model => model.pane_at(idx.other()).path)
   let views = stack
@@ -23,6 +26,28 @@ fn pane_stack_view(
     .assoc_by(
       (id, pane) => {
         let rows = pane_rows(pane, other_path, idx, emit, appearance, openers)
+        // Cached ancestor views retain their rows, but only the visible view
+        // mounts a history menu and its items.
+        let history_menu = history.switch_by(
+          history => {
+            let (current_id, path, paths) = history
+            guard current_id == id else { return Val::constant(@html.nothing) }
+            pane_history_menu_view(
+              "pane-\{idx.index()}-view-\{id}-history",
+              path,
+              paths,
+              idx,
+              emit,
+            )
+          },
+          by=history => {
+            if history.0 == id {
+              ToJson::to_json((history.1, history.2)).stringify()
+            } else {
+              ""
+            }
+          },
+        )
         let drive_menu = pane
           .map(pane => pane.path)
           .switch_by(
@@ -67,13 +92,14 @@ fn pane_stack_view(
           },
           by=sort => sort.label(),
         )
-        let content = pane.view6(
+        let content = pane.view7(
           filter,
           active,
           rows,
           breadcrumbs,
           sort_select,
-          (pane, filter, active, rows, breadcrumbs, sort_select) => {
+          history_menu,
+          (pane, filter, active, rows, breadcrumbs, sort_select, history_menu) => {
             pane.pane_view(
               pane.view_data(),
               idx,
@@ -83,6 +109,7 @@ fn pane_stack_view(
               rows,
               breadcrumbs,
               sort_select,
+              history_menu,
             )
           },
         )

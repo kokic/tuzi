@@ -16,8 +16,16 @@ fn TextPreviewContext::dialog(
         orientation=Horizontal,
         attrs=@html.Attrs::build().aria_label("Text preview"),
         style=[
-          "height: auto", "flex: 1", "min-height: 0", "overflow-y: auto", "padding: 12px",
-          "border: 1px solid var(--rui-border)", "user-select: text",
+          "height: auto",
+          "flex: 1",
+          "min-height: 0",
+          "overflow-y: auto",
+          "padding: 12px",
+          "border: 1px solid var(--rui-border)",
+          "user-select: text",
+          ..if context.content is Loading {
+            ["display: flex", "flex-direction: column"]
+          },
         ],
         context.content_view(),
       ),
@@ -29,12 +37,7 @@ fn TextPreviewContext::dialog(
 ///|
 fn TextPreviewContext::content_view(context : TextPreviewContext) -> Html {
   match context.content {
-    Loading =>
-      div(
-        style=["display: flex", "align-items: center", "gap: 8px"],
-        attrs=@html.Attrs::build().role("status"),
-        [@rui.spinner(label="Loading text"), span("Loading text…")],
-      )
+    Loading => centered_loading_view("Loading text…")
     Loaded(Err(error)) =>
       @rui.alert(variant=Destructive, [
         @rui.alert_title("Unable to load text"),

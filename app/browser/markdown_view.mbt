@@ -70,9 +70,16 @@ fn MarkdownContext::dialog(context : MarkdownContext, emit : Emit[Msg]) -> Html 
               labelledby="markdown-tab-\{view.label()}",
               selected~,
               style=[
-                "min-height: 0", "overflow: auto", "overscroll-behavior: contain",
-                "padding: 12px", "border: 1px solid var(--rui-border)", "user-select: text",
+                "min-height: 0",
+                "overflow: auto",
+                "overscroll-behavior: contain",
+                "padding: 12px",
+                "border: 1px solid var(--rui-border)",
+                "user-select: text",
                 "overflow-wrap: anywhere",
+                ..if selected && context.content is Loading {
+                  ["display: flex", "flex-direction: column"]
+                },
               ],
               if selected {
                 context.content_view()
@@ -91,12 +98,7 @@ fn MarkdownContext::dialog(context : MarkdownContext, emit : Emit[Msg]) -> Html 
 ///|
 fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
   match context.content {
-    Loading =>
-      div(
-        style=["display: flex", "align-items: center", "gap: 8px"],
-        attrs=@html.Attrs::build().role("status"),
-        [@rui.spinner(label="Loading Markdown"), span("Loading Markdown…")],
-      )
+    Loading => centered_loading_view("Loading Markdown…")
     Loaded(Err(error)) =>
       @rui.alert(variant=Destructive, [
         @rui.alert_title("Unable to load Markdown"),

@@ -34,12 +34,14 @@ fn Pane::pane_view(
   rows : Html,
   breadcrumbs : Html,
   sort_select : Html,
+  history_menu : Html,
 ) -> Html {
   div(id="pane-\{idx.index()}-view-\{pane.id}", style=pane_style(active), {
     "header": div(class="phead", style=pane_header_style(active), breadcrumbs),
     "sort": div(
       style=[..pane_header_style(active), "justify-content: flex-end"],
       [
+        history_menu,
         pane_filter_view(idx, pane.id, filter.unwrap_or(""), emit),
         @rui.button(
           variant=Ghost,
@@ -52,27 +54,69 @@ fn Pane::pane_view(
         sort_select,
       ],
     ),
-    "status": fragment(
-      match pane.loading {
-        Unloaded | Loading => [@rui.spinner(label="Loading directory…")]
-        LoadFailed(error) =>
-          [directory_failure_view(error, pane.entries.is_empty(), idx, emit)]
-        Ready =>
-          if pane.entries.is_empty() {
-            [@rui.empty(@rui.empty_header(@rui.empty_title("Empty directory")))]
-          } else {
-            []
-          }
+    "content": div(
+      style=[
+        "position: relative", "display: flex", "flex-direction: column", "flex: 1",
+        "min-width: 0", "min-height: 0",
+      ],
+      {
+        "status": match pane.loading {
+          Unloaded | Loading => @html.nothing
+          LoadFailed(error) =>
+            pane_status_scroll_view(
+              directory_failure_view(error, pane.entries.is_empty(), idx, emit),
+              fill=pane.entries.is_empty(),
+            )
+          Ready =>
+            if pane.entries.is_empty() {
+              pane_status_scroll_view(
+                @rui.empty(
+                  @rui.empty_header(@rui.empty_title("Empty directory")),
+                ),
+                fill=true,
+              )
+            } else {
+              @html.nothing
+            }
+        },
+        "entries": if pane.entries.is_empty() {
+          @html.nothing
+        } else {
+          rows
+        },
+        "loading": if pane.loading is (Unloaded | Loading) {
+          div(
+            style=[
+              "position: absolute", "inset: 0", "display: flex", "align-items: center",
+              "justify-content: center", "pointer-events: none",
+            ],
+            @rui.spinner(label="Loading directory…"),
+          )
+        } else {
+          @html.nothing
+        },
       },
     ),
-    "entries": if pane.loading is (LoadFailed(_) | Ready) &&
-      pane.entries.is_empty() {
-      @html.nothing
-    } else {
-      rows
-    },
     "details": data.entry_details_view(),
   })
+}
+
+///|
+fn pane_status_scroll_view(content : Html, fill~ : Bool) -> Html {
+  @rui.scroll_area(
+    attrs=@html.Attrs::build().aria_label("Directory status"),
+    style=[
+      "height: auto",
+      "min-height: 0",
+      ..if fill {
+        ["flex: 1", "display: flex", "flex-direction: column"]
+      } else {
+        // A refresh error must leave room for the retained directory listing.
+        ["flex: none", "max-height: 50%"]
+      },
+    ],
+    content,
+  )
 }
 
 ///|

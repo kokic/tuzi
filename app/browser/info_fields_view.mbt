@@ -159,20 +159,30 @@ fn info_input_row(
     @rui.field(
       invalid~,
       [
-        @rui.input(
+        @rui.input_group(
           style=[UI_FONT_STYLE],
-          id~,
-          value~,
-          autofocus~,
-          on_input~,
           invalid~,
-          attrs~,
+          [
+            @rui.input_group_input(
+              id~,
+              value~,
+              autofocus~,
+              on_input~,
+              invalid~,
+              attrs~,
+            ),
+            ..if loading {
+              [
+                @rui.input_group_addon(
+                  align=InputInlineEnd,
+                  @rui.spinner(label="Loading target…"),
+                ),
+              ]
+            },
+          ],
         ),
         ..if invalid {
           [@rui.field_error(id=error_id, error)]
-        },
-        ..if loading {
-          [@rui.spinner(label="Loading target…")]
         },
       ],
     ),

@@ -6,6 +6,16 @@ fn kbd(key : String) -> Html {
 }
 
 ///|
+fn centered_loading_view(label : String) -> Html {
+  @rui.empty(
+    @rui.empty_content(
+      style=["flex-direction: row", "justify-content: center"],
+      [@rui.spinner(label~, style=["flex: none"]), span(label)],
+    ),
+  )
+}
+
+///|
 fn[C : @html.IsChildren] badge(
   variant~ : @rui.BadgeVariant,
   attrs? : @html.Attrs,

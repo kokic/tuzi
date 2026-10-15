@@ -21,7 +21,7 @@ fn Model::view(
         style=application_style(),
         [
           ..match model.startup {
-            Starting => [@rui.spinner(label="Connecting to server…")]
+            Starting => [centered_loading_view("Connecting to server…")]
             StartupFailed(error) =>
               [
                 @rui.empty(attrs=@html.Attrs::build().role("alert"), [
