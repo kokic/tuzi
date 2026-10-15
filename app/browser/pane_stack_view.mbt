@@ -19,6 +19,11 @@ fn pane_stack_view(
   let history = stack.map(stack => {
     (stack.current.id, stack.current.path, stack.history)
   })
+  let bookmarks = stack
+    .map(stack => (stack.current.id, stack.current.path))
+    .map2(model.map(model => model.bookmarks), (location, bookmarks) => {
+      (location.0, location.1, bookmarks)
+    })
   let active = model.map(model => model.active == idx)
   let other_path = model.map(model => model.pane_at(idx.other()).path)
   let views = stack
@@ -27,7 +32,7 @@ fn pane_stack_view(
       (id, pane) => {
         let rows = pane_rows(pane, other_path, idx, emit, appearance, openers)
         // Cached ancestor views retain their rows, but only the visible view
-        // mounts a history menu and its items.
+        // mounts navigation menus and their items.
         let history_menu = history.switch_by(
           history => {
             let (current_id, path, paths) = history
@@ -43,6 +48,26 @@ fn pane_stack_view(
           by=history => {
             if history.0 == id {
               ToJson::to_json((history.1, history.2)).stringify()
+            } else {
+              ""
+            }
+          },
+        )
+        let bookmark_menu = bookmarks.switch_by(
+          bookmarks => {
+            let (current_id, path, paths) = bookmarks
+            guard current_id == id else { return Val::constant(@html.nothing) }
+            pane_bookmark_menu_view(
+              "pane-\{idx.index()}-view-\{id}-bookmarks",
+              path,
+              paths,
+              idx,
+              emit,
+            )
+          },
+          by=bookmarks => {
+            if bookmarks.0 == id {
+              ToJson::to_json((bookmarks.1, bookmarks.2)).stringify()
             } else {
               ""
             }
@@ -92,14 +117,24 @@ fn pane_stack_view(
           },
           by=sort => sort.label(),
         )
-        let content = pane.view7(
+        let content = pane.view8(
           filter,
           active,
           rows,
           breadcrumbs,
           sort_select,
           history_menu,
-          (pane, filter, active, rows, breadcrumbs, sort_select, history_menu) => {
+          bookmark_menu,
+          (
+            pane,
+            filter,
+            active,
+            rows,
+            breadcrumbs,
+            sort_select,
+            history_menu,
+            bookmark_menu,
+          ) => {
             pane.pane_view(
               pane.view_data(),
               idx,
@@ -110,6 +145,7 @@ fn pane_stack_view(
               breadcrumbs,
               sort_select,
               history_menu,
+              bookmark_menu,
             )
           },
         )

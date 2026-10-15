@@ -6,64 +6,15 @@ fn pane_history_menu_view(
   idx : PaneSide,
   emit : Emit[Msg],
 ) -> Val[Html] {
-  let paths = history.to_array()
-  let current = current.to_string()
-  @rui.dropdown_menu(id~, scope => {
-    fragment([
-      @rui.dropdown_menu_trigger(
-        scope,
-        variant=Ghost,
-        size=Xs,
-        aria_label="Path history",
-        title="Path history",
-        style=[UI_FONT_STYLE, "flex: none", "width: 24px", "padding: 0"],
-        pane_history_icon(),
-      ),
-      @rui.dropdown_menu_content(
-        scope,
-        align=Start,
-        aria_label="Path history",
-        style=[
-          UI_FONT_STYLE,
-          "max-width: min(32rem, calc(100vw - 1rem))",
-          "max-height: min(16rem, var(--rui-menu-available-height, calc(100vh - 1rem)))",
-        ],
-        [
-          @rui.dropdown_menu_label(style=["flex: none"], "Path history"),
-          ..paths
-          .rev_iter()
-          .map(path => {
-            let is_current = path == current
-            @rui.dropdown_menu_item(
-              scope,
-              disabled=is_current,
-              title=path,
-              aria_label=if is_current {
-                "\{path} (current directory)"
-              } else {
-                path
-              },
-              style=["flex: none"],
-              on_select=emit(PaneEvent(GotoPath(idx, Path(path)))),
-              [
-                span(
-                  attrs=@html.Attrs::build().aria_hidden("true"),
-                  style=["width: 1rem", "flex: none", "text-align: center"],
-                  if is_current {
-                    "✓"
-                  } else {
-                    ""
-                  },
-                ),
-                span(style=status_text_style(), path),
-              ],
-            )
-          })
-          .to_array(),
-        ],
-      ),
-    ])
-  })
+  pane_path_menu_view(
+    id,
+    current,
+    history.to_array().rev_iter().to_array(),
+    idx,
+    emit,
+    label="Path history",
+    icon=pane_history_icon(),
+  )
 }
 
 ///|

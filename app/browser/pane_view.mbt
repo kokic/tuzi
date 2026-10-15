@@ -35,6 +35,7 @@ fn Pane::pane_view(
   breadcrumbs : Html,
   sort_select : Html,
   history_menu : Html,
+  bookmark_menu : Html,
 ) -> Html {
   div(id="pane-\{idx.index()}-view-\{pane.id}", style=pane_style(active), {
     "header": div(class="phead", style=pane_header_style(active), breadcrumbs),
@@ -42,6 +43,7 @@ fn Pane::pane_view(
       style=[..pane_header_style(active), "justify-content: flex-end"],
       [
         history_menu,
+        bookmark_menu,
         pane_filter_view(idx, pane.id, filter.unwrap_or(""), emit),
         @rui.button(
           variant=Ghost,
