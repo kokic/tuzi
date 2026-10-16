@@ -9,9 +9,8 @@ priv struct OpenTarget {
 ///|
 fn Model::cursor_open_target(model : Model) -> OpenTarget? {
   let pane = model.pane_at(model.active)
-  let data = pane.view_data()
-  data.entries
-  .get(data.cursor_index.unwrap_or(0))
+  pane.visible_entries
+  .get(pane.cursor_index().unwrap_or(0))
   .map(entry => {
     pane: model.active,
     path: pane.path.join(Path("./\{entry.name}")),

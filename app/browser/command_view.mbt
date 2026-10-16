@@ -44,14 +44,18 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
                   "View: Synchronize to Current Panel Path",
                   emit(SyncPanePath),
                 ),
-                command_link_item(
+                command_action_item(
                   scope~,
                   "Contribution: New issue",
-                  "https://github.com/kokic/tuzi/issues/new",
+                  open_command_url("https://github.com/kokic/tuzi/issues/new"),
                 ),
                 @rui.command_separator(),
                 ..navigation_links.map(link => {
-                  command_link_item(scope~, link.label, link.url)
+                  command_action_item(
+                    scope~,
+                    link.label,
+                    open_command_url(link.url),
+                  )
                 }),
               ],
             ),
@@ -60,15 +64,6 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
       ])
     },
   )
-}
-
-///|
-fn command_link_item(
-  scope~ : @rui.CommandScope,
-  label : String,
-  url : String,
-) -> Html {
-  command_action_item(scope~, label, open_command_url(url))
 }
 
 ///|

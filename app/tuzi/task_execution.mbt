@@ -1,35 +1,38 @@
 ///|
-/// Request validation and command construction finish before a task gets an id.
+/// Retain the validated command until the entire batch is ready to enqueue.
 priv struct PreparedTask {
   kind : @shared.TaskKind
   execute : async () -> String
 }
 
 ///|
-fn prepare_task(kind : @shared.TaskKind) -> PreparedTask raise {
-  let execute : async () -> String = match kind {
-    File(operation) => {
-      validate_file_operation_input(operation)
-      () => {
-        execute_file_operation(operation)
-        ""
-      }
-    }
-    Git(request) => {
-      let arguments = @git.git_arguments(request.operation)
-      () => @git.run_git(request.path, arguments)
-    }
-  }
-  { kind, execute, }
-}
-
-///|
 fn TaskService::submit(
   self : TaskService,
-  prepared : Array[Result[PreparedTask, @shared.ApiFailure]],
+  requests : Array[Result[@shared.TaskKind, @shared.ApiFailure]],
   group : @async.TaskGroup[Unit],
   log : Bool,
 ) -> Array[@shared.ApiResponse[Int32]] raise {
+  // A spawned task may start immediately, so prepare the whole batch first.
+  let prepared = requests.map(result => {
+    result.map(kind => {
+      let execute : async () -> String = match kind {
+        File(operation) => {
+          validate_file_operation_input(operation)
+          () => {
+            execute_file_operation(operation)
+            ""
+          }
+        }
+        Git(request) => {
+          let arguments = @git.git_arguments(request.operation)
+          () => @git.run_git(request.path, arguments)
+        }
+      }
+      PreparedTask::{ kind, execute, }
+    }) catch {
+      error => Err(api_failure(error))
+    }
+  })
   let results = prepared.map(result => {
     let task = match result {
       Ok(task) => task

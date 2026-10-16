@@ -17,17 +17,7 @@ fn Model::open_entry_at_row(
   guard pane.visible_entries.get(row) is Some(entry) else {
     return (model, @rabbita.none)
   }
-  model.open_entry(idx, entry, emit)
-}
-
-///|
-fn Model::open_entry(
-  model : Model,
-  idx : PaneSide,
-  entry : Entry,
-  emit : Emit[Msg],
-) -> (Model, Cmd) {
-  let path = model.pane_at(idx).path.join(Path("./\{entry.name}"))
+  let path = pane.path.join(Path("./\{entry.name}"))
   model.open_default({ pane: idx, path, entry, }, emit)
 }
 
@@ -104,7 +94,7 @@ fn Model::update_panes(
 fn Model::scroll_to_cursor(model : Model) -> Cmd {
   let pane = model.pane_at(model.active)
   guard pane.cursor is Some(_) else { return @rabbita.none }
-  let row = pane.cursor_index()
+  let row = pane.cursor_index().unwrap_or(0)
   let id = "pane-\{model.active.index()}-view-\{pane.id}-row-\{row}"
   @cmd.custom_cmd(kind=AfterRender, _ => {
     guard @dom.document().get_element_by_id(id).to_option() is Some(node) else {

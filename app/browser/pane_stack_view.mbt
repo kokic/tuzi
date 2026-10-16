@@ -136,15 +136,7 @@ fn pane_stack_view(
             bookmark_menu,
           ) => {
             pane.pane_view(
-              pane.view_data(),
-              idx,
-              emit,
-              active,
-              filter,
-              rows,
-              breadcrumbs,
-              sort_select,
-              history_menu,
+              idx, emit, active, filter, rows, breadcrumbs, sort_select, history_menu,
               bookmark_menu,
             )
           },

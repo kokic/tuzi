@@ -10,11 +10,7 @@ fn Model::view(
     mode=color_mode(model.theme),
     id="tuzi",
     style=[
-      ..default_font_theme.style(),
-      ..appearance_style,
-      "height: 100%",
-      "display: flex",
-      "flex-direction: column",
+      ..typography_style, ..appearance_style, "height: 100%", "display: flex", "flex-direction: column",
     ],
     [
       div(

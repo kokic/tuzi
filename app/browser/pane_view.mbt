@@ -26,7 +26,6 @@ fn panes_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
 ///|
 fn Pane::pane_view(
   pane : Pane,
-  data : PaneViewData,
   idx : PaneSide,
   emit : Emit[Msg],
   active : Bool,
@@ -99,7 +98,7 @@ fn Pane::pane_view(
         },
       },
     ),
-    "details": data.entry_details_view(),
+    "details": pane.entry_details_view(),
   })
 }
 

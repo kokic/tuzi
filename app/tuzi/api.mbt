@@ -44,14 +44,14 @@ fn routes(
     ..post("/api/tasks", (req, res) => {
       respond(res, () => {
         let entries : Array[Json] = decode_request(req)
-        let prepared = entries.map(entry => {
-          Ok(prepare_task(decode_json(entry))) catch {
+        let requests = entries.map(entry => {
+          Ok(decode_json(entry)) catch {
             error => Err(api_failure(error))
           }
         })
         @shared.TaskSubmission::{
           session: tasks.session,
-          results: tasks.submit(prepared, group, log),
+          results: tasks.submit(requests, group, log),
         }
       })
     })

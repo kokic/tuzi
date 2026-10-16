@@ -94,15 +94,14 @@ fn Pane::with_entries(
     },
   }.with_filter(filter?)
   guard updated.cursor != pane.cursor else { return updated }
-  let previous = pane.view_data()
-  guard previous.cursor_index is Some(index) else { return updated }
+  guard pane.cursor_index() is Some(index) else { return updated }
   // Keep the cursor near the removed entry in the previous visible order.
   let names = Set::from_iter(
     updated.visible_entries.iter().map(entry => entry.name),
   )
-  guard previous.entries[index + 1:]
+  guard pane.visible_entries[index + 1:]
     .iter()
-    .concat(previous.entries[:index].rev_iter())
+    .concat(pane.visible_entries[:index].rev_iter())
     .find_first(entry => names.contains(entry.name))
     is Some(entry) else {
     return updated
