@@ -43,3 +43,17 @@ fn task_details_dialog(
     ],
   )
 }
+
+///|
+fn task_details(task : Task) -> Array[Html] {
+  match task.status {
+    Queued | Running => []
+    Completed(output) =>
+      if output.is_empty() {
+        []
+      } else {
+        [task_output_view(output)]
+      }
+    Failed(_) => []
+  }
+}

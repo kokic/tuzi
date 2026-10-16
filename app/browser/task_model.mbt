@@ -95,3 +95,14 @@ fn latest_git_task(tasks : Array[Task], path : Path) -> Task? {
   .iter()
   .find_first(task => task.kind is Git(request) && request.path == path)
 }
+
+///|
+fn Task::history_output(task : Task) -> (String, String)? {
+  let (label, message) = match task.status {
+    Completed(output) => ("Output", output)
+    Failed(error) => ("Error details", error.message)
+    Queued | Running => return None
+  }
+  guard !message.is_empty() else { return None }
+  Some((label, message))
+}

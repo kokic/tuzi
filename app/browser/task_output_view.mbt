@@ -1,15 +1,4 @@
 ///|
-fn Task::history_output(task : Task) -> (String, String)? {
-  let (label, message) = match task.status {
-    Completed(output) => ("Output", output)
-    Failed(error) => ("Error details", error.message)
-    Queued | Running => return None
-  }
-  guard !message.is_empty() else { return None }
-  Some((label, message))
-}
-
-///|
 fn task_output_dialog(
   tasks : Array[Task],
   id : Int32,
@@ -56,5 +45,17 @@ fn task_output_dialog(
         ),
       ]),
     ],
+  )
+}
+
+///|
+fn task_output_view(message : String, label~ : String = "Task output") -> Html {
+  @rui.scroll_area(
+    orientation=Horizontal,
+    attrs=@html.Attrs::build().aria_label(label),
+    style=[
+      "height: auto", "max-height: 160px", "overflow-y: auto", "overscroll-behavior-y: auto",
+    ],
+    @html.pre(style=[CODE_FONT_STYLE], message),
   )
 }

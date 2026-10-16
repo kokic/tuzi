@@ -63,3 +63,36 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
     }
   })
 }
+
+///|
+fn delete_confirm_dialog(
+  title : String,
+  description : String,
+  items : Array[(String, String)],
+  emit : Emit[Msg],
+) -> Html {
+  modal(title, emit, description~, [
+    @rui.scroll_area(
+      style=["height: auto", "max-height: 60vh"],
+      @rui.item_group(
+        Map::from_iter(
+          items
+          .iter()
+          .map(item => {
+            let (label, detail) = item
+            (
+              detail,
+              @rui.item(
+                @rui.item_content([
+                  @rui.item_title(label),
+                  @rui.item_description(detail),
+                ]),
+              ),
+            )
+          }),
+        ),
+      ),
+    ),
+    dialog_footer(emit, "Delete", Destructive),
+  ])
+}

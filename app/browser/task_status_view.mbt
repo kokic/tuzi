@@ -15,32 +15,6 @@ fn task_indicator(status : TaskStatus) -> Html {
 }
 
 ///|
-fn task_output_view(message : String, label~ : String = "Task output") -> Html {
-  @rui.scroll_area(
-    orientation=Horizontal,
-    attrs=@html.Attrs::build().aria_label(label),
-    style=[
-      "height: auto", "max-height: 160px", "overflow-y: auto", "overscroll-behavior-y: auto",
-    ],
-    @html.pre(style=[CODE_FONT_STYLE], message),
-  )
-}
-
-///|
-fn task_details(task : Task) -> Array[Html] {
-  match task.status {
-    Queued | Running => []
-    Completed(output) =>
-      if output.is_empty() {
-        []
-      } else {
-        [task_output_view(output)]
-      }
-    Failed(_) => []
-  }
-}
-
-///|
 fn task_status_view(status : TaskStatus, description : String) -> Html {
   match status {
     Queued =>
