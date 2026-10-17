@@ -68,7 +68,6 @@ fn Dialog::file_operations(
     | BookmarkDeleteConfirm(..)
     | Goto(_)
     | TaskDetails(_)
-    | TaskOutput(_)
     | Markdown(_)
     | TextPreview(_)
     | Progress(_)

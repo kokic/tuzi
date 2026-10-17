@@ -24,73 +24,25 @@ fn activity_dialog(jobs : Val[TaskState], emit : Emit[Msg]) -> Val[Html] {
 
 ///|
 fn activity_item_view(task : Task, emit : Emit[Msg]) -> Html {
-  let (label, variant) : (String, @rui.BadgeVariant) = match task.status {
-    Queued => ("Queued", Secondary)
-    Running => ("Running", Secondary)
-    Completed(_) => ("Completed", Secondary)
-    Failed(_) => ("Failed", Destructive)
-  }
-  let actions = [
-    ..task
-    .history_output()
-    .map_or([], output => {
-      let (label, _) = output
-      [
-        @rui.button(
-          variant=Ghost,
-          size=Sm,
-          style=[UI_FONT_STYLE],
-          on_click=emit(TaskEvent(TaskOutputOpen(task.id))),
-          label,
-        ),
-      ]
-    }),
-    ..match (task.kind, task.status) {
-      (File(Zip(..) | Unzip(..)) | Git(_), Queued | Running | Failed(_)) =>
-        [
-          @rui.button(
-            variant=Ghost,
-            size=Sm,
-            style=[UI_FONT_STYLE],
-            on_click=emit(TaskEvent(TaskOpen(task.id))),
-            if task.status.is_active() {
-              "View progress"
-            } else {
-              "View details"
-            },
-          ),
-        ]
-      _ => []
-    },
-  ]
   @rui.item(
     variant=ItemOutline,
     attrs=@html.Attrs::build().role("listitem"),
-    style=["flex-wrap: nowrap"],
+    style=["flex-wrap: nowrap", "align-items: flex-start"],
     [
-      @rui.item_media(
-        badge(variant~, attrs=@html.Attrs::build().role("status"), label),
+      task_summary_view(task),
+      @rui.item_actions(
+        style=["flex-shrink: 0"],
+        @rui.button(
+          variant=Outline,
+          size=Sm,
+          style=[UI_FONT_STYLE],
+          attrs=@html.Attrs::build().aria_label(
+            "View details for task #\{task.id}",
+          ),
+          on_click=emit(TaskEvent(TaskOpen(task.id))),
+          "View details",
+        ),
       ),
-      activity_description_view(task),
-      ..if actions.is_empty() {
-        []
-      } else {
-        [@rui.item_actions(actions)]
-      },
     ],
-  )
-}
-
-///|
-fn activity_description_view(task : Task) -> Html {
-  @rui.item_content(
-    match task.kind {
-      Git(request) =>
-        [
-          @rui.item_title("git \{request.operation.name()}"),
-          @rui.item_description(request.path.to_string()),
-        ]
-      File(_) => [@rui.item_title(task.description)]
-    },
   )
 }

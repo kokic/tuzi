@@ -5,7 +5,6 @@ priv enum TaskMsg {
     Result[@tuzi.TaskSubmission, RequestFailure]
   )
   TaskOpen(Int32)
-  TaskOutputOpen(Int32)
   TaskSocket(Int32, @websocket.Event)
   TaskSocketFailed(Int32, String)
   TaskReconnect(Int32)

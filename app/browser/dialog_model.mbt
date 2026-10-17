@@ -13,7 +13,6 @@ priv enum Dialog {
   BookmarkDeleteConfirm(side~ : PaneSide, path~ : Path)
   Goto(GotoContext)
   TaskDetails(Int32)
-  TaskOutput(Int32)
   Info(InfoContext)
   Markdown(MarkdownContext)
   TextPreview(TextPreviewContext)

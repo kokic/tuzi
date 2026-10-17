@@ -18,6 +18,7 @@ fn task_details_dialog(
     ])
   }
   let active = task.status.is_active()
+  let output = task.history_output()
   let description = if active {
     Some(
       "This operation continues on the server when this window is hidden or the page is refreshed.",
@@ -30,30 +31,50 @@ fn task_details_dialog(
     emit,
     size=Wide,
     description?,
+    style=[
+      "max-height: calc(100dvh - 32px)", "display: flex", "flex-direction: column",
+      "overflow: hidden",
+    ],
     [
-      @rui.item([
-        @rui.item_content([
-          @rui.item_title(task.description),
-          @rui.item_description("Task #\{task.id}"),
-        ]),
-        @rui.item_footer(task_status_view(task.status, task.description)),
+      @rui.item(style=["flex-shrink: 0"], [
+        task_summary_view(task, full_path=true),
+        @rui.item_footer(@rui.item_description("Task #\{task.id}")),
       ]),
-      ..task_details(task),
-      dialog_close_footer_view(label=if active { "Hide" } else { "Close" }),
+      ..if task.status is Running {
+        [@rui.progress(aria_label=task.description)]
+      } else {
+        []
+      },
+      ..output.map_or([], output => {
+        let (label, message) = output
+        [
+          @rui.item_title(style=["flex-shrink: 0"], label),
+          @rui.scroll_area(
+            orientation=Horizontal,
+            attrs=@html.Attrs::build().aria_label(label),
+            style=[
+              "height: auto", "max-height: 50dvh", "min-height: 0", "overflow-y: auto",
+            ],
+            @html.pre(
+              style=[
+                CODE_FONT_STYLE,
+                "margin: 0",
+                "white-space: pre",
+                "overflow-wrap: normal",
+              ],
+              message,
+            ),
+          ),
+        ]
+      }),
+      dialog_close_footer_view(label=if active { "Hide" } else { "Close" }, actions=[
+        @rui.button(
+          variant=Outline,
+          style=[UI_FONT_STYLE],
+          on_click=emit(ActivityOpen),
+          "Back to Activity",
+        ),
+      ]),
     ],
   )
-}
-
-///|
-fn task_details(task : Task) -> Array[Html] {
-  match task.status {
-    Queued | Running => []
-    Completed(output) =>
-      if output.is_empty() {
-        []
-      } else {
-        [task_output_view(output)]
-      }
-    Failed(_) => []
-  }
 }

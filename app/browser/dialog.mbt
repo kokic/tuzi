@@ -101,7 +101,6 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     | Bookmarks(_)
     | BookmarkDeleteConfirm(..)
     | TaskDetails(_)
-    | TaskOutput(_)
     | Info(_)
     | Markdown(_)
     | TextPreview(_)
