@@ -12,6 +12,9 @@ fn InfoContext::dialog(
       @tuzi.image_content_type(context.entry.name) is Some(_) {
       [context.image_view()]
     },
+    ..context.font_preview.map_or([], state => {
+      [context.font_preview_view(state)]
+    }),
     ..context.fields_view(emit, error~),
     ..additional_content,
   ]

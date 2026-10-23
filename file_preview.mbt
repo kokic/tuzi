@@ -15,6 +15,9 @@ fn Path::content_type(path : Path) -> String? {
   if image_content_type(name) is Some(content_type) {
     return Some(content_type)
   }
+  if font_content_type(name) is Some(content_type) {
+    return Some(content_type)
+  }
   Some(
     match @posix.Path(name.to_lower()).extname().to_owned() {
       ".pdf" => "application/pdf"

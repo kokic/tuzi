@@ -4,6 +4,7 @@ priv struct InfoContext {
   entry : Entry
   path : Path
   link : LinkFields?
+  font_preview : FontPreviewState?
 } derive(Eq)
 
 ///|
@@ -18,6 +19,13 @@ fn Model::open_info_dialog(
     id: model.next_info_id,
     entry,
     path,
+    font_preview: if entry.kind is Ok(kind) &&
+      !kind.is_dir() &&
+      @tuzi.font_content_type(entry.name) is Some(_) {
+      Some(Loading)
+    } else {
+      None
+    },
     link: if entry.is_link() {
       Some({ path: path.to_string(), target: None, })
     } else {

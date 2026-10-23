@@ -46,6 +46,7 @@ priv enum Msg {
   BreadcrumbAction(OpenTarget, FileAction)
   MarkdownEvent(MarkdownMsg)
   TextPreviewLoaded(Int32, Result[String, String])
+  FontPreviewLoaded(Int32, Result[Unit, String])
   GitEvent(GitMsg)
   TaskEvent(TaskMsg)
   LinkTargetLoaded(Int32, Result[Path, RequestFailure])

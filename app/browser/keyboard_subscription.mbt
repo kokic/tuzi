@@ -60,10 +60,15 @@ fn Model::keyboard_command(
 
 ///|
 fn Model::subscriptions(model : Model, emit : Emit[Msg]) -> @sub.Sub {
-  @sub.custom_sub(
-    "keyboard",
-    Local,
-    KeyboardSubscription::OnKeyDown(event => model.keyboard_command(event, emit)),
-    keyboard_subscription_loader,
-  )
+  @sub.batch([
+    @sub.custom_sub(
+      "keyboard",
+      Local,
+      KeyboardSubscription::OnKeyDown(event => {
+        model.keyboard_command(event, emit)
+      }),
+      keyboard_subscription_loader,
+    ),
+    model.font_preview_subscription(emit),
+  ])
 }
