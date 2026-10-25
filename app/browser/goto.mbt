@@ -83,7 +83,7 @@ fn Model::submit_goto(
       @rabbita.none,
     )
   }
-  let path = context.directory.resolve(Path(context.input)) catch {
+  let path = context.directory.resolve(parse_user_path(context.input)) catch {
     error =>
       return ({ ..model, dialog_error: error.to_string(), }, @rabbita.none)
   }

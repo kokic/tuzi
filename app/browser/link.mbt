@@ -82,20 +82,13 @@ fn Model::submit_info_link(
       @rabbita.none,
     )
   }
-  let parse = path => {
-    if model.supports_drive_selection {
-      Path::from_windows(path)
-    } else {
-      Path(path)
-    }
-  }
   model
   .start_file_operations(
     [
       EditLink(
         source=context.path,
-        destination=parse(fields.path),
-        target=parse(target),
+        destination=parse_user_path(fields.path),
+        target=parse_user_path(target),
       ),
     ],
     emit,

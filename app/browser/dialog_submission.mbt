@@ -49,7 +49,7 @@ fn Dialog::file_operations(
     }
     UnzipInput(source~, input~) => {
       guard !input.is_empty() else { raise DestinationRequired }
-      let destination = source.dirname().resolve(Path(input))
+      let destination = source.dirname().resolve(parse_user_path(input))
       [FileOperation::Unzip(source~, destination~)]
     }
     NewEntryInput(directory~, input~) => {
