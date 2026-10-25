@@ -100,7 +100,11 @@ fn Model::refresh_git(
 ) -> (Model, Cmd) {
   guard model.dialog is GitInfo(context) &&
     context.entry.id == id &&
-    !model.git_busy(context.entry.path) else {
+    !model.jobs.items.any(task => {
+      task.kind is Git(request) &&
+      request.path == context.entry.path &&
+      task.status.is_active()
+    }) else {
     return (model, @rabbita.none)
   }
   let context = {
