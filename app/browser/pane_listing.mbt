@@ -17,7 +17,6 @@ fn Model::invalidate_panes(model : Model, left~ : Bool, right~ : Bool) -> Model 
 fn Model::receive_listing(
   model : Model,
   targets : Array[ListingTarget],
-  include_markers : Bool,
   result : Result[Array[Entry], RequestFailure],
 ) -> Model {
   targets.fold(init=model, (model, target) => {
@@ -26,22 +25,17 @@ fn Model::receive_listing(
       guard pane.id == view_id && pane.request_id == request_id else {
         return pane
       }
-      if include_markers != (model.entry_appearance != Plain) {
-        // A response for the previous entry appearance cannot satisfy this view.
-        { ..pane, loading: Unloaded, refresh_pending: true, }
-      } else {
-        match result {
-          Ok(entries) =>
-            {
-              ..pane.with_entries(
-                entries,
-                model.sort_order(idx),
-                filter?=model.entry_filter(idx),
-              ),
-              loading: Ready,
-            }
-          Err(error) => { ..pane, loading: LoadFailed(error.message()), }
-        }
+      match result {
+        Ok(entries) =>
+          {
+            ..pane.with_entries(
+              entries,
+              model.sort_order(idx),
+              filter?=model.entry_filter(idx),
+            ),
+            loading: Ready,
+          }
+        Err(error) => { ..pane, loading: LoadFailed(error.message()), }
       }
     }
     {

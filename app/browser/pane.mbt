@@ -1,10 +1,6 @@
 ///|
 priv enum PaneMsg {
-  ListLoaded(
-    Array[ListingTarget],
-    Bool,
-    Result[Array[Entry], RequestFailure]
-  )
+  ListLoaded(Array[ListingTarget], Result[Array[Entry], RequestFailure])
   ReloadPane(PaneSide)
   GotoPath(PaneSide, Path)
   Click(PaneSide, Int32)

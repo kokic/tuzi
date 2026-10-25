@@ -9,7 +9,7 @@ priv struct GotoContext {
 ///|
 priv enum GotoMsg {
   Open(PaneSide, Path)
-  Loaded(Int32, Path, Bool, Result[Array[Entry], RequestFailure])
+  Loaded(Int32, Path, Result[Array[Entry], RequestFailure])
 }
 
 ///|
@@ -29,7 +29,7 @@ fn Model::update_goto(model : Model, msg : GotoMsg) -> (Model, Cmd) {
         },
         @rabbita.none,
       )
-    Loaded(revision, path, include_markers, result) => {
+    Loaded(revision, path, result) => {
       // Editing, dismissing, or reopening the dialog invalidates an older request.
       guard model.dialog_revision == revision &&
         model.dialog is Goto(context) &&
@@ -58,8 +58,7 @@ fn Model::update_goto(model : Model, msg : GotoMsg) -> (Model, Cmd) {
             ),
             request_id: pane.request_id + 1,
             loading: Ready,
-            refresh_pending: include_markers !=
-            (model.entry_appearance != Plain),
+            refresh_pending: false,
           }
           (
             { ..model, panes: set_pane(model.panes, context.pane, pane), },
@@ -95,7 +94,7 @@ fn Model::submit_goto(
     request_api(
       "/api/list",
       body=ToJson::to_json(@tuzi.ListingRequest::{ path, include_markers, }),
-      result => emit(GotoEvent(Loaded(revision, path, include_markers, result))),
+      result => emit(GotoEvent(Loaded(revision, path, result))),
     ),
   )
 }

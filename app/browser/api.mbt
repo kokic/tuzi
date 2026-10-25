@@ -32,9 +32,7 @@ fn request_directory_listing(
   request_api(
     "/api/list",
     body=ToJson::to_json(@tuzi.ListingRequest::{ path, include_markers, }),
-    result => {
-      emit(PaneEvent(ListLoaded(targets, include_markers, result)))
-    },
+    result => emit(PaneEvent(ListLoaded(targets, result))),
   )
 }
 

@@ -53,11 +53,8 @@ fn Model::update_panes(
         model.invalidate_panes(left=idx == Left, right=idx == Right),
         @rabbita.none,
       )
-    ListLoaded(targets, include_markers, result) =>
-      (
-        model.receive_listing(targets, include_markers, result),
-        @rabbita.none,
-      )
+    ListLoaded(targets, result) =>
+      (model.receive_listing(targets, result), @rabbita.none)
     GotoPath(idx, path) => model.navigate_to_directory(idx, path)
     Click(idx, row) => {
       let pane = model.pane_at(idx)

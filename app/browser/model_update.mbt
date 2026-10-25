@@ -11,19 +11,6 @@ fn Model::update(
   } else {
     updated
   }
-  // Marker data depends on entry appearance. Keep this at the update boundary so
-  // every configuration change invalidates listings, including future controls.
-  let updated = if updated.entry_appearance != model.entry_appearance {
-    {
-      ..updated,
-      panes: (
-        updated.panes.0.invalidate(_ => true),
-        updated.panes.1.invalidate(_ => true),
-      ),
-    }
-  } else {
-    updated
-  }
   let (updated, listings) = updated.load_pending_panes(emit)
   (updated, @rabbita.batch([command, listings]))
 }
