@@ -66,8 +66,6 @@ fn api_failure(error : Error) -> @shared.ApiFailure {
       (InvalidRequest, Show::to_string(error))
     @archive.ExtractionError::UnsafePath(_) as error =>
       (InvalidName, Show::to_string(error))
-    @archive.ExtractionError::ChecksumMismatch(_) as error =>
-      (InvalidRequest, Show::to_string(error))
     @zip.ZipError(UnsupportedCompression(_) | UnsupportedFeature, message) =>
       (Unsupported, message)
     @zip.ZipError(_, message) => (InvalidRequest, message)

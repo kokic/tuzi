@@ -1,7 +1,6 @@
 ///|
 pub suberror ExtractionError {
   UnsafePath(String)
-  ChecksumMismatch(String)
 }
 
 ///|
@@ -11,7 +10,6 @@ pub extend ExtractionError with Show::{to_string, output}
 pub impl Show for ExtractionError with fn to_string(self) {
   match self {
     UnsafePath(name) => "Unsafe archive path: \{name}"
-    ChecksumMismatch(name) => "ZIP checksum mismatch: \{name}"
   }
 }
 
@@ -47,8 +45,8 @@ fn extraction_components(name : String) -> Array[String] raise ExtractionError {
 
 ///|
 /// Own a fresh output tree, so failures can remove it without touching existing
-/// files. The ZIP reader materializes entries in memory and checks structure;
-/// CRC verification is the caller's responsibility.
+/// files. The ZIP reader materializes entries in memory and verifies structure
+/// and CRC checksums before extraction.
 pub async fn unzip_entries(source : Path, destination : Path) -> Unit {
   guard @async_fs.kind(source.to_native(), follow_symlink=false) is Regular else {
     raise ArchiveError::UnsupportedEntry(source.to_string())
@@ -62,9 +60,6 @@ pub async fn unzip_entries(source : Path, destination : Path) -> Unit {
     let components = extraction_components(name)
     guard !components.any(part => part == ".DS_Store" || part == "__MACOSX") else {
       continue
-    }
-    guard @checksum.crc32(entry.data()) == entry.crc32() else {
-      raise ChecksumMismatch(name)
     }
     let output = destination.join(Path(components.join("/")))
     if name.has_suffix("/") {

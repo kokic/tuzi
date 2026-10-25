@@ -1,6 +1,5 @@
 import {
   "moonbit-community/flate/zip",
-  "moonbit-community/flate/checksum",
   "kokic/tuzi" @shared,
   "kokic/tuzi/app/tuzi/fsops",
   "kokic/uniform-path" @uniform_path,
