@@ -1,7 +1,7 @@
 ///|
 priv struct EntryRow {
   view_id : Int32
-  directory : String
+  directory : Path
   row : Int32
   entry : Entry
   selected : Bool
@@ -24,7 +24,7 @@ fn pane_rows(
       @vector.Vector::from_array(
         entries.mapi((row, entry) => EntryRow::{
           view_id: pane.id,
-          directory: pane.path.to_string(),
+          directory: pane.path,
           row,
           entry,
           selected: pane.selected.contains(entry.name),
@@ -137,7 +137,7 @@ fn entry_context_menu(
         scope,
         {
           pane: idx,
-          path: Path(item.directory).join(Path("./\{entry.name}")),
+          path: item.directory.join(Path("./\{entry.name}")),
           entry,
         },
         openers,
