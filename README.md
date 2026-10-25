@@ -4,6 +4,7 @@
 
 - Dual-pane file browser with a web UI.
 - Never generates or packages junk files like `.DS_Store` and `__MACOSX/`, even on macOS.
+- Does not support backslashes `\` in file names, even with POSIX-style paths. Allowing them is a design flaw.
 
 ## Acknowledgements
 
