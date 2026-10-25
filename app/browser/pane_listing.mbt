@@ -17,16 +17,13 @@ fn Model::invalidate_panes(model : Model, left~ : Bool, right~ : Bool) -> Model 
 fn Model::receive_listing(
   model : Model,
   targets : Array[ListingTarget],
-  path : Path,
   include_markers : Bool,
   result : Result[Array[Entry], RequestFailure],
 ) -> Model {
   targets.fold(init=model, (model, target) => {
     let { pane: idx, view_id, request_id, } = target
     let receive = (pane : Pane) => {
-      guard pane.id == view_id &&
-        pane.path == path &&
-        pane.request_id == request_id else {
+      guard pane.id == view_id && pane.request_id == request_id else {
         return pane
       }
       if include_markers != (model.entry_appearance != Plain) {

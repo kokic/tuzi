@@ -2,7 +2,6 @@
 priv enum PaneMsg {
   ListLoaded(
     Array[ListingTarget],
-    Path,
     Bool,
     Result[Array[Entry], RequestFailure]
   )
