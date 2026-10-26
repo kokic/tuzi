@@ -23,7 +23,6 @@ fn save_browser_theme(theme : Theme) -> Cmd {
       },
       map_ok=_ => (),
     ) catch {
-      // Storage restrictions must not interrupt theme switching.
       _ => ()
     }
   })

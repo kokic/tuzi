@@ -1,5 +1,4 @@
 ///|
-/// Decode strings before constructing Paths so empty values are not saved as `.`.
 fn decode_bookmarks(value : String) -> Array[Path] raise {
   let saved : Array[String] = @json.from_json(@json.parse(value))
   let bookmarks : Array[Path] = []

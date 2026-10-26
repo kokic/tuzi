@@ -1,6 +1,4 @@
 ///|
-/// Resolve a browser preview type. Unknown formats up to 1 MiB are plain text;
-/// larger unknown files cannot be opened.
 pub fn preview_content_type(path : Path, size : Int64) -> String? {
   if path.content_type() is Some(content_type) {
     return Some(content_type)

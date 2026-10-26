@@ -27,12 +27,9 @@ priv struct Pane {
   cursor : String?
   request_id : Int32
   loading : ListingState
-  // Coalesce invalidations during a request into one subsequent reload.
   refresh_pending : Bool
-  // Stored in display order; readers must not mutate this array.
   entries : Array[Entry]
   visible_entries : Array[Entry]
-  // Copy before mutation: retained models share selection membership.
   selected : Set[String]
 } derive(Eq)
 
@@ -70,7 +67,6 @@ fn Pane::begin_loading(pane : Pane) -> Pane {
 }
 
 ///|
-/// Replace listing data without mutating arrays held by the previous model.
 fn Pane::with_entries(
   pane : Pane,
   entries : Array[Entry],
@@ -95,7 +91,6 @@ fn Pane::with_entries(
   }.with_filter(filter?)
   guard updated.cursor != pane.cursor else { return updated }
   guard pane.cursor_index() is Some(index) else { return updated }
-  // Keep the cursor near the removed entry in the previous visible order.
   let names = Set::from_iter(
     updated.visible_entries.iter().map(entry => entry.name),
   )

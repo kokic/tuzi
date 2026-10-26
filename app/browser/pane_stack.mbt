@@ -1,11 +1,8 @@
 ///|
-/// Each mounted directory owns its listing and DOM for the lifetime of this
-/// stack entry. IDs are never reused, including after an entry is popped.
 priv struct PaneStack {
   sort : SortMode
   current : Pane
   parents : Array[Pane]
-  // Copy before mutation: retained models share the insertion-ordered history.
   history : Set[String]
   next_id : Int32
 } derive(Eq)

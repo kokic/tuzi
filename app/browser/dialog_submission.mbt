@@ -15,7 +15,6 @@ impl Show for DialogInputError with fn to_string(self) {
 }
 
 ///|
-/// Keep input intact; filesystem conflicts are decided by the server at execution.
 fn validate_dialog_name(input : String) -> String raise DialogInputError {
   guard !input.is_empty() else { raise NameRequired }
   input

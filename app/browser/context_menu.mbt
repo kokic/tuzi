@@ -1,5 +1,4 @@
 ///|
-/// Reuse the row's right-click handler so actions and menu focus stay identical.
 fn Model::open_cursor_context_menu(model : Model) -> Cmd {
   let pane = model.pane_at(model.active)
   guard pane.cursor_index() is Some(row) else { return @rabbita.none }

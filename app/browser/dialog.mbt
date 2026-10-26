@@ -1,5 +1,4 @@
 ///|
-/// Capture operation targets when opening, so later pane updates cannot retarget it.
 fn Model::open_delete_dialog(
   model : Model,
   context : FileActionContext,
@@ -134,8 +133,6 @@ fn Model::set_archive_compression_level(
 
 ///|
 fn Model::cancel_dialog(model : Model) -> (Model, Cmd) {
-  // The native dialog has already closed and raised its close event. Going
-  // back to a parent panel keeps a dialog open, so reopen the host element.
   let dialog = match model.dialog {
     GitRenameInput(context~, ..) => GitInfo(context)
     BookmarkDeleteConfirm(side~, ..) => Bookmarks(side)

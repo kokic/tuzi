@@ -1,6 +1,3 @@
-// Brand colors: https://github.com/simple-icons/simple-icons/blob/develop/data/simple-icons.json
-// Java and C#: https://github.com/devicons/devicon/blob/master/devicon.json
-
 ///|
 let config_colors : ReadOnlyArray[(String, String)] = [
   ("toml", "#9c4121"),

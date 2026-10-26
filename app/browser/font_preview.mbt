@@ -5,6 +5,20 @@ priv enum FontPreviewState {
 } derive(Eq)
 
 ///|
+priv struct FontPreview {
+  state : FontPreviewState
+  text : String
+} derive(Eq)
+
+///|
+fn FontPreview::initialize() -> FontPreview {
+  {
+    state: Loading,
+    text: "天地玄黄，宇宙洪荒。\nThe quick brown fox jumps over the lazy dog.\nABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n0123456789 !?.,:;()[]{}",
+  }
+}
+
+///|
 fn InfoContext::font_family(context : InfoContext) -> String {
   "tuzi-font-preview-\{context.id}"
 }
@@ -61,7 +75,6 @@ fn Model::font_preview_subscription(
 }
 
 ///|
-/// The subscription owns both fonts, including loads that finish after closing.
 fn load_preview_font(
   family : String,
   url : String,
@@ -137,23 +150,43 @@ fn Model::receive_font_preview(
 ) -> Model {
   guard model.dialog is Info(context) &&
     context.id == id &&
-    context.font_preview is Some(Loading) else {
+    context.font_preview is Some(preview) &&
+    preview.state is Loading else {
     return model
   }
-  { ..model, dialog: Info({ ..context, font_preview: Some(Loaded(result)), }), }
+  {
+    ..model,
+    dialog: Info({
+      ..context,
+      font_preview: Some({ ..preview, state: Loaded(result), }),
+    }),
+  }
+}
+
+///|
+fn Model::with_font_preview_text(model : Model, text : String) -> Model {
+  guard model.dialog is Info(context) && context.font_preview is Some(preview) else {
+    return model
+  }
+  {
+    ..model,
+    dialog: Info({ ..context, font_preview: Some({ ..preview, text, }), }),
+  }
 }
 
 ///|
 fn InfoContext::font_preview_view(
   context : InfoContext,
-  state : FontPreviewState,
+  preview : FontPreview,
+  emit : Emit[Msg],
 ) -> Html {
+  let input_id = "font-preview-text-\{context.id}"
   div(
     style=[
       "padding: 12px", "margin-bottom: 12px", "border: 1px solid var(--rui-border)",
       "border-radius: var(--rui-radius)", "background: var(--rui-muted)",
     ],
-    match state {
+    match preview.state {
       Loading => centered_loading_view("Loading font…")
       Loaded(Err(error)) =>
         @rui.alert(variant=Destructive, [
@@ -162,20 +195,31 @@ fn InfoContext::font_preview_view(
         ])
       Loaded(Ok(_)) =>
         div([
-          p(
-            style=[
-              "font-family: '\{context.font_family()}', '\{context.font_family()}-notdef'",
-              "font-size: 28px",
-              "font-weight: normal",
-              "font-style: normal",
-              "font-synthesis: none",
-              "line-height: 1.6",
-              "white-space: pre-wrap",
-              "margin: 0",
-              "user-select: text",
-            ],
-            "天地玄黄，宇宙洪荒。\nThe quick brown fox jumps over the lazy dog.\nABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n0123456789 !?.,:;()[]{}",
-          ),
+          @rui.field([
+            @rui.field_label(
+              for_=input_id,
+              style=[UI_FONT_STYLE],
+              "Preview text",
+            ),
+            @rui.textarea(
+              id=input_id,
+              value=preview.text,
+              rows=5,
+              placeholder="Type text to preview this font…",
+              on_input=emit.map(text => FontPreviewInput(text)),
+              style=[
+                "font-family: '\{context.font_family()}', '\{context.font_family()}-notdef'",
+                "font-size: 28px",
+                "font-weight: normal",
+                "font-style: normal",
+                "font-synthesis: none",
+                "line-height: 1.6",
+                "white-space: pre-wrap",
+                "max-height: 45dvh",
+                "overflow-y: auto",
+              ],
+            ),
+          ]),
           p(
             style=[
               "margin: 12px 0 0", "font-size: 0.8125rem", "color: var(--rui-muted-foreground)",

@@ -1,5 +1,4 @@
 ///|
-/// Only a confirmed rejection is safe to return to an editable input dialog.
 fn submission_rejected(
   result : Result[@tuzi.TaskSubmission, RequestFailure],
 ) -> Bool {
@@ -11,7 +10,6 @@ fn submission_rejected(
 }
 
 ///|
-/// Capture the originating UI before sending. Acceptance is handled by the reply.
 fn Model::start_file_operations(
   model : Model,
   operations : Array[FileOperation],

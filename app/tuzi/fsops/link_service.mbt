@@ -34,7 +34,6 @@ pub fn validate_link_path(path : Path) -> Unit raise {
 }
 
 ///|
-/// Paths travel as process arguments or environment values, never shell code.
 async fn link_command(
   program : String,
   arguments : Array[String],
@@ -66,7 +65,6 @@ pub async fn read_link_target(path : Path) -> Path {
     raise FileError::UnsupportedEntry(path.to_string())
   }
   let target = path_from_native(read_link_text(path))
-  // Resolve relative targets against the link's parent, preserving link chains.
   path_from_native(@async_fs.realpath(path.dirname().to_native())).resolve(
     target,
   )
@@ -80,8 +78,6 @@ async fn canonical_link_path(path : Path) -> Path {
 }
 
 ///|
-/// Stage the replacement before touching the old link. The transaction is not
-/// cancelled between replacement and cleanup; failures restore the old entry.
 pub async fn edit_link(
   source : Path,
   destination : Path,

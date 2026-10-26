@@ -1,5 +1,4 @@
 ///|
-/// The project kind identified by a marker directly inside a directory.
 pub(all) enum FolderMarkerKind {
   MoonBit
   Rust
@@ -8,7 +7,6 @@ pub(all) enum FolderMarkerKind {
 }
 
 ///|
-/// Marker names are shared by server-side detection and browser presentation.
 pub let folder_marker_kinds : Map[String, FolderMarkerKind] = {
   "moon.mod": MoonBit,
   "moon.work": MoonBit,

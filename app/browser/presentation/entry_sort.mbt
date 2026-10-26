@@ -21,7 +21,6 @@ pub fn SortMode::next(self : SortMode) -> SortMode {
 }
 
 ///|
-/// Folders first; names ascending, sizes descending, newest timestamps first.
 pub fn SortMode::compare_entries(
   sort : SortMode,
   left : Entry,
@@ -33,7 +32,6 @@ pub fn SortMode::compare_entries(
   }
   match sort {
     Name => left.name.lexical_compare(right.name)
-    // Missing metadata follows known values in descending order.
     Size => right.size.unwrap_or(None).compare(left.size.unwrap_or(None))
     Time => right.mtime.to_option().compare(left.mtime.to_option())
   }

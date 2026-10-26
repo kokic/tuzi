@@ -42,7 +42,6 @@ async fn stream_file(path : Path, res : @moonback.Responder) -> Unit {
     ("Content-Length", size.to_string()),
     ("Cache-Control", "no-store"),
     ("X-Content-Type-Options", "nosniff"),
-    // Active documents must not execute scripts against the file browser.
     ..if content_type.has_prefix("text/html") ||
       content_type == "image/svg+xml" ||
       content_type.has_prefix("application/xml") {
@@ -61,7 +60,6 @@ async fn stream_file(path : Path, res : @moonback.Responder) -> Unit {
 }
 
 ///|
-/// Stream the original image so the browser retains animation and transparency.
 async fn serve_image(
   req : @moonback.Request,
   res : @moonback.Responder,

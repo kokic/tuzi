@@ -58,7 +58,6 @@ fn Model::update_markdown(model : Model, msg : MarkdownMsg) -> Model {
   guard model.dialog is Markdown(context) else { return model }
   let context = match msg {
     Loaded(id, result) => {
-      // A closed or replaced preview cannot receive an earlier file's response.
       guard id == context.id else { return model }
       { ..context, content: Loaded(result), }
     }
@@ -84,7 +83,6 @@ fn MarkdownContext::resolve_link(
     .split_once("?")
     .map_or((reference, ""), pair => (pair.0, "&\{pair.1}"))
   let first_segment = path.split_once("/").map_or(path, pair => pair.0)
-  // Preserve schemes so the Markdown renderer retains its URL safety checks.
   guard !first_segment.contains(":") else { return destination }
   let path = @percent.decode(path) catch { _ => return destination }
   let target = {

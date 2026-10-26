@@ -22,7 +22,6 @@ fn RequestFailure::submission_message(self : RequestFailure) -> String {
 }
 
 ///|
-/// One listing can satisfy both panes when they show the same path.
 fn request_directory_listing(
   targets : Array[ListingTarget],
   path : Path,
@@ -39,7 +38,6 @@ fn request_directory_listing(
 }
 
 ///|
-/// Report the server response or transport failure. Mutations are never retried automatically.
 fn[T : FromJson] request_api(
   path : String,
   receive : Emit[Result[T, RequestFailure]],

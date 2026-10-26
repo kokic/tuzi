@@ -24,13 +24,11 @@ pub impl Show for ArchiveError with fn to_string(self) {
 }
 
 ///|
-/// Keep both the output and selected entries inside the requested directory.
 fn validate_archive_name(name : String) -> Unit raise ArchiveError {
   guard @shared.is_valid_archive_name(name) else { raise InvalidName(name) }
 }
 
 ///|
-/// The output is a host filename; only stored entries use ZIP path rules.
 pub fn validate_zip_selection(
   names : Array[String],
   output_name : String,
@@ -44,7 +42,6 @@ pub fn validate_zip_selection(
 }
 
 ///|
-/// Sorted lexicographically for binary search; keep new extensions in order.
 let stored_archive_extensions : ReadOnlyArray[String] = [
   "7z", "aac", "apk", "apng", "avif", "br", "bz2", "docx", "ear", "epub", "flac",
   "gif", "gz", "heic", "heif", "ipa", "jar", "jfif", "jp2", "jpe", "jpeg", "jpg",
@@ -54,9 +51,6 @@ let stored_archive_extensions : ReadOnlyArray[String] = [
 ]
 
 ///|
-/// A conservative extension policy: skip recompression for common compressed
-/// formats, but keep compressing text and uncompressed containers such as TAR,
-/// BMP and WAV. Unknown extensions still use Deflate.
 fn archive_compression(name : String) -> @zip.Compression {
   guard name.rev_find(".") is Some(dot) else { return Deflate }
   let extension = name.view(start_offset=dot + 1).to_owned().to_lower()

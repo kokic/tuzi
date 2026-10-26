@@ -42,8 +42,6 @@ fn drive_menu_view(
       }
     },
   )
-  // Rebuild the menu contents when a request starts/finishes, retaining its
-  // current open state. A reply after dismissal must not reopen the menu.
   state.switch_by(
     state => {
       @rui.dropdown_menu(
@@ -161,7 +159,6 @@ fn drive_menu_view(
 }
 
 ///|
-/// The deepest mount containing this directory is the current location.
 fn current_storage_location(directory : Path, locations : Array[Path]) -> Path? {
   for current = directory {
     if locations.contains(current) {
@@ -174,7 +171,6 @@ fn current_storage_location(directory : Path, locations : Array[Path]) -> Path? 
 }
 
 ///|
-/// Right-click uses the same menu and keyboard/focus behavior as left-click.
 fn open_drive_menu(id : String) -> Cmd {
   @rabbita.effect(() => {
     guard @dom.document().get_element_by_id(id + "-trigger").to_option()

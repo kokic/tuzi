@@ -12,7 +12,6 @@ priv struct ProgressItem {
 } derive(Eq)
 
 ///|
-/// Track each submitted operation and its latest observed status.
 priv struct ProgressBatch {
   items : Array[ProgressItem]
   session : String
@@ -61,7 +60,6 @@ fn ProgressState::receive(
   if statuses.get(id) is Some(status) {
     return Tracking(id, Some(status))
   }
-  // The submission response may arrive before the first snapshot containing this id.
   self
 }
 

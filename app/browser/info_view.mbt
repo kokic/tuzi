@@ -12,8 +12,8 @@ fn InfoContext::dialog(
       @tuzi.image_content_type(context.entry.name) is Some(_) {
       [context.image_view()]
     },
-    ..context.font_preview.map_or([], state => {
-      [context.font_preview_view(state)]
+    ..context.font_preview.map_or([], preview => {
+      [context.font_preview_view(preview, emit)]
     }),
     ..context.fields_view(emit, error~),
     ..additional_content,
@@ -33,7 +33,6 @@ fn InfoContext::dialog(
     ],
     [
       div(
-        // Keep control shadows and focus outlines inside the scroll viewport.
         style=[
           "flex: 1 1 auto", "min-height: 0", "min-width: 0", "overflow-y: auto",
           "overflow-x: hidden", "scrollbar-gutter: stable", "padding-inline: 4px",

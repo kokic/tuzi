@@ -7,7 +7,6 @@ pub suberror GitBusy {
 let git_locks : Map[String, @async.Mutex] = Map([])
 
 ///|
-/// Build arguments and check reference kinds without accessing a repository.
 pub fn git_arguments(
   operation : @shared.GitOperation,
 ) -> Array[String] raise GitError {
@@ -40,7 +39,6 @@ pub fn git_arguments(
 
 ///|
 pub async fn run_git(path : Path, arguments : Array[String]) -> String {
-  // Linked worktrees share refs: lock their common Git directory, not the UI path.
   let (common, _) = checked_git(path.dirname(), [
     "rev-parse", "--path-format=absolute", "--git-common-dir",
   ])

@@ -29,7 +29,6 @@ pub impl Show for GitError with fn to_string(self) {
 }
 
 ///|
-/// Argument arrays keep paths and branch names out of shell syntax.
 async fn git_command(arguments : Array[String]) -> (Int32, String, String) {
   let (stdin, writer) = @process.write_to_process()
   writer.close()

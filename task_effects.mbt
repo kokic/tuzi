@@ -1,7 +1,4 @@
 ///|
-/// Directories whose immediate entries may change, including partial failure.
-/// Callers must account separately for metadata in parent listings and for
-/// subtrees created, removed, moved, or changed by a Git checkout.
 pub fn TaskKind::affected_directories(self : TaskKind) -> Array[Path] {
   match self {
     File(Delete(target~)) => [target.dirname()]
@@ -19,9 +16,6 @@ pub fn TaskKind::affected_directories(self : TaskKind) -> Array[Path] {
 }
 
 ///|
-/// A listing contains direct children and their metadata. Changing a directory
-/// also changes its entry in the parent listing (mtime and folder marker), but
-/// does not invalidate unrelated descendants of either directory.
 pub fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
   if kind
     .affected_directories()

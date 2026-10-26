@@ -15,8 +15,6 @@ fn git_branch_can_delete(
 }
 
 ///|
-/// Only local branches can be renamed; `git branch -m` works on the current
-/// branch too.
 fn git_branch_can_rename(branch : @tuzi.GitBranch) -> Bool {
   branch.local_name() is Some(_)
 }

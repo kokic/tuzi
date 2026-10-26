@@ -1,7 +1,8 @@
 ///|
 priv enum OpenExecution {
   Browse
-  Preview
+  Dialog(@shared.PreviewKind)
+  Browser
   ExtractZip
   External(OpenCommand)
   FileManager(OpenCommand)
@@ -23,6 +24,7 @@ pub struct OpenService {
 pub suberror OpenError {
   UnknownOpener(String)
   DefaultNotListed(String)
+  BrowserWithDialog(String)
   NotApplicable(String)
   UnsupportedTarget(String)
   ProgramMissing(String)
@@ -37,6 +39,8 @@ pub impl Show for OpenError with fn to_string(self) {
     UnknownOpener(id) => "Unknown opener: \{id}"
     DefaultNotListed(id) =>
       "Default opener must be listed in its association: \{id}"
+    BrowserWithDialog(id) =>
+      "A dialog association cannot also open in the browser: \{id}"
     NotApplicable(id) => "Opener is not available for this target: \{id}"
     UnsupportedTarget(path) => "Not a regular file or directory: \{path}"
     ProgramMissing(program) =>
@@ -51,7 +55,8 @@ pub fn OpenService::new() -> OpenService raise OpenError {
   for id, definition in definitions {
     let action : @shared.OpenAction = match definition.execution {
       Browse => Browse
-      Preview => Preview
+      Dialog(kind) => Dialog(kind)
+      Browser => Browser
       ExtractZip => ExtractZip
       External(_) | FileManager(_) => External
     }
@@ -80,6 +85,13 @@ fn validate_open_association(
   for id in association.openers {
     guard openers.get(id) is Some(_) else { raise UnknownOpener(id) }
   }
+  let has_dialog = association.openers.any(id => {
+    openers[id].action is (Dialog(_) | ExtractZip)
+  })
+  guard !has_dialog ||
+    !association.openers.any(id => openers[id].action is Browser) else {
+    raise BrowserWithDialog(association.default_opener)
+  }
 }
 
 ///|
@@ -88,7 +100,6 @@ pub async fn OpenService::open(
   request : @shared.OpenRequest,
   write_launch_log~ : async (String) -> Unit,
 ) -> Unit {
-  // Resolve on the host and inspect the current target instead of trusting UI metadata.
   let native = request.path.to_native()
   let native = {
     guard !@path.Path(native).is_absolute() else { native }
@@ -109,7 +120,8 @@ pub async fn OpenService::open(
     External(command) => (command, native)
     FileManager(command) =>
       (command, if is_dir { native } else { path.dirname().to_native() })
-    Browse | Preview | ExtractZip => raise NotApplicable(request.opener)
+    Browse | Dialog(_) | Browser | ExtractZip =>
+      raise NotApplicable(request.opener)
   }
   command.launch(
     target,

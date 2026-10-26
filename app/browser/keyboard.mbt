@@ -87,14 +87,15 @@ fn Model::handle_keyboard_event(
 }
 
 ///|
-/// Handle Enter inside a dialog: let buttons, links, and selects activate
-/// natively, and submit explicitly for other targets. Stop propagation so the
-/// global Enter (open entry) never fires, and swallow IME/repeat Enter so a
-/// single keypress cannot submit twice.
 fn handle_dialog_keyboard_event(
   event : @dom.KeyboardEvent,
   emit : Emit[Msg],
 ) -> Cmd {
+  let target = event.target().to_element()
+  guard !target.map_or(false, element => element.closest("textarea") is Some(_)) else {
+    event.stop_propagation()
+    return @rabbita.none
+  }
   let key = event.key()
   guard !event.is_composing() &&
     !event.repeat() &&
@@ -107,7 +108,6 @@ fn handle_dialog_keyboard_event(
     }
     return @rabbita.none
   }
-  let target = event.target().to_element()
   match key {
     "Enter" => {
       event.stop_propagation()

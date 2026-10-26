@@ -20,7 +20,6 @@ fn breadcrumbs_view(
           if index == 0 && drive_menu is Some(menu) {
             return menu
           }
-          // The current directory remains clickable to reload the pane.
           let attrs = if target == path {
             @html.Attrs::build().aria_current("page")
           } else {
@@ -120,7 +119,6 @@ fn breadcrumb_context_menu(
   .switch_by(
     value => {
       let (entry, transfer_disabled) = value
-      // Keep navigation available while metadata loads; the menu uses real entry data.
       guard entry is Some(entry) else { return Val::constant(trigger) }
       @rui.context_menu(id~, style=["min-width: 0"], scope => {
         fragment([

@@ -33,7 +33,6 @@ fn read_browser_location() -> BrowserLocation? raise {
 }
 
 ///|
-/// Explicit paths skip history. Restoring without usable storage falls back to base.
 fn load_browser_location(
   base : Path,
   startup : @tuzi.StartupMode,
@@ -60,7 +59,6 @@ fn Model::save_browser_location(model : Model) -> Cmd {
       },
       map_ok=_ => (),
     ) catch {
-      // Storage restrictions must not interrupt directory navigation.
       _ => ()
     }
   })

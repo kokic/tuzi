@@ -84,8 +84,6 @@ fn build_command() -> @argparse.Command {
 }
 
 ///|
-/// The server port: `WARREN_PORT` (set by `warren dev`) wins over the
-/// `-p` flag; otherwise use `default_port`.
 fn server_port(
   env : Map[String, String],
   cmd : @argparse.Matches,

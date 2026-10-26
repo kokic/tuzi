@@ -1,6 +1,4 @@
 ///|
-/// MIME types for image formats a browser may decode. Support for formats such
-/// as TIFF, HEIC and JPEG XL depends on the browser; decoding stays native.
 pub fn image_content_type(name : String) -> String? {
   match @posix.Path(name.to_lower()).extname().to_owned() {
     ".jpg" | ".jpeg" | ".jpe" | ".jfif" | ".pjpeg" | ".pjp" =>

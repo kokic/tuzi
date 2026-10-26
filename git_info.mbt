@@ -1,5 +1,4 @@
 ///|
-/// A local or remote-tracking branch; full refs are used as stable API identifiers.
 pub(all) struct GitBranch {
   reference : String
   name : String
@@ -11,7 +10,6 @@ pub fn GitBranch::is_remote(self : GitBranch) -> Bool {
 }
 
 ///|
-/// The branch name for a local reference, excluding its refs/heads/ prefix.
 pub fn GitBranch::local_name(self : GitBranch) -> String? {
   self.reference.strip_prefix("refs/heads/").map(name => name.to_owned())
 }
@@ -26,7 +24,6 @@ pub extend GitBranch with FromJson::{from_json}
 pub extend GitBranch with ToJson::{to_json}
 
 ///|
-/// An empty current branch denotes a detached HEAD.
 pub(all) struct GitInfo {
   available : Bool
   current : String

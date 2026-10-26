@@ -1,5 +1,4 @@
 ///|
-/// Check only request data; filesystem state is checked when the task executes.
 fn validate_file_operation_input(
   operation : @shared.FileOperation,
 ) -> Unit raise {

@@ -58,7 +58,6 @@ async fn create_link_like(
 }
 
 ///|
-/// FileInfo/DirectoryInfo.MoveTo moves the link entry without opening its target.
 #cfg(platform="windows")
 async fn relocate_link(source : Path, destination : Path) -> Unit {
   ignore(

@@ -1,13 +1,10 @@
 ///|
-/// Task ownership is tied to the server scope, never an HTTP connection.
 priv struct TaskService {
   session : String
   mut revision : Int32
   mut next_id : Int32
-  /// Tasks remain available for the lifetime of this server session.
   mut tasks : Array[@shared.Task]
   slots : @async.Semaphore
-  /// Each subscriber retains at most one notification to read the latest state.
   mut subscribers : Array[(Int32, @async.Queue[Unit])]
   mut next_subscriber : Int32
 }
@@ -42,7 +39,6 @@ fn TaskService::unsubscribe(self : TaskService, id : Int32) -> Unit {
 }
 
 ///|
-/// Coalesce changes for slow subscribers without retaining obsolete snapshots.
 fn TaskService::broadcast(self : TaskService) -> Unit raise {
   self.subscribers.each(pair => ignore(pair.1.try_put(())))
 }
@@ -53,7 +49,6 @@ fn TaskService::snapshot(self : TaskService) -> @shared.TaskSnapshot {
 }
 
 ///|
-/// Starting a task changes its status without reordering the activity history.
 fn TaskService::start(self : TaskService, id : Int32) -> Unit raise {
   self.tasks = self.tasks.map(task => {
     if task.id == id {
@@ -79,7 +74,6 @@ fn TaskService::finish(
 }
 
 ///|
-/// Retain the validated command until the entire batch is ready to enqueue.
 priv struct PreparedTask {
   kind : @shared.TaskKind
   execute : async () -> String
@@ -92,7 +86,6 @@ fn TaskService::submit(
   group : @async.TaskGroup[Unit],
   log : Bool,
 ) -> Array[@shared.ApiResponse[Int32]] raise {
-  // A spawned task may start immediately, so prepare the whole batch first.
   let prepared = requests.map(result => {
     result.map(kind => {
       let execute : async () -> String = match kind {

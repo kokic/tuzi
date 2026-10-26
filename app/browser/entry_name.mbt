@@ -133,7 +133,6 @@ fn link_arrow_view() -> Html {
       "display: inline-flex", "flex: none", "align-self: center", "width: 1em", "height: 1em",
       "margin: 0 0.5em",
     ],
-    // Only the static SVG constant is inserted as HTML.
     attrs=@html.Attrs::build().inner_html(SvgRightArrow),
     @html.nothing,
   )

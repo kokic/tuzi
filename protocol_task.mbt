@@ -13,7 +13,6 @@ pub(all) enum TaskStatus {
 } derive(Eq, ToJson, FromJson)
 
 ///|
-/// Queued and running tasks both remain active until they have a result.
 pub fn TaskStatus::is_active(self : TaskStatus) -> Bool {
   match self {
     Queued | Running => true
@@ -30,7 +29,6 @@ pub(all) struct Task {
 } derive(Eq, ToJson, FromJson)
 
 ///|
-/// Complete task history for the current server session.
 pub(all) struct TaskSnapshot {
   session : String
   revision : Int32
@@ -74,8 +72,6 @@ pub extend TaskSnapshot with ToJson::{to_json}
 pub extend TaskSnapshot with FromJson::{from_json}
 
 ///|
-/// Submission ids belong to one server session and must not be reused after a restart.
-/// Results correspond to submitted operations in order. Rejected items have no id.
 pub(all) struct TaskSubmission {
   session : String
   results : Array[ApiResponse[Int32]]

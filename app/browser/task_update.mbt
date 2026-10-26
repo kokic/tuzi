@@ -106,8 +106,6 @@ fn Model::receive_tasks(
   let model = {
     ..model,
     jobs,
-    // Keep a batch already acknowledged by the new server, but discard
-    // monitors whose ids belong to the previous session.
     dialog: if restarted {
       match model.dialog {
         TaskDetails(_) => None
@@ -119,7 +117,6 @@ fn Model::receive_tasks(
     },
   }
   let model = model.refresh_progress()
-  // Retained ancestors are marked too, but only visible views are reloaded.
   let affected = path => {
     restarted || changed.any(task => task.kind.affects_listing(path))
   }

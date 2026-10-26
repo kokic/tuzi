@@ -39,7 +39,6 @@ pub fn entry_title_style(entry : Entry, color : String) -> Array[String] {
     "currentColor" if entry.name.has_prefix(".") =>
       "var(--rui-muted-foreground)"
     "currentColor" => "var(--rui-foreground)"
-    // Keep the matched hue, adjusting lightness for readable text in either theme.
     _ =>
       "light-dark(oklch(from \{color} min(l, 0.5) c h / 1), oklch(from \{color} max(l, 0.75) c h / 1))"
   }

@@ -112,7 +112,6 @@ fn pane_status_scroll_view(content : Html, fill~ : Bool) -> Html {
       ..if fill {
         ["flex: 1", "display: flex", "flex-direction: column"]
       } else {
-        // A refresh error must leave room for the retained directory listing.
         ["flex: none", "max-height: 50%"]
       },
     ],

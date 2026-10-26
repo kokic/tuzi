@@ -1,5 +1,3 @@
-// Application-level wrappers for rui components.
-
 ///|
 fn kbd(key : String) -> Html {
   @rui.kbd(style=[CODE_FONT_STYLE], key)

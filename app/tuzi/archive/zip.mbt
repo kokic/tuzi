@@ -2,9 +2,6 @@
 using @uniform_path {type Path}
 
 ///|
-/// Bridge the synchronous ZIP sink to async writes. Drain after every writer
-/// operation so file payloads never accumulate beyond one input chunk plus
-/// codec buffers. ZIP central-directory metadata still scales with entry count.
 priv struct ZipOutput {
   file : @async_fs.File
   mut pending : Array[Bytes]
@@ -17,7 +14,6 @@ async fn ZipOutput::flush(self : ZipOutput) -> Unit {
   for bytes in pending {
     self.file.write(bytes)
   }
-  // Even a buffered read or a chunk producing no output must yield to other tasks.
   @async.pause()
 }
 
@@ -45,8 +41,6 @@ pub async fn zip_entries(
 }
 
 ///|
-/// Explicit directory entries preserve empty folders. Never follow symlinks:
-/// a link may lead outside the selection or back into its own directory tree.
 async fn add_archive_entry(
   writer : @zip.Writer,
   sink : ZipOutput,

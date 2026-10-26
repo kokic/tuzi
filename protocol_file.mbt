@@ -2,9 +2,6 @@
 using @path {type Path}
 
 ///|
-/// Existing entries are identified by their full paths. New names identify one
-/// child of the given parent; rename stays in the source directory, and ZIP
-/// selections and output stay in one directory.
 pub(all) enum FileOperation {
   Delete(target~ : Path)
   Rename(source~ : Path, new_name~ : String)

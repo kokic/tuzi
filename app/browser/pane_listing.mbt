@@ -1,5 +1,4 @@
 ///|
-/// Explicit reloads affect only the displayed directories.
 fn Model::invalidate_panes(model : Model, left~ : Bool, right~ : Bool) -> Model {
   let panes = set_pane(model.panes, Left, {
     ..model.panes.0.current,
@@ -13,7 +12,6 @@ fn Model::invalidate_panes(model : Model, left~ : Bool, right~ : Bool) -> Model 
 }
 
 ///|
-/// Apply a shared response to both panes before scheduling further work.
 fn Model::receive_listing(
   model : Model,
   targets : Array[ListingTarget],
@@ -30,7 +28,6 @@ fn Model::receive_listing(
         return pane
       }
       if include_markers != (model.entry_appearance != Plain) {
-        // A response for the previous entry appearance cannot satisfy this view.
         { ..pane, loading: Unloaded, refresh_pending: true, }
       } else {
         match result {
@@ -58,8 +55,6 @@ fn Model::receive_listing(
 }
 
 ///|
-/// Start at most one request per visible directory. An in-flight request is
-/// allowed to finish; accumulated invalidations cause one subsequent request.
 fn Model::load_pending_panes(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
   guard model.startup is Started else { return (model, @rabbita.none) }
   let left = model.panes.0.current

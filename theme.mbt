@@ -5,7 +5,6 @@ pub(all) enum Theme {
 } derive(Debug, Eq, ToJson, FromJson)
 
 ///|
-/// Parse a `--theme` flag value; unknown values use the default theme.
 pub fn Theme::parse(s : String) -> Theme {
   match s {
     "light" => Light

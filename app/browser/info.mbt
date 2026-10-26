@@ -4,16 +4,15 @@ priv struct InfoContext {
   entry : Entry
   path : Path
   link : LinkFields?
-  font_preview : FontPreviewState?
+  font_preview : FontPreview?
 } derive(Eq)
 
 ///|
 fn Model::open_info_dialog(
   model : Model,
-  context : FileActionContext,
+  target : OpenTarget,
   emit : Emit[Msg],
 ) -> (Model, Cmd) {
-  guard context.cursor is Some(target) else { return (model, @rabbita.none) }
   let { path, entry, .. } = target
   let context : InfoContext = {
     id: model.next_info_id,
@@ -22,7 +21,7 @@ fn Model::open_info_dialog(
     font_preview: if entry.kind is Ok(kind) &&
       !kind.is_dir() &&
       @tuzi.font_content_type(entry.name) is Some(_) {
-      Some(Loading)
+      Some(FontPreview::initialize())
     } else {
       None
     },

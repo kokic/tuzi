@@ -7,7 +7,6 @@ priv struct SelectionSubmission {
 }
 
 ///|
-/// Replies only clear accepted entries from an unchanged selection in its original view.
 fn Model::clear_accepted_selection(
   model : Model,
   context : SelectionSubmission,

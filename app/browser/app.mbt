@@ -56,8 +56,6 @@ fn create_file_browser() -> Val[Html] {
     },
     update=(model, msg, emit) => {
       let (next, command) = Model::update(model, msg, emit, toast_send)
-      // The browser owns the native dialog's open state: open the host once
-      // when the app transitions from no dialog to some dialog.
       if model.dialog is None && next.dialog != None {
         (next, @rabbita.batch([command, @dialog.show(DialogId)]))
       } else {

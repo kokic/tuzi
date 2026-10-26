@@ -11,8 +11,6 @@ fn Model::update(
   } else {
     updated
   }
-  // Marker data depends on entry appearance. Keep this at the update boundary so
-  // every configuration change invalidates listings, including future controls.
   let updated = if updated.entry_appearance != model.entry_appearance {
     {
       ..updated,
@@ -72,6 +70,8 @@ fn Model::update_message(
       (model.receive_text_preview(id, result), @rabbita.none)
     FontPreviewLoaded(id, result) =>
       (model.receive_font_preview(id, result), @rabbita.none)
+    FontPreviewInput(text) =>
+      (model.with_font_preview_text(text), @rabbita.none)
     GitEvent(msg) => model.update_git(msg, emit)
     TaskEvent(msg) => model.update_tasks(msg, emit)
     LinkTargetLoaded(id, result) =>

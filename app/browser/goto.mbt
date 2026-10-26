@@ -30,7 +30,6 @@ fn Model::update_goto(model : Model, msg : GotoMsg) -> (Model, Cmd) {
         @rabbita.none,
       )
     Loaded(revision, path, include_markers, result) => {
-      // Editing, dismissing, or reopening the dialog invalidates an older request.
       guard model.dialog_revision == revision &&
         model.dialog is Goto(context) &&
         context.pending else {
@@ -49,7 +48,6 @@ fn Model::update_goto(model : Model, msg : GotoMsg) -> (Model, Cmd) {
         Ok(entries) => {
           let (model, command) = model.navigate_to_directory(context.pane, path)
           let pane = model.pane_at(context.pane)
-          // Use the listing that validated the destination, superseding any old request.
           let pane = {
             ..pane.with_entries(
               entries,

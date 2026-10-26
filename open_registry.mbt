@@ -1,8 +1,16 @@
 ///|
-/// Browser actions share the same association table as server-side programs.
+pub(all) enum PreviewKind {
+  Markdown
+  Text
+  Font
+  Image
+} derive(Eq, ToJson, FromJson)
+
+///|
 pub(all) enum OpenAction {
   Browse
-  Preview
+  Dialog(PreviewKind)
+  Browser
   ExtractZip
   External
 } derive(Eq, ToJson, FromJson)
@@ -15,7 +23,6 @@ pub(all) struct Opener {
 
 ///|
 pub(all) struct OpenAssociation {
-  /// Menu order is independent of the default action.
   openers : Array[String]
   default_opener : String
 } derive(Eq, ToJson, FromJson)
@@ -24,9 +31,7 @@ pub(all) struct OpenAssociation {
 pub(all) struct OpenRegistry {
   openers : Map[String, Opener]
   folder : OpenAssociation
-  /// Lowercase complete filenames, including dotfiles.
   filenames : Map[String, OpenAssociation]
-  /// Lowercase extensions without a leading dot; "" means no extension.
   extensions : Map[String, OpenAssociation]
   other_file : OpenAssociation
 } derive(Eq, ToJson, FromJson)
@@ -55,6 +60,15 @@ pub(all) struct OpenRequest {
   path : Path
   opener : String
 } derive(ToJson, FromJson)
+
+///|
+pub extend PreviewKind with Eq::{equal, not_equal}
+
+///|
+pub extend PreviewKind with ToJson::{to_json}
+
+///|
+pub extend PreviewKind with FromJson::{from_json}
 
 ///|
 pub extend OpenAction with Eq::{equal, not_equal}

@@ -1,6 +1,4 @@
 ///|
-/// Heartbeats let clients detect broken connections. The upgraded socket
-/// must remain inside this handler's lifetime.
 async fn task_events(
   req : @moonback.Request,
   res : @moonback.Responder,

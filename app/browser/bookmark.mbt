@@ -54,7 +54,6 @@ fn Model::update_bookmarks(
         return (model, @rabbita.none)
       }
       let (updated, command) = model.navigate_to_directory(side, path)
-      // The native close event clears the dialog, as with its Close button.
       (updated, @rabbita.batch([@dialog.close(DialogId), command]))
     }
   }
