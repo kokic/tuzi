@@ -24,7 +24,6 @@ pub struct OpenService {
 pub suberror OpenError {
   UnknownOpener(String)
   DefaultNotListed(String)
-  BrowserWithDialog(String)
   NotApplicable(String)
   UnsupportedTarget(String)
   ProgramMissing(String)
@@ -39,8 +38,6 @@ pub impl Show for OpenError with fn to_string(self) {
     UnknownOpener(id) => "Unknown opener: \{id}"
     DefaultNotListed(id) =>
       "Default opener must be listed in its association: \{id}"
-    BrowserWithDialog(id) =>
-      "A dialog association cannot also open in the browser: \{id}"
     NotApplicable(id) => "Opener is not available for this target: \{id}"
     UnsupportedTarget(path) => "Not a regular file or directory: \{path}"
     ProgramMissing(program) =>
@@ -84,13 +81,6 @@ fn validate_open_association(
   }
   for id in association.openers {
     guard openers.get(id) is Some(_) else { raise UnknownOpener(id) }
-  }
-  let has_dialog = association.openers.any(id => {
-    openers[id].action is (Dialog(_) | ExtractZip)
-  })
-  guard !has_dialog ||
-    !association.openers.any(id => openers[id].action is Browser) else {
-    raise BrowserWithDialog(association.default_opener)
   }
 }
 

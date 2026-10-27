@@ -6,25 +6,25 @@ let text_association : @shared.OpenAssociation = {
 
 ///|
 let text_preview_association : @shared.OpenAssociation = {
-  openers: ["text", "vscode", "explorer"],
+  openers: ["text", "browser", "vscode", "explorer"],
   default_opener: "text",
 }
 
 ///|
 let markdown_association : @shared.OpenAssociation = {
-  openers: ["markdown", "vscode", "explorer"],
+  openers: ["markdown", "browser", "vscode", "explorer"],
   default_opener: "markdown",
 }
 
 ///|
 let font_association : @shared.OpenAssociation = {
-  openers: ["font", "explorer"],
+  openers: ["font", "browser", "explorer"],
   default_opener: "font",
 }
 
 ///|
 let image_association : @shared.OpenAssociation = {
-  openers: ["image", "explorer"],
+  openers: ["image", "browser", "explorer"],
   default_opener: "image",
 }
 
@@ -82,6 +82,14 @@ fn vscode_command() -> OpenCommand {
 fn configured_open_registry(
   openers : Map[String, @shared.Opener],
 ) -> @shared.OpenRegistry {
+  let markdown_dotfile_association : @shared.OpenAssociation = {
+    openers: ["markdown", "browser", "explorer"],
+    default_opener: "markdown",
+  }
+  let text_dotfile_association : @shared.OpenAssociation = {
+    openers: ["text", "browser", "explorer"],
+    default_opener: "text",
+  }
   {
     openers,
     folder: {
@@ -97,7 +105,19 @@ fn configured_open_registry(
       ".gitignore": text_association,
       ".gitattributes": text_association,
       ".env": text_association,
-      ".zip": { openers: ["extract", "explorer"], default_opener: "extract", },
+      ".md": markdown_dotfile_association,
+      ".markdown": markdown_dotfile_association,
+      ".txt": text_dotfile_association,
+      ".toml": text_dotfile_association,
+      ".yaml": text_dotfile_association,
+      ".yml": text_dotfile_association,
+      ".json": text_dotfile_association,
+      ".ini": text_dotfile_association,
+      ".conf": text_dotfile_association,
+      ".zip": {
+        openers: ["extract", "browser", "explorer"],
+        default_opener: "extract",
+      },
     },
     extensions: {
       "c": text_association,
@@ -106,7 +126,7 @@ fn configured_open_registry(
       "hpp": text_association,
       "md": markdown_association,
       "markdown": {
-        openers: ["markdown", "explorer"],
+        openers: ["markdown", "browser", "explorer"],
         default_opener: "markdown",
       },
       "mbt": text_association,
@@ -156,7 +176,10 @@ fn configured_open_registry(
       "heic": image_association,
       "heif": image_association,
       "jxl": image_association,
-      "zip": { openers: ["extract", "explorer"], default_opener: "extract", },
+      "zip": {
+        openers: ["extract", "browser", "explorer"],
+        default_opener: "extract",
+      },
     },
     other_file: { openers: ["browser", "explorer"], default_opener: "browser", },
   }
