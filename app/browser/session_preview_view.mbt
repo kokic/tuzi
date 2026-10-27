@@ -69,25 +69,26 @@ fn session_preview_dialog(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
 
 ///|
 fn session_scroller_view(id : Int32, document : @session.Document) -> Val[Html] {
+  let entries = session_conversation_entries(document.entries)
   let rows : Map[String, Html] = Map([])
-  rows["header"] = session_header_view(document)
+  rows["header"] = session_header_view(document, entries.length())
   if !document.diagnostics.is_empty() {
     rows["diagnostics"] = session_diagnostics_view(document.diagnostics)
   }
-  if document.entries.is_empty() {
+  if entries.is_empty() {
     rows["empty"] = @rui.empty(
       @rui.empty_header([
-        @rui.empty_title("No readable records"),
+        @rui.empty_title("No messages yet"),
         @rui.empty_description(
-          "No history could be loaded after the session header.",
+          "This session has no user or assistant messages to display.",
         ),
       ]),
     )
   }
-  for index, entry in document.entries {
+  for index, entry in entries {
     rows["line-\{entry.line}"] = @rui.message_scroller_item(
       id="session-\{id}-line-\{entry.line}",
-      scroll_anchor=index == document.entries.length() - 1,
+      scroll_anchor=index == entries.length() - 1,
       session_entry_view(entry),
     )
   }
@@ -116,7 +117,7 @@ fn session_scroller_view(id : Int32, document : @session.Document) -> Val[Html] 
           scope~,
           direction=ScrollStart,
           size=Sm,
-          label="Jump to first record",
+          label="Jump to first message",
           style=[UI_FONT_STYLE],
           "Top",
         ),
@@ -124,7 +125,7 @@ fn session_scroller_view(id : Int32, document : @session.Document) -> Val[Html] 
           scope~,
           direction=ScrollEnd,
           size=Sm,
-          label="Jump to latest record",
+          label="Jump to latest message",
           style=[UI_FONT_STYLE],
           "Latest",
         ),
@@ -134,37 +135,22 @@ fn session_scroller_view(id : Int32, document : @session.Document) -> Val[Html] 
 }
 
 ///|
-fn session_header_view(document : @session.Document) -> Html {
+fn session_header_view(
+  document : @session.Document,
+  message_count : Int32,
+) -> Html {
   let agent = match document.agent {
     Pi => "pi"
   }
   div(
-    style=["display: flex", "flex-direction: column", "gap: 8px"],
+    style=[
+      "display: flex", "align-items: center", "gap: 8px", "flex-wrap: wrap",
+    ],
     [
-      div(
-        style=[
-          "display: flex", "align-items: center", "gap: 8px", "flex-wrap: wrap",
-        ],
-        [
-          badge(variant=Secondary, "\{agent} v\{document.version}"),
-          span(
-            style=["font-size: 0.8125rem", "color: var(--rui-muted-foreground)"],
-            "\{document.entries.length()} records",
-          ),
-        ],
-      ),
-      p(
-        style=[
-          "margin: 0", "font-size: 0.8125rem", "color: var(--rui-muted-foreground)",
-        ],
-        "Full history in file order, including branches. Snapshot taken when opened.",
-      ),
-      ..if document.cwd is Some(cwd) {
-        [p(style=["margin: 0", CODE_FONT_STYLE, "font-size: 0.75rem"], cwd)]
-      },
-      session_disclosure(
-        "Session metadata",
-        session_code_view(document.header.stringify(indent=2)),
+      badge(variant=Secondary, agent),
+      span(
+        style=["font-size: 0.8125rem", "color: var(--rui-muted-foreground)"],
+        "\{message_count} messages",
       ),
     ],
   )
@@ -174,25 +160,10 @@ fn session_header_view(document : @session.Document) -> Html {
 fn session_diagnostics_view(diagnostics : Array[@session.Diagnostic]) -> Html {
   @rui.alert(variant=Destructive, [
     @rui.alert_title("\{diagnostics.length()} record issue(s)"),
-    @rui.alert_description([
-      p(
-        "Some records could not be read completely. The remaining history is shown.",
-      ),
-      session_disclosure(
-        "Show line errors",
-        div(
-          style=["display: flex", "flex-direction: column", "gap: 12px"],
-          diagnostics.map(issue => {
-            div([
-              p(
-                style=["margin: 0", "font-weight: 600"],
-                "Line \{issue.line}: \{issue.message}",
-              ),
-              session_code_view(issue.source),
-            ])
-          }),
-        ),
-      ),
-    ]),
+    @rui.alert_description(
+      diagnostics.map(issue => {
+        p(style=["margin: 0"], "Line \{issue.line}: \{issue.message}")
+      }),
+    ),
   ])
 }
