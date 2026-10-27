@@ -103,6 +103,7 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     | Info(_)
     | Markdown(_)
     | TextPreview(_)
+    | SessionPreview(_)
     | GitInfo(_)
     | RemoveWorktreeConfirm(..)
     | Progress(_)

@@ -68,6 +68,8 @@ fn Model::update_message(
     MarkdownEvent(msg) => (model.update_markdown(msg), @rabbita.none)
     TextPreviewLoaded(id, result) =>
       (model.receive_text_preview(id, result), @rabbita.none)
+    SessionPreviewLoaded(id, result) =>
+      (model.receive_session_preview(id, result), @rabbita.none)
     FontPreviewLoaded(id, result) =>
       (model.receive_font_preview(id, result), @rabbita.none)
     FontPreviewInput(text) =>

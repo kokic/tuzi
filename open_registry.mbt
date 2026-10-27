@@ -2,6 +2,7 @@
 pub(all) enum PreviewKind {
   Markdown
   Text
+  Session
   Font
   Image
 } derive(Eq, ToJson, FromJson)

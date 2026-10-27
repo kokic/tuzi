@@ -112,7 +112,7 @@ fn handle_dialog_keyboard_event(
     "Enter" => {
       event.stop_propagation()
       guard !target.map_or(false, element => {
-        element.closest("button, a[href], select") is Some(_)
+        element.closest("button, a[href], select, summary") is Some(_)
       }) else {
         return @rabbita.none
       }

@@ -1,7 +1,8 @@
 ///|
 fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
   let activity = activity_dialog(model.map(model => model.jobs), emit)
-  model.view2(activity, (model, activity) => {
+  let session = session_preview_dialog(model, emit)
+  model.view3(activity, session, (model, activity, session) => {
     let name_input = (title, prompt, input) => {
       name_dialog(title, prompt, input, model.dialog_error, emit)
     }
@@ -16,6 +17,7 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
       Info(context) => context.dialog([], emit, error=model.dialog_error)
       Markdown(context) => context.dialog(emit)
       TextPreview(context) => context.dialog(emit)
+      SessionPreview(_) => session
       GitInfo(context) =>
         git_info_dialog(context, model.jobs, emit, error=model.dialog_error)
       DeleteConfirm(directory~, names~) =>

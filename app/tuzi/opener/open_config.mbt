@@ -17,6 +17,12 @@ let markdown_association : @shared.OpenAssociation = {
 }
 
 ///|
+let session_association : @shared.OpenAssociation = {
+  openers: ["session", "text", "browser", "vscode", "explorer"],
+  default_opener: "session",
+}
+
+///|
 let font_association : @shared.OpenAssociation = {
   openers: ["font", "browser", "explorer"],
   default_opener: "font",
@@ -35,6 +41,7 @@ fn configured_openers() -> Map[String, OpenDefinition] {
     "browser": { label: "Open in browser", execution: Browser, },
     "markdown": { label: "Preview Markdown", execution: Dialog(Markdown), },
     "text": { label: "Preview text", execution: Dialog(Text), },
+    "session": { label: "Preview session", execution: Dialog(Session), },
     "font": { label: "Preview font", execution: Dialog(Font), },
     "image": { label: "Preview image", execution: Dialog(Image), },
     "extract": { label: "Extract ZIP", execution: ExtractZip, },
@@ -112,6 +119,7 @@ fn configured_open_registry(
       ".yaml": text_dotfile_association,
       ".yml": text_dotfile_association,
       ".json": text_dotfile_association,
+      ".jsonl": session_association,
       ".ini": text_dotfile_association,
       ".conf": text_dotfile_association,
       ".zip": {
@@ -141,6 +149,7 @@ fn configured_open_registry(
       "tsx": text_association,
       "jsx": text_association,
       "json": text_preview_association,
+      "jsonl": session_association,
       "html": text_association,
       "htm": text_association,
       "css": text_association,

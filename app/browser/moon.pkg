@@ -1,5 +1,6 @@
 import {
   "kokic/tuzi",
+  "kokic/tuzi/session",
   "kokic/tuzi/app/browser/presentation",
   "kokic/uniform-path" @path,
   "moonbit-community/rabbita",

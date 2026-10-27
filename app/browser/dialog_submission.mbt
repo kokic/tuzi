@@ -69,6 +69,7 @@ fn Dialog::file_operations(
     | TaskDetails(_)
     | Markdown(_)
     | TextPreview(_)
+    | SessionPreview(_)
     | Progress(_)
     | Info(_)
     | GitInfo(_)

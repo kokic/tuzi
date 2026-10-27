@@ -23,6 +23,7 @@ fn Path::content_type(path : Path) -> String? {
       ".json" | ".map" => "application/json; charset=utf-8"
       ".xml" => "application/xml; charset=utf-8"
       ".txt"
+      | ".jsonl"
       | ".md"
       | ".markdown"
       | ".csv"

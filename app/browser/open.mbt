@@ -50,6 +50,7 @@ fn Model::execute_opener(
       match kind {
         Markdown => model.open_markdown(target.path, emit)
         Text => model.open_text_preview(target.path, emit)
+        Session => model.open_session_preview(target.path, emit)
         Font | Image => model.open_info_dialog(target, emit)
       }
     Browser =>

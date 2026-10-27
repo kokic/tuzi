@@ -16,6 +16,7 @@ priv enum Dialog {
   Info(InfoContext)
   Markdown(MarkdownContext)
   TextPreview(TextPreviewContext)
+  SessionPreview(SessionPreviewContext)
   GitInfo(GitContext)
   DeleteConfirm(directory~ : Path, names~ : Array[String])
   RenameInput(directory~ : Path, original~ : String, input~ : String)
