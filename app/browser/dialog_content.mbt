@@ -59,6 +59,22 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
         new_entry_dialog(input, model.dialog_error, emit)
       GitRenameInput(input~, ..) =>
         name_input("Rename branch", "New branch name:", input)
+      RemoveWorktreeConfirm(context~, worktree~) =>
+        delete_confirm_dialog(
+          "Delete worktree?",
+          if worktree.prunable {
+            "The worktree directory is already gone. Removing it drops the leftover Git registration; the branch itself is kept."
+          } else {
+            "The worktree directory is removed from disk with all of its files, including uncommitted changes. The branch itself is kept."
+          },
+          [
+            ("Branch", git_worktree_branch_label(worktree)),
+            ("Worktree", worktree.path.to_string()),
+            ("Repository", context.entry.path.dirname().to_string()),
+          ],
+          emit,
+          error=model.dialog_error,
+        )
     }
   })
 }
@@ -69,29 +85,45 @@ fn delete_confirm_dialog(
   description : String,
   items : Array[(String, String)],
   emit : Emit[Msg],
+  error~ : String = "",
 ) -> Html {
-  modal(title, emit, description~, [
-    @rui.scroll_area(
-      style=["height: auto", "max-height: 60vh"],
-      @rui.item_group(
-        Map::from_iter(
-          items
-          .iter()
-          .map(item => {
-            let (label, detail) = item
-            (
-              detail,
-              @rui.item(
-                @rui.item_content([
-                  @rui.item_title(label),
-                  @rui.item_description(detail),
-                ]),
-              ),
-            )
-          }),
+  modal(
+    title,
+    emit,
+    description~,
+    [
+      ..if error.is_empty() {
+        []
+      } else {
+        [
+          @rui.alert(variant=Destructive, [
+            @rui.alert_title("Delete failed"),
+            @rui.alert_description(task_output_view(error)),
+          ]),
+        ]
+      },
+      @rui.scroll_area(
+        style=["height: auto", "max-height: 60vh"],
+        @rui.item_group(
+          Map::from_iter(
+            items
+            .iter()
+            .map(item => {
+              let (label, detail) = item
+              (
+                detail,
+                @rui.item(
+                  @rui.item_content([
+                    @rui.item_title(label),
+                    @rui.item_description(detail),
+                  ]),
+                ),
+              )
+            }),
+          ),
         ),
       ),
-    ),
-    dialog_footer(emit, "Delete", Destructive),
-  ])
+      dialog_footer(emit, "Delete", Destructive),
+    ],
+  )
 }

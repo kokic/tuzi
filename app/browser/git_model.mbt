@@ -5,6 +5,7 @@ priv enum GitMsg {
   GitSelectBranch(Int32, String)
   GitRun(Int32, GitOperation)
   GitRenameOpen(Int32)
+  GitWorktreeRemoveOpen(Int32, Path)
 }
 
 ///|

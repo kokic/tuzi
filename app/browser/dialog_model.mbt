@@ -28,5 +28,6 @@ priv enum Dialog {
   UnzipInput(source~ : Path, input~ : String)
   NewEntryInput(directory~ : Path, input~ : String)
   GitRenameInput(context~ : GitContext, reference~ : String, input~ : String)
+  RemoveWorktreeConfirm(context~ : GitContext, worktree~ : @tuzi.GitWorktree)
   Progress(ProgressBatch)
 } derive(Eq)

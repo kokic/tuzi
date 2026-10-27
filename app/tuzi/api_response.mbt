@@ -78,6 +78,8 @@ fn api_failure(error : Error) -> @shared.ApiFailure {
     | @git.InvalidLocalReference(_)
     | @git.InvalidSwitchReference(_) as error =>
       (InvalidRequest, Show::to_string(error))
+    @git.WorktreeNotFound(_) as error => (NotFound, Show::to_string(error))
+    @git.WorktreeInUse(_) as error => (Conflict, Show::to_string(error))
     @git.CommandFailed(..) as error => (GitFailed, Show::to_string(error))
     @os_error.OSError(_, ..) as error if error.is_EEXIST() =>
       (Conflict, error.to_string())

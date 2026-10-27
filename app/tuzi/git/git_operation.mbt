@@ -14,6 +14,9 @@ pub fn git_arguments(
     Pull => ["pull", "--ff-only"]
     Push => ["push"]
     Prune => ["remote", "prune", "origin"]
+    PruneWorktrees => ["worktree", "prune"]
+    RemoveWorktree(target) =>
+      ["worktree", "remove", "--force", "--", target.to_native()]
     DeleteBranch(target) => {
       guard target.strip_prefix("refs/heads/") is Some(name) else {
         raise InvalidLocalReference(target)
@@ -38,7 +41,7 @@ pub fn git_arguments(
 }
 
 ///|
-pub async fn run_git(path : Path, arguments : Array[String]) -> String {
+pub async fn run_git(path : Path, operation : @shared.GitOperation) -> String {
   let (common, _) = checked_git(path.dirname(), [
     "rev-parse", "--path-format=absolute", "--git-common-dir",
   ])
@@ -51,6 +54,22 @@ pub async fn run_git(path : Path, arguments : Array[String]) -> String {
     lock.release()
     git_locks.remove(key)
   }
+  let arguments = git_arguments(operation)
+  if operation is RemoveWorktree(target) {
+    validate_worktree_removal(path.dirname(), target)
+  }
   let (stdout, stderr) = checked_git(path.dirname(), arguments)
   stdout + stderr
+}
+
+///|
+/// Checks the removal target against the worktrees Git reports, so a
+/// client-supplied path can never remove anything else.
+async fn validate_worktree_removal(directory : Path, target : Path) -> Unit {
+  let worktrees = read_worktrees(directory)
+  guard worktrees.iter().find_first(worktree => worktree.path == target)
+    is Some(worktree) else {
+    raise WorktreeNotFound(target)
+  }
+  guard worktree.can_remove() else { raise WorktreeInUse(target) }
 }

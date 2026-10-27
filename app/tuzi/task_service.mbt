@@ -97,8 +97,8 @@ fn TaskService::submit(
           }
         }
         Git(request) => {
-          let arguments = @git.git_arguments(request.operation)
-          () => @git.run_git(request.path, arguments)
+          ignore(@git.git_arguments(request.operation))
+          () => @git.run_git(request.path, request.operation)
         }
       }
       PreparedTask::{ kind, execute, }

@@ -7,16 +7,38 @@ fn git_branch_is_current(
 }
 
 ///|
+fn git_branch_can_switch(
+  branch : @tuzi.GitBranch,
+  info : @tuzi.GitInfo,
+) -> Bool {
+  !git_branch_is_current(branch, info) &&
+  info.worktree_for_branch(branch.reference) is None
+}
+
+///|
 fn git_branch_can_delete(
   branch : @tuzi.GitBranch,
   info : @tuzi.GitInfo,
 ) -> Bool {
-  branch.local_name() is Some(_) && !git_branch_is_current(branch, info)
+  branch.local_name() is Some(_) && git_branch_can_switch(branch, info)
 }
 
 ///|
 fn git_branch_can_rename(branch : @tuzi.GitBranch) -> Bool {
   branch.local_name() is Some(_)
+}
+
+///|
+fn git_branch_title(
+  action : String,
+  branch : @tuzi.GitBranch?,
+  info : @tuzi.GitInfo,
+) -> String {
+  guard branch is Some(branch) else { return action }
+  guard info.worktree_for_branch(branch.reference) is Some(worktree) else {
+    return action
+  }
+  action + " · checked out in worktree " + worktree.path.to_string()
 }
 
 ///|
@@ -76,10 +98,10 @@ fn Model::submit_git_rename(
       }),
     ],
     emit,
-    context=GitRename(
+    context=GitDialog(
       dialog_revision=model.dialog_revision + 1,
       context~,
-      input_dialog=model.dialog,
+      restore=model.dialog,
     ),
   )
   .unwrap_or((model, @rabbita.none))

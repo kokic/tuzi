@@ -29,7 +29,7 @@ fn Model::update_tasks(
             model.finish_file_submission(submission, result).refresh_progress(),
             @rabbita.none,
           )
-        GitRename(dialog_revision~, context~, input_dialog~) => {
+        GitDialog(dialog_revision~, context~, restore~) => {
           guard model.dialog_revision == dialog_revision else {
             return (model, @rabbita.none)
           }
@@ -37,7 +37,7 @@ fn Model::update_tasks(
             return (
               {
                 ..model,
-                dialog: input_dialog,
+                dialog: restore,
                 dialog_error: model.jobs.submit_error,
               },
               @rabbita.none,

@@ -104,6 +104,7 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     | Markdown(_)
     | TextPreview(_)
     | GitInfo(_)
+    | RemoveWorktreeConfirm(..)
     | Progress(_)
     | DeleteConfirm(..) => self
   }
@@ -135,6 +136,7 @@ fn Model::set_archive_compression_level(
 fn Model::cancel_dialog(model : Model) -> (Model, Cmd) {
   let dialog = match model.dialog {
     GitRenameInput(context~, ..) => GitInfo(context)
+    RemoveWorktreeConfirm(context~, ..) => GitInfo(context)
     BookmarkDeleteConfirm(side~, ..) => Bookmarks(side)
     _ => None
   }

@@ -11,7 +11,13 @@ pub fn TaskKind::affected_directories(self : TaskKind) -> Array[Path] {
       [source.dirname(), destination.dirname()]
     File(EditLink(source~, destination~, ..)) =>
       [source.dirname(), destination.dirname(), source, destination]
-    Git(request) => [request.path.dirname()]
+    Git(request) => {
+      let extra = match request.operation {
+        RemoveWorktree(target) => [target.dirname()]
+        _ => []
+      }
+      [request.path.dirname(), ..extra]
+    }
   }
 }
 
@@ -41,7 +47,9 @@ pub fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
     Git(request) => {
       let subtree = match request.operation {
         Pull | Switch(_) => request.path.dirname()
-        Push | DeleteBranch(_) | RenameBranch(_, _) | Prune => request.path
+        RemoveWorktree(target) => target.dirname()
+        Push | DeleteBranch(_) | RenameBranch(_, _) | Prune | PruneWorktrees =>
+          request.path
       }
       directory_contains(subtree, directory)
     }
