@@ -10,7 +10,16 @@ fn Model::view(
     mode=color_mode(model.theme),
     id="tuzi",
     style=[
-      ..typography_style, ..appearance_style, "height: 100%", "display: flex", "flex-direction: column",
+      ..typography_style,
+      ..appearance_style,
+      ..match model.theme {
+        Light => [
+          "--rui-background: #fcfcfb", "--rui-card: #fcfcfb", "--rui-popover: #fcfcfb",
+          "--rui-outline-background: #fcfcfb",
+        ]
+        Dark => []
+      },
+      "height: 100%", "display: flex", "flex-direction: column",
     ],
     [
       div(
