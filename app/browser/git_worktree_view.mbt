@@ -42,6 +42,7 @@ fn git_worktree_controls(
         ],
       ),
       @rui.item_group(
+        style=["--rui-item-group-gap: 6px"],
         Map::from_iter(
           info.worktrees
           .iter()
@@ -64,44 +65,43 @@ fn git_worktree_item(
   disabled : Bool,
   emit : Emit[Msg],
 ) -> Html {
-  @rui.item(variant=ItemOutline, attrs=@html.Attrs::build().role("listitem"), [
-    @rui.item_content(style=["min-width: 0"], [
-      @rui.item_title(
-        style=[
-          "display: flex", "align-items: center", "gap: 8px", "min-width: 0",
-        ],
-        [
-          span(
-            style=status_text_style(),
-            title=worktree.path.to_string(),
-            worktree.label(),
+  @rui.item(
+    variant=ItemOutline,
+    attrs=@html.Attrs::build().role("listitem"),
+    style=["flex-wrap: nowrap", "padding: 6px 10px"],
+    [
+      @rui.item_content([
+        @rui.item_title(
+          [
+            span(
+              style=status_text_style(),
+              title=worktree.path.to_string() +
+                "\nBranch: " +
+                git_worktree_branch_label(worktree),
+              worktree.label(),
+            ),
+            ..git_worktree_badges(worktree),
+          ],
+        ),
+      ]),
+      @rui.item_actions(style=["flex-shrink: 0"], [
+        @rui.button(
+          variant=Destructive,
+          size=Sm,
+          style=[UI_FONT_STYLE],
+          disabled=disabled || !worktree.can_remove(),
+          title=git_worktree_remove_title(worktree),
+          attrs=@html.Attrs::build().aria_label(
+            "Delete worktree \{worktree.path}",
           ),
-          ..git_worktree_badges(worktree),
-        ],
-      ),
-      @rui.item_description(
-        style=["overflow-wrap: anywhere"],
-        worktree.path.to_string(),
-      ),
-      @rui.item_description("Branch: " + git_worktree_branch_label(worktree)),
-    ]),
-    @rui.item_actions([
-      @rui.button(
-        variant=Destructive,
-        size=Sm,
-        style=[UI_FONT_STYLE],
-        disabled=disabled || !worktree.can_remove(),
-        title=git_worktree_remove_title(worktree),
-        attrs=@html.Attrs::build().aria_label(
-          "Delete worktree \{worktree.path}",
+          on_click=emit(
+            GitEvent(GitWorktreeRemoveOpen(context.entry.id, worktree.path)),
+          ),
+          "Delete",
         ),
-        on_click=emit(
-          GitEvent(GitWorktreeRemoveOpen(context.entry.id, worktree.path)),
-        ),
-        "Delete",
-      ),
-    ]),
-  ])
+      ]),
+    ],
+  )
 }
 
 ///|
