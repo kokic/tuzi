@@ -12,7 +12,14 @@ async fn create_link_like(
   destination : Path,
   target : Path,
 ) -> Unit {
-  @async_fs.symlink(target=target.to_string(), destination.to_string())
+  create_link(target, destination)
+}
+
+///|
+/// Create a symbolic link without replacing an existing destination.
+#cfg(not(platform="windows"))
+pub async fn create_link(target : Path, destination : Path) -> Unit {
+  @async_fs.symlink(target=target.to_native(), destination.to_native())
 }
 
 ///|

@@ -13,6 +13,10 @@ fn validate_file_operation_input(
       @fsops.validate_link_path(destination)
       @fsops.validate_link_target(target)
     }
+    CreateLink(target~, destination~) => {
+      @fsops.validate_link_target(target)
+      @fsops.validate_link_path(destination)
+    }
     CreateFile(name~, ..) | Mkdir(name~, ..) => @fsops.validate_entry_name(name)
     Zip(names~, output_name~, level~, ..) =>
       @archive.validate_zip_selection(names, output_name, level~)
@@ -34,6 +38,7 @@ async fn execute_file_operation(operation : @shared.FileOperation) -> Unit {
     Rename(source~, new_name~) => @fsops.rename_entry(source, new_name)
     EditLink(source~, destination~, target~) =>
       @fsops.edit_link(source, destination, target)
+    CreateLink(target~, destination~) => @fsops.create_link(target, destination)
     CreateFile(parent~, name~) => @fsops.create_file_entry(parent, name)
     Mkdir(parent~, name~) => @fsops.mkdir_entry(parent, name)
     Zip(directory~, names~, output_name~, level~) =>

@@ -58,6 +58,28 @@ async fn create_link_like(
 }
 
 ///|
+/// Create a symbolic link without replacing an existing destination.
+#cfg(platform="windows")
+pub async fn create_link(target : Path, destination : Path) -> Unit {
+  ignore(
+    link_powershell(
+      (
+        #|$ErrorActionPreference = 'Stop'
+        #|[Console]::OutputEncoding = New-Object System.Text.UTF8Encoding
+        #|try {
+        #|  $target = [System.Management.Automation.WildcardPattern]::Escape($env:TUZI_LINK_TARGET)
+        #|  New-Item -ItemType SymbolicLink -Path $env:TUZI_LINK_DESTINATION -Target $target | Out-Null
+        #|} catch { [Console]::Error.WriteLine($_.Exception.Message); exit 1 }
+      ),
+      {
+        "TUZI_LINK_DESTINATION": destination.to_native(),
+        "TUZI_LINK_TARGET": target.to_native(),
+      },
+    ),
+  )
+}
+
+///|
 #cfg(platform="windows")
 async fn relocate_link(source : Path, destination : Path) -> Unit {
   ignore(

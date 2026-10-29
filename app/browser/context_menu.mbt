@@ -66,6 +66,16 @@ fn entry_menu_content(
       ..if !open_items.is_empty() {
         [@rui.context_menu_separator()]
       },
+      ..if !target.entry.is_link() {
+        [
+          @rui.context_menu_item(
+            scope,
+            disabled=transfer_disabled || root,
+            on_select=action_emit(CreateLinkToOtherPane),
+            "symbolic link to",
+          ),
+        ]
+      },
       ..actions.map(action => {
         let (label, shortcut, message) = action
         @rui.context_menu_item(

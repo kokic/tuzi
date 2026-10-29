@@ -3,6 +3,7 @@ priv enum FileAction {
   DeleteOpen
   InfoOpen
   TransferSelection(TransferKind)
+  CreateLinkToOtherPane
   CopyPaths
   RenameOpen
   ZipOpen
@@ -81,6 +82,7 @@ fn Model::execute_file_action(
       })
     TransferSelection(kind) =>
       model.transfer_selection_to_other_pane(kind, context, emit)
+    CreateLinkToOtherPane => model.create_links_in_other_pane(context, emit)
     CopyPaths => model.copy_selected_paths_to_clipboard(context, emit)
     RenameOpen => model.open_rename_dialog(context, emit)
     ZipOpen => (model.open_archive_dialog(context), @rabbita.none)

@@ -6,7 +6,8 @@ pub fn TaskKind::affected_directories(self : TaskKind) -> Array[Path] {
     File(CreateFile(parent~, ..)) | File(Mkdir(parent~, ..)) => [parent]
     File(Zip(directory~, ..)) => [directory]
     File(Unzip(destination~, ..)) => [destination.dirname(), destination]
-    File(Copy(destination~, ..)) => [destination.dirname()]
+    File(Copy(destination~, ..)) | File(CreateLink(destination~, ..)) =>
+      [destination.dirname()]
     File(Move(source~, destination~)) =>
       [source.dirname(), destination.dirname()]
     File(EditLink(source~, destination~, ..)) =>
@@ -36,7 +37,8 @@ pub fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
         source.dirname().join(Path("./\{new_name}")),
         directory,
       )
-    File(Copy(destination~, ..)) => directory_contains(destination, directory)
+    File(Copy(destination~, ..)) | File(CreateLink(destination~, ..)) =>
+      directory_contains(destination, directory)
     File(Unzip(destination~, ..)) => directory_contains(destination, directory)
     File(Move(source~, destination~))
     | File(EditLink(source~, destination~, ..)) =>
