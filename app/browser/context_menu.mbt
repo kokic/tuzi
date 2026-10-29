@@ -42,20 +42,21 @@ fn entry_menu_content(
     open_with_items(scope, target, registry, emit)
   })
   let root = target.path.dirname() == target.path
-  let actions : Array[(String, String, FileAction)] = [
+  let actions : Array[(String, String?, FileAction)] = [
     ..if !target.entry.is_link() {
       [
-        ("Copy to other pane", "c", TransferSelection(Copy)),
-        ("Move to other pane", "m", TransferSelection(Move)),
-        ("Rename…", "r", RenameOpen),
+        ("Symbolic link to", Option::None, CreateLinkToOtherPane),
+        ("Copy to other pane", Some("c"), TransferSelection(Copy)),
+        ("Move to other pane", Some("m"), TransferSelection(Move)),
+        ("Rename to", Some("r"), RenameOpen),
       ]
     },
-    ("Copy path", "y", CopyPaths),
+    ("Copy path", Some("y"), CopyPaths),
     ..if !target.entry.is_link() {
-      [("Compress to ZIP…", "z", ZipOpen)]
+      [("Compress to ZIP", Some("z"), ZipOpen)]
     },
-    ("Information", "i", InfoOpen),
-    ("New file or folder…", "n", NewEntryOpen),
+    ("Information", Some("i"), InfoOpen),
+    ("New file or folder", Some("n"), NewEntryOpen),
   ]
   @rui.context_menu_content(
     scope,
@@ -66,24 +67,25 @@ fn entry_menu_content(
       ..if !open_items.is_empty() {
         [@rui.context_menu_separator()]
       },
-      ..if !target.entry.is_link() {
-        [
-          @rui.context_menu_item(
-            scope,
-            disabled=transfer_disabled || root,
-            on_select=action_emit(CreateLinkToOtherPane),
-            "symbolic link to",
-          ),
-        ]
-      },
       ..actions.map(action => {
         let (label, shortcut, message) = action
         @rui.context_menu_item(
           scope,
-          disabled=(transfer_disabled && message is TransferSelection(_)) ||
-            (root && message is (TransferSelection(_) | RenameOpen | ZipOpen)),
+          disabled=(
+            transfer_disabled &&
+            message is (TransferSelection(_) | CreateLinkToOtherPane)
+          ) ||
+            (
+              root &&
+              message is (TransferSelection(_) | CreateLinkToOtherPane | RenameOpen | ZipOpen)
+            ),
           on_select=action_emit(message),
-          [span(label), @rui.context_menu_shortcut(kbd(shortcut))],
+          [
+            span(label),
+            ..shortcut.map_or([], key => {
+              [@rui.context_menu_shortcut(kbd(key))]
+            }),
+          ],
         )
       }),
       @rui.context_menu_separator(),
@@ -92,7 +94,7 @@ fn entry_menu_content(
         destructive=true,
         disabled=root,
         on_select=action_emit(DeleteOpen),
-        [span("Delete…"), @rui.context_menu_shortcut(kbd("d"))],
+        [span("Delete"), @rui.context_menu_shortcut(kbd("d"))],
       ),
     ],
   )
