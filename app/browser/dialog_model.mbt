@@ -6,7 +6,7 @@ priv enum NewEntryKind {
 
 ///|
 priv enum Dialog {
-  None
+  Nil
   Help
   Activity
   Bookmarks(PaneSide)

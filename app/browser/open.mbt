@@ -43,7 +43,7 @@ fn Model::execute_opener(
     is_dir=target.entry.is_dir(),
   )
   guard association.openers.contains(id) else { return (model, @rabbita.none) }
-  let model = { ..model, dialog: None, dialog_error: "", }
+  let model = { ..model, dialog: Nil, dialog_error: "", }
   match opener.action {
     Browse => model.navigate_to_directory(target.pane, target.path)
     Dialog(kind) =>

@@ -60,7 +60,7 @@ fn Dialog::file_operations(
         },
       ]
     }
-    None
+    Nil
     | Help
     | Activity
     | Bookmarks(_)

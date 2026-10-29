@@ -83,5 +83,5 @@ fn Model::refresh_progress(model : Model) -> Model {
   let completed = batch.error is None &&
     !batch.items.is_empty() &&
     batch.items.all(item => item.state is Tracking(_, Some(Completed(_))))
-  { ..model, dialog: if completed { None } else { Progress(batch) }, }
+  { ..model, dialog: if completed { Nil } else { Progress(batch) }, }
 }

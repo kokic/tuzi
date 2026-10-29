@@ -108,8 +108,8 @@ fn Model::receive_tasks(
     jobs,
     dialog: if restarted {
       match model.dialog {
-        TaskDetails(_) => None
-        Progress(batch) if batch.session != jobs.session => None
+        TaskDetails(_) => Nil
+        Progress(batch) if batch.session != jobs.session => Nil
         other => other
       }
     } else {

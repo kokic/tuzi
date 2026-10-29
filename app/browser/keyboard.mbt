@@ -6,7 +6,7 @@ fn Model::handle_keyboard_event(
 ) -> (Model, Cmd) {
   let key = kb.key()
   match () {
-    _ if model.dialog != None => {
+    _ if model.dialog != Nil => {
       guard !kb.ctrl_key() &&
         !kb.meta_key() &&
         !kb.alt_key() &&

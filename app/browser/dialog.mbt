@@ -94,7 +94,7 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     NewEntryInput(directory~, ..) => NewEntryInput(directory~, input~)
     GitRenameInput(context~, reference~, ..) =>
       GitRenameInput(context~, reference~, input~)
-    None
+    Nil
     | Help
     | Activity
     | Bookmarks(_)
@@ -139,9 +139,9 @@ fn Model::cancel_dialog(model : Model) -> (Model, Cmd) {
     GitRenameInput(context~, ..) => GitInfo(context)
     RemoveWorktreeConfirm(context~, ..) => GitInfo(context)
     BookmarkDeleteConfirm(side~, ..) => Bookmarks(side)
-    _ => None
+    _ => Nil
   }
-  let command = if dialog != None {
+  let command = if dialog != Nil {
     @dialog.show(DialogId)
   } else {
     @rabbita.none

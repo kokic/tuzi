@@ -56,7 +56,7 @@ fn create_file_browser() -> Val[Html] {
     },
     update=(model, msg, emit) => {
       let (next, command) = Model::update(model, msg, emit, toast_send)
-      if model.dialog is None && next.dialog != None {
+      if model.dialog is Nil && next.dialog != Nil {
         (next, @rabbita.batch([command, @dialog.show(DialogId)]))
       } else {
         (next, command)

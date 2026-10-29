@@ -45,7 +45,7 @@ fn entry_menu_content(
   let actions : Array[(String, String?, FileAction)] = [
     ..if !target.entry.is_link() {
       [
-        ("Symbolic link to", Option::None, CreateLinkToOtherPane),
+        ("Symbolic link to", None, CreateLinkToOtherPane),
         ("Copy to other pane", Some("c"), TransferSelection(Copy)),
         ("Move to other pane", Some("m"), TransferSelection(Move)),
         ("Rename to", Some("r"), RenameOpen),

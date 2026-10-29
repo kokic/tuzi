@@ -78,7 +78,7 @@ fn Model::initialize() -> Model {
     },
     filters: ("", ""),
     editing: false,
-    dialog: None,
+    dialog: Nil,
     dialog_revision: 0,
     dialog_error: "",
     jobs: TaskState::initialize(),

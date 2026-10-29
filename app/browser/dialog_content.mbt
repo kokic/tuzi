@@ -7,7 +7,7 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
       name_dialog(title, prompt, input, model.dialog_error, emit)
     }
     match model.dialog {
-      None => @html.nothing
+      Nil => @html.nothing
       Help => help_dialog(emit)
       Activity => activity
       Bookmarks(side) => bookmarks_dialog(model.bookmarks, side, emit)
