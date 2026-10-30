@@ -26,9 +26,7 @@ fn pane_path_menu_view(
         align=Start,
         aria_label=label,
         style=[
-          UI_FONT_STYLE,
-          "max-width: min(32rem, calc(100vw - 1rem))",
-          "max-height: min(16rem, var(--rui-menu-available-height, calc(100vh - 1rem)))",
+          ..popover_style, "max-width: min(32rem, calc(100vw - 1rem))", "max-height: min(16rem, var(--rui-menu-available-height, calc(100vh - 1rem)))",
         ],
         [
           @rui.dropdown_menu_label(style=["flex: none"], label),

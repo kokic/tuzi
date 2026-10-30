@@ -18,9 +18,21 @@ let typography_style : Array[String] = [
 
 ///|
 let appearance_style : Array[String] = [
-  "--rui-radius: 6px", "--tuzi-selection-background: light-dark(#e5e5e5, #3a3a3a)",
+  "--rui-radius: 4px", "--rui-item-group-gap: 8px", "--tuzi-selection-background: light-dark(#e5e5e5, #3a3a3a)",
   "--tuzi-selection-indicator: var(--rui-muted-foreground)", "--tuzi-marked-background: light-dark(#f0f0f0, #303030)",
   "--tuzi-row-height: 35px",
+]
+
+///|
+let popover_style : Array[String] = [
+  UI_FONT_STYLE,
+  "box-shadow: none",
+  "border-color: var(--rui-border)",
+]
+
+///|
+let dialog_footer_style : Array[String] = [
+  "background: transparent", "border-radius: 0",
 ]
 
 ///|

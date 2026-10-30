@@ -1,8 +1,7 @@
 ///|
 pub fn panes_style() -> Array[String] {
   [
-    "flex: 1", "min-height: 0", "display: flex", "gap: 1px", "overflow: clip", "border: 1px solid var(--rui-border)",
-    "border-radius: var(--rui-radius)", "background: var(--rui-border)",
+    "flex: 1", "min-height: 0", "display: flex", "gap: 1px", "overflow: clip", "background: var(--rui-border)",
   ]
 }
 
@@ -16,7 +15,7 @@ pub fn pane_style(active : Bool) -> Array[String] {
     "min-height: 0",
     "box-sizing: border-box",
     "overflow: clip",
-    "background: var(--rui-card)",
+    "background: var(--rui-background)",
     "container-type: inline-size",
     "container-name: file-pane",
     ..if active {
@@ -42,7 +41,6 @@ pub fn pane_header_style(active : Bool) -> Array[String] {
     "padding: 4px",
     "box-sizing: border-box",
     "min-height: var(--tuzi-row-height)",
-    "border-bottom: 1px solid var(--rui-border)",
     "background: var(--rui-background)",
     ..if active {
       [

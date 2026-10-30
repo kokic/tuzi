@@ -39,7 +39,11 @@ fn Pane::pane_view(
   div(id="pane-\{idx.index()}-view-\{pane.id}", style=pane_style(active), {
     "header": div(class="phead", style=pane_header_style(active), breadcrumbs),
     "sort": div(
-      style=[..pane_header_style(active), "justify-content: flex-end"],
+      style=[
+        ..pane_header_style(false),
+        "justify-content: flex-end",
+        "border-bottom: 1px solid var(--rui-border)",
+      ],
       [
         history_menu,
         bookmark_menu,

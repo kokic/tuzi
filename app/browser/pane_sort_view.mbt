@@ -73,7 +73,7 @@ fn pane_sort_select(
         @rui.select_content(
           scope~,
           attrs=@html.Attrs::build().aria_label("Sort files"),
-          style=[UI_FONT_STYLE],
+          style=popover_style,
           modes.map(mode => {
             @rui.select_item(
               scope~,

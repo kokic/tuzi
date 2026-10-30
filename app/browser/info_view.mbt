@@ -40,7 +40,7 @@ fn InfoContext::dialog(
         content,
       ),
       if context.link is Some(_) {
-        @rui.dialog_footer([
+        @rui.dialog_footer(style=dialog_footer_style, [
           dialog_close_button("Close"),
           @rui.button(
             style=[UI_FONT_STYLE],
@@ -63,7 +63,6 @@ fn InfoContext::image_view(context : InfoContext) -> Html {
   div(
     style=[
       "display: flex", "justify-content: center", "padding: 12px", "margin-bottom: 12px",
-      "border: 1px solid var(--rui-border)", "border-radius: var(--rui-radius)",
       "background: var(--rui-muted)",
     ],
     [
@@ -74,7 +73,6 @@ fn InfoContext::image_view(context : InfoContext) -> Html {
         decoding="async",
         style=[
           "display: block", "max-width: 100%", "max-height: 45dvh", "object-fit: contain",
-          "border-radius: var(--rui-radius)",
         ],
       ),
     ],

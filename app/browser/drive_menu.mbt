@@ -147,7 +147,7 @@ fn drive_menu_view(
             @rui.dropdown_menu_content(
               scope,
               aria_label="Storage locations",
-              style=[UI_FONT_STYLE],
+              style=popover_style,
               items,
             ),
           ])

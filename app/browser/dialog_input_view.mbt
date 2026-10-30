@@ -16,7 +16,7 @@ fn name_dialog(
 fn new_entry_dialog(input : String, error : String, emit : Emit[Msg]) -> Html {
   modal("New file or folder", emit, [
     dialog_input("Name:", input, error, emit),
-    @rui.dialog_footer([
+    @rui.dialog_footer(style=dialog_footer_style, [
       dialog_keyboard_hint_view("create folder"),
       dialog_close_button("Cancel"),
       @rui.button(

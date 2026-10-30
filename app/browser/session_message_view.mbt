@@ -50,15 +50,8 @@ fn session_entry_view(entry : @session.Entry) -> Html {
       },
       div(
         style=[
-          "min-width: 0",
-          "display: flex",
-          "flex-direction: column",
-          "gap: 10px",
-          ..if is_user {
-            [
-              "padding: 12px", "background: var(--rui-muted)", "border-radius: 8px",
-            ]
-          },
+          "min-width: 0", "display: flex", "flex-direction: column", "gap: 10px",
+          "padding-top: 12px", "border-top: 1px solid var(--rui-border)",
         ],
         [
           div(

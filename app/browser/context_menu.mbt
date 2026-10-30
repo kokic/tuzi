@@ -61,7 +61,7 @@ fn entry_menu_content(
   @rui.context_menu_content(
     scope,
     aria_label="File actions",
-    style=[UI_FONT_STYLE],
+    style=popover_style,
     [
       ..open_items,
       ..if !open_items.is_empty() {
@@ -72,19 +72,21 @@ fn entry_menu_content(
         @rui.context_menu_item(
           scope,
           disabled=(
-            transfer_disabled &&
-            message is (TransferSelection(_) | CreateLinkToOtherPane)
-          ) ||
+              transfer_disabled &&
+              message is (TransferSelection(_) | CreateLinkToOtherPane)
+            ) ||
             (
               root &&
-              message is (TransferSelection(_) | CreateLinkToOtherPane | RenameOpen | ZipOpen)
+              message
+              is (TransferSelection(_)
+              | CreateLinkToOtherPane
+              | RenameOpen
+              | ZipOpen)
             ),
           on_select=action_emit(message),
           [
             span(label),
-            ..shortcut.map_or([], key => {
-              [@rui.context_menu_shortcut(kbd(key))]
-            }),
+            ..shortcut.map_or([], key => [@rui.context_menu_shortcut(kbd(key))]),
           ],
         )
       }),

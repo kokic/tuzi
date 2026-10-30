@@ -66,7 +66,7 @@ fn git_worktree_item(
   emit : Emit[Msg],
 ) -> Html {
   @rui.item(
-    variant=ItemOutline,
+    variant=ItemDefault,
     attrs=@html.Attrs::build().role("listitem"),
     style=["flex-wrap: nowrap", "padding: 6px 10px"],
     [
@@ -108,13 +108,13 @@ fn git_worktree_item(
 fn git_worktree_badges(worktree : @tuzi.GitWorktree) -> Array[Html] {
   let badges : Array[Html] = []
   if worktree.main {
-    badges.push(badge(variant=Secondary, "main"))
+    badges.push(badge(variant=Ghost, "main"))
   }
   if worktree.current {
-    badges.push(badge(variant=Outline, "current"))
+    badges.push(badge(variant=Ghost, "current"))
   }
   if worktree.bare {
-    badges.push(badge(variant=Outline, "bare"))
+    badges.push(badge(variant=Ghost, "bare"))
   }
   if worktree.locked {
     badges.push(badge(variant=Destructive, "locked"))

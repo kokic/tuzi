@@ -36,6 +36,7 @@ fn breadcrumbs_view(
               "flex-shrink: 1",
               "font-size: inherit",
               "line-height: inherit",
+              "font-weight: 400",
               "--rui-button-base-fg: var(--rui-muted-foreground)",
             ],
             attrs~,
@@ -67,12 +68,7 @@ fn breadcrumbs_view(
     }
     @rui.breadcrumb(
       aria_label="Directory path",
-      style=[
-        UI_FONT_STYLE,
-        "flex: 1",
-        "min-width: 0",
-        "--rui-ghost-hover-bg: transparent",
-      ],
+      style=[UI_FONT_STYLE, "flex: 1", "min-width: 0"],
       @rui.breadcrumb_list(
         style=["font-size: inherit", "line-height: inherit"],
         items,
@@ -141,7 +137,7 @@ fn breadcrumb_context_menu(
               )
             }
             Err(error) =>
-              @rui.context_menu_content(scope, style=[UI_FONT_STYLE], [
+              @rui.context_menu_content(scope, style=popover_style, [
                 @rui.context_menu_item(
                   scope,
                   disabled=true,

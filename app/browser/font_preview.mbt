@@ -182,10 +182,7 @@ fn InfoContext::font_preview_view(
 ) -> Html {
   let input_id = "font-preview-text-\{context.id}"
   div(
-    style=[
-      "padding: 12px", "margin-bottom: 12px", "border: 1px solid var(--rui-border)",
-      "border-radius: var(--rui-radius)", "background: var(--rui-muted)",
-    ],
+    style=["margin-bottom: 12px"],
     match preview.state {
       Loading => centered_loading_view("Loading font…")
       Loaded(Err(error)) =>
