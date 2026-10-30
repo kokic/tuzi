@@ -17,8 +17,8 @@ import {
   "moonbitlang/core/string",
   "moonbitlang/core/encoding/percent",
   "moonbitlang/core/immut/vector",
-  "moonbit-community/rui",
-  "moonbit-community/rui/markdown",
+  "kokic/tuzi/vendor/rui",
+  "kokic/tuzi/vendor/rui/markdown",
   "moonbit-community/rabbita/dialog",
 }
 
