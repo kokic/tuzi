@@ -89,14 +89,6 @@ fn vscode_command() -> OpenCommand {
 fn configured_open_registry(
   openers : Map[String, @shared.Opener],
 ) -> @shared.OpenRegistry {
-  let markdown_dotfile_association : @shared.OpenAssociation = {
-    openers: ["markdown", "browser", "explorer"],
-    default_opener: "markdown",
-  }
-  let text_dotfile_association : @shared.OpenAssociation = {
-    openers: ["text", "browser", "explorer"],
-    default_opener: "text",
-  }
   {
     openers,
     folder: {
@@ -112,20 +104,6 @@ fn configured_open_registry(
       ".gitignore": text_association,
       ".gitattributes": text_association,
       ".env": text_association,
-      ".md": markdown_dotfile_association,
-      ".markdown": markdown_dotfile_association,
-      ".txt": text_dotfile_association,
-      ".toml": text_dotfile_association,
-      ".yaml": text_dotfile_association,
-      ".yml": text_dotfile_association,
-      ".json": text_dotfile_association,
-      ".jsonl": session_association,
-      ".ini": text_dotfile_association,
-      ".conf": text_dotfile_association,
-      ".zip": {
-        openers: ["extract", "browser", "explorer"],
-        default_opener: "extract",
-      },
     },
     extensions: {
       "c": text_association,
@@ -185,6 +163,10 @@ fn configured_open_registry(
       "heic": image_association,
       "heif": image_association,
       "jxl": image_association,
+      "apk": {
+        openers: ["extract", "browser", "explorer"],
+        default_opener: "extract",
+      },
       "zip": {
         openers: ["extract", "browser", "explorer"],
         default_opener: "extract",

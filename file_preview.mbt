@@ -17,7 +17,7 @@ fn Path::content_type(path : Path) -> String? {
     return Some(content_type)
   }
   Some(
-    match @posix.Path(name.to_lower()).extname().to_owned() {
+    match file_type_suffix(name) {
       ".pdf" => "application/pdf"
       ".html" | ".htm" => "text/html; charset=utf-8"
       ".json" | ".map" => "application/json; charset=utf-8"

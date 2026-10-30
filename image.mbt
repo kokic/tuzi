@@ -1,6 +1,6 @@
 ///|
 pub fn image_content_type(name : String) -> String? {
-  match @posix.Path(name.to_lower()).extname().to_owned() {
+  match file_type_suffix(name) {
     ".jpg" | ".jpeg" | ".jpe" | ".jfif" | ".pjpeg" | ".pjp" =>
       Some("image/jpeg")
     ".png" => Some("image/png")

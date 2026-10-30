@@ -1,6 +1,6 @@
 ///|
 pub fn font_content_type(name : String) -> String? {
-  match @posix.Path(name.to_lower()).extname().to_owned() {
+  match file_type_suffix(name) {
     ".ttf" => Some("font/ttf")
     ".otf" => Some("font/otf")
     ".woff" => Some("font/woff")
