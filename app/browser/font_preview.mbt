@@ -14,7 +14,13 @@ priv struct FontPreview {
 fn FontPreview::initialize() -> FontPreview {
   {
     state: Loading,
-    text: "天地玄黄，宇宙洪荒。\nThe quick brown fox jumps over the lazy dog.\nABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n0123456789 !?.,:;()[]{}",
+    text: (
+      #|天地玄黄，宇宙洪荒。
+      #|The quick brown fox jumps over the lazy dog.
+      #|ABCDEFGHIJKLMNOPQRSTUVWXYZ
+      #|abcdefghijklmnopqrstuvwxyz
+      #|0123456789 !?.,:;()[]{}"
+    ),
   }
 }
 
@@ -213,7 +219,7 @@ fn InfoContext::font_preview_view(
                 "line-height: 1.6",
                 "white-space: pre-wrap",
                 "max-height: 45dvh",
-                "overflow-y: auto",
+                "overflow-y: hidden",
               ],
             ),
           ]),
