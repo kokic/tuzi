@@ -2,7 +2,7 @@
 using @rabbita {type Cmd, type Emit, type Html, type Val}
 
 ///|
-using @html {div, form, fragment, input, li, p, span, ul}
+using @html {div, form, fragment, li, p, span, ul}
 
 ///|
 using @path {type Path}

@@ -38,7 +38,7 @@ fn pane_sort_select(
       "width: max-content",
       "flex: none",
       "margin-inline-end: 4px",
-      "font-weight: 500",
+      "font-weight: var(--tuzi-weight-ui)",
       "line-height: 1rem",
       "--tuzi-sort-padding: 0.5rem",
       "--tuzi-sort-gap: 0.25rem",
@@ -67,7 +67,8 @@ fn pane_sort_select(
           title="Sort files (s)",
           style=[
             "grid-area: 1 / 1", "height: 1.5rem", "padding: 0 var(--tuzi-sort-padding)",
-            "gap: var(--tuzi-sort-gap)", "font: inherit", "border-color: transparent",
+            "gap: var(--tuzi-sort-gap)", "font: inherit",
+            "font-weight: var(--tuzi-text-action-weight)", "border-color: transparent",
           ],
         ),
         @rui.select_content(

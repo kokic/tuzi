@@ -36,7 +36,7 @@ fn modal(
     style=[
       @presentation.UI_FONT_STYLE,
       "overflow-wrap: anywhere",
-      "border-radius: var(--rui-radius)",
+      "border-radius: 0",
       ..match size {
         Small => []
         Wide => ["width: min(640px, calc(100% - 2rem))"]

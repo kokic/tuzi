@@ -6,7 +6,7 @@ let typography_style : Array[String] = [
 
 ///|
 let appearance_style : Array[String] = [
-  "--rui-radius: 4px", "--rui-item-group-gap: 8px", "--tuzi-row-height: 35px",
+  "--rui-item-group-gap: 8px", "--tuzi-row-height: 35px",
 ]
 
 ///|
@@ -41,11 +41,11 @@ fn toolbar_style() -> Array[String] {
 fn count_style(active : Bool) -> Array[String] {
   if active {
     [
-      "font-weight: 600", "color: var(--tuzi-emphasis-foreground)", "font-variant-numeric: tabular-nums",
+      "font-weight: var(--tuzi-weight-emphasis)", "color: var(--tuzi-emphasis-foreground)", "font-variant-numeric: tabular-nums",
     ]
   } else {
     [
-      "font-weight: 500", "color: var(--rui-muted-foreground)", "font-variant-numeric: tabular-nums",
+      "font-weight: var(--tuzi-weight-ui)", "color: var(--rui-muted-foreground)", "font-variant-numeric: tabular-nums",
     ]
   }
 }

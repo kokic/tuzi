@@ -35,7 +35,6 @@ fn breadcrumbs_view(
               "min-width: 0",
               "flex-shrink: 1",
               "line-height: inherit",
-              "font-weight: 400",
               "--rui-button-base-fg: var(--rui-muted-foreground)",
             ],
             attrs~,

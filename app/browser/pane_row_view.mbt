@@ -56,7 +56,7 @@ fn pane_rows(
             li(
               id="pane-\{idx.index()}-view-\{row.view_id}-row-\{row.row}",
               class="entry-row",
-              style=row_style(row.is_cursor, row.selected),
+              style=row_style(row.is_cursor),
               menu,
             ),
           )
@@ -83,16 +83,6 @@ fn entry_context_menu(
     emit(PaneEvent(Click(idx, row)))
   })
   let children = [
-    input(
-      input_type=Checkbox,
-      checked=selected,
-      attrs=@html.Attrs::build().aria_label("Select \{entry.name}"),
-      style=[
-        "accent-color: var(--rui-primary)", "width: 14px", "height: 14px", "margin: 0",
-        "cursor: pointer", "align-self: center",
-      ],
-      on_change=emit.map(_value => PaneEvent(Select(idx, entry.name))),
-    ),
     span(
       style=[
         ..@presentation.entry_meta_style(),
@@ -108,7 +98,26 @@ fn entry_context_menu(
         emit(PaneEvent(DblClick(idx, row)))
       }),
       [
-        entry.name_view(@presentation.entry_color(entry, appearance)),
+        div(
+          style=[
+            "grid-column: 1", "min-width: 0", "position: relative",
+            "padding-left: \{if selected { "32px" } else { "0px" }}",
+            "transition: padding-left 160ms ease \{if selected { "0ms" } else { "80ms" }}",
+          ],
+          [
+            span(
+              style=[
+                "position: absolute", "left: 0", "width: 20px",
+                "text-align: center", "pointer-events: none",
+                "color: var(--tuzi-emphasis-foreground)",
+                "opacity: \{if selected { "1" } else { "0" }}",
+                "transition: opacity 80ms ease \{if selected { "160ms" } else { "0ms" }}",
+              ],
+              "✓",
+            ),
+            entry.name_view(@presentation.entry_color(entry, appearance)),
+          ],
+        ),
         entry_size_view(entry),
         entry_time_view(entry),
       ],
@@ -118,7 +127,7 @@ fn entry_context_menu(
   let trigger_style = [
     "display: grid", "grid-column: 1 / -1", "grid-template-columns: subgrid", "align-items: baseline",
     "align-content: center", "min-width: 0", "min-height: var(--tuzi-row-height)",
-    "padding: 4px 10px",
+    "padding: 4px 10px", "outline: none",
   ]
   @rui.context_menu(id=id + "-open", scope => {
     fragment([

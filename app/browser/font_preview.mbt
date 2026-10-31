@@ -207,7 +207,7 @@ fn InfoContext::font_preview_view(
               style=[
                 @presentation.preview_font_style(context.font_family()),
                 "font-size: var(--tuzi-font-preview-size)",
-                "font-weight: normal",
+                "font-weight: var(--tuzi-weight-ui)",
                 "font-style: normal",
                 "font-synthesis: none",
                 "line-height: 1.6",

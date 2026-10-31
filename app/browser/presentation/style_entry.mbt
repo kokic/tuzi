@@ -1,5 +1,5 @@
 ///|
-pub fn row_style(is_cursor : Bool, selected : Bool) -> Array[String] {
+pub fn row_style(is_cursor : Bool) -> Array[String] {
   [
     UI_FONT_STYLE,
     "display: grid",
@@ -12,15 +12,9 @@ pub fn row_style(is_cursor : Bool, selected : Bool) -> Array[String] {
     "-webkit-user-select: none",
     "user-select: none",
     "line-height: var(--tuzi-entry-line-height)",
-    "background: var(--tuzi-row-background, var(--tuzi-row-hover, transparent))",
+    "background: var(--tuzi-row-hover, transparent)",
     ..if is_cursor {
-      [
-        "--tuzi-row-background: var(--tuzi-cursor-background)", "box-shadow: inset 2px 0 var(--tuzi-cursor-indicator)",
-      ]
-    } else if selected {
-      ["--tuzi-row-background: var(--tuzi-marked-background)"]
-    } else {
-      []
+      ["--tuzi-entry-name-weight: var(--tuzi-weight-cursor)"]
     },
   ]
 }
@@ -28,7 +22,7 @@ pub fn row_style(is_cursor : Bool, selected : Bool) -> Array[String] {
 ///|
 pub fn entry_open_area_style() -> Array[String] {
   [
-    "grid-column: 3 / -1", "display: grid", "grid-template-columns: subgrid", "align-items: baseline",
+    "grid-column: 2 / -1", "display: grid", "grid-template-columns: subgrid", "align-items: baseline",
     "min-width: 0",
   ]
 }
@@ -51,6 +45,7 @@ pub fn entry_title_style(entry : Entry, color : String) -> Array[String] {
     "overflow: hidden",
     "white-space: nowrap",
     "font-size: var(--tuzi-content-size)",
+    "font-weight: var(--tuzi-entry-name-weight, var(--tuzi-weight-ui))",
     "color: \{foreground}",
   ]
 }

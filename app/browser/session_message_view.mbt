@@ -61,7 +61,7 @@ fn session_entry_view(entry : @session.Entry) -> Html {
             [
               span(
                 style=[
-                  "font-size: var(--tuzi-secondary-size)", "font-weight: 600",
+                  "font-size: var(--tuzi-secondary-size)", "font-weight: var(--tuzi-weight-emphasis)",
                 ],
                 if is_user {
                   "User"

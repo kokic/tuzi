@@ -9,7 +9,7 @@ priv enum ProgressState {
 const ProgressBaseStyle : String = "display:flex;width:100%;min-width:0;flex-wrap:wrap;align-items:center;gap:0.75rem"
 
 ///|
-const ProgressTrackStyle : String = "position:relative;display:flex;width:100%;height:0.25rem;align-items:center;overflow-x:hidden;border-radius:9999px;background:var(--rui-muted,oklch(0.97 0 0))"
+const ProgressTrackStyle : String = "position:relative;display:flex;width:100%;height:0.25rem;align-items:center;overflow-x:hidden;border-radius:0;background:var(--rui-muted,oklch(0.97 0 0))"
 
 ///|
 const ProgressIndicatorStyle : String = "height:100%;flex:none;background:var(--rui-primary,oklch(0.205 0 0));transition:width 150ms ease"
@@ -42,7 +42,7 @@ fn progress_indeterminate_stylesheet() -> @html.Html {
 }
 
 ///|
-const ProgressLabelStyle : String = "font-size:var(--tuzi-ui-size);line-height:1.25rem;font-weight:500"
+const ProgressLabelStyle : String = "font-size:var(--tuzi-ui-size);line-height:1.25rem;font-weight:var(--tuzi-weight-ui)"
 
 ///|
 const ProgressValueStyle : String = "margin-inline-start:auto;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-secondary-size);line-height:1.25rem;font-variant-numeric:tabular-nums"

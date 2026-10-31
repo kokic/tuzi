@@ -1,5 +1,5 @@
 ///|
-const CheckboxBaseStyle : String = "display:inline-flex;width:1rem;height:1rem;flex-shrink:0;align-items:center;justify-content:center;--rui-control-base-bg:var(--rui-input-background,transparent);--rui-control-base-fg:var(--rui-primary-foreground,oklch(0.985 0 0));--rui-control-base-border:var(--rui-input,oklch(0.922 0 0));--rui-control-base-shadow:0 0 #0000;border:1px solid transparent;border-color:var(--rui-control-border,var(--rui-control-base-border,var(--rui-input,oklch(0.922 0 0))));border-radius:4px;margin:0;padding:0;background:var(--rui-control-bg,var(--rui-control-base-bg,var(--rui-input-background,transparent)));color:var(--rui-control-fg,var(--rui-control-base-fg,var(--rui-primary-foreground,oklch(0.985 0 0))));box-shadow:var(--rui-control-shadow,var(--rui-control-base-shadow,0 0 #0000));cursor:pointer;user-select:none;appearance:none;-webkit-appearance:none;vertical-align:middle;outline-offset:2px"
+const CheckboxBaseStyle : String = "display:inline-flex;width:1rem;height:1rem;flex-shrink:0;align-items:center;justify-content:center;--rui-control-base-bg:var(--rui-input-background,transparent);--rui-control-base-fg:var(--rui-primary-foreground,oklch(0.985 0 0));--rui-control-base-border:var(--rui-input,oklch(0.922 0 0));--rui-control-base-shadow:0 0 #0000;border:1px solid transparent;border-color:var(--rui-control-border,var(--rui-control-base-border,var(--rui-input,oklch(0.922 0 0))));border-radius:0;margin:0;padding:0;background:var(--rui-control-bg,var(--rui-control-base-bg,var(--rui-input-background,transparent)));color:var(--rui-control-fg,var(--rui-control-base-fg,var(--rui-primary-foreground,oklch(0.985 0 0))));box-shadow:var(--rui-control-shadow,var(--rui-control-base-shadow,0 0 #0000));cursor:pointer;user-select:none;appearance:none;-webkit-appearance:none;vertical-align:middle;outline-offset:2px"
 
 ///|
 const CheckboxCheckedStyle : String = "--rui-control-base-border:var(--rui-primary,oklch(0.205 0 0));--rui-control-base-bg:var(--rui-primary,oklch(0.205 0 0))"
@@ -148,7 +148,7 @@ pub fn render(
     if indeterminate {
       @html.span(
         style=[
-          "width:0.5rem;height:0.125rem;border-radius:9999px;background:currentColor",
+          "width:0.5rem;height:0.125rem;border-radius:0;background:currentColor",
         ],
         "",
       )

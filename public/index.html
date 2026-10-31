@@ -47,7 +47,7 @@
             display: grid;
             place-content: center;
             border: 1px solid var(--tuzi-checkbox-border);
-            border-radius: 2px;
+            border-radius: 0;
             background: var(--tuzi-checkbox-background);
         }
 
@@ -57,15 +57,14 @@
         }
 
         #tuzi :is([data-slot="button"], .breadcrumb-path, .tuzi-text-action):not([data-size^="icon"]):not([data-rui-close-icon]) {
-            /* Override the components' inline font weight / font shorthand. */
-            font-weight: var(--tuzi-text-action-weight, 400) !important;
+            --tuzi-text-action-weight: var(--tuzi-weight-ui);
         }
 
         @media (hover: hover) {
             #tuzi :is([data-slot="button"], .breadcrumb-path, .tuzi-text-action):not([data-size^="icon"]):not([data-rui-close-icon]):not(:disabled):not([aria-disabled="true"]):hover {
                 --rui-button-bg: var(--rui-button-base-bg, transparent);
                 --rui-control-bg: var(--rui-control-base-bg, transparent);
-                --tuzi-text-action-weight: 600;
+                --tuzi-text-action-weight: var(--tuzi-weight-emphasis);
             }
 
             #tuzi[data-tuzi-theme="light"] .rui-markdown-anchor:hover,

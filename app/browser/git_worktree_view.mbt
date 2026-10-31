@@ -18,7 +18,7 @@ fn git_worktree_controls(
         ],
         [
           p(
-            style=["margin: 0", "font-weight: 600", "flex-shrink: 0"],
+            style=["margin: 0", "font-weight: var(--tuzi-weight-emphasis)", "flex-shrink: 0"],
             "Worktrees",
           ),
           span(

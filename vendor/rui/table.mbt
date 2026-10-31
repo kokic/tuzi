@@ -11,7 +11,7 @@ const TableHeaderStyle : String = "display:table-header-group"
 const TableBodyStyle : String = "display:table-row-group"
 
 ///|
-const TableFooterStyle : String = "display:table-footer-group;border-top:1px solid var(--rui-border,oklch(0.922 0 0));background:color-mix(in oklab,var(--rui-muted,oklch(0.97 0 0)) 50%,transparent);font-weight:500"
+const TableFooterStyle : String = "display:table-footer-group;border-top:1px solid var(--rui-border,oklch(0.922 0 0));background:color-mix(in oklab,var(--rui-muted,oklch(0.97 0 0)) 50%,transparent);font-weight:var(--tuzi-weight-ui)"
 
 ///|
 const TableRowStyle : String = "border-bottom:1px solid var(--rui-border,oklch(0.922 0 0));background:var(--rui-table-row-bg,var(--rui-table-row-base-bg,transparent));transition:background-color 150ms ease"
@@ -23,7 +23,7 @@ const TableRowSelectedStyle : String = "--rui-table-row-base-bg:var(--rui-muted,
 const TableRowExpandedStyle : String = "--rui-table-row-base-bg:color-mix(in oklab,var(--rui-muted,oklch(0.97 0 0)) 50%,transparent)"
 
 ///|
-const TableHeadStyle : String = "height:2.5rem;padding-inline:0.5rem;color:var(--rui-foreground,oklch(0.145 0 0));text-align:start;vertical-align:middle;font-weight:500;white-space:nowrap"
+const TableHeadStyle : String = "height:2.5rem;padding-inline:0.5rem;color:var(--rui-foreground,oklch(0.145 0 0));text-align:start;vertical-align:middle;font-weight:var(--tuzi-weight-ui);white-space:nowrap"
 
 ///|
 const TableCellStyle : String = "padding:0.5rem;vertical-align:middle;white-space:nowrap"

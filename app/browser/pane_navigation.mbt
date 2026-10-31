@@ -71,19 +71,6 @@ fn Model::update_panes(
       )
     }
     DblClick(idx, row) => model.open_entry_at_row(idx, row, emit)
-    Select(idx, name) =>
-      (
-        {
-          ..model,
-          active: idx,
-          panes: set_pane(
-            model.panes,
-            idx,
-            model.pane_at(idx).toggle_entry_selection(name),
-          ),
-        },
-        @rabbita.none,
-      )
   }
 }
 

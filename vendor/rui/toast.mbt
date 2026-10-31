@@ -43,7 +43,7 @@ priv enum ToastMsg {
 const ToastExitDurationMs : Int32 = 150
 
 ///|
-const ToastSurfaceStyle : String = "position:relative;display:grid;width:100%;grid-template-columns:1fr auto;align-items:start;gap:0.25rem 0.75rem;border:1px solid;border-radius:var(--rui-toast-radius,var(--rui-toast-base-radius,1rem));padding:0.875rem 1rem;box-shadow:var(--rui-toast-shadow,var(--rui-toast-base-shadow,0 4px 12px rgb(0 0 0 / 0.1)));touch-action:pan-y;transition:opacity 150ms ease,transform 150ms ease,box-shadow 200ms ease"
+const ToastSurfaceStyle : String = "position:relative;display:grid;width:100%;grid-template-columns:1fr auto;align-items:start;gap:0.25rem 0.75rem;border:1px solid;border-radius:0;padding:0.875rem 1rem;box-shadow:var(--rui-toast-shadow,var(--rui-toast-base-shadow,0 4px 12px rgb(0 0 0 / 0.1)));touch-action:pan-y;transition:opacity 150ms ease,transform 150ms ease,box-shadow 200ms ease"
 
 ///|
 const ToastCardShadowStyle : String = "--rui-toast-base-shadow:0 4px 12px rgb(0 0 0 / 0.1)"
@@ -176,7 +176,7 @@ pub fn[C : @html.IsChildren] toast_title(
     title?,
     attrs=ui_attrs(attrs).data_set("slot", "toast-title"),
     style=ui_styles(
-      ["font-size:var(--tuzi-ui-size);line-height:1.25rem;font-weight:500"],
+      ["font-size:var(--tuzi-ui-size);line-height:1.25rem;font-weight:var(--tuzi-weight-ui)"],
       style,
     ),
     children,

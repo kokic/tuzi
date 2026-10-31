@@ -15,7 +15,7 @@ pub extend BadgeVariant with Debug::{to_repr}
 pub extend BadgeVariant with Eq::{equal, not_equal}
 
 ///|
-const BadgeBaseStyle : String = "display:inline-flex;width:fit-content;height:1.25rem;flex-shrink:0;align-items:center;justify-content:center;gap:0.25rem;overflow:hidden;border:1px solid var(--rui-badge-border,var(--rui-badge-base-border,transparent));border-radius:9999px;padding-block:0.125rem;padding-inline:var(--rui-badge-padding-inline-start,0.5rem) var(--rui-badge-padding-inline-end,0.5rem);background:var(--rui-badge-bg,var(--rui-badge-base-bg,transparent));color:var(--rui-badge-fg,var(--rui-badge-base-fg,currentColor));box-shadow:var(--rui-badge-shadow,none);font-size:var(--tuzi-caption-size);line-height:1rem;font-weight:500;white-space:nowrap;vertical-align:middle;outline:none;--rui-icon-size:0.75rem"
+const BadgeBaseStyle : String = "display:inline-flex;width:fit-content;height:1.25rem;flex-shrink:0;align-items:center;justify-content:center;gap:0.25rem;overflow:hidden;border:1px solid var(--rui-badge-border,var(--rui-badge-base-border,transparent));border-radius:0;padding-block:0.125rem;padding-inline:var(--rui-badge-padding-inline-start,0.5rem) var(--rui-badge-padding-inline-end,0.5rem);background:var(--rui-badge-bg,var(--rui-badge-base-bg,transparent));color:var(--rui-badge-fg,var(--rui-badge-base-fg,currentColor));box-shadow:var(--rui-badge-shadow,none);font-size:var(--tuzi-caption-size);line-height:1rem;font-weight:var(--tuzi-weight-ui);white-space:nowrap;vertical-align:middle;outline:none;--rui-icon-size:0.75rem"
 
 ///|
 const BadgeDefaultStyle : String = "--rui-badge-base-bg:var(--rui-primary,oklch(0.205 0 0));--rui-badge-base-fg:var(--rui-primary-foreground,oklch(0.985 0 0));--rui-badge-base-border:transparent"

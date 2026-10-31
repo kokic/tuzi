@@ -20,7 +20,7 @@ pub fn[C : @html.IsChildren] scroll_area(
     style=ui_styles(
       [
         UiBoxSizing,
-        "position:relative;width:100%;height:100%;border-radius:inherit;outline-offset:2px;overscroll-behavior:contain;scrollbar-color:var(--rui-border,oklch(0.922 0 0)) transparent;scrollbar-width:thin",
+        "position:relative;width:100%;height:100%;border-radius:0;outline-offset:2px;overscroll-behavior:contain;scrollbar-color:var(--rui-border,oklch(0.922 0 0)) transparent;scrollbar-width:thin",
         if orientation is Vertical {
           "overflow-y:auto;overflow-x:hidden"
         } else {
@@ -67,7 +67,7 @@ pub fn scroll_bar(
     @html.div(
       attrs=@html.Attrs::build().data_set("slot", "scroll-area-thumb"),
       style=[
-        "position:relative;flex:1;border-radius:9999px;background:var(--rui-border,oklch(0.922 0 0));opacity:0.7",
+        "position:relative;flex:1;border-radius:0;background:var(--rui-border,oklch(0.922 0 0));opacity:0.7",
       ],
       "",
     ),
@@ -94,7 +94,7 @@ priv enum ScrollAreaMsg {
 }
 
 ///|
-const ScrollAreaManagedRootStyle : String = "position:relative;width:100%;height:100%;min-width:0;min-height:0;overflow:hidden;border-radius:inherit"
+const ScrollAreaManagedRootStyle : String = "position:relative;width:100%;height:100%;min-width:0;min-height:0;overflow:hidden;border-radius:0"
 
 ///|
 const ScrollAreaManagedViewportStyle : String = "width:100%;height:100%;min-width:0;min-height:0;overscroll-behavior:contain;scrollbar-color:transparent transparent;scrollbar-width:none;-ms-overflow-style:none;outline-offset:2px"
@@ -103,7 +103,7 @@ const ScrollAreaManagedViewportStyle : String = "width:100%;height:100%;min-widt
 const ScrollAreaManagedTrackStyle : String = "position:absolute;z-index:1;display:block;user-select:none;transition:opacity 150ms ease"
 
 ///|
-const ScrollAreaManagedThumbStyle : String = "position:absolute;display:block;border-radius:9999px;background:var(--rui-border,oklch(0.922 0 0));opacity:0.8;pointer-events:auto;touch-action:none"
+const ScrollAreaManagedThumbStyle : String = "position:absolute;display:block;border-radius:0;background:var(--rui-border,oklch(0.922 0 0));opacity:0.8;pointer-events:auto;touch-action:none"
 
 ///|
 #cfg(target="js")

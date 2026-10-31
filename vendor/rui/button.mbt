@@ -33,7 +33,7 @@ pub extend ButtonSize with Debug::{to_repr}
 pub extend ButtonSize with Eq::{equal, not_equal}
 
 ///|
-const ButtonBaseStyle : String = "display:inline-flex;flex-shrink:0;align-items:center;justify-content:center;gap:var(--rui-button-gap,0.375rem);--rui-button-base-bg:transparent;--rui-button-base-fg:currentColor;--rui-button-base-border:transparent;--rui-button-base-shadow:none;--rui-button-padding-inline:0.625rem;--rui-button-icon-size:1rem;border-style:solid;border-color:var(--rui-button-border,var(--rui-button-base-border,transparent));border-top-width:var(--rui-control-border-top-width,var(--rui-control-border-width,1px));border-right-width:var(--rui-control-border-right-width,var(--rui-control-border-width,1px));border-bottom-width:var(--rui-control-border-bottom-width,var(--rui-control-border-width,1px));border-left-width:var(--rui-control-border-left-width,var(--rui-control-border-width,1px));border-top-left-radius:var(--rui-control-radius-top-left,var(--rui-control-radius,var(--rui-button-group-radius,var(--rui-button-size-radius,var(--rui-radius,0.625rem)))));border-top-right-radius:var(--rui-control-radius-top-right,var(--rui-control-radius,var(--rui-button-group-radius,var(--rui-button-size-radius,var(--rui-radius,0.625rem)))));border-bottom-right-radius:var(--rui-control-radius-bottom-right,var(--rui-control-radius,var(--rui-button-group-radius,var(--rui-button-size-radius,var(--rui-radius,0.625rem)))));border-bottom-left-radius:var(--rui-control-radius-bottom-left,var(--rui-control-radius,var(--rui-button-group-radius,var(--rui-button-size-radius,var(--rui-radius,0.625rem)))));margin:0;padding-block:0;padding-inline:var(--rui-button-padding-inline-start,var(--rui-button-padding-inline)) var(--rui-button-padding-inline-end,var(--rui-button-padding-inline));background:var(--rui-button-bg,var(--rui-button-base-bg,transparent));background-clip:padding-box;color:var(--rui-button-fg,var(--rui-button-base-fg,currentColor));box-shadow:var(--rui-button-shadow,var(--rui-button-base-shadow,none));line-height:1.25rem;font-weight:500;white-space:nowrap;cursor:default;user-select:none;appearance:none;-webkit-appearance:none;outline:none;vertical-align:middle"
+const ButtonBaseStyle : String = "display:inline-flex;flex-shrink:0;align-items:center;justify-content:center;gap:var(--rui-button-gap,0.375rem);--rui-button-base-bg:transparent;--rui-button-base-fg:currentColor;--rui-button-base-border:transparent;--rui-button-base-shadow:none;--rui-button-padding-inline:0.625rem;--rui-button-icon-size:1rem;border-style:solid;border-color:var(--rui-button-border,var(--rui-button-base-border,transparent));border-top-width:var(--rui-control-border-top-width,var(--rui-control-border-width,1px));border-right-width:var(--rui-control-border-right-width,var(--rui-control-border-width,1px));border-bottom-width:var(--rui-control-border-bottom-width,var(--rui-control-border-width,1px));border-left-width:var(--rui-control-border-left-width,var(--rui-control-border-width,1px));border-radius:0;margin:0;padding-block:0;padding-inline:var(--rui-button-padding-inline-start,var(--rui-button-padding-inline)) var(--rui-button-padding-inline-end,var(--rui-button-padding-inline));background:var(--rui-button-bg,var(--rui-button-base-bg,transparent));background-clip:padding-box;color:var(--rui-button-fg,var(--rui-button-base-fg,currentColor));box-shadow:var(--rui-button-shadow,var(--rui-button-base-shadow,none));line-height:1.25rem;font-weight:var(--tuzi-text-action-weight,var(--tuzi-weight-ui));white-space:nowrap;cursor:default;user-select:none;appearance:none;-webkit-appearance:none;outline:none;vertical-align:middle"
 
 ///|
 const ButtonDefaultStyle : String = "--rui-button-base-bg:var(--rui-primary,oklch(0.205 0 0));--rui-button-base-fg:var(--rui-primary-foreground,oklch(0.985 0 0));--rui-button-base-border:transparent;--rui-button-base-shadow:none"
@@ -57,10 +57,10 @@ const ButtonLinkStyle : String = "height:auto;--rui-button-base-bg:transparent;-
 const ButtonSizeDefaultStyle : String = "height:2rem;--rui-button-padding-inline:0.625rem;--rui-button-padding-inline-with-icon:0.5rem"
 
 ///|
-const ButtonSizeXsStyle : String = "height:1.5rem;--rui-button-size-radius:min(calc(var(--rui-radius,0.625rem) - 0.125rem),10px);--rui-button-gap:0.25rem;--rui-button-padding-inline:0.5rem;--rui-button-padding-inline-with-icon:0.375rem;--rui-button-icon-size:0.75rem;line-height:1rem"
+const ButtonSizeXsStyle : String = "height:1.5rem;--rui-button-gap:0.25rem;--rui-button-padding-inline:0.5rem;--rui-button-padding-inline-with-icon:0.375rem;--rui-button-icon-size:0.75rem;line-height:1rem"
 
 ///|
-const ButtonSizeSmStyle : String = "height:1.75rem;--rui-button-size-radius:min(calc(var(--rui-radius,0.625rem) - 0.125rem),12px);--rui-button-gap:0.25rem;--rui-button-padding-inline:0.625rem;--rui-button-padding-inline-with-icon:0.375rem;--rui-button-icon-size:0.875rem"
+const ButtonSizeSmStyle : String = "height:1.75rem;--rui-button-gap:0.25rem;--rui-button-padding-inline:0.625rem;--rui-button-padding-inline-with-icon:0.375rem;--rui-button-icon-size:0.875rem"
 
 ///|
 const ButtonSizeLgStyle : String = "height:2.25rem;--rui-button-padding-inline:0.625rem;--rui-button-padding-inline-with-icon:0.5rem"
@@ -69,10 +69,10 @@ const ButtonSizeLgStyle : String = "height:2.25rem;--rui-button-padding-inline:0
 const ButtonSizeIconStyle : String = "width:2rem;height:2rem;--rui-button-padding-inline:0"
 
 ///|
-const ButtonSizeIconXsStyle : String = "width:1.5rem;height:1.5rem;--rui-button-size-radius:min(calc(var(--rui-radius,0.625rem) - 0.125rem),10px);--rui-button-padding-inline:0;--rui-button-icon-size:0.75rem"
+const ButtonSizeIconXsStyle : String = "width:1.5rem;height:1.5rem;--rui-button-padding-inline:0;--rui-button-icon-size:0.75rem"
 
 ///|
-const ButtonSizeIconSmStyle : String = "width:1.75rem;height:1.75rem;--rui-button-size-radius:min(calc(var(--rui-radius,0.625rem) - 0.125rem),12px);--rui-button-padding-inline:0"
+const ButtonSizeIconSmStyle : String = "width:1.75rem;height:1.75rem;--rui-button-padding-inline:0"
 
 ///|
 const ButtonSizeIconLgStyle : String = "width:2.25rem;height:2.25rem;--rui-button-padding-inline:0"

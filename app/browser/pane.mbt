@@ -5,7 +5,6 @@ priv enum PaneMsg {
   GotoPath(PaneSide, Path)
   Click(PaneSide, Int32)
   DblClick(PaneSide, Int32)
-  Select(PaneSide, String)
 }
 
 ///|

@@ -37,7 +37,13 @@ pub fn preview_font_style(family : String) -> String {
 ///|
 const FontCss : String =
   #|html { font-size: 18px; }
-  #|#tuzi { font-size: var(--tuzi-ui-size); }
+  #|#tuzi {
+  #|  --tuzi-weight-ui: 400;
+  #|  --tuzi-weight-emphasis: 600;
+  #|  --tuzi-weight-cursor: 800;
+  #|  font-size: var(--tuzi-ui-size);
+  #|  font-weight: var(--tuzi-weight-ui);
+  #|}
   #|#tuzi :where(button, input, select, textarea) { font-family: inherit; font-size: inherit; }
   #|#tuzi .rui-markdown { font-family: var(--tuzi-font-ui); font-size: calc(var(--tuzi-content-size) * 1.125); }
   #|@media (min-width: 48rem), print { #tuzi .rui-markdown { font-size: var(--tuzi-content-size); } }

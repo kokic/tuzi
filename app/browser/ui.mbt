@@ -22,7 +22,7 @@ fn[C : @html.IsChildren] badge(
   @rui.badge(
     variant~,
     attrs?,
-    style=[@presentation.UI_FONT_STYLE, "border-radius: var(--rui-radius)"],
+    style=[@presentation.UI_FONT_STYLE, "border-radius: 0"],
     children,
   )
 }

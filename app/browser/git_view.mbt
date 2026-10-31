@@ -44,7 +44,7 @@ fn git_info_content(
             "display: flex", "align-items: center", "gap: 12px", "min-width: 0",
           ],
           [
-            p(style=["margin: 0", "font-weight: 600", "flex-shrink: 0"], "Git"),
+            p(style=["margin: 0", "font-weight: var(--tuzi-weight-emphasis)", "flex-shrink: 0"], "Git"),
             span(
               style=[
                 ..status_text_style(),

@@ -104,7 +104,7 @@ const UiInteractionCss : String =
   #|    padding:0;
   #|    color:var(--rui-foreground,oklch(0.145 0 0));
   #|    font:inherit;
-  #|    font-weight:500;
+  #|    font-weight:var(--tuzi-weight-ui);
   #|  }
   #|  [data-slot="field-set"]:has(> :where([data-slot="checkbox-group"],[data-slot="radio-group"])) {
   #|    gap:0.75rem;

@@ -42,16 +42,16 @@ struct CommandScope {
 }
 
 ///|
-const CommandRootStyle : String = "display:flex;width:100%;min-width:0;flex-direction:column;overflow:hidden;border:0;border-radius:calc(var(--rui-radius,0.625rem) + 0.25rem);background:var(--rui-popover,var(--rui-background,oklch(1 0 0)));color:var(--rui-popover-foreground,var(--rui-foreground,oklch(0.145 0 0)));box-shadow:none;padding:0.25rem"
+const CommandRootStyle : String = "display:flex;width:100%;min-width:0;flex-direction:column;overflow:hidden;border:0;border-radius:0;background:var(--rui-popover,var(--rui-background,oklch(1 0 0)));color:var(--rui-popover-foreground,var(--rui-foreground,oklch(0.145 0 0)));box-shadow:none;padding:0.25rem"
 
 ///|
-const CommandDialogRootStyle : String = "border:0;border-radius:inherit;padding:0.25rem;box-shadow:none"
+const CommandDialogRootStyle : String = "border:0;border-radius:0;padding:0.25rem;box-shadow:none"
 
 ///|
-const CommandDialogStyle : String = "position:fixed;inset:0;width:min(calc(100% - 2rem),24rem);max-width:none;max-height:calc(100vh - 2rem);margin:auto;padding:0;overflow-y:auto;border:0;border-radius:calc(var(--rui-radius,0.625rem) + 0.25rem);background:var(--rui-popover,var(--rui-background,oklch(1 0 0)));color:var(--rui-popover-foreground,var(--rui-foreground,oklch(0.145 0 0)));box-shadow:0 0 0 1px color-mix(in oklab,var(--rui-foreground,oklch(0.145 0 0)) 10%,transparent)"
+const CommandDialogStyle : String = "position:fixed;inset:0;width:min(calc(100% - 2rem),24rem);max-width:none;max-height:calc(100vh - 2rem);margin:auto;padding:0;overflow-y:auto;border:0;border-radius:0;background:var(--rui-popover,var(--rui-background,oklch(1 0 0)));color:var(--rui-popover-foreground,var(--rui-foreground,oklch(0.145 0 0)));box-shadow:0 0 0 1px color-mix(in oklab,var(--rui-foreground,oklch(0.145 0 0)) 10%,transparent)"
 
 ///|
-const CommandInputWrapperStyle : String = "display:flex;min-width:0;align-items:center;gap:0.5rem;padding-inline:0.5rem;height:2rem;margin:0.25rem 0.25rem 0;border:1px solid color-mix(in oklab,var(--rui-input,oklch(0.922 0 0)) 30%,transparent);border-radius:var(--rui-radius,0.625rem);background:color-mix(in oklab,var(--rui-input,oklch(0.922 0 0)) 30%,transparent)"
+const CommandInputWrapperStyle : String = "display:flex;min-width:0;align-items:center;gap:0.5rem;padding-inline:0.5rem;height:2rem;margin:0.25rem 0.25rem 0;border:1px solid color-mix(in oklab,var(--rui-input,oklch(0.922 0 0)) 30%,transparent);border-radius:0;background:color-mix(in oklab,var(--rui-input,oklch(0.922 0 0)) 30%,transparent)"
 
 ///|
 const CommandInputStyle : String = "width:100%;min-width:0;height:100%;border:0;background:transparent;padding:0;color:inherit;line-height:1.25rem;outline:none;appearance:none;-webkit-appearance:none"
@@ -66,10 +66,10 @@ const CommandEmptyStyle : String = "padding:1.5rem 0.75rem;color:var(--rui-muted
 const CommandGroupStyle : String = "min-width:0;padding:0.25rem"
 
 ///|
-const CommandGroupHeadingStyle : String = "padding:0.375rem 0.5rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-caption-size);line-height:1rem;font-weight:500"
+const CommandGroupHeadingStyle : String = "padding:0.375rem 0.5rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-caption-size);line-height:1rem;font-weight:var(--tuzi-weight-ui)"
 
 ///|
-const CommandItemStyle : String = "position:relative;display:flex;width:100%;min-width:0;min-height:2rem;align-items:center;gap:0.5rem;border-radius:var(--rui-command-item-radius,calc(var(--rui-radius,0.625rem) - 0.25rem));background:var(--rui-menu-item-bg,var(--rui-menu-item-base-bg,transparent));padding:0.375rem 0.5rem;color:var(--rui-menu-item-fg,var(--rui-menu-item-base-fg,inherit));font-size:var(--tuzi-ui-size);line-height:1.25rem;text-align:start;outline:none;cursor:default;user-select:none"
+const CommandItemStyle : String = "position:relative;display:flex;width:100%;min-width:0;min-height:2rem;align-items:center;gap:0.5rem;border-radius:0;background:var(--rui-menu-item-bg,var(--rui-menu-item-base-bg,transparent));padding:0.375rem 0.5rem;color:var(--rui-menu-item-fg,var(--rui-menu-item-base-fg,inherit));font-size:var(--tuzi-ui-size);line-height:1.25rem;text-align:start;outline:none;cursor:default;user-select:none"
 
 ///|
 const CommandItemActiveStyle : String = "--rui-menu-item-base-bg:var(--rui-accent,oklch(0.97 0 0));--rui-menu-item-base-fg:var(--rui-accent-foreground,var(--rui-foreground,oklch(0.145 0 0)))"

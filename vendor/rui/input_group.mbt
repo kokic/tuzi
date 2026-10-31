@@ -77,7 +77,7 @@ pub fn[C : @html.IsChildren] input_group(
       [
         UiBoxSizing,
         UiTransition,
-        "position:relative;display:flex;width:100%;height:var(--rui-input-group-height,2rem);min-width:0;min-height:2rem;flex-direction:var(--rui-input-group-direction,row);align-items:var(--rui-input-group-align,center);--rui-control-base-bg:var(--rui-input-background,transparent);--rui-control-base-fg:var(--rui-foreground,oklch(0.145 0 0));--rui-control-base-border:var(--rui-input,oklch(0.922 0 0));--rui-control-base-shadow:0 0 #0000;border:1px solid transparent;border-color:var(--rui-control-border,var(--rui-control-base-border,var(--rui-input,oklch(0.922 0 0))));border-radius:var(--rui-radius,0.625rem);background:var(--rui-control-bg,var(--rui-control-base-bg,var(--rui-input-background,transparent)));color:var(--rui-control-fg,var(--rui-control-base-fg,var(--rui-foreground,oklch(0.145 0 0))));box-shadow:var(--rui-control-shadow,var(--rui-control-base-shadow,0 0 #0000));outline:none",
+        "position:relative;display:flex;width:100%;height:var(--rui-input-group-height,2rem);min-width:0;min-height:2rem;flex-direction:var(--rui-input-group-direction,row);align-items:var(--rui-input-group-align,center);--rui-control-base-bg:var(--rui-input-background,transparent);--rui-control-base-fg:var(--rui-foreground,oklch(0.145 0 0));--rui-control-base-border:var(--rui-input,oklch(0.922 0 0));--rui-control-base-shadow:0 0 #0000;border:1px solid transparent;border-color:var(--rui-control-border,var(--rui-control-base-border,var(--rui-input,oklch(0.922 0 0))));border-radius:0;background:var(--rui-control-bg,var(--rui-control-base-bg,var(--rui-input-background,transparent)));color:var(--rui-control-fg,var(--rui-control-base-fg,var(--rui-foreground,oklch(0.145 0 0))));box-shadow:var(--rui-control-shadow,var(--rui-control-base-shadow,0 0 #0000));outline:none",
         if invalid {
           InputInvalidStyle
         } else {
@@ -109,7 +109,7 @@ pub fn[C : @html.IsChildren] input_group_addon(
   let addon_style = ui_styles(
     [
       UiBoxSizing,
-      "display:flex;height:auto;align-items:center;justify-content:center;gap:0.5rem;padding-block:0.375rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-ui-size);font-weight:500;user-select:none;cursor:text",
+      "display:flex;height:auto;align-items:center;justify-content:center;gap:0.5rem;padding-block:0.375rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-ui-size);font-weight:var(--tuzi-weight-ui);user-select:none;cursor:text",
       input_group_align_style(align),
     ],
     style,
@@ -199,9 +199,9 @@ fn input_group_button_size(size : InputGroupButtonSize) -> (ButtonSize, String) 
 fn input_group_button_size_style(size : InputGroupButtonSize) -> String {
   match size {
     InputButtonXs =>
-      "--rui-control-radius:calc(var(--rui-radius,0.625rem) - 0.1875rem);--rui-button-padding-inline:0.375rem;--rui-button-icon-size:0.875rem;line-height:1.25rem"
+      "--rui-button-padding-inline:0.375rem;--rui-button-icon-size:0.875rem;line-height:1.25rem"
     InputButtonIconXs =>
-      "--rui-control-radius:calc(var(--rui-radius,0.625rem) - 0.1875rem);--rui-button-icon-size:1rem"
+      "--rui-button-icon-size:1rem"
     InputButtonSm | InputButtonIconSm => ""
   }
 }

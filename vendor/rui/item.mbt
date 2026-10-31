@@ -40,7 +40,7 @@ pub extend ItemMediaVariant with Eq::{equal, not_equal}
 const ItemGroupStyle : String = "display:flex;width:100%;flex-direction:column;gap:var(--rui-item-group-gap,1rem)"
 
 ///|
-const ItemBaseStyle : String = "display:flex;flex-wrap:wrap;align-items:center;border:1px solid var(--rui-item-border,var(--rui-item-base-border,transparent));border-radius:var(--rui-radius,0.625rem);background:var(--rui-item-bg,var(--rui-item-base-bg,transparent));color:var(--rui-item-fg,var(--rui-foreground,oklch(0.145 0 0)));box-shadow:var(--rui-item-shadow,none);font-size:var(--tuzi-ui-size);line-height:1.25rem;text-align:start;outline:none"
+const ItemBaseStyle : String = "display:flex;flex-wrap:wrap;align-items:center;border:1px solid var(--rui-item-border,var(--rui-item-base-border,transparent));border-radius:0;background:var(--rui-item-bg,var(--rui-item-base-bg,transparent));color:var(--rui-item-fg,var(--rui-foreground,oklch(0.145 0 0)));box-shadow:var(--rui-item-shadow,none);font-size:var(--tuzi-ui-size);line-height:1.25rem;text-align:start;outline:none"
 
 ///|
 fn item_variant_value(variant : ItemVariant) -> String {
@@ -229,9 +229,9 @@ pub fn[C : @html.IsChildren] item_media(
   let variant_style = match variant {
     ItemMediaDefault => "background:transparent"
     ItemMediaIcon =>
-      "width:2rem;height:2rem;border:1px solid var(--rui-border,oklch(0.922 0 0));border-radius:0.25rem;background:var(--rui-muted,oklch(0.97 0 0));--rui-icon-size:1rem"
+      "width:2rem;height:2rem;border:1px solid var(--rui-border,oklch(0.922 0 0));border-radius:0;background:var(--rui-muted,oklch(0.97 0 0));--rui-icon-size:1rem"
     ItemMediaImage =>
-      "width:2.5rem;height:2.5rem;overflow:hidden;border-radius:0.25rem"
+      "width:2.5rem;height:2.5rem;overflow:hidden;border-radius:0"
   }
   @html.div(
     id?,
@@ -289,7 +289,7 @@ pub fn[C : @html.IsChildren] item_title(
     attrs=ui_attrs(attrs).data_set("slot", "item-title"),
     style=ui_styles(
       [
-        "display:flex;width:fit-content;max-width:100%;min-width:0;align-items:center;gap:0.5rem;font-size:var(--tuzi-ui-size);line-height:1.375;font-weight:500;overflow-wrap:anywhere",
+        "display:flex;width:fit-content;max-width:100%;min-width:0;align-items:center;gap:0.5rem;font-size:var(--tuzi-ui-size);line-height:1.375;font-weight:var(--tuzi-weight-ui);overflow-wrap:anywhere",
       ],
       style,
     ),
@@ -313,7 +313,7 @@ pub fn[C : @html.IsChildren] item_description(
     attrs=ui_attrs(attrs).data_set("slot", "item-description"),
     style=ui_styles(
       [
-        "display:-webkit-box;overflow:hidden;margin:0;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-secondary-size);line-height:1.5;font-weight:400;text-wrap:balance;overflow-wrap:anywhere;-webkit-box-orient:vertical;-webkit-line-clamp:2",
+        "display:-webkit-box;overflow:hidden;margin:0;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-secondary-size);line-height:1.5;font-weight:var(--tuzi-weight-ui);text-wrap:balance;overflow-wrap:anywhere;-webkit-box-orient:vertical;-webkit-line-clamp:2",
       ],
       style,
     ),

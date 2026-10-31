@@ -8,10 +8,10 @@ const BreadcrumbListStyle : String = "display:flex;flex-wrap:wrap;align-items:ce
 const BreadcrumbItemStyle : String = "display:inline-flex;align-items:center;gap:0.25rem;min-width:0"
 
 ///|
-const BreadcrumbLinkStyle : String = "min-width:0;border-radius:0.25rem;color:var(--rui-link-fg,var(--rui-link-base-fg,inherit));text-decoration:none;overflow-wrap:anywhere;outline-offset:2px;transition:color 150ms ease"
+const BreadcrumbLinkStyle : String = "min-width:0;border-radius:0;color:var(--rui-link-fg,var(--rui-link-base-fg,inherit));text-decoration:none;overflow-wrap:anywhere;outline-offset:2px;transition:color 150ms ease"
 
 ///|
-const BreadcrumbPageStyle : String = "color:var(--rui-foreground,oklch(0.145 0 0));font-weight:400"
+const BreadcrumbPageStyle : String = "color:var(--rui-foreground,oklch(0.145 0 0));font-weight:var(--tuzi-weight-ui)"
 
 ///|
 const BreadcrumbSeparatorStyle : String = "display:inline-flex;align-items:center;justify-content:center;color:inherit"
@@ -26,7 +26,7 @@ const BreadcrumbChevronStyle : String = "display:block;width:0.4375rem;height:0.
 const BreadcrumbEllipsisStyle : String = "display:inline-flex;width:1.25rem;height:1.25rem;align-items:center;justify-content:center;color:inherit"
 
 ///|
-const BreadcrumbDotsStyle : String = "display:block;width:0.1875rem;height:0.1875rem;border-radius:9999px;background:currentColor;box-shadow:-0.3125rem 0 currentColor,0.3125rem 0 currentColor"
+const BreadcrumbDotsStyle : String = "display:block;width:0.1875rem;height:0.1875rem;border-radius:0;background:currentColor;box-shadow:-0.3125rem 0 currentColor,0.3125rem 0 currentColor"
 
 ///|
 const BreadcrumbScreenReaderOnlyStyle : String = "position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0"
