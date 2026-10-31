@@ -1278,7 +1278,6 @@ fn[C : @html.IsChildren] menu_trigger_button(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         ButtonBaseStyle,
@@ -1338,7 +1337,6 @@ fn[C : @html.IsChildren] menu_content_surface(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         MenuContentStyle,
         PopupTransition100Style,
@@ -1564,7 +1562,6 @@ fn[C : @html.IsChildren] menu_item_surface(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         MenuItemStyle,
@@ -1631,7 +1628,6 @@ fn[C : @html.IsChildren] menu_sub_content_surface(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         MenuSubContentStyle,
         PopupTransition100Style,
         menu_submenu_anchor_style(key),

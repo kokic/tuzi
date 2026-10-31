@@ -11,6 +11,7 @@ fn Model::view(
     id="tuzi",
     attrs=@html.Attrs::build().data_set("tuzi-theme", model.theme.to_string()),
     style=[
+      ..@presentation.theme_font_style(model.theme),
       ..typography_style,
       ..appearance_style,
       ..match model.theme {
@@ -22,6 +23,7 @@ fn Model::view(
       "flex-direction: column",
     ],
     [
+      @presentation.font_stylesheet(),
       div(
         style=application_style(),
         [

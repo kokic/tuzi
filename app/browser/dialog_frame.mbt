@@ -34,7 +34,7 @@ fn modal(
     attrs~,
     on_close=_ => emit(DialogCancel),
     style=[
-      UI_FONT_STYLE,
+      @presentation.UI_FONT_STYLE,
       "overflow-wrap: anywhere",
       "border-radius: var(--rui-radius)",
       ..match size {
@@ -62,7 +62,7 @@ fn modal(
 fn dialog_close_button(label : String, autofocus~ : Bool = false) -> Html {
   form(method_="dialog", [
     @rui.button(
-      style=[UI_FONT_STYLE],
+      style=[@presentation.UI_FONT_STYLE],
       variant=Outline,
       type_="submit",
       autofocus~,
@@ -94,7 +94,7 @@ fn dialog_confirm_footer_view(
     dialog_keyboard_hint_view("confirm"),
     dialog_close_button("Cancel"),
     @rui.button(
-      style=[UI_FONT_STYLE],
+      style=[@presentation.UI_FONT_STYLE],
       variant~,
       autofocus~,
       disabled~,

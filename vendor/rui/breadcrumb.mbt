@@ -51,10 +51,7 @@ pub fn[C : @html.IsChildren] breadcrumb(
     aria_label,
   )
   @html.nav(
-    style=ui_styles(
-      [UiBoxSizing, UiFontSans, UiTextRendering, BreadcrumbRootStyle],
-      style,
-    ),
+    style=ui_styles([UiBoxSizing, UiTextRendering, BreadcrumbRootStyle], style),
     id?,
     class?,
     title?,
@@ -119,10 +116,7 @@ pub fn[C : @html.IsChildren] breadcrumb_link(
   children : C,
 ) -> @html.Html {
   @html.a(
-    style=ui_styles(
-      [UiBoxSizing, UiFontSans, UiTransition, BreadcrumbLinkStyle],
-      style,
-    ),
+    style=ui_styles([UiBoxSizing, UiTransition, BreadcrumbLinkStyle], style),
     id?,
     class?,
     title?,

@@ -53,7 +53,6 @@ pub fn textarea(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         TextareaBaseStyle,

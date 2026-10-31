@@ -21,7 +21,7 @@ fn git_branch_controls(
             !selected.map_or(false, branch => {
               git_branch_can_switch(branch, info)
             }),
-          style=[UI_FONT_STYLE],
+          style=[@presentation.UI_FONT_STYLE],
           title=git_branch_title("git switch", selected, info),
           on_click=emit(
             GitEvent(GitRun(context.entry.id, Switch(panel.selected))),
@@ -32,7 +32,7 @@ fn git_branch_controls(
           variant=Secondary,
           disabled=disabled ||
             !selected.map_or(false, branch => git_branch_can_rename(branch)),
-          style=[UI_FONT_STYLE],
+          style=[@presentation.UI_FONT_STYLE],
           title="git branch -m",
           on_click=emit(GitEvent(GitRenameOpen(context.entry.id))),
           "Rename",
@@ -43,7 +43,7 @@ fn git_branch_controls(
             !selected.map_or(false, branch => {
               git_branch_can_delete(branch, info)
             }),
-          style=[UI_FONT_STYLE],
+          style=[@presentation.UI_FONT_STYLE],
           title=git_branch_title("git branch -D", selected, info),
           on_click=emit(
             GitEvent(GitRun(context.entry.id, DeleteBranch(panel.selected))),
@@ -61,7 +61,7 @@ fn git_branch_controls(
         @rui.button(
           variant=Outline,
           disabled~,
-          style=[UI_FONT_STYLE, "min-width: 0"],
+          style=[@presentation.UI_FONT_STYLE, "min-width: 0"],
           title="Pull changes from the configured upstream (fast-forward only)",
           on_click=emit(GitEvent(GitRun(context.entry.id, Pull))),
           "↓ Pull",
@@ -69,7 +69,7 @@ fn git_branch_controls(
         @rui.button(
           variant=Outline,
           disabled~,
-          style=[UI_FONT_STYLE, "min-width: 0"],
+          style=[@presentation.UI_FONT_STYLE, "min-width: 0"],
           title="Push changes to the configured remote",
           on_click=emit(GitEvent(GitRun(context.entry.id, Push))),
           "↑ Push",
@@ -77,7 +77,7 @@ fn git_branch_controls(
         @rui.button(
           variant=Outline,
           disabled~,
-          style=[UI_FONT_STYLE, "min-width: 0"],
+          style=[@presentation.UI_FONT_STYLE, "min-width: 0"],
           title="git remote prune origin",
           on_click=emit(GitEvent(GitRun(context.entry.id, Prune))),
           "* Prune",

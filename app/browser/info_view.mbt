@@ -43,7 +43,7 @@ fn InfoContext::dialog(
         @rui.dialog_footer(style=dialog_footer_style, [
           dialog_close_button("Close"),
           @rui.button(
-            style=[UI_FONT_STYLE],
+            style=[@presentation.UI_FONT_STYLE],
             on_click=emit(DialogSubmit),
             "Save",
           ),

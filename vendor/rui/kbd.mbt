@@ -18,7 +18,7 @@ pub fn[C : @html.IsChildren] kbd(
     class?,
     title?,
     attrs=ui_attrs(attrs).data_set("slot", "kbd"),
-    style=ui_styles([UiBoxSizing, UiFontSans, KbdStyle], style),
+    style=ui_styles([UiBoxSizing, KbdStyle], style),
     children,
   )
 }

@@ -193,10 +193,7 @@ pub fn progress(
     progress_track(value?, min~, max~, [progress_indicator(value?, min~, max~)]),
   )
   @html.div(
-    style=ui_styles(
-      [UiBoxSizing, UiFontSans, UiTextRendering, ProgressBaseStyle],
-      style,
-    ),
+    style=ui_styles([UiBoxSizing, UiTextRendering, ProgressBaseStyle], style),
     id?,
     class?,
     title?,

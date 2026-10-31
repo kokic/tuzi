@@ -35,7 +35,7 @@ fn activity_item_view(task : Task, emit : Emit[Msg]) -> Html {
         @rui.button(
           variant=Outline,
           size=Sm,
-          style=[UI_FONT_STYLE],
+          style=[@presentation.UI_FONT_STYLE],
           attrs=@html.Attrs::build().aria_label(
             "View details for task #\{task.id}",
           ),

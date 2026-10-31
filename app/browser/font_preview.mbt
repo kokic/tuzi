@@ -195,7 +195,7 @@ fn InfoContext::font_preview_view(
           @rui.field([
             @rui.field_label(
               for_=input_id,
-              style=[UI_FONT_STYLE],
+              style=[@presentation.UI_FONT_STYLE],
               "Preview text",
             ),
             @rui.textarea(
@@ -205,7 +205,7 @@ fn InfoContext::font_preview_view(
               placeholder="Type text to preview this font…",
               on_input=emit.map(text => FontPreviewInput(text)),
               style=[
-                "font-family: '\{context.font_family()}', '\{context.font_family()}-notdef'",
+                @presentation.preview_font_style(context.font_family()),
                 "font-size: 28px",
                 "font-weight: normal",
                 "font-style: normal",

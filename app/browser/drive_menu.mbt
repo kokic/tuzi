@@ -114,7 +114,7 @@ fn drive_menu_view(
               aria_label="Switch storage location",
               title="Switch storage location",
               style=[
-                UI_FONT_STYLE,
+                @presentation.UI_FONT_STYLE,
                 "min-width: 0",
                 "flex-shrink: 1",
                 "font-size: inherit",

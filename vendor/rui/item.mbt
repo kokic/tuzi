@@ -120,7 +120,6 @@ pub fn[C : @html.IsChildren] item(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTransition,
         ItemBaseStyle,
         item_variant_style(variant),
@@ -198,7 +197,6 @@ pub fn[C : @html.IsChildren] item_link(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTransition,
         ItemBaseStyle,
         item_variant_style(variant),

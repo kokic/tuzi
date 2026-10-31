@@ -298,7 +298,6 @@ pub fn[C : @html.IsChildren] tabs_root(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         TabsRootStyle,
         tabs_root_orientation_style(orientation),
@@ -341,7 +340,6 @@ pub fn[C : @html.IsChildren] tabs_list(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         TabsListStyle,
         tabs_list_variant_style(variant),
@@ -397,7 +395,6 @@ pub fn[C : @html.IsChildren] tabs_trigger(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         TabsTriggerStyle,

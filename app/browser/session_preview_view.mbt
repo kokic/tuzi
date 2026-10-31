@@ -101,7 +101,7 @@ fn session_scroller_view(id : Int32, document : @session.Document) -> Val[Html] 
   @rui.message_scroller(
     id="session-\{id}",
     style=[
-      UI_FONT_STYLE,
+      @presentation.UI_FONT_STYLE,
       "border: 1px solid var(--rui-border)",
       "user-select: text",
     ],
@@ -118,7 +118,7 @@ fn session_scroller_view(id : Int32, document : @session.Document) -> Val[Html] 
           direction=ScrollStart,
           size=Sm,
           label="Jump to first message",
-          style=[UI_FONT_STYLE],
+          style=[@presentation.UI_FONT_STYLE],
           "Top",
         ),
         @rui.message_scroller_button(
@@ -126,7 +126,7 @@ fn session_scroller_view(id : Int32, document : @session.Document) -> Val[Html] 
           direction=ScrollEnd,
           size=Sm,
           label="Jump to latest message",
-          style=[UI_FONT_STYLE],
+          style=[@presentation.UI_FONT_STYLE],
           "Latest",
         ),
       ]

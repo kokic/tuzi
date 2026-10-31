@@ -71,7 +71,6 @@ pub fn[C : @html.IsChildren] field_set(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         "display:flex;min-width:0;flex-direction:column;gap:1rem;border:0;margin:0;padding:0",
       ],
       style,

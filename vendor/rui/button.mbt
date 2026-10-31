@@ -164,7 +164,6 @@ pub fn[C : @html.IsChildren] button(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         ButtonBaseStyle,

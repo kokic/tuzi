@@ -34,7 +34,7 @@ fn git_worktree_controls(
             variant=Ghost,
             size=Sm,
             disabled~,
-            style=[UI_FONT_STYLE],
+            style=[@presentation.UI_FONT_STYLE],
             title="git worktree prune",
             on_click=emit(GitEvent(GitRun(context.entry.id, PruneWorktrees))),
             "Prune stale",
@@ -88,7 +88,7 @@ fn git_worktree_item(
         @rui.button(
           variant=Destructive,
           size=Sm,
-          style=[UI_FONT_STYLE],
+          style=[@presentation.UI_FONT_STYLE],
           disabled=disabled || !worktree.can_remove(),
           title=git_worktree_remove_title(worktree),
           attrs=@html.Attrs::build().aria_label(

@@ -1455,7 +1455,6 @@ pub fn[C : @html.IsChildren] popover_trigger(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         ButtonBaseStyle,
@@ -1533,7 +1532,6 @@ pub fn[C : @html.IsChildren] popover_content(
   let content_style = ui_styles(
     [
       UiBoxSizing,
-      UiFontSans,
       UiTextRendering,
       PopoverContentStyle,
       PopupTransition100Style,
@@ -1654,7 +1652,6 @@ pub fn[C : @html.IsChildren] popover_close_button(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         ButtonBaseStyle,

@@ -1,6 +1,6 @@
 ///|
 const MarkdownCss : String =
-  #|.rui-markdown { --rui-markdown-leading:1.75; --rui-markdown-flow:1.25em; box-sizing:border-box; width:100%; min-width:0; color:var(--rui-foreground,oklch(0.145 0 0)); font-family:var(--rui-font-sans,Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif); font-size:calc(var(--rui-markdown-size,1rem) * 1.125); line-height:var(--rui-markdown-leading); overflow-wrap:break-word; text-align:start; }
+  #|.rui-markdown { --rui-markdown-leading:1.75; --rui-markdown-flow:1.25em; box-sizing:border-box; width:100%; min-width:0; color:var(--rui-foreground,oklch(0.145 0 0)); font-size:calc(var(--rui-markdown-size,1rem) * 1.125); line-height:var(--rui-markdown-leading); overflow-wrap:break-word; text-align:start; }
   #|@media (min-width:48rem), print { .rui-markdown { font-size:var(--rui-markdown-size,1rem); } }
   #|.rui-markdown *, .rui-markdown *::before, .rui-markdown *::after { box-sizing:border-box; }
   #|.rui-markdown :where(p,ul,ol,blockquote,.rui-markdown-code,.rui-markdown-table) { margin:var(--rui-markdown-flow) 0 0; }
@@ -31,7 +31,7 @@ const MarkdownCss : String =
   #|.rui-markdown .rui-markdown-task { list-style-type:none; position:relative; }
   #|.rui-markdown .rui-markdown-task > [data-slot="checkbox"] { position:absolute; inset-inline-start:-1.1em; top:calc((1lh - 1rem) / 2); font-size:inherit; line-height:inherit; width:1rem; height:1rem; margin:0; }
   #|.rui-markdown blockquote { border-inline-start:2px solid var(--rui-border,oklch(0.922 0 0)); padding-inline-start:1em; }
-  #|.rui-markdown code { border-radius:min(calc(var(--rui-radius,0.625rem) * 0.6),0.35em); background:var(--rui-muted,oklch(0.97 0 0)); padding:0.125em 0.3em; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:0.85em; font-weight:inherit; }
+  #|.rui-markdown code { border-radius:min(calc(var(--rui-radius,0.625rem) * 0.6),0.35em); background:var(--rui-muted,oklch(0.97 0 0)); padding:0.125em 0.3em; font-size:0.85em; font-weight:inherit; }
   #|.rui-markdown .rui-markdown-code { position:relative; display:block; max-width:100%; border:1px solid var(--rui-border,oklch(0.922 0 0)); border-radius:var(--rui-radius,0.625rem); background:var(--rui-muted,oklch(0.97 0 0)); }
   #|.rui-markdown .rui-markdown-code-content { min-width:0; overflow-x:auto; }
   #|.rui-markdown pre { min-width:0; max-width:100%; margin:0; overflow-x:auto; border:0; border-radius:inherit; background:none; padding:1rem; font-size:0.875em; line-height:1.5; white-space:pre; overflow-wrap:normal; tab-size:2; direction:ltr; }

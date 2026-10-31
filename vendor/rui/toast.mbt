@@ -145,7 +145,6 @@ pub fn[C : @html.IsChildren] toast(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         ToastSurfaceStyle,
         ToastCardShadowStyle,
@@ -569,7 +568,6 @@ fn toast_entry_view(
     attrs=element_attrs,
     style=[
       UiBoxSizing,
-      UiFontSans,
       ToastSurfaceStyle,
       ToastCardShadowStyle,
       if entry.closing {

@@ -32,7 +32,7 @@ fn pane_sort_select(
     }),
     class="pane-sort",
     style=[
-      UI_FONT_STYLE,
+      @presentation.UI_FONT_STYLE,
       "display: inline-grid",
       "grid-template-columns: max-content",
       "width: max-content",
@@ -79,7 +79,7 @@ fn pane_sort_select(
             @rui.select_item(
               scope~,
               value=mode.label(),
-              style=[UI_FONT_STYLE],
+              style=[@presentation.UI_FONT_STYLE],
               mode.label(),
             )
           }),

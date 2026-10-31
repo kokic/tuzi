@@ -57,7 +57,7 @@ fn bookmark_item(path : Path, emit : Emit[Msg]) -> Html {
       @rui.button(
         variant=Outline,
         size=Sm,
-        style=[UI_FONT_STYLE],
+        style=[@presentation.UI_FONT_STYLE],
         attrs=@html.Attrs::build().aria_label("Jump to \{path}"),
         on_click=emit(BookmarkEvent(Jump(path))),
         "Jump",
@@ -65,7 +65,7 @@ fn bookmark_item(path : Path, emit : Emit[Msg]) -> Html {
       @rui.button(
         variant=Destructive,
         size=Sm,
-        style=[UI_FONT_STYLE],
+        style=[@presentation.UI_FONT_STYLE],
         attrs=@html.Attrs::build().aria_label("Remove bookmark \{path}"),
         on_click=emit(BookmarkEvent(Remove(path))),
         "Delete",

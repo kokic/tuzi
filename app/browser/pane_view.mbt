@@ -51,7 +51,7 @@ fn Pane::pane_view(
         @rui.button(
           variant=Ghost,
           size=Xs,
-          style=[UI_FONT_STYLE, "flex: none"],
+          style=[@presentation.UI_FONT_STYLE, "flex: none"],
           title="Go to directory",
           on_click=emit(GotoEvent(Open(idx, pane.path))),
           "goto",

@@ -1,9 +1,4 @@
 ///|
-/// Shared Nova foundations. Component-specific recipes stay next to their
-/// component so copying source remains straightforward.
-const UiFontSans : String = "font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif"
-
-///|
 const UiBoxSizing : String = "box-sizing:border-box"
 
 ///|
@@ -1207,13 +1202,7 @@ pub fn[C : @html.IsChildren] theme(
     ui_interaction_stylesheet(),
     @html.div(
       style=ui_styles(
-        [
-          UiBoxSizing,
-          UiFontSans,
-          UiTextRendering,
-          theme_mode_style(mode),
-          ThemeBaseStyle,
-        ],
+        [UiBoxSizing, UiTextRendering, theme_mode_style(mode), ThemeBaseStyle],
         style,
       ),
       id?,

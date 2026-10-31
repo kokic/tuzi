@@ -57,7 +57,7 @@ fn task_details_dialog(
             ],
             @html.pre(
               style=[
-                CODE_FONT_STYLE,
+                @presentation.CODE_FONT_STYLE,
                 "margin: 0",
                 "white-space: pre",
                 "overflow-wrap: normal",
@@ -70,7 +70,7 @@ fn task_details_dialog(
       dialog_close_footer_view(label=if active { "Hide" } else { "Close" }, actions=[
         @rui.button(
           variant=Outline,
-          style=[UI_FONT_STYLE],
+          style=[@presentation.UI_FONT_STYLE],
           on_click=emit(ActivityOpen),
           "Back to Activity",
         ),

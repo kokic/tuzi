@@ -57,7 +57,7 @@ fn MarkdownContext::dialog(context : MarkdownContext, emit : Emit[Msg]) -> Html 
                 controls="markdown-panel-\{label}",
                 selected=context.view == view,
                 on_value_change=emit.map(_ => MarkdownEvent(ViewChanged(view))),
-                style=[UI_FONT_STYLE],
+                style=[@presentation.UI_FONT_STYLE],
                 [view.icon(), span(label)],
               )
             }),
@@ -113,14 +113,14 @@ fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
         Code =>
           @html.pre(
             style=[
-              CODE_FONT_STYLE,
+              @presentation.CODE_FONT_STYLE,
               "margin: 0",
               "white-space: pre-wrap",
               "overflow-wrap: anywhere",
               "font-size: 0.8125rem",
               "line-height: 1.6",
             ],
-            [@html.code(style=["font-family: inherit"], source)],
+            [@html.code(source)],
           )
       }
   }

@@ -436,15 +436,9 @@ fn command_surface(
   )
   let content = children(scope)
   let root_styles = if dialog {
-    [
-      UiBoxSizing,
-      UiFontSans,
-      UiTextRendering,
-      CommandRootStyle,
-      CommandDialogRootStyle,
-    ]
+    [UiBoxSizing, UiTextRendering, CommandRootStyle, CommandDialogRootStyle]
   } else {
-    [UiBoxSizing, UiFontSans, UiTextRendering, CommandRootStyle]
+    [UiBoxSizing, UiTextRendering, CommandRootStyle]
   }
   @html.div(
     style=ui_styles(root_styles, style),
@@ -538,7 +532,6 @@ pub fn command_input(
         style=ui_styles(
           [
             UiBoxSizing,
-            UiFontSans,
             UiTextRendering,
             CommandInputStyle,
             ui_disabled_style(disabled),
@@ -769,7 +762,6 @@ pub fn[C : @html.IsChildren] command_item(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTransition,
         CommandItemStyle,
         if active {

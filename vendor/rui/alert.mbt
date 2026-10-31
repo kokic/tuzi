@@ -60,7 +60,6 @@ pub fn[C : @html.IsChildren] alert(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         AlertBaseStyle,
         alert_variant_style(variant),

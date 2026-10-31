@@ -45,7 +45,7 @@ pub fn[C : @html.IsChildren] empty(
     class?,
     title?,
     attrs=ui_attrs(attrs).data_set("slot", "empty"),
-    style=ui_styles([UiBoxSizing, UiFontSans, EmptyStyle], style),
+    style=ui_styles([UiBoxSizing, EmptyStyle], style),
     children,
   )
 }

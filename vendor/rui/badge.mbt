@@ -76,7 +76,6 @@ pub fn[C : @html.IsChildren] badge(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         BadgeBaseStyle,
@@ -148,7 +147,6 @@ pub fn[C : @html.IsChildren] badge_link(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         BadgeBaseStyle,

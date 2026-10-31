@@ -46,7 +46,7 @@ fn TextPreviewContext::content_view(context : TextPreviewContext) -> Html {
     Loaded(Ok(source)) =>
       @html.pre(
         style=[
-          CODE_FONT_STYLE,
+          @presentation.CODE_FONT_STYLE,
           "margin: 0",
           "white-space: pre",
           "overflow-wrap: normal",

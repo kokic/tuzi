@@ -76,7 +76,6 @@ fn[C : @html.IsChildren] render_message_scroller(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         "position:relative;display:flex;width:100%;height:100%;min-height:0;flex-direction:column;overflow:hidden",
       ],
       style,

@@ -76,7 +76,6 @@ pub fn[C : @html.IsChildren] input_group(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTransition,
         "position:relative;display:flex;width:100%;height:var(--rui-input-group-height,2rem);min-width:0;min-height:2rem;flex-direction:var(--rui-input-group-direction,row);align-items:var(--rui-input-group-align,center);--rui-control-base-bg:var(--rui-input-background,transparent);--rui-control-base-fg:var(--rui-foreground,oklch(0.145 0 0));--rui-control-base-border:var(--rui-input,oklch(0.922 0 0));--rui-control-base-shadow:0 0 #0000;border:1px solid transparent;border-color:var(--rui-control-border,var(--rui-control-base-border,var(--rui-input,oklch(0.922 0 0))));border-radius:var(--rui-radius,0.625rem);background:var(--rui-control-bg,var(--rui-control-base-bg,var(--rui-input-background,transparent)));color:var(--rui-control-fg,var(--rui-control-base-fg,var(--rui-foreground,oklch(0.145 0 0))));box-shadow:var(--rui-control-shadow,var(--rui-control-base-shadow,0 0 #0000));outline:none",
         if invalid {

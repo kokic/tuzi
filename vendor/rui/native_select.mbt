@@ -108,7 +108,6 @@ pub fn[C : @html.IsChildren] native_select(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         NativeSelectBaseStyle,

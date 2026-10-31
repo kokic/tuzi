@@ -18,7 +18,12 @@ fn pane_path_menu_view(
         size=Xs,
         aria_label=label,
         title=label,
-        style=[UI_FONT_STYLE, "flex: none", "width: 24px", "padding: 0"],
+        style=[
+          @presentation.UI_FONT_STYLE,
+          "flex: none",
+          "width: 24px",
+          "padding: 0",
+        ],
         icon,
       ),
       @rui.dropdown_menu_content(

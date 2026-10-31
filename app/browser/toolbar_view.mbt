@@ -9,7 +9,7 @@ fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
     style=toolbar_style(),
     [
       @rui.button(
-        style=[UI_FONT_STYLE],
+        style=[@presentation.UI_FONT_STYLE],
         variant=Ghost,
         size=Sm,
         on_click=emit(HelpOpen),
@@ -39,7 +39,7 @@ fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
         ]
       },
       @rui.button(
-        style=[UI_FONT_STYLE],
+        style=[@presentation.UI_FONT_STYLE],
         variant=Ghost,
         size=Sm,
         on_click=@dialog.show(CommandDialogId),
@@ -47,7 +47,7 @@ fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
       ),
       model.status_view(emit),
       @rui.button(
-        style=[UI_FONT_STYLE, "margin-left: auto"],
+        style=[@presentation.UI_FONT_STYLE, "margin-left: auto"],
         variant=Ghost,
         size=Sm,
         title="Toggle light / dark theme",
@@ -86,7 +86,7 @@ fn Model::status_view(model : Model, emit : Emit[Msg]) -> Html {
         variant=Ghost,
         size=Sm,
         style=[
-          UI_FONT_STYLE,
+          @presentation.UI_FONT_STYLE,
           "min-width: 0",
           "width: 100%",
           "justify-content: flex-start",

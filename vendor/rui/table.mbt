@@ -64,10 +64,7 @@ pub fn[C : @html.IsChildren] table(
   children : C,
 ) -> @html.Html {
   let table_node = @html.table(
-    style=ui_styles(
-      [UiBoxSizing, UiFontSans, UiTextRendering, TableBaseStyle],
-      style,
-    ),
+    style=ui_styles([UiBoxSizing, UiTextRendering, TableBaseStyle], style),
     id?,
     class?,
     title?,

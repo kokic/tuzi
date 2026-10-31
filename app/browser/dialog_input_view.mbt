@@ -20,13 +20,13 @@ fn new_entry_dialog(input : String, error : String, emit : Emit[Msg]) -> Html {
       dialog_keyboard_hint_view("create folder"),
       dialog_close_button("Cancel"),
       @rui.button(
-        style=[UI_FONT_STYLE],
+        style=[@presentation.UI_FONT_STYLE],
         variant=Outline,
         on_click=emit(NewEntrySubmit(File)),
         "File",
       ),
       @rui.button(
-        style=[UI_FONT_STYLE],
+        style=[@presentation.UI_FONT_STYLE],
         on_click=emit(NewEntrySubmit(Folder)),
         "Folder",
       ),
@@ -49,7 +49,7 @@ fn zip_dialog(
         @rui.native_select(
           id="zip-level",
           value=level.to_string(),
-          style=[UI_FONT_STYLE],
+          style=[@presentation.UI_FONT_STYLE],
           wrapper_style=["width: 100%"],
           attrs=@html.Attrs::build().aria_describedby("zip-level-description"),
           on_change=emit.map(value => ZipLevelChanged(value)),

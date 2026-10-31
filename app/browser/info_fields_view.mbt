@@ -15,7 +15,7 @@ fn InfoContext::fields_view(
           @rui.button(
             variant=Link,
             style=[
-              UI_FONT_STYLE,
+              @presentation.UI_FONT_STYLE,
               "height: auto",
               "max-width: 100%",
               "padding: 0",
@@ -160,7 +160,7 @@ fn info_input_row(
       invalid~,
       [
         @rui.input_group(
-          style=[UI_FONT_STYLE],
+          style=[@presentation.UI_FONT_STYLE],
           invalid~,
           [
             @rui.input_group_input(

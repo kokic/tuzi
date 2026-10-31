@@ -6,7 +6,7 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
   @rui.command_dialog(
     id=CommandDialogId,
     aria_label="Command",
-    style=[UI_FONT_STYLE, "width: min(40rem, calc(100vw - 2rem))"],
+    style=[@presentation.UI_FONT_STYLE, "width: min(40rem, calc(100vw - 2rem))"],
     attrs=@html.Attrs::build().on_keydown(event => {
       event.stop_propagation()
       @rabbita.none
@@ -14,7 +14,7 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
     scope => {
       @html.fragment([
         @rui.command_input(scope~, placeholder="Type a command…", input_style=[
-          UI_FONT_STYLE,
+          @presentation.UI_FONT_STYLE,
         ]),
         @rui.command_list(
           scope~,
@@ -74,7 +74,7 @@ fn command_action_item(
     scope~,
     value=label,
     on_click=action,
-    style=[UI_FONT_STYLE],
+    style=[@presentation.UI_FONT_STYLE],
     label,
   )
 }

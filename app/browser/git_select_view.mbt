@@ -14,7 +14,7 @@ fn git_branch_select(
     title=panel.selected,
     wrapper_style=["flex: 1 1 200px", "width: 100%", "min-width: 0"],
     style=[
-      UI_FONT_STYLE,
+      @presentation.UI_FONT_STYLE,
       "max-width: 100%",
       "overflow: hidden",
       "white-space: nowrap",

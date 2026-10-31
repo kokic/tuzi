@@ -73,7 +73,6 @@ pub fn input(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         InputBaseStyle,

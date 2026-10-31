@@ -1,6 +1,6 @@
 ///|
 fn kbd(key : String) -> Html {
-  @rui.kbd(style=[CODE_FONT_STYLE], key)
+  @rui.kbd(style=[@presentation.CODE_FONT_STYLE], key)
 }
 
 ///|
@@ -22,7 +22,7 @@ fn[C : @html.IsChildren] badge(
   @rui.badge(
     variant~,
     attrs?,
-    style=[UI_FONT_STYLE, "border-radius: var(--rui-radius)"],
+    style=[@presentation.UI_FONT_STYLE, "border-radius: var(--rui-radius)"],
     children,
   )
 }
@@ -52,7 +52,7 @@ fn text_input_field_view(
     [
       @rui.field_label(for_=id, label),
       @rui.input(
-        style=[UI_FONT_STYLE],
+        style=[@presentation.UI_FONT_STYLE],
         id~,
         value~,
         autofocus~,

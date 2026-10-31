@@ -565,7 +565,6 @@ pub fn select_trigger(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         UiTransition,
         SelectTriggerStyle,
@@ -691,7 +690,6 @@ pub fn[C : @html.IsChildren] select_item(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTransition,
         SelectItemStyle,
         if active {
@@ -845,7 +843,6 @@ pub fn[C : @html.IsChildren] select_content(
     style=ui_styles(
       [
         UiBoxSizing,
-        UiFontSans,
         UiTextRendering,
         SelectContentStyle,
         PopupTransition100Style,
@@ -913,10 +910,7 @@ fn select_render(
     class?,
     title?,
     attrs=select_scope_root_attrs(scope, attrs),
-    style=ui_styles(
-      [UiBoxSizing, UiFontSans, UiTextRendering, SelectRootStyle],
-      style,
-    ),
+    style=ui_styles([UiBoxSizing, UiTextRendering, SelectRootStyle], style),
     [hidden_control, body],
   )
 }
