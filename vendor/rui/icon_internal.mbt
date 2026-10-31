@@ -31,7 +31,8 @@ fn ui_stroke_icon(path : String) -> @html.Html {
 }
 
 ///|
-fn ui_check_icon() -> @html.Html {
+/// Render the shared decorative checkmark used by selection indicators.
+pub fn ui_check_icon() -> @html.Html {
   ui_stroke_icon("M20 6 9 17l-5-5")
 }
 

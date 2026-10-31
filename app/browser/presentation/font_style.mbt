@@ -18,10 +18,10 @@ pub fn theme_font_style(theme : @tuzi.Theme) -> Array[String] {
   match theme {
     Light =>
       [
-        "--tuzi-font-ui: Alegreya", "--tuzi-font-content: Alegreya, 'LXGW Neo ZhiSong Plus'",
-        "--tuzi-font-metadata: Alegreya, 'LXGW Neo ZhiSong Plus'",
-        "--tuzi-ui-size: 0.875rem", "--tuzi-content-size: 1rem", "--tuzi-secondary-size: 0.8rem",
-        "--tuzi-caption-size: 0.75rem", "--tuzi-code-size: 0.8125rem", "--tuzi-font-preview-size: 28px",
+        "--tuzi-font-ui: Alegreya, ui-serif, serif", "--tuzi-font-content: Alegreya, ui-serif, serif",
+        "--tuzi-font-metadata: Consolas, monospace", "--tuzi-ui-size: 0.875rem", "--tuzi-content-size: 1rem",
+        "--tuzi-secondary-size: 0.8rem", "--tuzi-caption-size: 0.75rem", "--tuzi-code-size: 0.8125rem",
+        "--tuzi-font-preview-size: 28px",
       ]
     Dark =>
       [

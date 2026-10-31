@@ -79,11 +79,13 @@ fn entry_context_menu(
   openers : @tuzi.OpenRegistry?,
 ) -> Val[Html] {
   let { entry, row, selected, .. } = item
+  let entry_color = @presentation.entry_color(entry, appearance)
   let row_attrs = @html.Attrs::build().on_click(_event => {
     emit(PaneEvent(Click(idx, row)))
   })
   let children = [
     span(
+      class="entry-meta",
       style=[
         ..@presentation.entry_meta_style(),
         "text-align: right",
@@ -100,23 +102,12 @@ fn entry_context_menu(
       [
         div(
           style=[
-            "grid-column: 1", "min-width: 0", "position: relative",
+            "grid-column: 1", "min-width: 0",
             "padding-left: \{if selected { "32px" } else { "0px" }}",
-            "transition: padding-left 160ms ease \{if selected { "0ms" } else { "80ms" }}",
+            "transition: padding-left 160ms ease",
+            "--tuzi-entry-name-decoration: \{if selected { "underline" } else { "none" }}",
           ],
-          [
-            span(
-              style=[
-                "position: absolute", "left: 0", "width: 20px",
-                "text-align: center", "pointer-events: none",
-                "color: var(--tuzi-emphasis-foreground)",
-                "opacity: \{if selected { "1" } else { "0" }}",
-                "transition: opacity 80ms ease \{if selected { "160ms" } else { "0ms" }}",
-              ],
-              "✓",
-            ),
-            entry.name_view(@presentation.entry_color(entry, appearance)),
-          ],
+          entry.name_view(entry_color),
         ),
         entry_size_view(entry),
         entry_time_view(entry),

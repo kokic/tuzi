@@ -61,6 +61,10 @@
         }
 
         @media (hover: hover) {
+            #tuzi .entry-meta:hover {
+                --tuzi-entry-meta-hover: var(--tuzi-entry-secondary-hover-foreground);
+            }
+
             #tuzi :is([data-slot="button"], .breadcrumb-path, .tuzi-text-action):not([data-size^="icon"]):not([data-rui-close-icon]):not(:disabled):not([aria-disabled="true"]):hover {
                 --rui-button-bg: var(--rui-button-base-bg, transparent);
                 --rui-control-bg: var(--rui-control-base-bg, transparent);

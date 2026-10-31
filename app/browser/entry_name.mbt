@@ -94,7 +94,10 @@ fn Entry::name_container(
 ///|
 fn truncated_name_view(name : String) -> Html {
   span(
-    style=["min-width: 0", "overflow: hidden", "text-overflow: ellipsis"],
+    style=[
+      "min-width: 0", "overflow: hidden", "text-overflow: ellipsis",
+      "text-decoration-line: var(--tuzi-entry-name-decoration, none)",
+    ],
     name,
   )
 }
@@ -104,6 +107,7 @@ fn link_name_view(name : String) -> Html {
   span(
     style=[
       "flex: none", "max-width: 50cqw", "overflow: hidden", "text-overflow: ellipsis",
+      "text-decoration-line: var(--tuzi-entry-name-decoration, none)",
     ],
     name,
   )
