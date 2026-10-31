@@ -23,7 +23,7 @@ fn pane_filter_view(
   @rui.input_group(
     style=[
       @presentation.CODE_FONT_STYLE,
-      "width: 320px",
+      "width: 240px",
       "max-width: 50%",
       "min-width: 0",
       "flex: none",
