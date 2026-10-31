@@ -35,7 +35,7 @@ fn help_lines() -> Array[Html] {
   ]
   binds.map(pair => {
     let (key, desc) = pair
-    @rui.table_row([
+    @rui.table_row(style=["border-bottom: none"], [
       @rui.table_cell(style=["text-align: right"], kbd(key)),
       @rui.table_cell(style=["text-align: left", "white-space: normal"], desc),
     ])

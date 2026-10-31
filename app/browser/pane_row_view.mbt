@@ -95,10 +95,8 @@ fn entry_context_menu(
     ),
     span(
       style=[
-        CODE_FONT_STYLE,
-        "color: var(--rui-muted-foreground)",
+        ..@presentation.entry_meta_style(),
         "font-size: var(--tuzi-entry-title-size)",
-        "font-variant-numeric: tabular-nums",
         "text-align: right",
         "min-width: 2ch",
         "margin: 0 4px",

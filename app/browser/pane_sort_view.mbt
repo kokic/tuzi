@@ -64,10 +64,11 @@ fn pane_sort_select(
         @rui.select_trigger(
           scope~,
           aria_label="Sort files",
+          class="tuzi-text-action",
           title="Sort files (s)",
           style=[
             "grid-area: 1 / 1", "height: 1.5rem", "padding: 0 var(--tuzi-sort-padding)",
-            "gap: var(--tuzi-sort-gap)", "font: inherit",
+            "gap: var(--tuzi-sort-gap)", "font: inherit", "border-color: transparent",
           ],
         ),
         @rui.select_content(

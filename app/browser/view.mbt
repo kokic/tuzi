@@ -9,17 +9,17 @@ fn Model::view(
   @rui.theme(
     mode=color_mode(model.theme),
     id="tuzi",
+    attrs=@html.Attrs::build().data_set("tuzi-theme", model.theme.to_string()),
     style=[
       ..typography_style,
       ..appearance_style,
       ..match model.theme {
-        Light => [
-          "--rui-background: #fcfcfb", "--rui-card: #fcfcfb", "--rui-popover: #fcfcfb",
-          "--rui-outline-background: #fcfcfb",
-        ]
-        Dark => []
+        Light => light_theme_style
+        Dark => dark_theme_style
       },
-      "height: 100%", "display: flex", "flex-direction: column",
+      "height: 100%",
+      "display: flex",
+      "flex-direction: column",
     ],
     [
       div(

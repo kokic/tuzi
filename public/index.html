@@ -24,7 +24,7 @@
         #tuzi,
         #tuzi * {
             scrollbar-width: thin;
-            scrollbar-color: var(--rui-border) transparent;
+            scrollbar-color: var(--tuzi-scrollbar-thumb) var(--tuzi-scrollbar-track);
         }
 
         #tuzi .entry-row:hover {
@@ -40,6 +40,56 @@
         #tuzi-command-dialog::backdrop {
             -webkit-backdrop-filter: none;
             backdrop-filter: none;
+        }
+
+        #tuzi[data-tuzi-theme="light"] .entry-row input[type="checkbox"] {
+            appearance: none;
+            box-sizing: border-box;
+            display: grid;
+            place-content: center;
+            border: 1px solid var(--tuzi-checkbox-border);
+            border-radius: 2px;
+            background: var(--tuzi-checkbox-background);
+        }
+
+        #tuzi[data-tuzi-theme="light"] [data-variant="link"] {
+            --rui-button-fg: var(--rui-foreground);
+            --rui-badge-fg: var(--rui-foreground);
+        }
+
+        #tuzi :is([data-slot="button"], .breadcrumb-path, .tuzi-text-action):not([data-size^="icon"]):not([data-rui-close-icon]) {
+            /* Override the components' inline font weight / font shorthand. */
+            font-weight: var(--tuzi-text-action-weight, 400) !important;
+        }
+
+        @media (hover: hover) {
+            #tuzi :is([data-slot="button"], .breadcrumb-path, .tuzi-text-action):not([data-size^="icon"]):not([data-rui-close-icon]):not(:disabled):not([aria-disabled="true"]):hover {
+                --rui-button-bg: var(--rui-button-base-bg, transparent);
+                --rui-control-bg: var(--rui-control-base-bg, transparent);
+                --tuzi-text-action-weight: 600;
+            }
+
+            #tuzi[data-tuzi-theme="light"] .rui-markdown-anchor:hover,
+            #tuzi[data-tuzi-theme="light"] :is([data-slot="field-description"], [data-slot="empty-description"], [data-slot="item-description"]) > a:hover {
+                color: var(--rui-foreground);
+            }
+
+            #tuzi[data-tuzi-theme="light"] .entry-row input[type="checkbox"]:not(:checked):hover {
+                background: var(--tuzi-checkbox-hover-background);
+            }
+        }
+
+        #tuzi[data-tuzi-theme="light"] .entry-row input[type="checkbox"]:checked {
+            border-color: var(--tuzi-checkbox-checked-border);
+            background: var(--tuzi-checkbox-checked-background);
+        }
+
+        #tuzi[data-tuzi-theme="light"] .entry-row input[type="checkbox"]:checked::before {
+            content: "";
+            width: 9px;
+            height: 7px;
+            background: var(--tuzi-checkbox-checkmark);
+            clip-path: polygon(0 45%, 20% 25%, 40% 55%, 80% 0, 100% 20%, 40% 100%);
         }
 
         #tuzi .entry-row input:focus-visible {

@@ -37,7 +37,7 @@ pub fn entry_size_view(entry : Entry) -> Html {
   let style = entry_meta_style() +
     [
       "grid-column: 2 / 4", "display: grid", "grid-template-columns: subgrid", "column-gap: 0",
-      "text-align: right", "font-variant-numeric: tabular-nums",
+      "text-align: right",
     ]
   guard !entry.is_dir() else { span(style~, "") }
   guard entry.size is Ok(size) else {
@@ -52,10 +52,7 @@ pub fn entry_size_view(entry : Entry) -> Html {
 
 ///|
 pub fn entry_time_view(entry : Entry) -> Html {
-  let style = entry_meta_style() +
-    [
-      "grid-column: 4", "text-align: right", "font-variant-numeric: tabular-nums",
-    ]
+  let style = entry_meta_style() + ["grid-column: 4", "text-align: right"]
   guard entry.mtime is Ok(time) else {
     span(style~, title=entry.mtime.unwrap_err().message, "Unavailable")
   }

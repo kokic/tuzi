@@ -56,7 +56,8 @@ pub fn entry_title_style(entry : Entry, color : String) -> Array[String] {
 }
 
 ///|
-fn entry_meta_style() -> Array[String] {
+/// Shared typography and color for entry numbers, sizes and timestamps.
+pub fn entry_meta_style() -> Array[String] {
   [
     CODE_FONT_STYLE,
     "min-width: 0",
@@ -64,7 +65,8 @@ fn entry_meta_style() -> Array[String] {
     "white-space: nowrap",
     "text-overflow: ellipsis",
     "font-size: var(--tuzi-entry-subtitle-size)",
-    "color: var(--rui-muted-foreground)",
+    "font-variant-numeric: tabular-nums",
+    "color: var(--tuzi-entry-secondary-foreground)",
   ]
 }
 
