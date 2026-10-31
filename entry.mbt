@@ -25,6 +25,7 @@ pub(all) struct Entry {
   name : String
   kind : Result[EntryKind, ApiFailure]
   size : Result[Int64?, ApiFailure]
+  child_count : Result[Int64, ApiFailure]?
   mtime : Result[Int64, ApiFailure]
   marker : Result[String, ApiFailure]
 } derive(Eq, FromJson, ToJson)

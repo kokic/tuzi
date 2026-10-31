@@ -27,6 +27,12 @@ fn routes(
         list_entries(request.path, include_markers=request.include_markers)
       })
     })
+    ..post("/api/directory-counts", (req, res) => {
+      respond(res, () => {
+        let request : @shared.DirectoryCountsRequest = decode_request(req)
+        directory_child_counts(request)
+      })
+    })
     ..post("/api/entry", (req, res) => {
       respond(res, () => {
         let request : @shared.DirectoryRequest = decode_request(req)

@@ -25,15 +25,15 @@ let dialog_footer_style : Array[String] = [
 fn application_style() -> Array[String] {
   [
     "display: flex", "flex-direction: column", "flex: 1", "min-height: 0", "min-width: 0",
-    "padding: 8px", "gap: 6px",
+    "padding: 8px",
   ]
 }
 
 ///|
 fn toolbar_style() -> Array[String] {
   [
-    "flex: none", "display: flex", "flex-wrap: wrap", "align-items: center", "gap: 8px",
-    "padding: 0 2px", "min-height: 32px",
+    "flex: none", "display: grid", "grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr)",
+    "align-items: center", "min-height: 32px",
   ]
 }
 
@@ -53,7 +53,7 @@ fn count_style(active : Bool) -> Array[String] {
 ///|
 fn status_style() -> Array[String] {
   [
-    "flex: 1 1 240px", "min-width: 0", "max-width: 100%", "min-height: 32px", "display: flex",
+    "flex: 1", "min-width: 0", "min-height: 32px", "display: flex",
     "align-items: center", "gap: 8px", "overflow: hidden", "color: var(--rui-muted-foreground)",
   ]
 }

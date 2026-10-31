@@ -48,3 +48,15 @@ pub extend ListingRequest with ToJson::{to_json}
 
 ///|
 pub extend ListingRequest with FromJson::{from_json}
+
+///|
+pub(all) struct DirectoryCountsRequest {
+  path : Path
+  names : Array[String]
+} derive(ToJson, FromJson)
+
+///|
+pub extend DirectoryCountsRequest with ToJson::{to_json}
+
+///|
+pub extend DirectoryCountsRequest with FromJson::{from_json}

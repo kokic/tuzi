@@ -1,6 +1,10 @@
 ///|
 priv enum PaneMsg {
-  ListLoaded(Array[ListingTarget], Result[Array[Entry], RequestFailure])
+  ListLoaded(Array[ListingTarget], Path, Result[Array[Entry], RequestFailure])
+  DirectoryCountsLoaded(
+    Array[ListingTarget],
+    Result[Map[String, Result[Int64, @tuzi.ApiFailure]], RequestFailure]
+  )
   ReloadPane(PaneSide)
   GotoPath(PaneSide, Path)
   Click(PaneSide, Int32)

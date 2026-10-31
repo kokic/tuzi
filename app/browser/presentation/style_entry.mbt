@@ -88,8 +88,7 @@ pub fn entry_meta_style() -> Array[String] {
 pub fn entry_details_style() -> Array[String] {
   [
     METADATA_FONT_STYLE,
-    "flex: none",
-    "width: 320px",
+    "flex: 1",
     "min-width: 0",
     "box-sizing: border-box",
     "display: flex",

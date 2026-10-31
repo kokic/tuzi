@@ -8,55 +8,76 @@ fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
     id="bar",
     style=toolbar_style(),
     [
-      @rui.button(
-        style=[@presentation.UI_FONT_STYLE],
-        variant=Ghost,
-        size=Sm,
-        on_click=emit(HelpOpen),
-        "Help",
+      div(
+        style=[
+          "display: flex", "align-items: center", "gap: 8px",
+          "min-width: 0", "overflow: hidden", "padding-right: 12px",
+        ],
+        [
+          @rui.button(
+            style=[@presentation.UI_FONT_STYLE],
+            variant=Ghost,
+            size=Sm,
+            on_click=emit(HelpOpen),
+            "Help",
+          ),
+          div(
+            style=[
+              "display: flex", "align-items: center", "gap: 6px", "font-size: var(--tuzi-secondary-size)",
+              "color: var(--rui-muted-foreground)", "white-space: nowrap",
+            ],
+            [
+              span(style=count_style(model.active == Left), "\{left}"),
+              span("·"),
+              span(style=count_style(model.active == Right), "\{right}"),
+              span("items"),
+            ],
+          ),
+          ..if sel > 0 {
+            [
+              span(
+                style=[
+                  "font-size: var(--tuzi-secondary-size)", "font-variant-numeric: tabular-nums",
+                  "white-space: nowrap",
+                ],
+                "\{sel} selected",
+              ),
+            ]
+          },
+          @rui.button(
+            style=[@presentation.UI_FONT_STYLE],
+            variant=Ghost,
+            size=Sm,
+            on_click=@dialog.show(CommandDialogId),
+            "Command",
+          ),
+          model.status_view(emit),
+        ],
+      ),
+      div(
+        attrs=@html.Attrs::build().aria_hidden("true"),
+        style=["align-self: stretch", "background: var(--rui-border)"],
+        @html.nothing,
       ),
       div(
         style=[
-          "display: flex", "align-items: center", "gap: 6px", "font-size: var(--tuzi-secondary-size)",
-          "color: var(--rui-muted-foreground)", "white-space: nowrap",
+          "display: flex", "align-items: center", "gap: 8px",
+          "min-width: 0", "overflow: hidden", "padding-left: 12px",
         ],
         [
-          span(style=count_style(model.active == Left), "\{left}"),
-          span("·"),
-          span(style=count_style(model.active == Right), "\{right}"),
-          span("items"),
-        ],
-      ),
-      ..if sel > 0 {
-        [
-          span(
-            style=[
-              "font-size: var(--tuzi-secondary-size)", "font-variant-numeric: tabular-nums",
-              "white-space: nowrap",
-            ],
-            "\{sel} selected",
+          model.pane_at(model.active).entry_details_view(),
+          @rui.button(
+            style=[@presentation.UI_FONT_STYLE],
+            variant=Ghost,
+            size=Sm,
+            title="Toggle light / dark theme",
+            on_click=emit(ThemeToggle),
+            match model.theme {
+              Light => "Light"
+              Dark => "Dark"
+            },
           ),
-        ]
-      },
-      @rui.button(
-        style=[@presentation.UI_FONT_STYLE],
-        variant=Ghost,
-        size=Sm,
-        on_click=@dialog.show(CommandDialogId),
-        "Command",
-      ),
-      model.pane_at(model.active).entry_details_view(),
-      model.status_view(emit),
-      @rui.button(
-        style=[@presentation.UI_FONT_STYLE, "margin-left: auto"],
-        variant=Ghost,
-        size=Sm,
-        title="Toggle light / dark theme",
-        on_click=emit(ThemeToggle),
-        match model.theme {
-          Light => "Light"
-          Dark => "Dark"
-        },
+        ],
       ),
     ],
   )

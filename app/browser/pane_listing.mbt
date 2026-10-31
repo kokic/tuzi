@@ -47,6 +47,43 @@ fn Model::receive_listing(
 }
 
 ///|
+fn Model::receive_directory_counts(
+  model : Model,
+  targets : Array[ListingTarget],
+  result : Result[Map[String, Result[Int64, @tuzi.ApiFailure]], RequestFailure],
+) -> Model {
+  targets.fold(init=model, (model, target) => {
+    let receive = (pane : Pane) => {
+      guard pane.id == target.view_id && pane.request_id == target.request_id else {
+        return pane
+      }
+      let update_entry = (entry : Entry) => {
+        guard entry.is_dir() else { return entry }
+        let count = match result {
+          Ok(counts) => counts.get(entry.name)
+          Err(Rejected(error)) => Some(Err(error))
+          Err(Unconfirmed(message)) =>
+            Some(Err(@tuzi.ApiFailure::{ code: Io, message, }))
+        }
+        { ..entry, child_count: count, }
+      }
+      {
+        ..pane,
+        entries: pane.entries.map(update_entry),
+        visible_entries: pane.visible_entries.map(update_entry),
+      }
+    }
+    {
+      ..model,
+      panes: match target.pane {
+        Left => (model.panes.0.map_views(receive), model.panes.1)
+        Right => (model.panes.0, model.panes.1.map_views(receive))
+      },
+    }
+  })
+}
+
+///|
 fn Model::load_pending_panes(model : Model, emit : Emit[Msg]) -> (Model, Cmd) {
   guard model.startup is Started else { return (model, @rabbita.none) }
   let left = model.panes.0.current

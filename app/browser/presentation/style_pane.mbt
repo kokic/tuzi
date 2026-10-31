@@ -57,7 +57,7 @@ pub fn pane_list_style() -> Array[String] {
     "flex: 1",
     "container-type: inline-size",
     "display: grid",
-    "grid-template-columns: max-content minmax(0, 1fr) max-content minmax(1em, max-content) calc(var(--tuzi-time-column, 17ch) + 10px)",
+    "grid-template-columns: max-content minmax(0, 1fr) max-content calc(var(--tuzi-time-column, 17ch) + 10px)",
     "font-size: var(--tuzi-secondary-size)",
     "column-gap: 8px",
     "align-content: start",

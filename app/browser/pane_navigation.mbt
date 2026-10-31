@@ -53,8 +53,32 @@ fn Model::update_panes(
         model.invalidate_panes(left=idx == Left, right=idx == Right),
         @rabbita.none,
       )
-    ListLoaded(targets, result) =>
-      (model.receive_listing(targets, result), @rabbita.none)
+    ListLoaded(targets, path, result) => {
+      let model = model.receive_listing(targets, result)
+      guard result is Ok(entries) else { return (model, @rabbita.none) }
+      let targets = targets.filter(target => {
+        let stack = match target.pane {
+          Left => model.panes.0
+          Right => model.panes.1
+        }
+        let matches = (pane : Pane) =>
+          pane.id == target.view_id && pane.request_id == target.request_id
+        matches(stack.current) || stack.parents.any(matches)
+      })
+      guard !targets.is_empty() else { return (model, @rabbita.none) }
+      let names = entries.filter(entry => entry.is_dir()).map(entry => entry.name)
+      guard !names.is_empty() else { return (model, @rabbita.none) }
+      (
+        model,
+        request_api(
+          "/api/directory-counts",
+          body=ToJson::to_json(@tuzi.DirectoryCountsRequest::{ path, names, }),
+          result => emit(PaneEvent(DirectoryCountsLoaded(targets, result))),
+        ),
+      )
+    }
+    DirectoryCountsLoaded(targets, result) =>
+      (model.receive_directory_counts(targets, result), @rabbita.none)
     GotoPath(idx, path) => model.navigate_to_directory(idx, path)
     Click(idx, row) => {
       let pane = model.pane_at(idx)

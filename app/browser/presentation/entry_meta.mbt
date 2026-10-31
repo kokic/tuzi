@@ -34,25 +34,25 @@ pub fn format_entry_meta(entry : Entry) -> String {
 
 ///|
 pub fn entry_size_view(entry : Entry) -> Html {
-  let style = entry_meta_style() +
-    [
-      "grid-column: 2 / 4", "display: grid", "grid-template-columns: subgrid", "column-gap: 0",
-      "text-align: right",
-    ]
-  guard !entry.is_dir() else { span(class="entry-meta", style~, "") }
-  guard entry.size is Ok(size) else {
-    span(class="entry-meta", style~, "Unavailable")
+  let style = entry_meta_style() + ["grid-column: 2", "text-align: right"]
+  let text = if entry.is_dir() {
+    match entry.child_count {
+      None => "…"
+      Some(Err(_)) => "Unavailable"
+      Some(Ok(count)) => "\{count} items"
+    }
+  } else {
+    match entry.size {
+      Ok(size) => size.map_or(unknown_size, size => format_file_size(size)).to_string()
+      Err(_) => "Unavailable"
+    }
   }
-  let formatted = size.map_or(unknown_size, size => format_file_size(size))
-  span(class="entry-meta", style~, [
-    span(formatted.value),
-    span(style=["text-align: left"], formatted.unit),
-  ])
+  span(class="entry-meta", style~, text)
 }
 
 ///|
 pub fn entry_time_view(entry : Entry) -> Html {
-  let style = entry_meta_style() + ["grid-column: 4", "text-align: right"]
+  let style = entry_meta_style() + ["grid-column: 3", "text-align: right"]
   guard entry.mtime is Ok(time) else {
     span(class="entry-meta", style~, "Unavailable")
   }
