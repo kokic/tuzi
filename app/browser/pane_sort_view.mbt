@@ -1,9 +1,9 @@
 ///|
 fn SortMode::label(self : SortMode) -> String {
   match self {
-    Name => "name"
-    Size => "size"
-    Time => "time"
+    Name => "Name"
+    Size => "Size"
+    Time => "Time"
   }
 }
 
