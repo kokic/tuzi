@@ -94,8 +94,6 @@ pub fn entry_details_style() -> Array[String] {
     "display: flex",
     "align-items: center",
     "overflow: hidden",
-    "font-size: var(--tuzi-secondary-size)",
     "color: var(--rui-muted-foreground)",
-    "line-height: 18px",
   ]
 }

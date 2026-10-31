@@ -42,7 +42,7 @@ pub fn preview_font_style(family : String) -> String {
 
 ///|
 const FontCss : String =
-  #|html { font-size: 18px; }
+  #|html { font-size: 20px; }
   #|#tuzi {
   #|  --tuzi-weight-ui: 400;
   #|  --tuzi-weight-emphasis: 600;

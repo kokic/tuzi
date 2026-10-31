@@ -23,7 +23,7 @@ fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
           ),
           div(
             style=[
-              "display: flex", "align-items: center", "gap: 6px", "font-size: var(--tuzi-secondary-size)",
+              "display: flex", "align-items: center", "gap: 6px",
               "color: var(--rui-muted-foreground)", "white-space: nowrap",
             ],
             [
@@ -37,7 +37,7 @@ fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
             [
               span(
                 style=[
-                  "font-size: var(--tuzi-secondary-size)", "font-variant-numeric: tabular-nums",
+                  "font-variant-numeric: tabular-nums",
                   "white-space: nowrap",
                 ],
                 "\{sel} selected",

@@ -33,7 +33,7 @@ fn application_style() -> Array[String] {
 fn toolbar_style() -> Array[String] {
   [
     "flex: none", "display: grid", "grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr)",
-    "align-items: center", "min-height: 32px",
+    "align-items: center", "min-height: 32px", "font-size: var(--tuzi-ui-size)",
   ]
 }
 
