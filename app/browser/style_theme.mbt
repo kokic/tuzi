@@ -8,7 +8,7 @@ let light_theme_style : Array[String] = [
    "--tuzi-marked-background: oklch(from var(--tuzi-theme-background) calc(l - 0.065) c h)",
   "--tuzi-selection-background: oklch(from var(--tuzi-theme-background) calc(l - 0.05) c h)",
   "--tuzi-theme-border: var(--tuzi-theme-foreground)", "--tuzi-theme-indicator: var(--tuzi-theme-border)",
-  "--tuzi-scrollbar-thumb: oklch(from var(--tuzi-theme-background) calc(l - 0.1) c h)",
+  "--tuzi-scrollbar-thumb: oklch(from var(--tuzi-theme-background) calc(l - 0.05) c h)",
   "--tuzi-entry-secondary-foreground: oklch(from var(--tuzi-theme-background) calc(l - 0.1) c h)",
   "--tuzi-entry-secondary-hover-foreground: oklch(from var(--tuzi-theme-background) calc(l - 0.3) c h)",
   "--tuzi-scrollbar-track: var(--tuzi-theme-background)", "--tuzi-checkbox-checkmark: oklch(from var(--tuzi-theme-background) calc(l - 0.55) c h)",
@@ -34,7 +34,7 @@ let light_theme_style : Array[String] = [
 
 ///|
 let dark_theme_style : Array[String] = [
-  "--tuzi-scrollbar-thumb: var(--rui-border)", "--tuzi-scrollbar-track: transparent",
+  "--tuzi-scrollbar-thumb: color-mix(in oklab, var(--rui-border) 60%, var(--rui-background))", "--tuzi-scrollbar-track: transparent",
   "--tuzi-entry-secondary-foreground: color-mix(in oklab, var(--rui-muted-foreground) 50%, var(--rui-background))",
   "--tuzi-entry-secondary-hover-foreground: color-mix(in oklab, var(--rui-muted-foreground) 75%, var(--rui-foreground))",
   "--tuzi-emphasis-foreground: var(--rui-primary)",

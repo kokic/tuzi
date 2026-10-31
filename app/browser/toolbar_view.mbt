@@ -45,6 +45,7 @@ fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
         on_click=@dialog.show(CommandDialogId),
         "Command",
       ),
+      model.pane_at(model.active).entry_details_view(),
       model.status_view(emit),
       @rui.button(
         style=[@presentation.UI_FONT_STYLE, "margin-left: auto"],

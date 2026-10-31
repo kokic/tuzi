@@ -89,15 +89,14 @@ pub fn entry_details_style() -> Array[String] {
   [
     METADATA_FONT_STYLE,
     "flex: none",
+    "width: 320px",
+    "min-width: 0",
+    "box-sizing: border-box",
     "display: flex",
     "align-items: center",
-    "gap: 8px",
-    "padding: 4px",
+    "overflow: hidden",
     "font-size: var(--tuzi-secondary-size)",
     "color: var(--rui-muted-foreground)",
-    "min-width: 0",
     "line-height: 18px",
-    "border-top: 1px solid var(--rui-border)",
-    "background: var(--rui-background)",
   ]
 }

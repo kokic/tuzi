@@ -102,7 +102,6 @@ fn Pane::pane_view(
         },
       },
     ),
-    "details": pane.entry_details_view(),
   })
 }
 

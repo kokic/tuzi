@@ -8,7 +8,7 @@ pub const CONTENT_FONT_STYLE : String = "font-family: var(--tuzi-font-content)"
 
 ///|
 /// Entry numbers, sizes, timestamps and the file status bar use the metadata family.
-const METADATA_FONT_STYLE : String = "font-family: var(--tuzi-font-metadata)"
+const METADATA_FONT_STYLE : String = "font-family: var(--tuzi-font-content)"
 
 ///|
 /// Each theme supplies final font families and sizes, without component fallbacks.
