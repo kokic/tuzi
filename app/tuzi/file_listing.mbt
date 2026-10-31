@@ -14,7 +14,6 @@ async fn list_entries(path : Path, include_markers~ : Bool) -> Array[Entry] {
     jobs.push(() => {
       let full = path.join(Path("./\{entry.name}"))
       Some(read_entry(full, include_markers~)) catch {
-        // The entry may disappear after directory enumeration.
         @os_error.OSError(_, ..) as error if error.is_ENOENT() => None
         error => raise error
       }
@@ -34,7 +33,6 @@ async fn read_entry(path : Path, include_markers~ : Bool) -> Entry {
   let is_dir = kind is Ok(kind) && kind.is_dir()
   let size = {
     guard !is_dir else { Ok(None) }
-    // Metadata calls never open FIFOs/devices as input streams.
     Ok(Some(@async_fs.file_size(full_path))) catch {
       error => Err(api_failure(error))
     }

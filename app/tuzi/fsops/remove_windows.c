@@ -7,7 +7,6 @@ MOONBIT_FFI_EXPORT int32_t tuzi_clear_readonly(moonbit_string_t path) {
   DWORD attrs = GetFileAttributesW((LPCWSTR)path);
   if (attrs == INVALID_FILE_ATTRIBUTES)
     return -(int32_t)GetLastError();
-  // Never change the target of a link, nor attributes on directories.
   if ((attrs & (FILE_ATTRIBUTE_REPARSE_POINT | FILE_ATTRIBUTE_DIRECTORY)) ||
       !(attrs & FILE_ATTRIBUTE_READONLY))
     return 0;

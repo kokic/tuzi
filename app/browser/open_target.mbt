@@ -1,5 +1,4 @@
 ///|
-/// Keep the item's path with the action, independent of the current cursor.
 priv struct OpenTarget {
   pane : PaneSide
   path : Path
@@ -36,11 +35,10 @@ fn OpenTarget::unavailable_reason(
       } else {
         Some("Select a directory to enter.")
       }
-    Preview => {
+    Dialog(_) | Browser => {
       guard !kind.is_dir() else {
         return Some("Directories cannot be previewed as files.")
       }
-      // Missing listing metadata is checked by the existing file endpoint.
       guard self.entry.size
         .unwrap_or(None)
         .map_or(true, size => preview_content_type(self.path, size) is Some(_)) else {
@@ -51,8 +49,10 @@ fn OpenTarget::unavailable_reason(
       None
     }
     ExtractZip => {
-      guard !kind.is_dir() && self.entry.name.to_lower().has_suffix(".zip") else {
-        return Some("Select a ZIP file to extract.")
+      let name = self.entry.name.to_lower()
+      guard !kind.is_dir() &&
+        (name.has_suffix(".zip") || name.has_suffix(".apk")) else {
+        return Some("Select a ZIP or APK file to extract.")
       }
       None
     }

@@ -19,7 +19,6 @@ pub impl Default for EntryAppearance with fn default() -> EntryAppearance {
 pub extend EntryAppearance with Default::{default}
 
 ///|
-/// Unknown values use the same fallback as an omitted startup option.
 pub fn EntryAppearance::parse(value : String) -> EntryAppearance {
   match value {
     "plain" => Plain

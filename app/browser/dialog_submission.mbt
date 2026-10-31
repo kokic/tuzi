@@ -15,7 +15,6 @@ impl Show for DialogInputError with fn to_string(self) {
 }
 
 ///|
-/// Keep input intact; filesystem conflicts are decided by the server at execution.
 fn validate_dialog_name(input : String) -> String raise DialogInputError {
   guard !input.is_empty() else { raise NameRequired }
   input
@@ -61,7 +60,7 @@ fn Dialog::file_operations(
         },
       ]
     }
-    None
+    Nil
     | Help
     | Activity
     | Bookmarks(_)
@@ -70,10 +69,12 @@ fn Dialog::file_operations(
     | TaskDetails(_)
     | Markdown(_)
     | TextPreview(_)
+    | SessionPreview(_)
     | Progress(_)
     | Info(_)
     | GitInfo(_)
-    | GitRenameInput(..) => return None
+    | GitRenameInput(..)
+    | RemoveWorktreeConfirm(..) => return None
   }
   Some(operations)
 }
@@ -92,6 +93,8 @@ fn Model::submit_dialog(
     GitInfo(context) => return model.submit_info_link(context.entry, emit)
     GitRenameInput(context~, reference~, input~) =>
       return model.submit_git_rename(context, reference, input, emit)
+    RemoveWorktreeConfirm(context~, worktree~) =>
+      return model.submit_worktree_removal(context, worktree, emit)
     _ => ()
   }
   let operations = model.dialog.file_operations(new_entry_kind) catch {

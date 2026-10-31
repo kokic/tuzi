@@ -14,7 +14,6 @@ pub impl Show for FormattedFileSize with fn output(self, logger) {
 pub extend FormattedFileSize with Show::{to_string, output}
 
 ///|
-/// Format the value and unit separately (base 1024, truncated).
 pub fn format_file_size(size : Int64) -> FormattedFileSize {
   let units = ["B", "K", "M", "G", "T"]
   let (scale, i) = for scale = 1L, i = 0 {
@@ -29,7 +28,6 @@ pub fn format_file_size(size : Int64) -> FormattedFileSize {
 }
 
 ///|
-/// UTC display components; text is assembled only at the output boundary.
 pub(all) struct FormattedTimestamp {
   year : String
   month_day : String
@@ -49,7 +47,6 @@ pub impl Show for FormattedTimestamp with fn output(self, logger) {
 pub extend FormattedTimestamp with Show::{to_string, output}
 
 ///|
-/// Format a Unix timestamp in UTC, optionally including seconds.
 pub fn format_timestamp(
   sec : Int64,
   seconds~ : Bool = false,
@@ -78,8 +75,6 @@ fn format_two_digits(n : Int64) -> String {
 }
 
 ///|
-/// Howard Hinnant's civil-from-days algorithm (proleptic Gregorian, UTC).
-/// `days` is the number of days since the Unix epoch.
 fn calendar_date_from_epoch_days(days : Int64) -> (Int64, Int64, Int64) {
   let z = days + 719468L
   let era = floor_divide(z, 146097L)
@@ -101,7 +96,6 @@ fn calendar_date_from_epoch_days(days : Int64) -> (Int64, Int64, Int64) {
 }
 
 ///|
-/// Euclidean-like division that floors toward negative infinity.
 fn floor_divide(a : Int64, b : Int64) -> Int64 {
   let q = a / b
   let signs_differ = (a < 0L) != (b < 0L)

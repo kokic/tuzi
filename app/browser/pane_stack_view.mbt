@@ -31,8 +31,6 @@ fn pane_stack_view(
     .assoc_by(
       (id, pane) => {
         let rows = pane_rows(pane, other_path, idx, emit, appearance, openers)
-        // Cached ancestor views retain their rows, but only the visible view
-        // mounts navigation menus and their items.
         let history_menu = history.switch_by(
           history => {
             let (current_id, path, paths) = history

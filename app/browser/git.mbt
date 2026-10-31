@@ -21,6 +21,8 @@ fn Model::update_git(
     GitRefresh(id) => model.refresh_git(id, emit)
     GitRun(id, operation) => model.run_git_operation(id, operation, emit)
     GitRenameOpen(id) => (model.open_git_rename(id), @rabbita.none)
+    GitWorktreeRemoveOpen(id, path) =>
+      (model.open_worktree_removal(id, path), @rabbita.none)
     GitLoaded(id, request_id, result) => {
       let dialog = match model.dialog {
         GitInfo(context) if context.entry.id == id &&
@@ -83,6 +85,13 @@ fn Model::run_git_operation(
   if operation is DeleteBranch(reference) {
     guard info.branches.any(branch => {
       branch.reference == reference && git_branch_can_delete(branch, info)
+    }) else {
+      return (model, @rabbita.none)
+    }
+  }
+  if operation is RemoveWorktree(target) {
+    guard info.worktrees.any(worktree => {
+      worktree.path == target && worktree.can_remove()
     }) else {
       return (model, @rabbita.none)
     }

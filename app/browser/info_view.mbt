@@ -12,8 +12,8 @@ fn InfoContext::dialog(
       @tuzi.image_content_type(context.entry.name) is Some(_) {
       [context.image_view()]
     },
-    ..context.font_preview.map_or([], state => {
-      [context.font_preview_view(state)]
+    ..context.font_preview.map_or([], preview => {
+      [context.font_preview_view(preview, emit)]
     }),
     ..context.fields_view(emit, error~),
     ..additional_content,
@@ -33,7 +33,6 @@ fn InfoContext::dialog(
     ],
     [
       div(
-        // Keep control shadows and focus outlines inside the scroll viewport.
         style=[
           "flex: 1 1 auto", "min-height: 0", "min-width: 0", "overflow-y: auto",
           "overflow-x: hidden", "scrollbar-gutter: stable", "padding-inline: 4px",
@@ -41,7 +40,7 @@ fn InfoContext::dialog(
         content,
       ),
       if context.link is Some(_) {
-        @rui.dialog_footer([
+        @rui.dialog_footer(style=dialog_footer_style, [
           dialog_close_button("Close"),
           @rui.button(
             style=[UI_FONT_STYLE],
@@ -64,7 +63,6 @@ fn InfoContext::image_view(context : InfoContext) -> Html {
   div(
     style=[
       "display: flex", "justify-content: center", "padding: 12px", "margin-bottom: 12px",
-      "border: 1px solid var(--rui-border)", "border-radius: var(--rui-radius)",
       "background: var(--rui-muted)",
     ],
     [
@@ -75,7 +73,6 @@ fn InfoContext::image_view(context : InfoContext) -> Html {
         decoding="async",
         style=[
           "display: block", "max-width: 100%", "max-height: 45dvh", "object-fit: contain",
-          "border-radius: var(--rui-radius)",
         ],
       ),
     ],

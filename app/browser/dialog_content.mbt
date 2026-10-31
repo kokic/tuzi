@@ -1,12 +1,13 @@
 ///|
 fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
   let activity = activity_dialog(model.map(model => model.jobs), emit)
-  model.view2(activity, (model, activity) => {
+  let session = session_preview_dialog(model, emit)
+  model.view3(activity, session, (model, activity, session) => {
     let name_input = (title, prompt, input) => {
       name_dialog(title, prompt, input, model.dialog_error, emit)
     }
     match model.dialog {
-      None => @html.nothing
+      Nil => @html.nothing
       Help => help_dialog(emit)
       Activity => activity
       Bookmarks(side) => bookmarks_dialog(model.bookmarks, side, emit)
@@ -16,6 +17,7 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
       Info(context) => context.dialog([], emit, error=model.dialog_error)
       Markdown(context) => context.dialog(emit)
       TextPreview(context) => context.dialog(emit)
+      SessionPreview(_) => session
       GitInfo(context) =>
         git_info_dialog(context, model.jobs, emit, error=model.dialog_error)
       DeleteConfirm(directory~, names~) =>
@@ -59,6 +61,22 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
         new_entry_dialog(input, model.dialog_error, emit)
       GitRenameInput(input~, ..) =>
         name_input("Rename branch", "New branch name:", input)
+      RemoveWorktreeConfirm(context~, worktree~) =>
+        delete_confirm_dialog(
+          "Delete worktree?",
+          if worktree.prunable {
+            "The worktree directory is already gone. Removing it drops the leftover Git registration; the branch itself is kept."
+          } else {
+            "The worktree directory is removed from disk with all of its files, including uncommitted changes. The branch itself is kept."
+          },
+          [
+            ("Branch", git_worktree_branch_label(worktree)),
+            ("Worktree", worktree.path.to_string()),
+            ("Repository", context.entry.path.dirname().to_string()),
+          ],
+          emit,
+          error=model.dialog_error,
+        )
     }
   })
 }
@@ -69,29 +87,45 @@ fn delete_confirm_dialog(
   description : String,
   items : Array[(String, String)],
   emit : Emit[Msg],
+  error~ : String = "",
 ) -> Html {
-  modal(title, emit, description~, [
-    @rui.scroll_area(
-      style=["height: auto", "max-height: 60vh"],
-      @rui.item_group(
-        Map::from_iter(
-          items
-          .iter()
-          .map(item => {
-            let (label, detail) = item
-            (
-              detail,
-              @rui.item(
-                @rui.item_content([
-                  @rui.item_title(label),
-                  @rui.item_description(detail),
-                ]),
-              ),
-            )
-          }),
+  modal(
+    title,
+    emit,
+    description~,
+    [
+      ..if error.is_empty() {
+        []
+      } else {
+        [
+          @rui.alert(variant=Destructive, [
+            @rui.alert_title("Delete failed"),
+            @rui.alert_description(task_output_view(error)),
+          ]),
+        ]
+      },
+      @rui.scroll_area(
+        style=["height: auto", "max-height: 60vh"],
+        @rui.item_group(
+          Map::from_iter(
+            items
+            .iter()
+            .map(item => {
+              let (label, detail) = item
+              (
+                detail,
+                @rui.item(
+                  @rui.item_content([
+                    @rui.item_title(label),
+                    @rui.item_description(detail),
+                  ]),
+                ),
+              )
+            }),
+          ),
         ),
       ),
-    ),
-    dialog_footer(emit, "Delete", Destructive),
-  ])
+      dialog_footer(emit, "Delete", Destructive),
+    ],
+  )
 }

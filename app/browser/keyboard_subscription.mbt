@@ -43,7 +43,7 @@ fn Model::keyboard_command(
     return @rabbita.none
   }
   guard !event.is_composing() else { return @rabbita.none }
-  if model.dialog == None &&
+  if model.dialog == Nil &&
     !event.ctrl_key() &&
     !event.meta_key() &&
     !event.alt_key() {

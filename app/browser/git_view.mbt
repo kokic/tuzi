@@ -75,7 +75,10 @@ fn git_info_content(
               ]),
             ]
           }
-          [git_branch_controls(context, panel, info, busy, emit)]
+          [
+            git_branch_controls(context, panel, info, busy, emit),
+            git_worktree_controls(context, panel, info, busy, emit),
+          ]
         }),
         git_output_view(panel, task),
       ],

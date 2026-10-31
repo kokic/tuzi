@@ -1,5 +1,4 @@
 ///|
-/// Capture operation targets when opening, so later pane updates cannot retarget it.
 fn Model::open_delete_dialog(
   model : Model,
   context : FileActionContext,
@@ -95,7 +94,7 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     NewEntryInput(directory~, ..) => NewEntryInput(directory~, input~)
     GitRenameInput(context~, reference~, ..) =>
       GitRenameInput(context~, reference~, input~)
-    None
+    Nil
     | Help
     | Activity
     | Bookmarks(_)
@@ -104,7 +103,9 @@ fn Dialog::with_input(self : Dialog, input : String) -> Dialog {
     | Info(_)
     | Markdown(_)
     | TextPreview(_)
+    | SessionPreview(_)
     | GitInfo(_)
+    | RemoveWorktreeConfirm(..)
     | Progress(_)
     | DeleteConfirm(..) => self
   }
@@ -134,14 +135,13 @@ fn Model::set_archive_compression_level(
 
 ///|
 fn Model::cancel_dialog(model : Model) -> (Model, Cmd) {
-  // The native dialog has already closed and raised its close event. Going
-  // back to a parent panel keeps a dialog open, so reopen the host element.
   let dialog = match model.dialog {
     GitRenameInput(context~, ..) => GitInfo(context)
+    RemoveWorktreeConfirm(context~, ..) => GitInfo(context)
     BookmarkDeleteConfirm(side~, ..) => Bookmarks(side)
-    _ => None
+    _ => Nil
   }
-  let command = if dialog != None {
+  let command = if dialog != Nil {
     @dialog.show(DialogId)
   } else {
     @rabbita.none

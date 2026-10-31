@@ -1,8 +1,17 @@
 ///|
-/// Browser actions share the same association table as server-side programs.
+pub(all) enum PreviewKind {
+  Markdown
+  Text
+  Session
+  Font
+  Image
+} derive(Eq, ToJson, FromJson)
+
+///|
 pub(all) enum OpenAction {
   Browse
-  Preview
+  Dialog(PreviewKind)
+  Browser
   ExtractZip
   External
 } derive(Eq, ToJson, FromJson)
@@ -15,7 +24,6 @@ pub(all) struct Opener {
 
 ///|
 pub(all) struct OpenAssociation {
-  /// Menu order is independent of the default action.
   openers : Array[String]
   default_opener : String
 } derive(Eq, ToJson, FromJson)
@@ -24,14 +32,14 @@ pub(all) struct OpenAssociation {
 pub(all) struct OpenRegistry {
   openers : Map[String, Opener]
   folder : OpenAssociation
-  /// Lowercase complete filenames, including dotfiles.
   filenames : Map[String, OpenAssociation]
-  /// Lowercase extensions without a leading dot; "" means no extension.
   extensions : Map[String, OpenAssociation]
   other_file : OpenAssociation
 } derive(Eq, ToJson, FromJson)
 
 ///|
+/// Explicit filename associations take precedence over extensions.
+/// A dotfile such as `.md` uses the `md` extension association when not overridden.
 pub fn OpenRegistry::for_entry(
   self : OpenRegistry,
   name : String,
@@ -42,9 +50,7 @@ pub fn OpenRegistry::for_entry(
   if self.filenames.get(name) is Some(association) {
     return association
   }
-  let extension = @posix.Path(name)
-    .extname()
-    .to_owned()
+  let extension = file_type_suffix(name)
     .strip_prefix(".")
     .map_or("", suffix => suffix.to_owned())
   self.extensions.get(extension).unwrap_or(self.other_file)
@@ -55,6 +61,15 @@ pub(all) struct OpenRequest {
   path : Path
   opener : String
 } derive(ToJson, FromJson)
+
+///|
+pub extend PreviewKind with Eq::{equal, not_equal}
+
+///|
+pub extend PreviewKind with ToJson::{to_json}
+
+///|
+pub extend PreviewKind with FromJson::{from_json}
 
 ///|
 pub extend OpenAction with Eq::{equal, not_equal}

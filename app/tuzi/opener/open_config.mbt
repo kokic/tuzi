@@ -1,16 +1,49 @@
 ///|
 let text_association : @shared.OpenAssociation = {
-  openers: ["preview", "vscode", "explorer"],
-  default_opener: "preview",
+  openers: ["browser", "vscode", "explorer"],
+  default_opener: "browser",
 }
 
 ///|
-/// Define each application once here; associations below refer to these IDs.
-/// Programs and arguments stay on the server and are never accepted from clients.
+let text_preview_association : @shared.OpenAssociation = {
+  openers: ["text", "browser", "vscode", "explorer"],
+  default_opener: "text",
+}
+
+///|
+let markdown_association : @shared.OpenAssociation = {
+  openers: ["markdown", "browser", "vscode", "explorer"],
+  default_opener: "markdown",
+}
+
+///|
+let session_association : @shared.OpenAssociation = {
+  openers: ["session", "text", "browser", "vscode", "explorer"],
+  default_opener: "session",
+}
+
+///|
+let font_association : @shared.OpenAssociation = {
+  openers: ["font", "browser", "explorer"],
+  default_opener: "font",
+}
+
+///|
+let image_association : @shared.OpenAssociation = {
+  openers: ["image", "browser", "explorer"],
+  default_opener: "image",
+}
+
+///|
 fn configured_openers() -> Map[String, OpenDefinition] {
   {
     "browse": { label: "Enter in Tuzi", execution: Browse, },
-    "preview": { label: "Open in browser", execution: Preview, },
+    "browser": { label: "Open in browser", execution: Browser, },
+    "markdown": { label: "Preview Markdown", execution: Dialog(Markdown), },
+    "text": { label: "Preview text", execution: Dialog(Text), },
+    "session": { label: "Preview session", execution: Dialog(Session), },
+    "font": { label: "Preview font", execution: Dialog(Font), },
+    "image": { label: "Preview image", execution: Dialog(Image), },
     "extract": { label: "Extract ZIP", execution: ExtractZip, },
     "vscode": {
       label: "Open in VSCode",
@@ -53,7 +86,6 @@ fn vscode_command() -> OpenCommand {
 }
 
 ///|
-/// Complete filenames override extensions. Each association owns its whole menu.
 fn configured_open_registry(
   openers : Map[String, @shared.Opener],
 ) -> @shared.OpenRegistry {
@@ -72,20 +104,20 @@ fn configured_open_registry(
       ".gitignore": text_association,
       ".gitattributes": text_association,
       ".env": text_association,
-      ".zip": {
-        openers: ["extract", "preview", "explorer"],
-        default_opener: "extract",
-      },
     },
     extensions: {
       "c": text_association,
       "h": text_association,
       "cpp": text_association,
       "hpp": text_association,
-      "md": text_association,
+      "md": markdown_association,
+      "markdown": {
+        openers: ["markdown", "browser", "explorer"],
+        default_opener: "markdown",
+      },
       "mbt": text_association,
       "mbti": text_association,
-      "txt": text_association,
+      "txt": text_preview_association,
       "rs": text_association,
       "go": text_association,
       "py": text_association,
@@ -94,22 +126,52 @@ fn configured_open_registry(
       "ts": text_association,
       "tsx": text_association,
       "jsx": text_association,
-      "json": text_association,
+      "json": text_preview_association,
+      "jsonl": session_association,
       "html": text_association,
       "htm": text_association,
       "css": text_association,
       "xml": text_association,
-      "toml": text_association,
-      "yaml": text_association,
-      "yml": text_association,
-      "ini": text_association,
-      "conf": text_association,
+      "toml": text_preview_association,
+      "yaml": text_preview_association,
+      "yml": text_preview_association,
+      "ini": text_preview_association,
+      "conf": text_preview_association,
       "sh": text_association,
+      "ttf": font_association,
+      "otf": font_association,
+      "woff": font_association,
+      "woff2": font_association,
+      "jpg": image_association,
+      "jpeg": image_association,
+      "jpe": image_association,
+      "jfif": image_association,
+      "pjpeg": image_association,
+      "pjp": image_association,
+      "png": image_association,
+      "apng": image_association,
+      "gif": image_association,
+      "webp": image_association,
+      "avif": image_association,
+      "bmp": image_association,
+      "ico": image_association,
+      "cur": image_association,
+      "svg": image_association,
+      "svgz": image_association,
+      "tif": image_association,
+      "tiff": image_association,
+      "heic": image_association,
+      "heif": image_association,
+      "jxl": image_association,
+      "apk": {
+        openers: ["extract", "browser", "explorer"],
+        default_opener: "extract",
+      },
       "zip": {
-        openers: ["extract", "preview", "explorer"],
+        openers: ["extract", "browser", "explorer"],
         default_opener: "extract",
       },
     },
-    other_file: { openers: ["preview", "explorer"], default_opener: "preview", },
+    other_file: { openers: ["browser", "explorer"], default_opener: "browser", },
   }
 }

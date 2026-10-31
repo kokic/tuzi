@@ -1,7 +1,4 @@
 ///|
-/// Directories whose immediate entries may change, including partial failure.
-/// Callers must account separately for metadata in parent listings and for
-/// subtrees created, removed, moved, or changed by a Git checkout.
 pub fn TaskKind::affected_directories(self : TaskKind) -> Array[Path] {
   match self {
     File(Delete(target~)) => [target.dirname()]
@@ -9,19 +6,23 @@ pub fn TaskKind::affected_directories(self : TaskKind) -> Array[Path] {
     File(CreateFile(parent~, ..)) | File(Mkdir(parent~, ..)) => [parent]
     File(Zip(directory~, ..)) => [directory]
     File(Unzip(destination~, ..)) => [destination.dirname(), destination]
-    File(Copy(destination~, ..)) => [destination.dirname()]
+    File(Copy(destination~, ..)) | File(CreateLink(destination~, ..)) =>
+      [destination.dirname()]
     File(Move(source~, destination~)) =>
       [source.dirname(), destination.dirname()]
     File(EditLink(source~, destination~, ..)) =>
       [source.dirname(), destination.dirname(), source, destination]
-    Git(request) => [request.path.dirname()]
+    Git(request) => {
+      let extra = match request.operation {
+        RemoveWorktree(target) => [target.dirname()]
+        _ => []
+      }
+      [request.path.dirname(), ..extra]
+    }
   }
 }
 
 ///|
-/// A listing contains direct children and their metadata. Changing a directory
-/// also changes its entry in the parent listing (mtime and folder marker), but
-/// does not invalidate unrelated descendants of either directory.
 pub fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
   if kind
     .affected_directories()
@@ -36,7 +37,8 @@ pub fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
         source.dirname().join(Path("./\{new_name}")),
         directory,
       )
-    File(Copy(destination~, ..)) => directory_contains(destination, directory)
+    File(Copy(destination~, ..)) | File(CreateLink(destination~, ..)) =>
+      directory_contains(destination, directory)
     File(Unzip(destination~, ..)) => directory_contains(destination, directory)
     File(Move(source~, destination~))
     | File(EditLink(source~, destination~, ..)) =>
@@ -47,7 +49,9 @@ pub fn TaskKind::affects_listing(kind : TaskKind, directory : Path) -> Bool {
     Git(request) => {
       let subtree = match request.operation {
         Pull | Switch(_) => request.path.dirname()
-        Push | DeleteBranch(_) | RenameBranch(_, _) | Prune => request.path
+        RemoveWorktree(target) => target.dirname()
+        Push | DeleteBranch(_) | RenameBranch(_, _) | Prune | PruneWorktrees =>
+          request.path
       }
       directory_contains(subtree, directory)
     }

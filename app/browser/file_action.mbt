@@ -3,6 +3,7 @@ priv enum FileAction {
   DeleteOpen
   InfoOpen
   TransferSelection(TransferKind)
+  CreateLinkToOtherPane
   CopyPaths
   RenameOpen
   ZipOpen
@@ -10,7 +11,6 @@ priv enum FileAction {
 }
 
 ///|
-/// Capture explicit targets so breadcrumb actions never depend on row selection.
 priv struct FileActionContext {
   items : Array[OpenTarget]
   cursor : OpenTarget?
@@ -76,9 +76,13 @@ fn Model::execute_file_action(
 ) -> (Model, Cmd) {
   match action {
     DeleteOpen => (model.open_delete_dialog(context), @rabbita.none)
-    InfoOpen => model.open_info_dialog(context, emit)
+    InfoOpen =>
+      context.cursor.map_or((model, @rabbita.none), target => {
+        model.open_info_dialog(target, emit)
+      })
     TransferSelection(kind) =>
       model.transfer_selection_to_other_pane(kind, context, emit)
+    CreateLinkToOtherPane => model.create_links_in_other_pane(context, emit)
     CopyPaths => model.copy_selected_paths_to_clipboard(context, emit)
     RenameOpen => model.open_rename_dialog(context, emit)
     ZipOpen => (model.open_archive_dialog(context), @rabbita.none)

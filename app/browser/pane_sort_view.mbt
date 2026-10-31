@@ -46,8 +46,6 @@ fn pane_sort_select(
     ],
     render=scope => {
       fragment([
-        // Overlap every label in one grid cell to reserve the widest text.
-        // Include the trigger's padding, border, gap, and one-rem chevron.
         span(
           attrs=@html.Attrs::build().aria_hidden("true"),
           style=[
@@ -75,7 +73,7 @@ fn pane_sort_select(
         @rui.select_content(
           scope~,
           attrs=@html.Attrs::build().aria_label("Sort files"),
-          style=[UI_FONT_STYLE],
+          style=popover_style,
           modes.map(mode => {
             @rui.select_item(
               scope~,

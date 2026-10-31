@@ -2,7 +2,6 @@
 using @path {type Path}
 
 ///|
-/// Choose a default ZIP name: `a.txt -> a.zip`, `a.zip -> a.zip`, dir/multi -> `<dir>.zip`.
 pub fn default_archive_name(items : Array[Entry], directory : Path) -> String {
   let name = {
     guard items.length() == 1 else { directory.basename() }

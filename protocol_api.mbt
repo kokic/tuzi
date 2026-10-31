@@ -1,6 +1,4 @@
 ///|
-/// JSON request endpoints use this envelope for application results.
-/// File responses and WebSocket frames use their own formats.
 pub(all) enum ApiResponse[T] {
   Success(T)
   Failure(ApiFailure)

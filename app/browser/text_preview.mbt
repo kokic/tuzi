@@ -12,14 +12,6 @@ priv struct TextPreviewContext {
 } derive(Eq)
 
 ///|
-fn is_text_preview_file(name : String) -> Bool {
-  let name = name.to_lower()
-  [".txt", ".toml", ".yaml", ".yml", ".json", ".ini", ".conf"].any(extension => {
-    name.has_suffix(extension)
-  })
-}
-
-///|
 fn Model::open_text_preview(
   model : Model,
   path : Path,
@@ -54,7 +46,6 @@ fn Model::receive_text_preview(
   id : Int32,
   result : Result[String, String],
 ) -> Model {
-  // A closed or replaced preview cannot receive an earlier file's response.
   guard model.dialog is TextPreview(context) && context.id == id else {
     return model
   }

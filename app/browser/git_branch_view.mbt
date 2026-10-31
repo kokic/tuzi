@@ -7,6 +7,9 @@ fn git_branch_controls(
   emit : Emit[Msg],
 ) -> Html {
   let disabled = panel.loading || busy
+  let selected = info.branches
+    .iter()
+    .find_first(branch => branch.reference == panel.selected)
   div(style=["display: grid", "gap: 12px", "min-width: 0"], [
     div(
       style=["display: flex", "flex-wrap: wrap", "gap: 8px", "min-width: 0"],
@@ -15,11 +18,11 @@ fn git_branch_controls(
         @rui.button(
           variant=Secondary,
           disabled=disabled ||
-            !info.branches.any(branch => {
-              branch.reference == panel.selected &&
-              !git_branch_is_current(branch, info)
+            !selected.map_or(false, branch => {
+              git_branch_can_switch(branch, info)
             }),
           style=[UI_FONT_STYLE],
+          title=git_branch_title("git switch", selected, info),
           on_click=emit(
             GitEvent(GitRun(context.entry.id, Switch(panel.selected))),
           ),
@@ -28,10 +31,7 @@ fn git_branch_controls(
         @rui.button(
           variant=Secondary,
           disabled=disabled ||
-            !info.branches.any(branch => {
-              branch.reference == panel.selected &&
-              git_branch_can_rename(branch)
-            }),
+            !selected.map_or(false, branch => git_branch_can_rename(branch)),
           style=[UI_FONT_STYLE],
           title="git branch -m",
           on_click=emit(GitEvent(GitRenameOpen(context.entry.id))),
@@ -40,12 +40,11 @@ fn git_branch_controls(
         @rui.button(
           variant=Destructive,
           disabled=disabled ||
-            !info.branches.any(branch => {
-              branch.reference == panel.selected &&
+            !selected.map_or(false, branch => {
               git_branch_can_delete(branch, info)
             }),
           style=[UI_FONT_STYLE],
-          title="git branch -D",
+          title=git_branch_title("git branch -D", selected, info),
           on_click=emit(
             GitEvent(GitRun(context.entry.id, DeleteBranch(panel.selected))),
           ),

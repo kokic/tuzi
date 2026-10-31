@@ -31,8 +31,6 @@
             --tuzi-row-hover: var(--rui-muted);
         }
 
-        /* Inline flex styles override the native closed-popover display rule.
-           Keep closed menus out of layout, including anchor fallback passes. */
         #tuzi [data-slot="context-menu-content"][popover]:not(:popover-open),
         #tuzi [data-slot="dropdown-menu-content"][popover]:not(:popover-open),
         #tuzi [data-slot="select-content"][popover]:not(:popover-open) {
@@ -66,16 +64,6 @@
 
             #tuzi .entry-time-year {
                 display: none;
-            }
-        }
-
-        #tuzi .phead [aria-current="page"] {
-            font-weight: 400 !important;
-        }
-
-        @media (hover: hover) {
-            #tuzi .phead .breadcrumb-path:hover {
-                font-weight: 600 !important;
             }
         }
 

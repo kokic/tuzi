@@ -6,7 +6,7 @@ priv enum NewEntryKind {
 
 ///|
 priv enum Dialog {
-  None
+  Nil
   Help
   Activity
   Bookmarks(PaneSide)
@@ -16,6 +16,7 @@ priv enum Dialog {
   Info(InfoContext)
   Markdown(MarkdownContext)
   TextPreview(TextPreviewContext)
+  SessionPreview(SessionPreviewContext)
   GitInfo(GitContext)
   DeleteConfirm(directory~ : Path, names~ : Array[String])
   RenameInput(directory~ : Path, original~ : String, input~ : String)
@@ -28,5 +29,6 @@ priv enum Dialog {
   UnzipInput(source~ : Path, input~ : String)
   NewEntryInput(directory~ : Path, input~ : String)
   GitRenameInput(context~ : GitContext, reference~ : String, input~ : String)
+  RemoveWorktreeConfirm(context~ : GitContext, worktree~ : @tuzi.GitWorktree)
   Progress(ProgressBatch)
 } derive(Eq)

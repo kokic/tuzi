@@ -35,7 +35,6 @@ fn pane_rows(
     })
     .assoc_by(
       (name, row) => {
-        // Cursor movement only updates the row's appearance, keeping the double-click target mounted.
         let menu = row.switch_by(
           row => entry_context_menu(row, idx, emit, appearance, openers),
           by=row => {

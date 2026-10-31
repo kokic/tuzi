@@ -1,4 +1,26 @@
 ///|
+fn Model::create_links_in_other_pane(
+  model : Model,
+  context : FileActionContext,
+  emit : Emit[Msg],
+) -> (Model, Cmd) {
+  let destination = model.pane_at(model.active.other()).path
+  guard !context.items.is_empty() &&
+    context.items.all(item => item.path.dirname() != destination) else {
+    return (model, @rabbita.none)
+  }
+  let operations = context.items.map(item => {
+    FileOperation::CreateLink(
+      target=item.path,
+      destination=destination.join(Path("./\{item.entry.name}")),
+    )
+  })
+  model
+  .start_file_operations(operations, emit, selection?=context.selection)
+  .unwrap_or((model, @rabbita.none))
+}
+
+///|
 priv struct LinkFields {
   path : String
   target : String?

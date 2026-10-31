@@ -6,6 +6,14 @@ fn task_output_view(message : String, label~ : String = "Task output") -> Html {
     style=[
       "height: auto", "max-height: 160px", "overflow-y: auto", "overscroll-behavior-y: auto",
     ],
-    @html.pre(style=[CODE_FONT_STYLE], message),
+    @html.pre(
+      style=[
+        CODE_FONT_STYLE,
+        "font-size: 0.8125rem",
+        "line-height: 1.5",
+        "margin: 0",
+      ],
+      message,
+    ),
   )
 }

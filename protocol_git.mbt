@@ -5,7 +5,9 @@ pub(all) enum GitOperation {
   Switch(String)
   DeleteBranch(String)
   RenameBranch(String, String)
+  RemoveWorktree(Path)
   Prune
+  PruneWorktrees
 } derive(Eq, ToJson, FromJson)
 
 ///|
@@ -16,7 +18,9 @@ pub fn GitOperation::name(self : GitOperation) -> String {
     Switch(_) => "switch"
     DeleteBranch(_) => "delete-branch"
     RenameBranch(_, _) => "rename-branch"
+    RemoveWorktree(_) => "remove-worktree"
     Prune => "prune"
+    PruneWorktrees => "prune-worktrees"
   }
 }
 

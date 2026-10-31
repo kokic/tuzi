@@ -11,7 +11,6 @@ pub async fn rename_entry(source : Path, new_name : String) -> Unit {
 }
 
 ///|
-/// Renaming and moving links are not supported file operations.
 async fn rename_path(from : Path, to : Path) -> Unit {
   let source = from.to_native()
   guard !(@async_fs.kind(source, follow_symlink=false) is SymLink) else {

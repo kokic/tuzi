@@ -1,7 +1,8 @@
 ///|
 priv enum OpenExecution {
   Browse
-  Preview
+  Dialog(@shared.PreviewKind)
+  Browser
   ExtractZip
   External(OpenCommand)
   FileManager(OpenCommand)
@@ -51,7 +52,8 @@ pub fn OpenService::new() -> OpenService raise OpenError {
   for id, definition in definitions {
     let action : @shared.OpenAction = match definition.execution {
       Browse => Browse
-      Preview => Preview
+      Dialog(kind) => Dialog(kind)
+      Browser => Browser
       ExtractZip => ExtractZip
       External(_) | FileManager(_) => External
     }
@@ -88,7 +90,6 @@ pub async fn OpenService::open(
   request : @shared.OpenRequest,
   write_launch_log~ : async (String) -> Unit,
 ) -> Unit {
-  // Resolve on the host and inspect the current target instead of trusting UI metadata.
   let native = request.path.to_native()
   let native = {
     guard !@path.Path(native).is_absolute() else { native }
@@ -109,7 +110,8 @@ pub async fn OpenService::open(
     External(command) => (command, native)
     FileManager(command) =>
       (command, if is_dir { native } else { path.dirname().to_native() })
-    Browse | Preview | ExtractZip => raise NotApplicable(request.opener)
+    Browse | Dialog(_) | Browser | ExtractZip =>
+      raise NotApplicable(request.opener)
   }
   command.launch(
     target,

@@ -65,7 +65,6 @@ fn routes(
 }
 
 ///|
-// Async stdout permits only one pending write.
 let log_mutex : @async.Mutex = Mutex()
 
 ///|

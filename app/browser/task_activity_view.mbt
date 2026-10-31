@@ -25,7 +25,7 @@ fn activity_dialog(jobs : Val[TaskState], emit : Emit[Msg]) -> Val[Html] {
 ///|
 fn activity_item_view(task : Task, emit : Emit[Msg]) -> Html {
   @rui.item(
-    variant=ItemOutline,
+    variant=ItemDefault,
     attrs=@html.Attrs::build().role("listitem"),
     style=["flex-wrap: nowrap", "align-items: flex-start"],
     [

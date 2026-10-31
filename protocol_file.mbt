@@ -2,13 +2,11 @@
 using @path {type Path}
 
 ///|
-/// Existing entries are identified by their full paths. New names identify one
-/// child of the given parent; rename stays in the source directory, and ZIP
-/// selections and output stay in one directory.
 pub(all) enum FileOperation {
   Delete(target~ : Path)
   Rename(source~ : Path, new_name~ : String)
   EditLink(source~ : Path, destination~ : Path, target~ : Path)
+  CreateLink(target~ : Path, destination~ : Path)
   Zip(
     directory~ : Path,
     names~ : Array[String],
@@ -39,6 +37,8 @@ pub fn FileOperation::description(operation : FileOperation) -> String {
       "rename \{source} -> \{source.dirname().join(Path("./\{new_name}"))}"
     EditLink(source~, destination~, target~) =>
       "edit link \{source} -> \{destination} (target: \{target})"
+    CreateLink(target~, destination~) =>
+      "create link \{destination} -> \{target}"
     Zip(directory~, output_name~, ..) =>
       "compress \{directory.join(Path("./\{output_name}"))}"
     Unzip(source~, destination~) => "extract \{source} -> \{destination}"

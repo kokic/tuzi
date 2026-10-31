@@ -11,8 +11,6 @@ priv struct OpenCommand {
 }
 
 ///|
-/// The caller supplies a URL or an already-resolved native path. Launched
-/// applications intentionally outlive both the request and the Tuzi process.
 async fn OpenCommand::launch(
   self : OpenCommand,
   target : String,

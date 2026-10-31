@@ -15,11 +15,7 @@ priv enum TaskMsg {
 priv enum SubmissionContext {
   Background
   Files(FileSubmission)
-  GitRename(
-    dialog_revision~ : Int32,
-    context~ : GitContext,
-    input_dialog~ : Dialog
-  )
+  GitDialog(dialog_revision~ : Int32, context~ : GitContext, restore~ : Dialog)
 }
 
 ///|

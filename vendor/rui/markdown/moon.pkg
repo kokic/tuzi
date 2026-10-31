@@ -1,0 +1,9 @@
+import {
+  "kokic/tuzi/vendor/rui/internal/checkbox_view",
+  "moonbit-community/rabbita/html",
+  "moonbit-community/rabbita/clipboard",
+  "moonbit-community/rabbita/svg",
+  "moonbit-community/cmark/cmark",
+}
+
+supported_targets = "js"

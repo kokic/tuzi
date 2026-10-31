@@ -8,7 +8,6 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
     aria_label="Command",
     style=[UI_FONT_STYLE, "width: min(40rem, calc(100vw - 2rem))"],
     attrs=@html.Attrs::build().on_keydown(event => {
-      // Keep palette input and navigation out of the file-manager shortcuts.
       event.stop_propagation()
       @rabbita.none
     }),
@@ -31,7 +30,6 @@ fn global_command_view(emit : Emit[Msg]) -> Val[Html] {
               command_action_item(
                 scope~,
                 "Bookmarks: View All",
-                // Let the command palette close before opening the next dialog.
                 @rabbita.delay(emit(BookmarkEvent(Open)), 0),
               ),
             ]),

@@ -10,8 +10,6 @@ fn Pane::cursor_entry(pane : Pane) -> Entry? {
 }
 
 ///|
-/// Entries to operate on: the current selection, or the cursor entry when
-/// nothing is selected.
 fn Pane::selected_items(pane : Pane) -> Array[Entry] {
   guard !pane.selected.is_empty() else {
     return pane.cursor_entry().map_or([], entry => [entry])

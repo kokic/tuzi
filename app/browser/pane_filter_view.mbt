@@ -31,8 +31,7 @@ fn pane_filter_view(
       "margin-right: auto",
       "height: 24px",
       "min-height: 0",
-      "--rui-control-base-bg: var(--rui-card)",
-      "--rui-control-base-border: color-mix(in oklab, var(--rui-muted-foreground) 50%, var(--rui-background))",
+      "--rui-control-base-bg: var(--rui-background)",
     ],
     [
       @rui.input_group_input(

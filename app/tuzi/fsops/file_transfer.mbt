@@ -5,8 +5,6 @@ pub async fn copy_entry(from : Path, to : Path) -> Unit {
 }
 
 ///|
-/// Only regular files and directories are copied; links are never dereferenced.
-/// Exclusive creation means cleanup only removes output owned by this operation.
 async fn copy_tree(from : Path, to : Path) -> Unit {
   let kind = @async_fs.kind(from.to_native(), follow_symlink=false)
   match kind {

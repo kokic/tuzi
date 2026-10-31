@@ -1,5 +1,3 @@
-// Application-level wrappers for rui components.
-
 ///|
 fn kbd(key : String) -> Html {
   @rui.kbd(style=[CODE_FONT_STYLE], key)
@@ -24,7 +22,7 @@ fn[C : @html.IsChildren] badge(
   @rui.badge(
     variant~,
     attrs?,
-    style=[UI_FONT_STYLE, "border-radius: 4px"],
+    style=[UI_FONT_STYLE, "border-radius: var(--rui-radius)"],
     children,
   )
 }

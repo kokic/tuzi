@@ -1,5 +1,4 @@
 ///|
-/// Names identify one child, never a path supplied by a caller.
 pub fn validate_entry_name(name : String) -> Unit raise FileError {
   guard !name.is_empty() &&
     name != "." &&
@@ -15,7 +14,6 @@ pub fn validate_entry_name(name : String) -> Unit raise FileError {
 }
 
 ///|
-/// Resolve parent aliases before comparing paths, without following the source entry.
 async fn validate_transfer(from : Path, to : Path) -> Unit {
   let source = path_from_native(@async_fs.realpath(from.dirname().to_native())).join(
     Path("./\{from.basename()}"),

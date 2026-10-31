@@ -2,7 +2,6 @@
 #ifdef _WIN32
 #include <windows.h>
 
-// Drive letters occupy the low 26 bits; negative values carry Win32 errors.
 MOONBIT_FFI_EXPORT int32_t tuzi_logical_drives(void) {
   DWORD drives = GetLogicalDrives();
   return drives ? (int32_t)drives : -(int32_t)GetLastError();
@@ -19,7 +18,6 @@ static int browsable_mount(const struct statfs *mount) {
          strcmp(mount->f_fstypename, "autofs") != 0;
 }
 
-// Copy the borrowed getmntinfo snapshot into a MoonBit FixedArray[Bytes].
 MOONBIT_FFI_EXPORT void **tuzi_mount_points(int32_t *error) {
   struct statfs *mounts;
   *error = 0;
@@ -45,7 +43,6 @@ MOONBIT_FFI_EXPORT void **tuzi_mount_points(int32_t *error) {
 #elif defined(__linux__)
 #include <stdlib.h>
 
-// The shared Unix FFI must link on Linux; only the MacOS branch calls it.
 MOONBIT_FFI_EXPORT void **tuzi_mount_points(int32_t *error) {
   (void)error;
   abort();

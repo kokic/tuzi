@@ -27,8 +27,6 @@ fn task_socket_cmd(generation : Int32, emit : Emit[Msg]) -> Cmd {
 }
 
 ///|
-/// One ordered stream owns task snapshots. Generation checks reject callbacks
-/// from replaced sockets; HTTP responses never replace this stream's state.
 fn Model::handle_task_socket(
   model : Model,
   generation : Int32,
@@ -72,8 +70,6 @@ fn Model::handle_task_socket(
 }
 
 ///|
-/// Error and close may both fire for one failure. Only the first schedules a
-/// retry, and a failed connection backs off up to thirty seconds.
 fn Model::retry_task_socket(
   model : Model,
   generation : Int32,
@@ -132,8 +128,6 @@ fn Model::reconnect_tasks(
 }
 
 ///|
-/// The server sends a snapshot at least every fifteen seconds. Keep one
-/// watchdog per connection rather than scheduling a timer for every message.
 fn Model::check_task_connection(
   model : Model,
   generation : Int32,

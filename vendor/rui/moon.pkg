@@ -1,0 +1,12 @@
+import {
+  "moonbit-community/rabbita",
+  "moonbit-community/rabbita/html",
+  "moonbit-community/rabbita/cmd",
+  "moonbit-community/rabbita/dialog",
+  "moonbit-community/rabbita/dom",
+  "moonbit-community/rabbita/js",
+  "moonbit-community/rabbita/svg",
+  "moonbitlang/core/string",
+}
+
+supported_targets = "js"

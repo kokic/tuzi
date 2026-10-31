@@ -1,14 +1,10 @@
 ///|
-/// File and directory matching rules for filename colors.
 priv struct EntryColorRegistry {
-  /// Lowercase directory names, such as .git or _build.
   exact_folder : Map[String, String]
-  /// Marker file names, such as .git or package.json.
   marker_colors : Map[String, String]
   dot_folder : String
   folder : String
   filenames : Map[String, String]
-  /// Lowercase extensions without a leading dot; "" means no extension.
   extensions : Map[String, String]
   unknown_file : String
 }
@@ -35,7 +31,6 @@ fn EntryColorRegistry::for_entry(
   }
   let raw_extension = @posix.Path(name).extname().to_owned()
 
-  // Names without an extension, including dotfiles such as .txt, try a filename-based key.
   if raw_extension == "" {
     let key = name.strip_prefix(".").map_or(name, suffix => suffix.to_owned())
     if self.extensions.get(key) is Some(content) {

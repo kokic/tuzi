@@ -45,7 +45,6 @@ let extension_colors : Map[String, String] = Map::from_iter(
 )
 
 ///|
-/// Each registered filename, extension, or folder owns its representative color.
 let builtin_entry_colors : EntryColorRegistry = {
   folder: "#dcb67a",
   marker_colors: folder_colors,

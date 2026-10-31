@@ -7,7 +7,7 @@ fn progress_dialog(batch : ProgressBatch, emit : Emit[Msg]) -> Html {
   let rows = batch.items.map(item => {
     let description = item.operation.description()
     @rui.item(
-      variant=ItemOutline,
+      variant=ItemDefault,
       attrs=@html.Attrs::build().role("listitem"),
       [
         @rui.item_content(@rui.item_title(description)),

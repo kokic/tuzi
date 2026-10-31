@@ -29,7 +29,7 @@ fn Model::update_tasks(
             model.finish_file_submission(submission, result).refresh_progress(),
             @rabbita.none,
           )
-        GitRename(dialog_revision~, context~, input_dialog~) => {
+        GitDialog(dialog_revision~, context~, restore~) => {
           guard model.dialog_revision == dialog_revision else {
             return (model, @rabbita.none)
           }
@@ -37,7 +37,7 @@ fn Model::update_tasks(
             return (
               {
                 ..model,
-                dialog: input_dialog,
+                dialog: restore,
                 dialog_error: model.jobs.submit_error,
               },
               @rabbita.none,
@@ -106,12 +106,10 @@ fn Model::receive_tasks(
   let model = {
     ..model,
     jobs,
-    // Keep a batch already acknowledged by the new server, but discard
-    // monitors whose ids belong to the previous session.
     dialog: if restarted {
       match model.dialog {
-        TaskDetails(_) => None
-        Progress(batch) if batch.session != jobs.session => None
+        TaskDetails(_) => Nil
+        Progress(batch) if batch.session != jobs.session => Nil
         other => other
       }
     } else {
@@ -119,7 +117,6 @@ fn Model::receive_tasks(
     },
   }
   let model = model.refresh_progress()
-  // Retained ancestors are marked too, but only visible views are reloaded.
   let affected = path => {
     restarted || changed.any(task => task.kind.affects_listing(path))
   }

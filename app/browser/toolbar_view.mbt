@@ -28,7 +28,15 @@ fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
         ],
       ),
       ..if sel > 0 {
-        [badge(variant=Secondary, "\{sel} selected")]
+        [
+          span(
+            style=[
+              "font-size: var(--tuzi-footer-size)", "font-variant-numeric: tabular-nums",
+              "white-space: nowrap",
+            ],
+            "\{sel} selected",
+          ),
+        ]
       },
       @rui.button(
         style=[UI_FONT_STYLE],

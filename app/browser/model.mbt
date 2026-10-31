@@ -18,9 +18,7 @@ priv struct Model {
   filters : (String, String)
   editing : Bool
   dialog : Dialog
-  // Late submission replies only update the dialog that initiated them.
   dialog_revision : Int32
-  // Validation message shown inside the open dialog; cleared on input/cancel.
   dialog_error : String
   jobs : TaskState
   next_info_id : Int32
@@ -46,7 +44,9 @@ priv enum Msg {
   BreadcrumbAction(OpenTarget, FileAction)
   MarkdownEvent(MarkdownMsg)
   TextPreviewLoaded(Int32, Result[String, String])
+  SessionPreviewLoaded(Int32, Result[@session.Document, String])
   FontPreviewLoaded(Int32, Result[Unit, String])
+  FontPreviewInput(String)
   GitEvent(GitMsg)
   TaskEvent(TaskMsg)
   LinkTargetLoaded(Int32, Result[Path, RequestFailure])
@@ -78,7 +78,7 @@ fn Model::initialize() -> Model {
     },
     filters: ("", ""),
     editing: false,
-    dialog: None,
+    dialog: Nil,
     dialog_revision: 0,
     dialog_error: "",
     jobs: TaskState::initialize(),
