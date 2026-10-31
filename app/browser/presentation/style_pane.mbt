@@ -53,7 +53,7 @@ pub fn pane_header_style(active : Bool) -> Array[String] {
 ///|
 pub fn pane_list_style() -> Array[String] {
   [
-    CODE_FONT_STYLE,
+    CONTENT_FONT_STYLE,
     "flex: 1",
     "container-type: inline-size",
     "display: grid",

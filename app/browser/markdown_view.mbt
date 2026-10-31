@@ -113,7 +113,7 @@ fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
         Code =>
           @html.pre(
             style=[
-              @presentation.CODE_FONT_STYLE,
+              @presentation.CONTENT_FONT_STYLE,
               "margin: 0",
               "white-space: pre-wrap",
               "overflow-wrap: anywhere",

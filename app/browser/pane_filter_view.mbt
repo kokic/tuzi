@@ -22,7 +22,7 @@ fn pane_filter_view(
   }
   @rui.input_group(
     style=[
-      @presentation.CODE_FONT_STYLE,
+      @presentation.CONTENT_FONT_STYLE,
       "width: 240px",
       "max-width: 50%",
       "min-width: 0",
@@ -36,7 +36,7 @@ fn pane_filter_view(
     [
       @rui.input_group_input(
         style=[
-          @presentation.CODE_FONT_STYLE,
+          @presentation.CONTENT_FONT_STYLE,
           "line-height: inherit",
           "padding: 0 6px",
         ],
@@ -62,7 +62,7 @@ fn pane_filter_view(
             style=["padding: 0 2px"],
             @rui.input_group_button(
               style=[
-                @presentation.CODE_FONT_STYLE,
+                @presentation.CONTENT_FONT_STYLE,
                 "height: 20px",
                 "line-height: inherit",
               ],

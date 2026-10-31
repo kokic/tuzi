@@ -3,8 +3,12 @@
 pub const UI_FONT_STYLE : String = "font-family: var(--tuzi-font-ui)"
 
 ///|
-/// File metadata, code, logs and keyboard shortcuts use the code family.
-pub const CODE_FONT_STYLE : String = "font-family: var(--tuzi-font-code)"
+/// File names, filter input, text/code, task output and shortcuts use the content family.
+pub const CONTENT_FONT_STYLE : String = "font-family: var(--tuzi-font-content)"
+
+///|
+/// Entry numbers, sizes, timestamps and the file status bar use the metadata family.
+const METADATA_FONT_STYLE : String = "font-family: var(--tuzi-font-metadata)"
 
 ///|
 /// Each theme supplies final font families and sizes, without component fallbacks.
@@ -14,14 +18,16 @@ pub fn theme_font_style(theme : @tuzi.Theme) -> Array[String] {
   match theme {
     Light =>
       [
-        "--tuzi-font-ui: Alegreya", "--tuzi-font-code: Alegreya, 'LXGW Neo ZhiSong Plus'",
+        "--tuzi-font-ui: Alegreya", "--tuzi-font-content: Alegreya, 'LXGW Neo ZhiSong Plus'",
+        "--tuzi-font-metadata: Alegreya, 'LXGW Neo ZhiSong Plus'",
         "--tuzi-ui-size: 0.875rem", "--tuzi-content-size: 1rem", "--tuzi-secondary-size: 0.8rem",
         "--tuzi-caption-size: 0.75rem", "--tuzi-code-size: 0.8125rem", "--tuzi-font-preview-size: 28px",
       ]
     Dark =>
       [
         "--tuzi-font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        "--tuzi-font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+        "--tuzi-font-content: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+        "--tuzi-font-metadata: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
         "--tuzi-ui-size: 0.875rem", "--tuzi-content-size: 1rem", "--tuzi-secondary-size: 0.8rem",
         "--tuzi-caption-size: 0.75rem", "--tuzi-code-size: 0.8125rem", "--tuzi-font-preview-size: 28px",
       ]
@@ -53,7 +59,7 @@ const FontCss : String =
   #|#tuzi .rui-markdown h4 { font-size: 1em; }
   #|#tuzi .rui-markdown h5 { font-size: 0.875em; }
   #|#tuzi .rui-markdown h6 { font-size: 0.8125em; }
-  #|#tuzi .rui-markdown code { font-family: var(--tuzi-font-code); font-size: 0.85em; }
+  #|#tuzi .rui-markdown code { font-family: var(--tuzi-font-content); font-size: 0.85em; }
   #|#tuzi .rui-markdown pre { font-size: 0.875em; }
   #|#tuzi .rui-markdown pre code { font-size: inherit; }
   #|#tuzi .rui-markdown table { font-size: 1em; }

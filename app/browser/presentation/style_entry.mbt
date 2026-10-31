@@ -37,7 +37,7 @@ pub fn entry_title_style(entry : Entry, color : String) -> Array[String] {
       "light-dark(oklch(from \{color} min(l, 0.5) c h / 1), oklch(from \{color} max(l, 0.75) c h / 1))"
   }
   [
-    CODE_FONT_STYLE,
+    CONTENT_FONT_STYLE,
     "min-width: 0",
     "grid-column: 1",
     "display: flex",
@@ -54,7 +54,7 @@ pub fn entry_title_style(entry : Entry, color : String) -> Array[String] {
 /// Shared typography and color for entry numbers, sizes and timestamps.
 pub fn entry_meta_style() -> Array[String] {
   [
-    CODE_FONT_STYLE,
+    METADATA_FONT_STYLE,
     "min-width: 0",
     "overflow: hidden",
     "white-space: nowrap",
@@ -68,7 +68,7 @@ pub fn entry_meta_style() -> Array[String] {
 ///|
 pub fn entry_details_style() -> Array[String] {
   [
-    CODE_FONT_STYLE,
+    METADATA_FONT_STYLE,
     "flex: none",
     "display: flex",
     "align-items: center",

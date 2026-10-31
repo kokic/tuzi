@@ -1,6 +1,6 @@
 ///|
 fn kbd(key : String) -> Html {
-  @rui.kbd(style=[@presentation.CODE_FONT_STYLE], key)
+  @rui.kbd(style=[@presentation.CONTENT_FONT_STYLE], key)
 }
 
 ///|

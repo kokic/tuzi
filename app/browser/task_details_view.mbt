@@ -57,7 +57,7 @@ fn task_details_dialog(
             ],
             @html.pre(
               style=[
-                @presentation.CODE_FONT_STYLE,
+                @presentation.CONTENT_FONT_STYLE,
                 "margin: 0",
                 "white-space: pre",
                 "overflow-wrap: normal",
