@@ -2,7 +2,7 @@
 const BreadcrumbRootStyle : String = "display:block"
 
 ///|
-const BreadcrumbListStyle : String = "display:flex;flex-wrap:wrap;align-items:center;gap:0.375rem;margin:0;padding:0;list-style:none;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.875rem;line-height:1.25rem;overflow-wrap:anywhere"
+const BreadcrumbListStyle : String = "display:flex;flex-wrap:wrap;align-items:center;gap:0.375rem;margin:0;padding:0;list-style:none;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-ui-size);line-height:1.25rem;overflow-wrap:anywhere"
 
 ///|
 const BreadcrumbItemStyle : String = "display:inline-flex;align-items:center;gap:0.25rem;min-width:0"

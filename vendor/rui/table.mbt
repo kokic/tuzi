@@ -2,7 +2,7 @@
 const TableContainerStyle : String = "position:relative;width:100%;max-width:100%;overflow-x:auto"
 
 ///|
-const TableBaseStyle : String = "width:100%;border-collapse:collapse;caption-side:bottom;color:var(--rui-foreground,oklch(0.145 0 0));font-size:0.875rem;line-height:1.25rem"
+const TableBaseStyle : String = "width:100%;border-collapse:collapse;caption-side:bottom;color:var(--rui-foreground,oklch(0.145 0 0));font-size:var(--tuzi-ui-size);line-height:1.25rem"
 
 ///|
 const TableHeaderStyle : String = "display:table-header-group"
@@ -29,7 +29,7 @@ const TableHeadStyle : String = "height:2.5rem;padding-inline:0.5rem;color:var(-
 const TableCellStyle : String = "padding:0.5rem;vertical-align:middle;white-space:nowrap"
 
 ///|
-const TableCaptionStyle : String = "margin-top:1rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.875rem;line-height:1.25rem"
+const TableCaptionStyle : String = "margin-top:1rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-secondary-size);line-height:1.25rem"
 
 ///|
 fn table_part_attrs(attrs : @html.Attrs?, slot : String) -> @html.Attrs {

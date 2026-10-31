@@ -34,7 +34,7 @@ fn git_output_view(panel : GitPanel, task : Task?) -> Html {
     div(
       style=[
         "display: flex", "align-items: center", "gap: 8px", "min-width: 0", "min-height: 24px",
-        "font-size: 0.8125rem",
+        "font-size: var(--tuzi-code-size)",
       ],
       attrs=@html.Attrs::build().role("status").aria_live("polite"),
       [

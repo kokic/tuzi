@@ -37,7 +37,6 @@ fn pane_filter_view(
       @rui.input_group_input(
         style=[
           @presentation.CODE_FONT_STYLE,
-          "font-size: inherit",
           "line-height: inherit",
           "padding: 0 6px",
         ],
@@ -60,12 +59,11 @@ fn pane_filter_view(
         [
           @rui.input_group_addon(
             align=InputInlineEnd,
-            style=["padding: 0 2px", "font-size: inherit"],
+            style=["padding: 0 2px"],
             @rui.input_group_button(
               style=[
                 @presentation.CODE_FONT_STYLE,
                 "height: 20px",
-                "font-size: inherit",
                 "line-height: inherit",
               ],
               title="Clear filter",

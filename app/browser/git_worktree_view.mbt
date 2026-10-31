@@ -25,7 +25,7 @@ fn git_worktree_controls(
             style=[
               ..status_text_style(),
               "flex: 1",
-              "font-size: 0.8125rem",
+              "font-size: var(--tuzi-secondary-size)",
               "color: var(--rui-muted-foreground)",
             ],
             "\{info.worktrees.length()} registered",

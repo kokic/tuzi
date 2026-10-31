@@ -42,10 +42,10 @@ fn progress_indeterminate_stylesheet() -> @html.Html {
 }
 
 ///|
-const ProgressLabelStyle : String = "font-size:0.875rem;line-height:1.25rem;font-weight:500"
+const ProgressLabelStyle : String = "font-size:var(--tuzi-ui-size);line-height:1.25rem;font-weight:500"
 
 ///|
-const ProgressValueStyle : String = "margin-inline-start:auto;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.875rem;line-height:1.25rem;font-variant-numeric:tabular-nums"
+const ProgressValueStyle : String = "margin-inline-start:auto;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-secondary-size);line-height:1.25rem;font-variant-numeric:tabular-nums"
 
 ///|
 fn progress_effective_max(min : Int32, max : Int32) -> Int32 {

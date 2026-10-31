@@ -40,11 +40,9 @@ pub fn entry_size_view(entry : Entry) -> Html {
       "text-align: right",
     ]
   guard !entry.is_dir() else { span(style~, "") }
-  guard entry.size is Ok(size) else {
-    span(style~, title=entry.size.unwrap_err().message, "Unavailable")
-  }
+  guard entry.size is Ok(size) else { span(style~, "Unavailable") }
   let formatted = size.map_or(unknown_size, size => format_file_size(size))
-  span(style~, title=formatted.to_string(), [
+  span(style~, [
     span(formatted.value),
     span(style=["text-align: left"], formatted.unit),
   ])
@@ -53,11 +51,9 @@ pub fn entry_size_view(entry : Entry) -> Html {
 ///|
 pub fn entry_time_view(entry : Entry) -> Html {
   let style = entry_meta_style() + ["grid-column: 4", "text-align: right"]
-  guard entry.mtime is Ok(time) else {
-    span(style~, title=entry.mtime.unwrap_err().message, "Unavailable")
-  }
+  guard entry.mtime is Ok(time) else { span(style~, "Unavailable") }
   let formatted = format_timestamp(time)
-  span(style~, title=formatted.to_string(), [
+  span(style~, [
     span(class="entry-time-year", formatted.year + "-"),
     span(formatted.month_day),
     span(class="entry-time-clock", " " + formatted.clock),

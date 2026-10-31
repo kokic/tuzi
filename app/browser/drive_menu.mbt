@@ -117,7 +117,6 @@ fn drive_menu_view(
                 @presentation.UI_FONT_STYLE,
                 "min-width: 0",
                 "flex-shrink: 1",
-                "font-size: inherit",
                 "line-height: inherit",
                 "--rui-button-base-fg: var(--rui-muted-foreground)",
               ],

@@ -44,7 +44,7 @@ fn field_orientation_style(orientation : FieldOrientation) -> String {
 }
 
 ///|
-const FieldLabelStyle : String = "display:flex;width:var(--rui-field-label-width,fit-content);flex-direction:var(--rui-field-label-direction,row);align-items:var(--rui-field-label-align,center);gap:0.5rem;--rui-field-label-base-bg:transparent;--rui-field-label-base-border:transparent;--rui-field-label-base-shadow:none;border-width:var(--rui-field-label-border-width,0px);border-style:solid;border-color:var(--rui-field-label-border,var(--rui-field-label-base-border,transparent));border-radius:var(--rui-field-label-radius,0px);background:var(--rui-field-label-bg,var(--rui-field-label-base-bg,transparent));padding:var(--rui-field-label-padding,0px);color:var(--rui-field-label-fg,inherit);box-shadow:var(--rui-field-label-shadow,var(--rui-field-label-base-shadow,none));font-size:0.875rem;line-height:1.375;font-weight:500"
+const FieldLabelStyle : String = "display:flex;width:var(--rui-field-label-width,fit-content);flex-direction:var(--rui-field-label-direction,row);align-items:var(--rui-field-label-align,center);gap:0.5rem;--rui-field-label-base-bg:transparent;--rui-field-label-base-border:transparent;--rui-field-label-base-shadow:none;border-width:var(--rui-field-label-border-width,0px);border-style:solid;border-color:var(--rui-field-label-border,var(--rui-field-label-base-border,transparent));border-radius:var(--rui-field-label-radius,0px);background:var(--rui-field-label-bg,var(--rui-field-label-base-bg,transparent));padding:var(--rui-field-label-padding,0px);color:var(--rui-field-label-fg,inherit);box-shadow:var(--rui-field-label-shadow,var(--rui-field-label-base-shadow,none));font-size:var(--tuzi-ui-size);line-height:1.375;font-weight:500"
 
 ///|
 pub fn[C : @html.IsChildren] field_set(
@@ -101,9 +101,9 @@ pub fn[C : @html.IsChildren] field_legend(
       [
         "margin:0 0 0.375rem;padding:0;font-weight:500",
         if variant is FieldLegend {
-          "font-size:1rem;line-height:1.5rem"
+          "font-size:var(--tuzi-content-size);line-height:1.5rem"
         } else {
-          "font-size:0.875rem;line-height:1.25rem"
+          "font-size:var(--tuzi-ui-size);line-height:1.25rem"
         },
       ],
       style,
@@ -243,7 +243,7 @@ pub fn[C : @html.IsChildren] field_title(
     attrs=ui_attrs(attrs).data_set("slot", "field-label"),
     style=ui_styles(
       [
-        "display:flex;width:fit-content;align-items:center;gap:0.5rem;font-size:0.875rem;line-height:1.375;font-weight:500",
+        "display:flex;width:fit-content;align-items:center;gap:0.5rem;font-size:var(--tuzi-ui-size);line-height:1.375;font-weight:500",
       ],
       style,
     ),
@@ -267,7 +267,7 @@ pub fn[C : @html.IsChildren] field_description(
     attrs=ui_attrs(attrs).data_set("slot", "field-description"),
     style=ui_styles(
       [
-        "margin:0;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.875rem;line-height:1.5;font-weight:400",
+        "margin:0;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-secondary-size);line-height:1.5;font-weight:400",
       ],
       style,
     ),
@@ -291,7 +291,7 @@ pub fn[C : @html.IsChildren] field_error(
     attrs=ui_attrs(attrs).role("alert").data_set("slot", "field-error"),
     style=ui_styles(
       [
-        "color:var(--rui-destructive,oklch(0.577 0.245 27.325));font-size:0.875rem;line-height:1.25rem;font-weight:400",
+        "color:var(--rui-destructive,oklch(0.577 0.245 27.325));font-size:var(--tuzi-secondary-size);line-height:1.25rem;font-weight:400",
       ],
       style,
     ),
@@ -315,7 +315,7 @@ pub fn[C : @html.IsChildren] field_separator(
     attrs=ui_attrs(attrs).data_set("slot", "field-separator"),
     style=ui_styles(
       [
-        "position:relative;display:flex;height:1.25rem;align-items:center;justify-content:center;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.875rem",
+        "position:relative;display:flex;height:1.25rem;align-items:center;justify-content:center;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-secondary-size)",
       ],
       style,
     ),

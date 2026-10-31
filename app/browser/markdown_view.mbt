@@ -117,7 +117,7 @@ fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
               "margin: 0",
               "white-space: pre-wrap",
               "overflow-wrap: anywhere",
-              "font-size: 0.8125rem",
+              "font-size: var(--tuzi-code-size)",
               "line-height: 1.6",
             ],
             [@html.code(source)],

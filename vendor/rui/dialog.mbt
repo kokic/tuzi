@@ -71,10 +71,10 @@ pub fn[C : @html.IsChildren] dialog(
 const DialogCloseIconButtonStyle : String = "background:var(--rui-close-bg,var(--rui-button-bg,var(--rui-button-base-bg,transparent)));color:var(--rui-close-fg,var(--rui-button-fg,var(--rui-button-base-fg,currentColor)));box-shadow:var(--rui-close-shadow,var(--rui-button-shadow,var(--rui-button-base-shadow,none)));opacity:var(--rui-close-opacity,var(--rui-close-base-opacity,0.7))"
 
 ///|
-const DialogDescriptionStyle : String = "margin:0;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.875rem;line-height:1.5;text-wrap:pretty"
+const DialogDescriptionStyle : String = "margin:0;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-secondary-size);line-height:1.5;text-wrap:pretty"
 
 ///|
-const DialogTitleStyle : String = "margin:0;color:var(--rui-foreground,oklch(0.145 0 0));font-size:1rem;line-height:1.5rem;font-weight:500;letter-spacing:-0.01em;text-wrap:balance"
+const DialogTitleStyle : String = "margin:0;color:var(--rui-foreground,oklch(0.145 0 0));font-size:var(--tuzi-content-size);line-height:1.5rem;font-weight:500;letter-spacing:-0.01em;text-wrap:balance"
 
 ///|
 const DialogFooterStyle : String = "display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:0.5rem;margin-inline:-1rem;margin-block-end:-1rem;padding:1rem;border-top:1px solid var(--rui-border,oklch(0.922 0 0));border-radius:0 0 calc(var(--rui-radius,0.625rem) + 0.25rem) calc(var(--rui-radius,0.625rem) + 0.25rem);background:color-mix(in oklab,var(--rui-muted,oklch(0.97 0 0)) 50%,transparent)"

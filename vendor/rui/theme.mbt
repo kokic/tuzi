@@ -104,7 +104,6 @@ const UiInteractionCss : String =
   #|    padding:0;
   #|    color:var(--rui-foreground,oklch(0.145 0 0));
   #|    font:inherit;
-  #|    font-size:0.875rem;
   #|    font-weight:500;
   #|  }
   #|  [data-slot="field-set"]:has(> :where([data-slot="checkbox-group"],[data-slot="radio-group"])) {
@@ -491,7 +490,6 @@ const UiInteractionCss : String =
   #|  @media (min-width:768px) {
   #|    [data-slot="empty"] { --rui-empty-padding:1.5rem; }
   #|    :where([data-slot="input"],[data-slot="data-table-search"],[data-slot="input-group-control"],[data-slot="textarea"]) {
-  #|      --rui-control-font-size:0.875rem;
   #|      --rui-control-line-height:1.25rem;
   #|    }
   #|  }

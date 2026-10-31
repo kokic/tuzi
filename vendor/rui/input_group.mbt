@@ -109,7 +109,7 @@ pub fn[C : @html.IsChildren] input_group_addon(
   let addon_style = ui_styles(
     [
       UiBoxSizing,
-      "display:flex;height:auto;align-items:center;justify-content:center;gap:0.5rem;padding-block:0.375rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.875rem;font-weight:500;user-select:none;cursor:text",
+      "display:flex;height:auto;align-items:center;justify-content:center;gap:0.5rem;padding-block:0.375rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-ui-size);font-weight:500;user-select:none;cursor:text",
       input_group_align_style(align),
     ],
     style,
@@ -152,7 +152,7 @@ pub fn[C : @html.IsChildren] input_group_text(
     attrs=ui_attrs(attrs).data_set("slot", "input-group-text"),
     style=ui_styles(
       [
-        "display:flex;align-items:center;gap:0.5rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.875rem",
+        "display:flex;align-items:center;gap:0.5rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-ui-size)",
       ],
       style,
     ),
@@ -178,7 +178,7 @@ pub fn input_group_control(
     control_attrs,
     ui_styles(
       [
-        "display:flex;width:100%;min-width:0;min-height:2rem;flex:1;border:0;border-radius:0;background:transparent;padding:0.625rem;color:inherit;font:inherit;font-size:var(--rui-control-font-size,1rem);line-height:var(--rui-control-line-height,1.5rem);box-shadow:none;outline:none",
+        "display:flex;width:100%;min-width:0;min-height:2rem;flex:1;border:0;border-radius:0;background:transparent;padding:0.625rem;color:inherit;font:inherit;line-height:var(--rui-control-line-height,1.5rem);box-shadow:none;outline:none",
       ],
       style,
     ),
@@ -199,7 +199,7 @@ fn input_group_button_size(size : InputGroupButtonSize) -> (ButtonSize, String) 
 fn input_group_button_size_style(size : InputGroupButtonSize) -> String {
   match size {
     InputButtonXs =>
-      "--rui-control-radius:calc(var(--rui-radius,0.625rem) - 0.1875rem);--rui-button-padding-inline:0.375rem;--rui-button-icon-size:0.875rem;font-size:0.875rem;line-height:1.25rem"
+      "--rui-control-radius:calc(var(--rui-radius,0.625rem) - 0.1875rem);--rui-button-padding-inline:0.375rem;--rui-button-icon-size:0.875rem;line-height:1.25rem"
     InputButtonIconXs =>
       "--rui-control-radius:calc(var(--rui-radius,0.625rem) - 0.1875rem);--rui-button-icon-size:1rem"
     InputButtonSm | InputButtonIconSm => ""

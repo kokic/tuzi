@@ -60,7 +60,9 @@ fn session_entry_view(entry : @session.Entry) -> Html {
             ],
             [
               span(
-                style=["font-size: 0.8125rem", "font-weight: 600"],
+                style=[
+                  "font-size: var(--tuzi-secondary-size)", "font-weight: 600",
+                ],
                 if is_user {
                   "User"
                 } else {
@@ -75,7 +77,7 @@ fn session_entry_view(entry : @session.Entry) -> Html {
                   @html.time(
                     datetime=timestamp,
                     style=[
-                      "font-size: 0.75rem", "color: var(--rui-muted-foreground)",
+                      "font-size: var(--tuzi-caption-size)", "color: var(--rui-muted-foreground)",
                     ],
                     timestamp,
                   ),

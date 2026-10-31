@@ -149,7 +149,9 @@ fn session_header_view(
     [
       badge(variant=Secondary, agent),
       span(
-        style=["font-size: 0.8125rem", "color: var(--rui-muted-foreground)"],
+        style=[
+          "font-size: var(--tuzi-secondary-size)", "color: var(--rui-muted-foreground)",
+        ],
         "\{message_count} messages",
       ),
     ],

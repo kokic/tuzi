@@ -6,7 +6,6 @@ fn pane_path_menu_view(
   idx : PaneSide,
   emit : Emit[Msg],
   label~ : String,
-  icon~ : Html,
   empty_label? : String,
 ) -> Val[Html] {
   let current = current.to_string()
@@ -16,15 +15,11 @@ fn pane_path_menu_view(
         scope,
         variant=Ghost,
         size=Xs,
+        class="tuzi-text-action",
         aria_label=label,
         title=label,
-        style=[
-          @presentation.UI_FONT_STYLE,
-          "flex: none",
-          "width: 24px",
-          "padding: 0",
-        ],
-        icon,
+        style=[@presentation.UI_FONT_STYLE, "flex: none"],
+        label,
       ),
       @rui.dropdown_menu_content(
         scope,

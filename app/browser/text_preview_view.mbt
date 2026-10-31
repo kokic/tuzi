@@ -50,7 +50,7 @@ fn TextPreviewContext::content_view(context : TextPreviewContext) -> Html {
           "margin: 0",
           "white-space: pre",
           "overflow-wrap: normal",
-          "font-size: 0.8125rem",
+          "font-size: var(--tuzi-code-size)",
           "line-height: 1.6",
         ],
         source,

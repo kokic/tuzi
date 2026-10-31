@@ -75,7 +75,7 @@ fn dialog_close_button(label : String, autofocus~ : Bool = false) -> Html {
 fn dialog_keyboard_hint_view(action : String) -> Html {
   p(
     style=[
-      "margin: 0", "width: 100%", "color: var(--rui-muted-foreground)", "font-size: 0.875rem",
+      "margin: 0", "width: 100%", "color: var(--rui-muted-foreground)", "font-size: var(--tuzi-secondary-size)",
       "line-height: 1.5",
     ],
     [kbd("Enter"), span(" to \{action} · "), kbd("Esc"), span(" to cancel")],

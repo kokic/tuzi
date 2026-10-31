@@ -54,22 +54,22 @@ const CommandDialogStyle : String = "position:fixed;inset:0;width:min(calc(100% 
 const CommandInputWrapperStyle : String = "display:flex;min-width:0;align-items:center;gap:0.5rem;padding-inline:0.5rem;height:2rem;margin:0.25rem 0.25rem 0;border:1px solid color-mix(in oklab,var(--rui-input,oklch(0.922 0 0)) 30%,transparent);border-radius:var(--rui-radius,0.625rem);background:color-mix(in oklab,var(--rui-input,oklch(0.922 0 0)) 30%,transparent)"
 
 ///|
-const CommandInputStyle : String = "width:100%;min-width:0;height:100%;border:0;background:transparent;padding:0;color:inherit;font-size:0.875rem;line-height:1.25rem;outline:none;appearance:none;-webkit-appearance:none"
+const CommandInputStyle : String = "width:100%;min-width:0;height:100%;border:0;background:transparent;padding:0;color:inherit;line-height:1.25rem;outline:none;appearance:none;-webkit-appearance:none"
 
 ///|
 const CommandListStyle : String = "min-height:0;max-height:18rem;overflow-x:hidden;overflow-y:auto;padding:0;scroll-padding-block:0.25rem"
 
 ///|
-const CommandEmptyStyle : String = "padding:1.5rem 0.75rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.875rem;line-height:1.25rem;text-align:center"
+const CommandEmptyStyle : String = "padding:1.5rem 0.75rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-secondary-size);line-height:1.25rem;text-align:center"
 
 ///|
 const CommandGroupStyle : String = "min-width:0;padding:0.25rem"
 
 ///|
-const CommandGroupHeadingStyle : String = "padding:0.375rem 0.5rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.75rem;line-height:1rem;font-weight:500"
+const CommandGroupHeadingStyle : String = "padding:0.375rem 0.5rem;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-caption-size);line-height:1rem;font-weight:500"
 
 ///|
-const CommandItemStyle : String = "position:relative;display:flex;width:100%;min-width:0;min-height:2rem;align-items:center;gap:0.5rem;border-radius:var(--rui-command-item-radius,calc(var(--rui-radius,0.625rem) - 0.25rem));background:var(--rui-menu-item-bg,var(--rui-menu-item-base-bg,transparent));padding:0.375rem 0.5rem;color:var(--rui-menu-item-fg,var(--rui-menu-item-base-fg,inherit));font-size:0.875rem;line-height:1.25rem;text-align:start;outline:none;cursor:default;user-select:none"
+const CommandItemStyle : String = "position:relative;display:flex;width:100%;min-width:0;min-height:2rem;align-items:center;gap:0.5rem;border-radius:var(--rui-command-item-radius,calc(var(--rui-radius,0.625rem) - 0.25rem));background:var(--rui-menu-item-bg,var(--rui-menu-item-base-bg,transparent));padding:0.375rem 0.5rem;color:var(--rui-menu-item-fg,var(--rui-menu-item-base-fg,inherit));font-size:var(--tuzi-ui-size);line-height:1.25rem;text-align:start;outline:none;cursor:default;user-select:none"
 
 ///|
 const CommandItemActiveStyle : String = "--rui-menu-item-base-bg:var(--rui-accent,oklch(0.97 0 0));--rui-menu-item-base-fg:var(--rui-accent-foreground,var(--rui-foreground,oklch(0.145 0 0)))"
@@ -78,7 +78,7 @@ const CommandItemActiveStyle : String = "--rui-menu-item-base-bg:var(--rui-accen
 const CommandSeparatorStyle : String = "height:1px;margin:0 -0.25rem;background:var(--rui-border,oklch(0.922 0 0));pointer-events:none"
 
 ///|
-const CommandShortcutStyle : String = "margin-inline-start:auto;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.75rem;line-height:1rem;letter-spacing:0.08em"
+const CommandShortcutStyle : String = "margin-inline-start:auto;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-caption-size);line-height:1rem;letter-spacing:0.08em"
 
 ///|
 fn command_default_filter(
@@ -517,7 +517,7 @@ pub fn command_input(
       @html.span(
         style=[
           UiBoxSizing,
-          "display:inline-flex;width:1rem;height:1rem;flex:none;align-items:center;justify-content:center;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:1rem",
+          "display:inline-flex;width:1rem;height:1rem;flex:none;align-items:center;justify-content:center;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-content-size)",
         ],
         attrs=@html.Attrs::build()
           .data_set("slot", "command-input-icon")

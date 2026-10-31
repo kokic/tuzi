@@ -50,7 +50,7 @@ pub fn entry_title_style(entry : Entry, color : String) -> Array[String] {
     "align-items: baseline",
     "overflow: hidden",
     "white-space: nowrap",
-    "font-size: var(--tuzi-entry-title-size)",
+    "font-size: var(--tuzi-content-size)",
     "color: \{foreground}",
   ]
 }
@@ -64,7 +64,7 @@ pub fn entry_meta_style() -> Array[String] {
     "overflow: hidden",
     "white-space: nowrap",
     "text-overflow: ellipsis",
-    "font-size: var(--tuzi-entry-subtitle-size)",
+    "font-size: var(--tuzi-secondary-size)",
     "font-variant-numeric: tabular-nums",
     "color: var(--tuzi-entry-secondary-foreground)",
   ]
@@ -79,7 +79,7 @@ pub fn entry_details_style() -> Array[String] {
     "align-items: center",
     "gap: 8px",
     "padding: 4px",
-    "font-size: var(--tuzi-footer-size)",
+    "font-size: var(--tuzi-secondary-size)",
     "color: var(--rui-muted-foreground)",
     "min-width: 0",
     "line-height: 18px",

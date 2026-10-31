@@ -23,13 +23,13 @@ const EmptyMediaStyle : String = "display:flex;flex-shrink:0;align-items:center;
 const EmptyMediaIconStyle : String = "width:2rem;height:2rem;border-radius:0.5rem;background:var(--rui-muted,oklch(0.97 0 0));color:var(--rui-foreground,oklch(0.145 0 0));--rui-icon-size:1rem"
 
 ///|
-const EmptyTitleStyle : String = "font-size:0.875rem;line-height:1.25rem;font-weight:500;letter-spacing:-0.025em"
+const EmptyTitleStyle : String = "font-size:var(--tuzi-content-size);line-height:1.25rem;font-weight:500;letter-spacing:-0.025em"
 
 ///|
-const EmptyDescriptionStyle : String = "color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.875rem;line-height:1.625"
+const EmptyDescriptionStyle : String = "color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-secondary-size);line-height:1.625"
 
 ///|
-const EmptyContentStyle : String = "display:flex;width:100%;max-width:24rem;min-width:0;flex-direction:column;align-items:center;gap:0.625rem;font-size:0.875rem;text-wrap:balance;overflow-wrap:anywhere"
+const EmptyContentStyle : String = "display:flex;width:100%;max-width:24rem;min-width:0;flex-direction:column;align-items:center;gap:0.625rem;font-size:var(--tuzi-ui-size);text-wrap:balance;overflow-wrap:anywhere"
 
 ///|
 pub fn[C : @html.IsChildren] empty(

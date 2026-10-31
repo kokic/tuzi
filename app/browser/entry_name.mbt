@@ -1,13 +1,12 @@
 ///|
 fn Entry::name_view(entry : Entry, color : String) -> Html {
   match entry.kind {
-    Err(error) =>
-      entry.name_container(color, title=entry.name, [
+    Err(_) =>
+      entry.name_container(color, [
         truncated_name_view(entry.name),
         @rui.badge(
           variant=Secondary,
           style=["margin-left: 0.5em", "flex: none"],
-          title=error.message,
           "Type unavailable",
         ),
       ])
@@ -17,8 +16,7 @@ fn Entry::name_view(entry : Entry, color : String) -> Html {
         target.to_string(),
         directory=target_kind.is_dir(),
       )
-    Ok(UnresolvedLink(error)) =>
-      entry.unresolved_link_name_view(color, error.message)
+    Ok(UnresolvedLink(_)) => entry.unresolved_link_name_view(color)
     Ok(Directory) => entry.directory_name_view(color)
     _ => entry.file_name_view(color)
   }
@@ -26,14 +24,12 @@ fn Entry::name_view(entry : Entry, color : String) -> Html {
 
 ///|
 fn Entry::file_name_view(entry : Entry, color : String) -> Html {
-  entry.name_container(color, title=entry.name, [
-    truncated_name_view(entry.name),
-  ])
+  entry.name_container(color, [truncated_name_view(entry.name)])
 }
 
 ///|
 fn Entry::directory_name_view(entry : Entry, color : String) -> Html {
-  entry.name_container(color, title=entry.name + "/", [
+  entry.name_container(color, [
     truncated_name_view(entry.name),
     span(style=["flex: none"], "/"),
   ])
@@ -48,7 +44,6 @@ fn Entry::symbolic_link_name_view(
 ) -> Html {
   entry.name_container(
     color,
-    title=if directory { entry.name + "/" } else { entry.name },
     [
       link_name_view(entry.name),
       ..if directory {
@@ -57,7 +52,6 @@ fn Entry::symbolic_link_name_view(
       link_arrow_view(),
       span(
         style=["min-width: 3ch", "overflow: hidden", "text-overflow: ellipsis"],
-        title=target,
         target,
       ),
     ],
@@ -65,16 +59,11 @@ fn Entry::symbolic_link_name_view(
 }
 
 ///|
-fn Entry::unresolved_link_name_view(
-  entry : Entry,
-  color : String,
-  error : String,
-) -> Html {
-  entry.name_container(color, title=entry.name, [
+fn Entry::unresolved_link_name_view(entry : Entry, color : String) -> Html {
+  entry.name_container(color, [
     link_name_view(entry.name),
     span(
       style=["margin-left: 0.5em", "color: var(--rui-muted-foreground)"],
-      title=error,
       "Target unavailable",
     ),
   ])
@@ -84,19 +73,16 @@ fn Entry::unresolved_link_name_view(
 fn Entry::name_container(
   entry : Entry,
   color : String,
-  title~ : String,
   children : Array[Html],
 ) -> Html {
   span(
     style=entry_title_style(entry, color),
-    title~,
     [
       ..children,
-      ..if entry.kind is Ok(_) && entry.marker is Err(error) {
+      ..if entry.kind is Ok(_) && entry.marker is Err(_) {
         [
           span(
             style=["margin-left: 0.5em", "color: var(--rui-muted-foreground)"],
-            title=error.message,
             "Marker unavailable",
           ),
         ]
@@ -109,7 +95,6 @@ fn Entry::name_container(
 fn truncated_name_view(name : String) -> Html {
   span(
     style=["min-width: 0", "overflow: hidden", "text-overflow: ellipsis"],
-    title=name,
     name,
   )
 }
@@ -120,7 +105,6 @@ fn link_name_view(name : String) -> Html {
     style=[
       "flex: none", "max-width: 50cqw", "overflow: hidden", "text-overflow: ellipsis",
     ],
-    title=name,
     name,
   )
 }

@@ -34,7 +34,6 @@ fn breadcrumbs_view(
               @presentation.UI_FONT_STYLE,
               "min-width: 0",
               "flex-shrink: 1",
-              "font-size: inherit",
               "line-height: inherit",
               "font-weight: 400",
               "--rui-button-base-fg: var(--rui-muted-foreground)",
@@ -69,10 +68,7 @@ fn breadcrumbs_view(
     @rui.breadcrumb(
       aria_label="Directory path",
       style=[@presentation.UI_FONT_STYLE, "flex: 1", "min-width: 0"],
-      @rui.breadcrumb_list(
-        style=["font-size: inherit", "line-height: inherit"],
-        items,
-      ),
+      @rui.breadcrumb_list(style=["line-height: inherit"], items),
     )
   })
 }

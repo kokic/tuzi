@@ -206,7 +206,7 @@ fn InfoContext::font_preview_view(
               on_input=emit.map(text => FontPreviewInput(text)),
               style=[
                 @presentation.preview_font_style(context.font_family()),
-                "font-size: 28px",
+                "font-size: var(--tuzi-font-preview-size)",
                 "font-weight: normal",
                 "font-style: normal",
                 "font-synthesis: none",
@@ -219,7 +219,7 @@ fn InfoContext::font_preview_view(
           ]),
           p(
             style=[
-              "margin: 12px 0 0", "font-size: 0.8125rem", "color: var(--rui-muted-foreground)",
+              "margin: 12px 0 0", "font-size: var(--tuzi-secondary-size)", "color: var(--rui-muted-foreground)",
             ],
             "Crossed boxes indicate characters missing from this font.",
           ),

@@ -96,7 +96,6 @@ fn entry_context_menu(
     span(
       style=[
         ..@presentation.entry_meta_style(),
-        "font-size: var(--tuzi-entry-title-size)",
         "text-align: right",
         "min-width: 2ch",
         "margin: 0 4px",

@@ -176,7 +176,7 @@ pub fn[C : @html.IsChildren] toast_title(
     title?,
     attrs=ui_attrs(attrs).data_set("slot", "toast-title"),
     style=ui_styles(
-      ["font-size:0.875rem;line-height:1.25rem;font-weight:500"],
+      ["font-size:var(--tuzi-ui-size);line-height:1.25rem;font-weight:500"],
       style,
     ),
     children,
@@ -199,7 +199,7 @@ pub fn[C : @html.IsChildren] toast_description(
     attrs=ui_attrs(attrs).data_set("slot", "toast-description"),
     style=ui_styles(
       [
-        "grid-column:1;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:0.8125rem;line-height:1.25rem",
+        "grid-column:1;color:var(--rui-muted-foreground,oklch(0.556 0 0));font-size:var(--tuzi-secondary-size);line-height:1.25rem",
       ],
       style,
     ),

@@ -1,9 +1,5 @@
 ///|
 let typography_style : Array[String] = [
-  "--tuzi-entry-title-size: 1rem",
-  "--tuzi-entry-subtitle-size: 0.8rem",
-  "--tuzi-pane-header-size: 0.8125rem",
-  "--tuzi-footer-size: 0.8rem",
   "--tuzi-entry-line-height: 1.25",
   @presentation.UI_FONT_STYLE,
 ]
