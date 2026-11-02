@@ -38,7 +38,7 @@ fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
     ),
     div(
       attrs=@html.Attrs::build().aria_hidden("true"),
-      style=["align-self: stretch", "background: var(--rui-border)"],
+      style=["align-self: stretch", "background: var(--tuzi-divider-color)"],
       @html.nothing,
     ),
     div(

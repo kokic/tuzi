@@ -40,6 +40,13 @@ body {
 #tuzi[data-tuzi-theme="light"] {
   --rui-background: #fcfbf8;
   --rui-foreground: #17344d;
+  --tuzi-divider-color: var(--rui-foreground);
+}
+
+#tuzi[data-tuzi-theme="dark"] {
+  --rui-background: #282c34;
+  --rui-foreground: #cccccc;
+  --tuzi-divider-color: var(--rui-foreground);
 }
 
 #tuzi {
@@ -176,6 +183,7 @@ print {
 
 @media (hover: hover) {
   #tuzi .entry-meta:hover {
+    font-weight: var(--tuzi-weight-emphasis);
     --tuzi-entry-meta-hover: var(--tuzi-entry-secondary-hover-foreground);
   }
 
@@ -286,7 +294,7 @@ print {
   display: flex;
   gap: 1px;
   overflow: clip;
-  background: var(--rui-border);
+  background: var(--tuzi-divider-color);
 }
 
 #tuzi .tuzi-pane {

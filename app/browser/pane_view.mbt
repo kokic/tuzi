@@ -47,7 +47,7 @@ fn Pane::pane_view(
       "sort": div(
         class="phead",
         style=[
-          "justify-content: flex-end", "border-bottom: 1px solid var(--rui-border)",
+          "justify-content: flex-end", "border-bottom: 1px solid var(--tuzi-divider-color)",
         ],
         [
           history_menu,
