@@ -1,16 +1,18 @@
 ///|
-fn Model::entry_details_view(model: Model, pane : Pane) -> Html {
+fn Model::entry_details_view(model : Model, pane : Pane) -> Html {
   let info = pane
     .cursor_index()
     .map(index => pane.visible_entries[index])
     .map_or("", entry => "\{entry.name}  \{format_entry_meta(entry)}")
+
   let left = model.panes.0.current.visible_entries.length()
   let right = model.panes.1.current.visible_entries.length()
-  div(class="entry-details", [
+
+  div(class="entry-details", style=[], [
     div(
       style=[
-        "display: flex", "align-items: center", "gap: 6px", "color: var(--rui-muted-foreground)",
-        "white-space: nowrap",
+        "padding-inline: 0.625em", "display: flex", "align-items: center", "gap: 8px",
+        "color: var(--rui-muted-foreground)", "white-space: nowrap",
       ],
       [
         span(
@@ -30,10 +32,15 @@ fn Model::entry_details_view(model: Model, pane : Pane) -> Html {
           },
           "\{right}",
         ),
-        // span("items"),
+        span("Items"),
       ],
     ),
-    span(class="tuzi-status-text", style=["flex: 1"], title=info, info),
+    span(
+      class="tuzi-status-text",
+      style=["padding-inline: 0.625em", "flex: 1"],
+      title=info,
+      [span(style=["user-select: none"], "/"), span(info)],
+    ),
   ])
 }
 
