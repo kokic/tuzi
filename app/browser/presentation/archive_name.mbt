@@ -12,7 +12,7 @@ pub fn default_archive_name(items : Array[Entry], directory : Path) -> String {
       dot > 0 else {
       item.name
     }
-    item.name.view(end_offset=dot).to_owned()
+    item.name.exact_view(end=dot).to_owned()
   }
   guard !name.is_empty() else { "archive.zip" }
   name + ".zip"
