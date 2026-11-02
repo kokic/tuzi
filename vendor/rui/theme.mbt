@@ -1111,10 +1111,29 @@ pub extend ColorMode with Eq::{equal, not_equal}
 const ThemeBaseStyle : String = "background:var(--rui-background);color:var(--rui-foreground)"
 
 ///|
-const ThemeLightStyle : String = "color-scheme:light;--rui-radius:0.625rem;--rui-background:oklch(1 0 0);--rui-foreground:oklch(0.145 0 0);--rui-card:oklch(1 0 0);--rui-card-foreground:oklch(0.145 0 0);--rui-popover:oklch(1 0 0);--rui-popover-foreground:oklch(0.145 0 0);--rui-primary:oklch(0.205 0 0);--rui-primary-foreground:oklch(0.985 0 0);--rui-secondary:oklch(0.97 0 0);--rui-secondary-foreground:oklch(0.205 0 0);--rui-muted:oklch(0.97 0 0);--rui-muted-foreground:oklch(0.556 0 0);--rui-accent:oklch(0.97 0 0);--rui-accent-foreground:oklch(0.205 0 0);--rui-destructive:oklch(0.577 0.245 27.325);--rui-destructive-border:oklch(0.577 0.245 27.325);--rui-destructive-subtle:oklch(0.577 0.245 27.325 / 0.1);--rui-destructive-surface:var(--rui-destructive);--rui-destructive-ring:oklch(0.577 0.245 27.325 / 0.2);--rui-border:oklch(0.922 0 0);--rui-input:oklch(0.922 0 0);--rui-input-background:transparent;--rui-outline-background:oklch(1 0 0);--rui-outline-border:oklch(0.922 0 0);--rui-outline-hover-bg:oklch(0.97 0 0);--rui-ghost-hover-bg:oklch(0.97 0 0);--rui-select-hover-bg:var(--rui-control-base-bg,transparent);--rui-tabs-active-bg:var(--rui-background);--rui-tabs-active-border:transparent;--rui-field-label-checked-bg:color-mix(in oklab,var(--rui-primary) 5%,transparent);--rui-ring:oklch(0.708 0 0);--rui-switch-unchecked:oklch(0.922 0 0);--rui-switch-thumb-checked:oklch(1 0 0);--rui-switch-thumb-unchecked:oklch(1 0 0);--rui-sidebar:oklch(0.985 0 0);--rui-sidebar-foreground:oklch(0.145 0 0);--rui-sidebar-primary:oklch(0.205 0 0);--rui-sidebar-primary-foreground:oklch(0.985 0 0);--rui-sidebar-accent:oklch(0.97 0 0);--rui-sidebar-accent-foreground:oklch(0.205 0 0);--rui-sidebar-border:oklch(0.922 0 0);--rui-sidebar-ring:oklch(0.708 0 0)"
+const ThemeLightStyle : String = "color-scheme:light;--rui-background:oklch(1 0 0);--rui-foreground:oklch(0.145 0 0);--rui-tone-direction:-1;--rui-destructive:oklch(0.577 0.245 27.325);--rui-destructive-border:oklch(0.577 0.245 27.325);--rui-destructive-subtle:oklch(0.577 0.245 27.325 / 0.1);--rui-destructive-surface:var(--rui-destructive);--rui-destructive-ring:oklch(0.577 0.245 27.325 / 0.2)"
 
 ///|
-const ThemeDarkStyle : String = "color-scheme:dark;--rui-radius:0.625rem;--rui-background:oklch(0.145 0 0);--rui-foreground:oklch(0.985 0 0);--rui-card:oklch(0.205 0 0);--rui-card-foreground:oklch(0.985 0 0);--rui-popover:oklch(0.205 0 0);--rui-popover-foreground:oklch(0.985 0 0);--rui-primary:oklch(0.922 0 0);--rui-primary-foreground:oklch(0.205 0 0);--rui-secondary:oklch(0.269 0 0);--rui-secondary-foreground:oklch(0.985 0 0);--rui-muted:oklch(0.269 0 0);--rui-muted-foreground:oklch(0.708 0 0);--rui-accent:oklch(0.269 0 0);--rui-accent-foreground:oklch(0.985 0 0);--rui-destructive:oklch(0.704 0.191 22.216);--rui-destructive-border:oklch(0.704 0.191 22.216 / 0.5);--rui-destructive-subtle:oklch(0.704 0.191 22.216 / 0.2);--rui-destructive-surface:color-mix(in oklab,var(--rui-destructive) 60%,transparent);--rui-destructive-ring:oklch(0.704 0.191 22.216 / 0.4);--rui-border:oklch(1 0 0 / 0.1);--rui-input:oklch(1 0 0 / 0.15);--rui-input-background:oklch(1 0 0 / 0.045);--rui-outline-background:oklch(1 0 0 / 0.045);--rui-outline-border:oklch(1 0 0 / 0.15);--rui-outline-hover-bg:color-mix(in oklab,oklch(1 0 0 / 0.15) 50%,transparent);--rui-ghost-hover-bg:color-mix(in oklab,oklch(0.269 0 0) 50%,transparent);--rui-select-hover-bg:color-mix(in oklab,var(--rui-input) 50%,transparent);--rui-tabs-active-bg:var(--rui-outline-background);--rui-tabs-active-border:var(--rui-input);--rui-field-label-checked-bg:color-mix(in oklab,var(--rui-primary) 10%,transparent);--rui-ring:oklch(0.556 0 0);--rui-switch-unchecked:oklch(1 0 0 / 0.12);--rui-switch-thumb-checked:oklch(0.205 0 0);--rui-switch-thumb-unchecked:oklch(0.985 0 0);--rui-sidebar:oklch(0.205 0 0);--rui-sidebar-foreground:oklch(0.985 0 0);--rui-sidebar-primary:oklch(0.488 0.243 264.376);--rui-sidebar-primary-foreground:oklch(0.985 0 0);--rui-sidebar-accent:oklch(0.269 0 0);--rui-sidebar-accent-foreground:oklch(0.985 0 0);--rui-sidebar-border:oklch(1 0 0 / 0.1);--rui-sidebar-ring:oklch(0.439 0 0)"
+const ThemeDarkStyle : String = "color-scheme:dark;--rui-background:oklch(0.145 0 0);--rui-foreground:oklch(0.985 0 0);--rui-tone-direction:1;--rui-destructive:oklch(0.704 0.191 22.216);--rui-destructive-border:oklch(0.704 0.191 22.216 / 0.5);--rui-destructive-subtle:oklch(0.704 0.191 22.216 / 0.2);--rui-destructive-surface:color-mix(in oklab,var(--rui-destructive) 60%,transparent);--rui-destructive-ring:oklch(0.704 0.191 22.216 / 0.4)"
+
+///|
+const ThemeRoleStyle : String =
+  #|--rui-radius:0.625rem;
+  #|--rui-card:var(--rui-background);--rui-card-foreground:var(--rui-foreground);
+  #|--rui-popover:var(--rui-background);--rui-popover-foreground:var(--rui-foreground);
+  #|--rui-primary:oklch(from var(--rui-background) calc(l + var(--rui-tone-direction) * 0.1) c h);--rui-primary-foreground:var(--rui-foreground);
+  #|--rui-secondary:oklch(from var(--rui-background) calc(l + var(--rui-tone-direction) * 0.025) c h);--rui-secondary-foreground:var(--rui-foreground);
+  #|--rui-muted:var(--rui-secondary);--rui-muted-foreground:color-mix(in oklab,var(--rui-foreground) 78%,var(--rui-background));
+  #|--rui-accent:oklch(from var(--rui-background) calc(l + var(--rui-tone-direction) * 0.05) c h);--rui-accent-foreground:var(--rui-foreground);
+  #|--rui-border:var(--rui-foreground);--rui-input:var(--rui-border);--rui-input-background:transparent;
+  #|--rui-outline-background:var(--rui-background);--rui-outline-border:var(--rui-border);--rui-outline-hover-bg:var(--rui-accent);
+  #|--rui-ghost-hover-bg:var(--rui-accent);--rui-select-hover-bg:var(--rui-accent);
+  #|--rui-tabs-active-bg:var(--rui-background);--rui-tabs-active-border:transparent;
+  #|--rui-field-label-checked-bg:oklch(from var(--rui-background) calc(l + var(--rui-tone-direction) * 0.065) c h);
+  #|--rui-ring:var(--rui-border);--rui-switch-unchecked:var(--rui-border);--rui-switch-thumb-checked:var(--rui-background);--rui-switch-thumb-unchecked:var(--rui-background);
+  #|--rui-sidebar:var(--rui-background);--rui-sidebar-foreground:var(--rui-foreground);--rui-sidebar-primary:var(--rui-primary);--rui-sidebar-primary-foreground:var(--rui-primary-foreground);
+  #|--rui-sidebar-accent:var(--rui-accent);--rui-sidebar-accent-foreground:var(--rui-accent-foreground);--rui-sidebar-border:var(--rui-border);--rui-sidebar-ring:var(--rui-ring);
+
 
 ///|
 fn theme_mode_name(mode : ColorMode) -> String {
@@ -1184,6 +1203,9 @@ fn ui_interaction_stylesheet() -> @html.Html {
   let attrs = @html.Attrs::build()
     .data_set("rui-style", "interactions")
     .inner_html(
+      ":where([data-rui-theme]) {" +
+      ThemeRoleStyle +
+      "}\n" +
       ":where([data-rui-theme=light]) {" +
       ThemeLightStyle +
       "}\n" +
@@ -1196,7 +1218,7 @@ fn ui_interaction_stylesheet() -> @html.Html {
 }
 
 ///|
-/// Provide the official shadcn Neutral tokens to a subtree.
+/// Provide related surface and foreground tokens to a subtree.
 ///
 /// The wrapper emits the library's static pseudo-class interaction sheet, so
 /// no external CSS import or runtime stylesheet registration is required.

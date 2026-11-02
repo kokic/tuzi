@@ -38,73 +38,30 @@ body {
 }
 
 #tuzi[data-tuzi-theme="light"] {
-  /* Surface and hover colors retain the beige hue; adjust only lightness. */
-  --tuzi-theme-background: #fcfbf8;
-  --tuzi-theme-foreground: #17344d;
-  --tuzi-theme-surface: oklch(from var(--tuzi-theme-background) calc(l - 0.025) c h);
-  --tuzi-theme-hover: oklch(from var(--tuzi-theme-background) calc(l - 0.05) c h);
-  --tuzi-pane-header-hover-background: oklch(from var(--tuzi-theme-background) calc(l - 0.075) c h);
-  /* Fills derive from beige; borders and focus lines use blue. */
-  --tuzi-marked-background: oklch(from var(--tuzi-theme-background) calc(l - 0.065) c h);
-  --tuzi-selection-background: oklch(from var(--tuzi-theme-background) calc(l - 0.05) c h);
-  --tuzi-theme-border: var(--tuzi-theme-foreground);
-  --tuzi-theme-indicator: var(--tuzi-theme-border);
-  --tuzi-scrollbar-thumb: oklch(from var(--tuzi-theme-background) calc(l - 0.05) c h);
-  --tuzi-entry-secondary-foreground: oklch(from var(--tuzi-theme-background) calc(l - 0.1) c h);
-  --tuzi-entry-secondary-hover-foreground: oklch(from var(--tuzi-theme-background) calc(l - 0.3) c h);
-  --tuzi-scrollbar-track: var(--tuzi-theme-background);
-  --tuzi-checkbox-checkmark: oklch(from var(--tuzi-theme-background) calc(l - 0.55) c h);
-  /* General auxiliary text remains blue; entry metadata uses beige. */
-  --tuzi-theme-muted-foreground: color-mix(in oklab, var(--tuzi-theme-foreground) 78%, var(--tuzi-theme-background));
-  /* Map component roles to the palette above. */
-  --rui-background: var(--tuzi-theme-background);
-  --rui-foreground: var(--tuzi-theme-foreground);
-  --rui-card: var(--tuzi-theme-background);
-  --rui-card-foreground: var(--tuzi-theme-foreground);
-  --rui-popover: var(--tuzi-theme-background);
-  --rui-popover-foreground: var(--tuzi-theme-foreground);
-  --rui-primary: oklch(from var(--tuzi-theme-background) calc(l - 0.1) c h);
-  --rui-primary-foreground: var(--tuzi-theme-foreground);
-  --tuzi-emphasis-foreground: var(--tuzi-theme-foreground);
-  --rui-secondary: var(--tuzi-theme-surface);
-  --rui-secondary-foreground: var(--tuzi-theme-foreground);
-  --rui-muted: var(--tuzi-theme-surface);
-  --rui-muted-foreground: var(--tuzi-theme-muted-foreground);
-  --rui-accent: var(--tuzi-theme-hover);
-  --rui-accent-foreground: var(--tuzi-theme-foreground);
-  --rui-border: var(--tuzi-theme-border);
-  --rui-input: var(--tuzi-theme-border);
-  --rui-outline-background: var(--tuzi-theme-background);
-  --rui-outline-border: var(--tuzi-theme-border);
-  --rui-outline-hover-bg: var(--tuzi-theme-hover);
-  --rui-ghost-hover-bg: var(--tuzi-theme-hover);
-  --rui-select-hover-bg: var(--tuzi-theme-hover);
-  --rui-field-label-checked-bg: var(--tuzi-marked-background);
-  --rui-ring: var(--tuzi-theme-indicator);
-  --tuzi-selection-indicator: var(--tuzi-theme-indicator);
-  --tuzi-checkbox-background: var(--tuzi-theme-background);
-  --tuzi-checkbox-border: var(--tuzi-theme-border);
-  --tuzi-checkbox-hover-background: var(--tuzi-theme-hover);
+  --rui-background: #fcfbf8;
+  --rui-foreground: #17344d;
+}
+
+#tuzi {
+  /* Both modes share the same relationships; dark tones increase lightness. */
+  --tuzi-pane-header-hover-background: oklch(from var(--rui-background) calc(l + var(--rui-tone-direction) * 0.075) c h);
+  --tuzi-marked-background: var(--rui-field-label-checked-bg);
+  --tuzi-selection-background: var(--rui-accent);
+  --tuzi-selection-indicator: var(--rui-ring);
+  --tuzi-scrollbar-thumb: var(--rui-accent);
+  --tuzi-scrollbar-track: var(--rui-background);
+  --tuzi-entry-secondary-foreground: var(--rui-primary);
+  --tuzi-entry-secondary-hover-foreground: oklch(from var(--rui-background) calc(l + var(--rui-tone-direction) * 0.3) c h);
+  --tuzi-emphasis-foreground: var(--rui-foreground);
+  --tuzi-checkbox-background: var(--rui-background);
+  --tuzi-checkbox-border: var(--rui-border);
+  --tuzi-checkbox-hover-background: var(--rui-accent);
   --tuzi-checkbox-checked-background: var(--rui-primary);
-  --tuzi-checkbox-checked-border: var(--tuzi-theme-indicator);
+  --tuzi-checkbox-checked-border: var(--rui-ring);
+  --tuzi-checkbox-checkmark: oklch(from var(--rui-background) calc(l + var(--rui-tone-direction) * 0.55) c h);
   --tuzi-font-ui: Alegreya, ui-serif, serif;
   --tuzi-font-content: Alegreya, ui-serif, serif;
   --tuzi-font-metadata: Alegreya, ui-serif, serif;
-}
-
-#tuzi[data-tuzi-theme="dark"] {
-  --tuzi-scrollbar-thumb: color-mix(in oklab, var(--rui-border) 60%, var(--rui-background));
-  --tuzi-scrollbar-track: transparent;
-  --tuzi-entry-secondary-foreground: color-mix(in oklab, var(--rui-muted-foreground) 50%, var(--rui-background));
-  --tuzi-entry-secondary-hover-foreground: color-mix(in oklab, var(--rui-muted-foreground) 75%, var(--rui-foreground));
-  --tuzi-emphasis-foreground: var(--rui-primary);
-  --tuzi-selection-background: #3a3a3a;
-  --tuzi-selection-indicator: var(--rui-muted-foreground);
-  --tuzi-marked-background: #303030;
-  --tuzi-pane-header-hover-background: color-mix(in oklab, var(--rui-muted) 90%, var(--rui-foreground));
-  --tuzi-font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --tuzi-font-content: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --tuzi-font-metadata: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 #tuzi,
@@ -198,7 +155,7 @@ print {
   backdrop-filter: none;
 }
 
-#tuzi[data-tuzi-theme="light"] .entry-row input[type="checkbox"] {
+#tuzi .entry-row input[type="checkbox"] {
   appearance: none;
   box-sizing: border-box;
   display: grid;
@@ -208,7 +165,7 @@ print {
   background: var(--tuzi-checkbox-background);
 }
 
-#tuzi[data-tuzi-theme="light"] [data-variant="link"] {
+#tuzi [data-variant="link"] {
   --rui-button-fg: var(--rui-foreground);
   --rui-badge-fg: var(--rui-foreground);
 }
@@ -228,22 +185,22 @@ print {
     --tuzi-text-action-weight: var(--tuzi-weight-emphasis);
   }
 
-  #tuzi[data-tuzi-theme="light"] .rui-markdown-anchor:hover,
-  #tuzi[data-tuzi-theme="light"] :is([data-slot="field-description"], [data-slot="empty-description"], [data-slot="item-description"])>a:hover {
+  #tuzi .rui-markdown-anchor:hover,
+  #tuzi :is([data-slot="field-description"], [data-slot="empty-description"], [data-slot="item-description"])>a:hover {
     color: var(--rui-foreground);
   }
 
-  #tuzi[data-tuzi-theme="light"] .entry-row input[type="checkbox"]:not(:checked):hover {
+  #tuzi .entry-row input[type="checkbox"]:not(:checked):hover {
     background: var(--tuzi-checkbox-hover-background);
   }
 }
 
-#tuzi[data-tuzi-theme="light"] .entry-row input[type="checkbox"]:checked {
+#tuzi .entry-row input[type="checkbox"]:checked {
   border-color: var(--tuzi-checkbox-checked-border);
   background: var(--tuzi-checkbox-checked-background);
 }
 
-#tuzi[data-tuzi-theme="light"] .entry-row input[type="checkbox"]:checked::before {
+#tuzi .entry-row input[type="checkbox"]:checked::before {
   content: "";
   width: 9px;
   height: 7px;
