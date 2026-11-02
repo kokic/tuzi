@@ -8,9 +8,10 @@ fn task_indicator(status : TaskStatus) -> Html {
         "Queued",
       )
     Running => @rui.spinner(label="Running", style=["flex-shrink: 0"])
-    Completed(_) =>
-      span(attrs=@html.Attrs::build().aria_label("Completed"), "✓")
-    Failed(_) => span(attrs=@html.Attrs::build().aria_label("Failed"), "✕")
+    _ => @html.nothing
+    // Completed(_) =>
+    //   span(attrs=@html.Attrs::build().aria_label("Completed"), "")
+    // Failed(_) => span(attrs=@html.Attrs::build().aria_label("Failed"), "")
   }
 }
 

@@ -116,7 +116,7 @@ fn entry_context_menu(
                     "position: absolute", "left: 0", "width: 32px", "text-align: center",
                     "color: var(--rui-foreground)", "pointer-events: none", "user-select: none",
                   ],
-                  "✓",
+                  "+",
                 ),
               ]
             } else {

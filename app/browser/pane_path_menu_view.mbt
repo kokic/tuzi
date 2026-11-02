@@ -53,9 +53,9 @@ fn pane_path_menu_view(
                     attrs=@html.Attrs::build().aria_hidden("true"),
                     style=["width: 1rem", "flex: none", "text-align: center"],
                     if is_current {
-                      "✓"
+                      @rui.ui_check_icon()
                     } else {
-                      ""
+                      @html.nothing
                     },
                   ),
                   span(class="tuzi-status-text", path),

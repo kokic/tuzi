@@ -1,7 +1,5 @@
 ///|
 fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
-  let left = model.panes.0.current.visible_entries.length()
-  let right = model.panes.1.current.visible_entries.length()
   let sel = model.panes.0.current.selected.length() +
     model.panes.1.current.selected.length()
   div(id="bar", class="tuzi-toolbar", [
@@ -17,32 +15,6 @@ fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
           size=Sm,
           on_click=emit(HelpOpen),
           "Help",
-        ),
-        div(
-          style=[
-            "display: flex", "align-items: center", "gap: 6px", "color: var(--rui-muted-foreground)",
-            "white-space: nowrap",
-          ],
-          [
-            span(
-              class=if model.active == Left {
-                "tuzi-count is-active"
-              } else {
-                "tuzi-count"
-              },
-              "\{left}",
-            ),
-            span("·"),
-            span(
-              class=if model.active == Right {
-                "tuzi-count is-active"
-              } else {
-                "tuzi-count"
-              },
-              "\{right}",
-            ),
-            span("items"),
-          ],
         ),
         ..if sel > 0 {
           [
@@ -75,7 +47,7 @@ fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
         "padding-left: 12px",
       ],
       [
-        model.pane_at(model.active).entry_details_view(),
+        model.entry_details_view(model.pane_at(model.active)),
         @rui.button(
           style=[@presentation.UI_FONT_STYLE],
           variant=Ghost,

@@ -375,7 +375,7 @@ print {
   container-type: inline-size;
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr) max-content calc(var(--tuzi-time-column, 17ch) + 10px);
-  font-size: var(--tuzi-secondary-size);
+  font-size: var(--tuzi-content-size);
   column-gap: 8px;
   align-content: start;
   overflow-y: auto;

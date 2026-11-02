@@ -1,10 +1,38 @@
 ///|
-fn Pane::entry_details_view(pane : Pane) -> Html {
+fn Model::entry_details_view(model: Model, pane : Pane) -> Html {
   let info = pane
     .cursor_index()
     .map(index => pane.visible_entries[index])
     .map_or("", entry => "\{entry.name}  \{format_entry_meta(entry)}")
+  let left = model.panes.0.current.visible_entries.length()
+  let right = model.panes.1.current.visible_entries.length()
   div(class="entry-details", [
+    div(
+      style=[
+        "display: flex", "align-items: center", "gap: 6px", "color: var(--rui-muted-foreground)",
+        "white-space: nowrap",
+      ],
+      [
+        span(
+          class=if model.active == Left {
+            "tuzi-count is-active"
+          } else {
+            "tuzi-count"
+          },
+          "\{left}",
+        ),
+        span("·"),
+        span(
+          class=if model.active == Right {
+            "tuzi-count is-active"
+          } else {
+            "tuzi-count"
+          },
+          "\{right}",
+        ),
+        // span("items"),
+      ],
+    ),
     span(class="tuzi-status-text", style=["flex: 1"], title=info, info),
   ])
 }
