@@ -15,7 +15,7 @@ fn open_with_items(
       @rui.context_menu_item(
         scope,
         on_select=emit(OpenWith(target, id)),
-        span(style=status_text_style(), title=opener.label, opener.label),
+        span(class="tuzi-status-text", title=opener.label, opener.label),
       ),
     )
   }

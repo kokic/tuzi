@@ -67,14 +67,13 @@ fn pane_sort_select(
           title="Sort files (s)",
           style=[
             "grid-area: 1 / 1", "height: 1.5rem", "padding: 0 var(--tuzi-sort-padding)",
-            "gap: var(--tuzi-sort-gap)", "font: inherit",
-            "font-weight: var(--tuzi-text-action-weight)", "border-color: transparent",
+            "gap: var(--tuzi-sort-gap)", "font: inherit", "font-weight: var(--tuzi-text-action-weight)",
+            "border-color: transparent",
           ],
         ),
         @rui.select_content(
           scope~,
           attrs=@html.Attrs::build().aria_label("Sort files"),
-          style=popover_style,
           modes.map(mode => {
             @rui.select_item(
               scope~,

@@ -16,7 +16,7 @@ fn panes_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
           openers,
           supports_drives,
         ),
-        (left, right) => div(id="panes", style=panes_style(), [left, right]),
+        (left, right) => div(id="panes", [left, right]),
       )
     },
     by=configuration => ToJson::to_json(configuration).stringify(),
@@ -36,73 +36,84 @@ fn Pane::pane_view(
   history_menu : Html,
   bookmark_menu : Html,
 ) -> Html {
-  div(id="pane-\{idx.index()}-view-\{pane.id}", style=pane_style(active), {
-    "header": div(class="phead", style=pane_header_style(active), breadcrumbs),
-    "sort": div(
-      style=[
-        ..pane_header_style(false),
-        "justify-content: flex-end",
-        "border-bottom: 1px solid var(--rui-border)",
-      ],
-      [
-        history_menu,
-        bookmark_menu,
-        pane_filter_view(idx, pane.id, filter.unwrap_or(""), emit),
-        @rui.button(
-          variant=Ghost,
-          size=Xs,
-          style=[@presentation.UI_FONT_STYLE, "flex: none"],
-          title="Go to directory",
-          on_click=emit(GotoEvent(Open(idx, pane.path))),
-          "Goto",
-        ),
-        sort_select,
-      ],
-    ),
-    "content": div(
-      style=[
-        "position: relative", "display: flex", "flex-direction: column", "flex: 1",
-        "min-width: 0", "min-height: 0",
-      ],
-      {
-        "status": match pane.loading {
-          Unloaded | Loading => @html.nothing
-          LoadFailed(error) =>
-            pane_status_scroll_view(
-              directory_failure_view(error, pane.entries.is_empty(), idx, emit),
-              fill=pane.entries.is_empty(),
-            )
-          Ready =>
-            if pane.entries.is_empty() {
+  div(
+    id="pane-\{idx.index()}-view-\{pane.id}",
+    class=if active { "tuzi-pane is-active" } else { "tuzi-pane" },
+    {
+      "header": div(
+        class=if active { "phead is-active" } else { "phead" },
+        breadcrumbs,
+      ),
+      "sort": div(
+        class="phead",
+        style=[
+          "justify-content: flex-end", "border-bottom: 1px solid var(--rui-border)",
+        ],
+        [
+          history_menu,
+          bookmark_menu,
+          pane_filter_view(idx, pane.id, filter.unwrap_or(""), emit),
+          @rui.button(
+            variant=Ghost,
+            size=Xs,
+            style=[@presentation.UI_FONT_STYLE, "flex: none"],
+            title="Go to directory",
+            on_click=emit(GotoEvent(Open(idx, pane.path))),
+            "Goto",
+          ),
+          sort_select,
+        ],
+      ),
+      "content": div(
+        style=[
+          "position: relative", "display: flex", "flex-direction: column", "flex: 1",
+          "min-width: 0", "min-height: 0",
+        ],
+        {
+          "status": match pane.loading {
+            Unloaded | Loading => @html.nothing
+            LoadFailed(error) =>
               pane_status_scroll_view(
-                @rui.empty(
-                  @rui.empty_header(@rui.empty_title("Empty directory")),
+                directory_failure_view(
+                  error,
+                  pane.entries.is_empty(),
+                  idx,
+                  emit,
                 ),
-                fill=true,
+                fill=pane.entries.is_empty(),
               )
-            } else {
-              @html.nothing
-            }
+            Ready =>
+              if pane.entries.is_empty() {
+                pane_status_scroll_view(
+                  @rui.empty(
+                    @rui.empty_header(@rui.empty_title("Empty directory")),
+                  ),
+                  fill=true,
+                )
+              } else {
+                @html.nothing
+              }
+          },
+          "entries": if pane.entries.is_empty() {
+            @html.nothing
+          } else {
+            rows
+          },
+          "loading": if pane.loading is (Unloaded | Loading) {
+            div(
+              style=[
+                "position: absolute", "inset: 0", "display: flex", "align-items: center",
+                "justify-content: center", "pointer-events: none",
+              ],
+              @rui.spinner(label="Loading directory…"),
+            )
+          } else {
+            @html.nothing
+          },
         },
-        "entries": if pane.entries.is_empty() {
-          @html.nothing
-        } else {
-          rows
-        },
-        "loading": if pane.loading is (Unloaded | Loading) {
-          div(
-            style=[
-              "position: absolute", "inset: 0", "display: flex", "align-items: center",
-              "justify-content: center", "pointer-events: none",
-            ],
-            @rui.spinner(label="Loading directory…"),
-          )
-        } else {
-          @html.nothing
-        },
-      },
-    ),
-  })
+      ),
+    },
+  )
 }
 
 ///|

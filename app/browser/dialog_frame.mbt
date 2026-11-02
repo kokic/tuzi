@@ -90,7 +90,7 @@ fn dialog_confirm_footer_view(
   autofocus~ : Bool = false,
   disabled~ : Bool = false,
 ) -> Html {
-  @rui.dialog_footer(style=dialog_footer_style, [
+  @rui.dialog_footer([
     dialog_keyboard_hint_view("confirm"),
     dialog_close_button("Cancel"),
     @rui.button(
@@ -109,8 +109,5 @@ fn dialog_close_footer_view(
   label~ : String = "Close",
   actions~ : Array[Html] = [],
 ) -> Html {
-  @rui.dialog_footer(
-    style=dialog_footer_style,
-    [..actions, dialog_close_button(label, autofocus=true)],
-  )
+  @rui.dialog_footer([..actions, dialog_close_button(label, autofocus=true)])
 }

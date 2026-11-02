@@ -61,7 +61,6 @@ fn entry_menu_content(
   @rui.context_menu_content(
     scope,
     aria_label="File actions",
-    style=popover_style,
     [
       ..open_items,
       ..if !open_items.is_empty() {

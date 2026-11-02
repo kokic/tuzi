@@ -40,7 +40,7 @@ fn InfoContext::dialog(
         content,
       ),
       if context.link is Some(_) {
-        @rui.dialog_footer(style=dialog_footer_style, [
+        @rui.dialog_footer([
           dialog_close_button("Close"),
           @rui.button(
             style=[@presentation.UI_FONT_STYLE],

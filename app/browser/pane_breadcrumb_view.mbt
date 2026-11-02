@@ -39,7 +39,7 @@ fn breadcrumbs_view(
             ],
             attrs~,
             on_click=emit(PaneEvent(GotoPath(idx, target))),
-            span(style=status_text_style(), part),
+            span(class="tuzi-status-text", part),
           )
           breadcrumb_context_menu(
             "pane-\{idx.index()}-view-\{view_id}-path-\{index}",
@@ -132,7 +132,7 @@ fn breadcrumb_context_menu(
               )
             }
             Err(error) =>
-              @rui.context_menu_content(scope, style=popover_style, [
+              @rui.context_menu_content(scope, [
                 @rui.context_menu_item(
                   scope,
                   disabled=true,

@@ -77,7 +77,7 @@ const DialogDescriptionStyle : String = "margin:0;color:var(--rui-muted-foregrou
 const DialogTitleStyle : String = "margin:0;color:var(--rui-foreground,oklch(0.145 0 0));font-size:var(--tuzi-content-size);line-height:1.5rem;font-weight:var(--tuzi-weight-ui);letter-spacing:-0.01em;text-wrap:balance"
 
 ///|
-const DialogFooterStyle : String = "display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:0.5rem;margin-inline:-1rem;margin-block-end:-1rem;padding:1rem;border-top:1px solid var(--rui-border,oklch(0.922 0 0));border-radius:0;background:color-mix(in oklab,var(--rui-muted,oklch(0.97 0 0)) 50%,transparent)"
+const DialogFooterStyle : String = "display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:0.5rem;margin-inline:-1rem;margin-block-end:-1rem;padding:1rem;border-top:1px solid var(--rui-border,oklch(0.922 0 0))"
 
 ///|
 const DialogHeaderStyle : String = "display:flex;min-width:0;flex-direction:column;gap:0.375rem;text-align:start"

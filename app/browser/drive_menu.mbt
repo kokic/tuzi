@@ -68,7 +68,7 @@ fn drive_menu_view(
                       on_select=emit(PaneEvent(GotoPath(idx, drive))),
                       [
                         span(
-                          style=status_text_style(),
+                          class="tuzi-status-text",
                           title=drive.to_string(),
                           drive.to_string(),
                         ),
@@ -136,7 +136,7 @@ fn drive_menu_view(
                 }),
               [
                 span(
-                  style=status_text_style(),
+                  class="tuzi-status-text",
                   title=root.to_string(),
                   "\{root}",
                 ),
@@ -146,7 +146,6 @@ fn drive_menu_view(
             @rui.dropdown_menu_content(
               scope,
               aria_label="Storage locations",
-              style=popover_style,
               items,
             ),
           ])

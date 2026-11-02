@@ -55,8 +55,11 @@ fn pane_rows(
             name,
             li(
               id="pane-\{idx.index()}-view-\{row.view_id}-row-\{row.row}",
-              class="entry-row",
-              style=row_style(row.is_cursor),
+              class=if row.is_cursor {
+                "entry-row is-cursor"
+              } else {
+                "entry-row"
+              },
               menu,
             ),
           )
@@ -66,7 +69,7 @@ fn pane_rows(
     )
   rows.view(rows => {
     let children : Map[String, Html] = Map::from_iter(rows.iter())
-    ul(class="plist", style=pane_list_style(), children)
+    ul(class="plist", children)
   })
 }
 
@@ -86,23 +89,19 @@ fn entry_context_menu(
   let children = [
     span(
       class="entry-meta",
-      style=[
-        ..@presentation.entry_meta_style(),
-        "text-align: right",
-        "min-width: 2ch",
-        "margin: 0 4px",
-      ],
+      style=["text-align: right", "min-width: 2ch", "margin: 0 4px"],
       "\{row + 1}",
     ),
     div(
-      style=entry_open_area_style(),
+      class="entry-open-area",
       attrs=@html.Attrs::build().on_dblclick(_ev => {
         emit(PaneEvent(DblClick(idx, row)))
       }),
       [
         div(
           style=[
-            "grid-column: 1", "min-width: 0",
+            "grid-column: 1",
+            "min-width: 0",
             "padding-left: \{if selected { "32px" } else { "0px" }}",
             "transition: padding-left 160ms ease",
             "--tuzi-entry-name-decoration: \{if selected { "underline" } else { "none" }}",

@@ -76,6 +76,7 @@ fn Entry::name_container(
   children : Array[Html],
 ) -> Html {
   span(
+    class="entry-title",
     style=entry_title_style(entry, color),
     [
       ..children,
@@ -95,8 +96,7 @@ fn Entry::name_container(
 fn truncated_name_view(name : String) -> Html {
   span(
     style=[
-      "min-width: 0", "overflow: hidden", "text-overflow: ellipsis",
-      "text-decoration-line: var(--tuzi-entry-name-decoration, none)",
+      "min-width: 0", "overflow: hidden", "text-overflow: ellipsis", "text-decoration-line: var(--tuzi-entry-name-decoration, none)",
     ],
     name,
   )

@@ -31,14 +31,7 @@ using @presentation {
   format_entry_meta,
   entry_size_view,
   entry_time_view,
-  row_style,
-  entry_open_area_style,
   entry_title_style,
-  entry_details_style,
-  panes_style,
-  pane_style,
-  pane_header_style,
-  pane_list_style,
 }
 
 ///|

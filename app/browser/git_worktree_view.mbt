@@ -18,15 +18,15 @@ fn git_worktree_controls(
         ],
         [
           p(
-            style=["margin: 0", "font-weight: var(--tuzi-weight-emphasis)", "flex-shrink: 0"],
+            style=[
+              "margin: 0", "font-weight: var(--tuzi-weight-emphasis)", "flex-shrink: 0",
+            ],
             "Worktrees",
           ),
           span(
+            class="tuzi-status-text",
             style=[
-              ..status_text_style(),
-              "flex: 1",
-              "font-size: var(--tuzi-secondary-size)",
-              "color: var(--rui-muted-foreground)",
+              "flex: 1", "font-size: var(--tuzi-secondary-size)", "color: var(--rui-muted-foreground)",
             ],
             "\{info.worktrees.length()} registered",
           ),
@@ -74,7 +74,7 @@ fn git_worktree_item(
         @rui.item_title(
           [
             span(
-              style=status_text_style(),
+              class="tuzi-status-text",
               title=worktree.path.to_string() +
                 "\nBranch: " +
                 git_worktree_branch_label(worktree),

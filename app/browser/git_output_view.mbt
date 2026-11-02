@@ -41,7 +41,7 @@ fn git_output_view(panel : GitPanel, task : Task?) -> Html {
         ..if pending {
           [@rui.spinner(label~, style=["flex-shrink: 0"])]
         },
-        span(style=status_text_style(), title=label, label),
+        span(class="tuzi-status-text", title=label, label),
       ],
     ),
     task_output_view(output, label="Git output"),

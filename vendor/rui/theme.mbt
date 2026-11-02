@@ -14,11 +14,19 @@ const UiDisabled : String = "cursor:not-allowed;pointer-events:none;opacity:0.5"
 const UiDisabledVisual : String = "cursor:not-allowed;opacity:0.5"
 
 ///|
-/// Pseudo classes cannot live in an HTML `style` attribute. This small,
-/// declarative sheet supplies the interaction layer while every component's
-/// layout and base recipe remain inline. It is emitted by `theme`, so callers
-/// still import no CSS and no script registers or mutates hover state.
+/// Shared interaction rules and overridable component defaults.
+/// Emitted by `theme`; callers can override defaults in an external stylesheet.
 const UiInteractionCss : String =
+  #|:where([data-slot="context-menu-content"], [data-slot="dropdown-menu-content"]) {
+  #|  border-color: color-mix(in oklab,var(--rui-foreground,oklch(0.145 0 0)) 10%,transparent);
+  #|}
+  #|:where([data-slot="context-menu-content"], [data-slot="dropdown-menu-content"], [data-slot="select-content"]) {
+  #|  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),0 4px 6px -4px rgb(0 0 0 / 0.1);
+  #|}
+  #|:where([data-slot="dialog-footer"]) {
+  #|  border-radius: 0;
+  #|  background: color-mix(in oklab,var(--rui-muted,oklch(0.97 0 0)) 50%,transparent);
+  #|}
   #|@keyframes rui-spin {
   #|  to { transform:rotate(360deg); }
   #|}
@@ -1109,10 +1117,10 @@ const ThemeLightStyle : String = "color-scheme:light;--rui-radius:0.625rem;--rui
 const ThemeDarkStyle : String = "color-scheme:dark;--rui-radius:0.625rem;--rui-background:oklch(0.145 0 0);--rui-foreground:oklch(0.985 0 0);--rui-card:oklch(0.205 0 0);--rui-card-foreground:oklch(0.985 0 0);--rui-popover:oklch(0.205 0 0);--rui-popover-foreground:oklch(0.985 0 0);--rui-primary:oklch(0.922 0 0);--rui-primary-foreground:oklch(0.205 0 0);--rui-secondary:oklch(0.269 0 0);--rui-secondary-foreground:oklch(0.985 0 0);--rui-muted:oklch(0.269 0 0);--rui-muted-foreground:oklch(0.708 0 0);--rui-accent:oklch(0.269 0 0);--rui-accent-foreground:oklch(0.985 0 0);--rui-destructive:oklch(0.704 0.191 22.216);--rui-destructive-border:oklch(0.704 0.191 22.216 / 0.5);--rui-destructive-subtle:oklch(0.704 0.191 22.216 / 0.2);--rui-destructive-surface:color-mix(in oklab,var(--rui-destructive) 60%,transparent);--rui-destructive-ring:oklch(0.704 0.191 22.216 / 0.4);--rui-border:oklch(1 0 0 / 0.1);--rui-input:oklch(1 0 0 / 0.15);--rui-input-background:oklch(1 0 0 / 0.045);--rui-outline-background:oklch(1 0 0 / 0.045);--rui-outline-border:oklch(1 0 0 / 0.15);--rui-outline-hover-bg:color-mix(in oklab,oklch(1 0 0 / 0.15) 50%,transparent);--rui-ghost-hover-bg:color-mix(in oklab,oklch(0.269 0 0) 50%,transparent);--rui-select-hover-bg:color-mix(in oklab,var(--rui-input) 50%,transparent);--rui-tabs-active-bg:var(--rui-outline-background);--rui-tabs-active-border:var(--rui-input);--rui-field-label-checked-bg:color-mix(in oklab,var(--rui-primary) 10%,transparent);--rui-ring:oklch(0.556 0 0);--rui-switch-unchecked:oklch(1 0 0 / 0.12);--rui-switch-thumb-checked:oklch(0.205 0 0);--rui-switch-thumb-unchecked:oklch(0.985 0 0);--rui-sidebar:oklch(0.205 0 0);--rui-sidebar-foreground:oklch(0.985 0 0);--rui-sidebar-primary:oklch(0.488 0.243 264.376);--rui-sidebar-primary-foreground:oklch(0.985 0 0);--rui-sidebar-accent:oklch(0.269 0 0);--rui-sidebar-accent-foreground:oklch(0.985 0 0);--rui-sidebar-border:oklch(1 0 0 / 0.1);--rui-sidebar-ring:oklch(0.439 0 0)"
 
 ///|
-fn theme_mode_style(mode : ColorMode) -> String {
+fn theme_mode_name(mode : ColorMode) -> String {
   match mode {
-    Light => ThemeLightStyle
-    Dark => ThemeDarkStyle
+    Light => "light"
+    Dark => "dark"
   }
 }
 
@@ -1175,7 +1183,15 @@ fn ui_interaction_stylesheet() -> @html.Html {
   // here so SSR does not escape CSS selectors; no caller input reaches it.
   let attrs = @html.Attrs::build()
     .data_set("rui-style", "interactions")
-    .inner_html(UiInteractionCss)
+    .inner_html(
+      ":where([data-rui-theme=light]) {" +
+      ThemeLightStyle +
+      "}\n" +
+      ":where([data-rui-theme=dark]) {" +
+      ThemeDarkStyle +
+      "}\n" +
+      UiInteractionCss,
+    )
   @html.style_tag(attrs~, ([] : Array[@html.Html]))
 }
 
@@ -1184,8 +1200,8 @@ fn ui_interaction_stylesheet() -> @html.Html {
 ///
 /// The wrapper emits the library's static pseudo-class interaction sheet, so
 /// no external CSS import or runtime stylesheet registration is required.
-/// Every component still carries light-theme fallback values. Append custom
-/// CSS variables through `style` to override any token.
+/// Every component still carries light-theme fallback values. Override theme
+/// tokens in an external stylesheet or through `style`.
 pub fn[C : @html.IsChildren] theme(
   mode~ : ColorMode = Light,
   id? : String,
@@ -1195,14 +1211,14 @@ pub fn[C : @html.IsChildren] theme(
   style~ : Array[String] = [],
   children : C,
 ) -> @html.Html {
-  let element_attrs = ui_attrs(attrs).data_set("rui-theme", "")
+  let element_attrs = ui_attrs(attrs).data_set(
+    "rui-theme",
+    theme_mode_name(mode),
+  )
   @html.fragment([
     ui_interaction_stylesheet(),
     @html.div(
-      style=ui_styles(
-        [UiBoxSizing, UiTextRendering, theme_mode_style(mode), ThemeBaseStyle],
-        style,
-      ),
+      style=ui_styles([UiBoxSizing, UiTextRendering, ThemeBaseStyle], style),
       id?,
       class?,
       title?,

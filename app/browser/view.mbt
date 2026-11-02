@@ -10,22 +10,9 @@ fn Model::view(
     mode=color_mode(model.theme),
     id="tuzi",
     attrs=@html.Attrs::build().data_set("tuzi-theme", model.theme.to_string()),
-    style=[
-      ..@presentation.theme_font_style(model.theme),
-      ..typography_style,
-      ..appearance_style,
-      ..match model.theme {
-        Light => light_theme_style
-        Dark => dark_theme_style
-      },
-      "height: 100%",
-      "display: flex",
-      "flex-direction: column",
-    ],
     [
-      @presentation.font_stylesheet(),
       div(
-        style=application_style(),
+        class="tuzi-application",
         [
           ..match model.startup {
             Starting => [centered_loading_view("Connecting to server…")]

@@ -34,7 +34,7 @@ pub fn format_entry_meta(entry : Entry) -> String {
 
 ///|
 pub fn entry_size_view(entry : Entry) -> Html {
-  let style = entry_meta_style() + ["grid-column: 2", "text-align: right"]
+  let style = ["grid-column: 2", "text-align: right"]
   let text = if entry.is_dir() {
     match entry.child_count {
       None => "…"
@@ -43,7 +43,8 @@ pub fn entry_size_view(entry : Entry) -> Html {
     }
   } else {
     match entry.size {
-      Ok(size) => size.map_or(unknown_size, size => format_file_size(size)).to_string()
+      Ok(size) =>
+        size.map_or(unknown_size, size => format_file_size(size)).to_string()
       Err(_) => "Unavailable"
     }
   }
@@ -52,7 +53,7 @@ pub fn entry_size_view(entry : Entry) -> Html {
 
 ///|
 pub fn entry_time_view(entry : Entry) -> Html {
-  let style = entry_meta_style() + ["grid-column: 3", "text-align: right"]
+  let style = ["grid-column: 3", "text-align: right"]
   guard entry.mtime is Ok(time) else {
     span(class="entry-meta", style~, "Unavailable")
   }

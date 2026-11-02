@@ -4,8 +4,8 @@ fn Pane::entry_details_view(pane : Pane) -> Html {
     .cursor_index()
     .map(index => pane.visible_entries[index])
     .map_or("", entry => "\{entry.name}  \{format_entry_meta(entry)}")
-  div(style=entry_details_style(), [
-    span(style=["flex: 1", ..status_text_style()], title=info, info),
+  div(class="entry-details", [
+    span(class="tuzi-status-text", style=["flex: 1"], title=info, info),
   ])
 }
 
