@@ -1,7 +1,7 @@
 ///|
 let light_theme_style : Array[String] = [
   // Surface and hover colors retain the beige hue; adjust only lightness.
-  "--tuzi-theme-background: #e8e0ba", "--tuzi-theme-foreground: #17344d", "--tuzi-theme-surface: oklch(from var(--tuzi-theme-background) calc(l - 0.025) c h)",
+  "--tuzi-theme-background: #fcfbf8", "--tuzi-theme-foreground: #17344d", "--tuzi-theme-surface: oklch(from var(--tuzi-theme-background) calc(l - 0.025) c h)",
   "--tuzi-theme-hover: oklch(from var(--tuzi-theme-background) calc(l - 0.05) c h)",
   "--tuzi-pane-header-hover-background: oklch(from var(--tuzi-theme-background) calc(l - 0.075) c h)",
   // Fills derive from beige; borders and focus lines use blue.
