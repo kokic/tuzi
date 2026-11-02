@@ -53,7 +53,7 @@ let stored_archive_extensions : ReadOnlyArray[String] = [
 ///|
 fn archive_compression(name : String) -> @zip.Compression {
   guard name.rev_find(".") is Some(dot) else { return Deflate }
-  let extension = name.view(start_offset=dot + 1).to_owned().to_lower()
+  let extension = name.exact_view(start=dot + 1).to_owned().to_lower()
   guard stored_archive_extensions.binary_search_by(ext => {
       ext.lexical_compare(extension)
     })
