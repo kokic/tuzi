@@ -459,7 +459,7 @@ print {
 
 #tuzi .task-output {
   font-family: var(--tuzi-font-mono);
-  font-size: var(--tuzi-code-size);
+  font-size: 0.7rem;
   line-height: 1.5;
   margin: 0;
 }

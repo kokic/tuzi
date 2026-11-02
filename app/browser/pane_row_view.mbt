@@ -101,12 +101,29 @@ fn entry_context_menu(
         div(
           style=[
             "grid-column: 1",
+            "position: relative",
             "min-width: 0",
             "padding-left: \{if selected { "32px" } else { "0px" }}",
             "transition: padding-left 160ms ease",
             "--tuzi-entry-name-decoration: \{if selected { "underline" } else { "none" }}",
           ],
-          entry.name_view(entry_color),
+          [
+            ..if selected {
+              [
+                span(
+                  attrs=@html.Attrs::build().aria_hidden("true"),
+                  style=[
+                    "position: absolute", "left: 0", "width: 32px", "text-align: center",
+                    "color: var(--rui-foreground)", "pointer-events: none", "user-select: none",
+                  ],
+                  "✓",
+                ),
+              ]
+            } else {
+              []
+            },
+            entry.name_view(entry_color),
+          ],
         ),
         entry_size_view(entry),
         entry_time_view(entry),
