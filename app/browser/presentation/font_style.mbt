@@ -3,25 +3,26 @@
 pub const UI_FONT_STYLE : String = "font-family: var(--tuzi-font-ui)"
 
 ///|
-/// File names, filter input, text/code, task output and shortcuts use the content family.
+/// File names, filter input, text/code and shortcuts use the content family.
 pub const CONTENT_FONT_STYLE : String = "font-family: var(--tuzi-font-content)"
 
 ///|
-/// Entry numbers, sizes, timestamps and the file status bar use the metadata family.
-const METADATA_FONT_STYLE : String = "font-family: var(--tuzi-font-content)"
+/// Task output and error details use the mono family.
+pub const MONO_FONT_STYLE : String = "font-family: var(--tuzi-font-mono)"
 
 ///|
-/// Each theme supplies final font families and sizes, without component fallbacks.
-/// UI: controls and menus; content: primary text; secondary: metadata;
-/// caption: badges and shortcuts; code: source/logs; preview: font samples.
+/// Entry numbers, sizes, timestamps and the file status bar use the metadata family.
+const METADATA_FONT_STYLE : String = "font-family: var(--tuzi-font-metadata)"
+
+///|
 pub fn theme_font_style(theme : @tuzi.Theme) -> Array[String] {
   match theme {
     Light =>
       [
         "--tuzi-font-ui: Alegreya, ui-serif, serif", "--tuzi-font-content: Alegreya, ui-serif, serif",
-        "--tuzi-font-metadata: Consolas, monospace", "--tuzi-ui-size: 0.875rem", "--tuzi-content-size: 1rem",
-        "--tuzi-secondary-size: 0.8rem", "--tuzi-caption-size: 0.75rem", "--tuzi-code-size: 0.8125rem",
-        "--tuzi-font-preview-size: 28px",
+        "--tuzi-font-metadata: Alegreya, ui-serif, serif", "--tuzi-ui-size: 0.875rem",
+        "--tuzi-content-size: 1rem", "--tuzi-secondary-size: 0.8rem", "--tuzi-caption-size: 0.75rem",
+        "--tuzi-code-size: 0.8125rem", "--tuzi-font-preview-size: 28px",
       ]
     Dark =>
       [
@@ -44,6 +45,7 @@ pub fn preview_font_style(family : String) -> String {
 const FontCss : String =
   #|html { font-size: 20px; }
   #|#tuzi {
+  #|  --tuzi-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   #|  --tuzi-weight-ui: 400;
   #|  --tuzi-weight-emphasis: 600;
   #|  --tuzi-weight-cursor: 800;

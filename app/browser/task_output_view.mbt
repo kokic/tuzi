@@ -8,7 +8,7 @@ fn task_output_view(message : String, label~ : String = "Task output") -> Html {
     ],
     @html.pre(
       style=[
-        @presentation.CONTENT_FONT_STYLE,
+        @presentation.MONO_FONT_STYLE,
         "font-size: var(--tuzi-code-size)",
         "line-height: 1.5",
         "margin: 0",
