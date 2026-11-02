@@ -2,7 +2,7 @@
 #cfg(not(platform="windows"))
 async fn read_link_text(path : Path) -> String {
   let output = link_command("readlink", [path.to_string()])
-  output.view(end_offset=output.length() - 1).to_owned()
+  output.exact_view(end=output.length() - 1).to_owned()
 }
 
 ///|

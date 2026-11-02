@@ -16,7 +16,7 @@ pub impl Show for ExtractionError with fn to_string(self) {
 ///|
 fn extraction_components(name : String) -> Array[String] raise ExtractionError {
   let relative = if name.has_suffix("/") {
-    name.view(end_offset=name.length() - 1).to_owned()
+    name.exact_view(end=name.length() - 1).to_owned()
   } else {
     name
   }
