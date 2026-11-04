@@ -9,9 +9,9 @@ const DialogDescriptionId : String = "tuzi-dialog-description"
 
 ///|
 priv enum ModalSize {
-  Small
-  Wide
-  Reading
+  Small(tall~ : Bool)
+  Wide(tall~ : Bool)
+  Reading(tall~ : Bool)
 }
 
 ///|
@@ -19,7 +19,7 @@ fn modal(
   title : String,
   emit : Emit[Msg],
   children : Array[Html],
-  size~ : ModalSize = Small,
+  size~ : ModalSize = Small(tall=false),
   style~ : Array[String] = [],
   description? : String,
 ) -> Html {
@@ -38,14 +38,26 @@ fn modal(
       "overflow-wrap: anywhere",
       "border-radius: 0",
       ..match size {
-        Small => []
-        Wide => ["width: min(640px, calc(100% - 2rem))"]
-        Reading => ["width: 960px", "max-width: calc(100vw - 32px)"]
+        Small(_) => []
+        Wide(_) => ["width: min(640px, calc(100% - 2rem))"]
+        Reading(_) => ["width: 960px", "max-width: calc(100vw - 32px)"]
+      },
+      ..match size {
+        Small(tall~) | Wide(tall~) | Reading(tall~) =>
+          if tall {
+            [
+              "height: calc(100dvh - 32px)", "max-height: calc(100dvh - 32px)", "display: flex",
+              "flex-direction: column", "overflow: hidden",
+            ]
+          } else {
+            []
+          }
       },
       ..style,
     ],
     [
       @rui.dialog_header(
+        style=["flex-shrink: 0"],
         [
           @rui.dialog_title(id=DialogTitleId, title),
           ..description.map_or([], description => {
@@ -55,6 +67,17 @@ fn modal(
       ),
       ..children,
     ],
+  )
+}
+
+///|
+fn dialog_body(children : Array[Html]) -> Html {
+  div(
+    style=[
+      "flex: 1 1 auto", "min-height: 0", "min-width: 0", "overflow-y: auto", "overflow-x: hidden",
+      "scrollbar-gutter: stable", "padding-inline: 4px",
+    ],
+    children,
   )
 }
 
@@ -109,5 +132,8 @@ fn dialog_close_footer_view(
   label~ : String = "Close",
   actions~ : Array[Html] = [],
 ) -> Html {
-  @rui.dialog_footer([..actions, dialog_close_button(label, autofocus=true)])
+  @rui.dialog_footer(
+    style=["flex-shrink: 0"],
+    [..actions, dialog_close_button(label, autofocus=true)],
+  )
 }
