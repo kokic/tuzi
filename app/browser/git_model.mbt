@@ -9,19 +9,21 @@ priv enum GitMsg {
 }
 
 ///|
+#derive(Eq)
 priv struct GitContext {
   entry : InfoContext
   panel : GitPanel
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct GitPanel {
   info : @tuzi.GitInfo?
   loading : Bool
   request_id : Int32
   selected : String
   error : String
-} derive(Eq)
+}
 
 ///|
 fn GitPanel::initialize() -> GitPanel {

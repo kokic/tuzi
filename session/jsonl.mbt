@@ -1,14 +1,16 @@
 ///|
+#derive(Eq)
 pub(all) struct JsonlRecord {
   line : Int32
   value : Json
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 pub(all) struct JsonlDocument {
   records : Array[JsonlRecord]
   diagnostics : Array[Diagnostic]
-} derive(Eq)
+}
 
 ///|
 pub fn parse_jsonl(source : String) -> JsonlDocument {

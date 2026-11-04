@@ -60,22 +60,23 @@ async fn directory_child_counts(
   request : @shared.DirectoryCountsRequest,
 ) -> Map[String, Result[Int64, @shared.ApiFailure]] {
   let jobs : Array[async () -> (String, Result[Int64, @shared.ApiFailure])] = request.names.map(name => {
-    async fn () {
-      let count = try {
-        let path = request.path.join(Path("./\{name}"))
-        let dir = @async_fs.opendir(path.to_native())
-        defer dir.close()
-        let mut count = 0L
-        while dir.next(include_hidden=true, include_special=false) is Some(_) {
-          count += 1
+      async fn() {
+        let count = try {
+          let path = request.path.join(Path("./\{name}"))
+          let dir = @async_fs.opendir(path.to_native())
+          defer dir.close()
+          let mut count = 0L
+          while dir.next(include_hidden=true, include_special=false) is Some(_) {
+            count += 1
+          }
+          Ok(count)
+        } catch {
+          error => Err(api_failure(error))
         }
-        Ok(count)
-      } catch {
-        error => Err(api_failure(error))
+        (name, count)
       }
-      (name, count)
-    }
-  })
+    },
+  )
   Map::from_array(@async.all(jobs[:], max_concurrent=8))
 }
 

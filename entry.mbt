@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, FromJson, ToJson)
 pub(all) enum EntryKind {
   Regular
   Directory
@@ -9,7 +10,7 @@ pub(all) enum EntryKind {
   BlockDevice
   CharDevice
   Unknown
-} derive(Eq, FromJson, ToJson)
+}
 
 ///|
 pub extend EntryKind with Eq::{equal, not_equal}
@@ -21,6 +22,7 @@ pub extend EntryKind with FromJson::{from_json}
 pub extend EntryKind with ToJson::{to_json}
 
 ///|
+#derive(Eq, FromJson, ToJson)
 pub(all) struct Entry {
   name : String
   kind : Result[EntryKind, ApiFailure]
@@ -28,7 +30,7 @@ pub(all) struct Entry {
   child_count : Result[Int64, ApiFailure]?
   mtime : Result[Int64, ApiFailure]
   marker : Result[String, ApiFailure]
-} derive(Eq, FromJson, ToJson)
+}
 
 ///|
 pub extend Entry with Eq::{equal, not_equal}

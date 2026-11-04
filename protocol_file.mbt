@@ -2,6 +2,7 @@
 using @path {type Path}
 
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) enum FileOperation {
   Delete(target~ : Path)
   Rename(source~ : Path, new_name~ : String)
@@ -18,7 +19,7 @@ pub(all) enum FileOperation {
   Mkdir(parent~ : Path, name~ : String)
   Copy(source~ : Path, destination~ : Path)
   Move(source~ : Path, destination~ : Path)
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
 pub extend FileOperation with ToJson::{to_json}

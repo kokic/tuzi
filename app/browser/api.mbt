@@ -1,8 +1,9 @@
 ///|
+#derive(Eq)
 priv enum RequestFailure {
   Rejected(@tuzi.ApiFailure)
   Unconfirmed(String)
-} derive(Eq)
+}
 
 ///|
 fn RequestFailure::message(self : RequestFailure) -> String {

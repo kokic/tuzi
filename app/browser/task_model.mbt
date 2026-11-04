@@ -27,6 +27,7 @@ priv struct FileSubmission {
 }
 
 ///|
+#derive(Eq)
 priv struct TaskState {
   items : Array[Task]
   session : String
@@ -35,7 +36,7 @@ priv struct TaskState {
   submitting : Bool
   sync_error : String
   submit_error : String
-} derive(Eq)
+}
 
 ///|
 fn TaskState::initialize() -> TaskState {

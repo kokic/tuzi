@@ -1,11 +1,12 @@
 ///|
+#derive(Eq)
 priv struct InfoContext {
   id : Int32
   entry : Entry
   path : Path
   link : LinkFields?
   font_preview : FontPreview?
-} derive(Eq)
+}
 
 ///|
 fn Model::open_info_dialog(

@@ -1,10 +1,12 @@
 ///|
+#derive(ToJson, FromJson)
 pub(all) enum StartupMode {
   OpenDirectory
   RestoreHistory
-} derive(ToJson, FromJson)
+}
 
 ///|
+#derive(ToJson, FromJson)
 pub(all) struct ServerConfig {
   base : Path
   startup : StartupMode
@@ -12,12 +14,13 @@ pub(all) struct ServerConfig {
   entry_appearance : EntryAppearance
   openers : OpenRegistry
   supports_drive_selection : Bool
-} derive(ToJson, FromJson)
+}
 
 ///|
+#derive(ToJson, FromJson)
 pub(all) struct DirectoryRequest {
   path : Path
-} derive(ToJson, FromJson)
+}
 
 ///|
 pub extend StartupMode with ToJson::{to_json}
@@ -38,10 +41,11 @@ pub extend DirectoryRequest with ToJson::{to_json}
 pub extend DirectoryRequest with FromJson::{from_json}
 
 ///|
+#derive(ToJson, FromJson)
 pub(all) struct ListingRequest {
   path : Path
   include_markers : Bool
-} derive(ToJson, FromJson)
+}
 
 ///|
 pub extend ListingRequest with ToJson::{to_json}
@@ -50,10 +54,11 @@ pub extend ListingRequest with ToJson::{to_json}
 pub extend ListingRequest with FromJson::{from_json}
 
 ///|
+#derive(ToJson, FromJson)
 pub(all) struct DirectoryCountsRequest {
   path : Path
   names : Array[String]
-} derive(ToJson, FromJson)
+}
 
 ///|
 pub extend DirectoryCountsRequest with ToJson::{to_json}

@@ -1,14 +1,16 @@
 ///|
+#derive(Eq)
 priv enum FontPreviewState {
   Loading
   Loaded(Result[Unit, String])
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct FontPreview {
   state : FontPreviewState
   text : String
-} derive(Eq)
+}
 
 ///|
 fn FontPreview::initialize() -> FontPreview {

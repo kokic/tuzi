@@ -19,6 +19,7 @@ priv struct ListingTarget {
 }
 
 ///|
+#derive(Eq)
 priv struct Pane {
   id : Int32
   path : Path
@@ -29,15 +30,16 @@ priv struct Pane {
   entries : Array[Entry]
   visible_entries : Array[Entry]
   selected : Set[String]
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv enum ListingState {
   Unloaded
   Loading
   Ready
   LoadFailed(String)
-} derive(Eq)
+}
 
 ///|
 fn Pane::initialize(path : Path, id~ : Int32 = 0) -> Pane {

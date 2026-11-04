@@ -1,27 +1,31 @@
 ///|
+#derive(Eq)
 pub(all) enum Agent {
   Pi
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 pub(all) enum Role {
   User
   Assistant
   System
   Tool
   Custom(String)
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 pub(all) enum Block {
   Text(String)
   Thinking(String)
   ToolCall(id~ : String, name~ : String, arguments~ : Json)
   Image(mime_type~ : String, data~ : String)
   Unknown(Json)
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 pub(all) struct Message {
   role : Role
   blocks : Array[Block]
@@ -32,16 +36,18 @@ pub(all) struct Message {
   is_error : Bool
   stop_reason : String?
   error : String?
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 pub(all) enum Event {
   Message(Message)
   Notice(title~ : String, blocks~ : Array[Block])
   Unknown(String)
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 pub(all) struct Entry {
   line : Int32
   id : String
@@ -50,16 +56,18 @@ pub(all) struct Entry {
   branch_start : Bool
   event : Event
   raw : Json
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 pub(all) struct Diagnostic {
   line : Int32
   message : String
   source : String
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 pub(all) struct Document {
   agent : Agent
   id : String
@@ -69,7 +77,7 @@ pub(all) struct Document {
   header : Json
   entries : Array[Entry]
   diagnostics : Array[Diagnostic]
-} derive(Eq)
+}
 
 ///|
 pub extend Agent with Eq::{equal, not_equal}

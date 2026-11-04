@@ -1,10 +1,12 @@
 ///|
+#derive(ToJson, FromJson)
 pub(all) enum ApiResponse[T] {
   Success(T)
   Failure(ApiFailure)
-} derive(ToJson, FromJson)
+}
 
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) enum ApiErrorCode {
   InvalidRequest
   InvalidName
@@ -18,13 +20,14 @@ pub(all) enum ApiErrorCode {
   Io
   GitUnavailable
   GitFailed
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) struct ApiFailure {
   code : ApiErrorCode
   message : String
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
 pub extend ApiResponse with ToJson::{to_json}

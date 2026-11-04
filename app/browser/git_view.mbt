@@ -11,7 +11,7 @@ fn git_info_dialog(
     jobs.submitting,
     emit,
   )
-  context.entry.dialog(content, emit, expanded=true, error~)
+  context.entry.dialog(content, emit, tall=true, error~)
 }
 
 ///|

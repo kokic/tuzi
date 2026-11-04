@@ -1,11 +1,13 @@
 ///|
+#derive(Eq)
 priv enum StartupState {
   Starting
   Started
   StartupFailed(String)
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct Model {
   startup : StartupState
   theme : Theme
@@ -22,7 +24,7 @@ priv struct Model {
   dialog_error : String
   jobs : TaskState
   next_info_id : Int32
-} derive(Eq)
+}
 
 ///|
 priv enum Msg {

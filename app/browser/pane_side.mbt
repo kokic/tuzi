@@ -1,8 +1,9 @@
 ///|
+#derive(Eq)
 priv enum PaneSide {
   Left
   Right
-} derive(Eq)
+}
 
 ///|
 fn PaneSide::other(self : PaneSide) -> PaneSide {

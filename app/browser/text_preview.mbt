@@ -1,15 +1,17 @@
 ///|
+#derive(Eq)
 priv enum TextPreviewContent {
   Loading
   Loaded(Result[String, String])
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct TextPreviewContext {
   id : Int32
   path : Path
   content : TextPreviewContent
-} derive(Eq)
+}
 
 ///|
 fn Model::open_text_preview(

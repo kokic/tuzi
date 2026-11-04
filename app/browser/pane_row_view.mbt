@@ -1,4 +1,5 @@
 ///|
+#derive(Eq)
 priv struct EntryRow {
   view_id : Int32
   directory : Path
@@ -7,7 +8,7 @@ priv struct EntryRow {
   selected : Bool
   is_cursor : Bool
   transfer_disabled : Bool
-} derive(Eq)
+}
 
 ///|
 fn pane_rows(

@@ -1,9 +1,10 @@
 ///|
+#derive(Eq)
 priv struct DriveMenuState {
   open : Bool
   request_id : Int32
   listing : Result[Array[Path], RequestFailure]?
-} derive(Eq)
+}
 
 ///|
 priv enum DriveMenuMsg {

@@ -1,8 +1,9 @@
 ///|
+#derive(Debug, Eq, ToJson, FromJson)
 pub(all) enum Theme {
   Light
   Dark
-} derive(Debug, Eq, ToJson, FromJson)
+}
 
 ///|
 pub fn Theme::parse(s : String) -> Theme {

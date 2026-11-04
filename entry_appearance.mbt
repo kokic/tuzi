@@ -1,8 +1,9 @@
 ///|
+#derive(Debug, Eq, ToJson, FromJson)
 pub(all) enum EntryAppearance {
   Plain
   Decorated
-} derive(Debug, Eq, ToJson, FromJson)
+}
 
 ///|
 pub extend EntryAppearance with Debug::{to_repr}

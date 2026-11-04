@@ -60,4 +60,3 @@ fn ui_chevron_up_icon() -> @html.Html {
 fn ui_search_icon() -> @html.Html {
   ui_stroke_icon("m21 21-4.3-4.3M19 11a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z")
 }
-

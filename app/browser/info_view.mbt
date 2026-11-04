@@ -3,7 +3,7 @@ fn InfoContext::dialog(
   context : InfoContext,
   additional_content : Array[Html],
   emit : Emit[Msg],
-  expanded~ : Bool = false,
+  tall~ : Bool = false,
   error~ : String = "",
 ) -> Html {
   let content = [
@@ -21,26 +21,15 @@ fn InfoContext::dialog(
   modal(
     "Information",
     emit,
-    size=Wide,
+    size=Wide(tall~),
     style=[
-      "max-height: calc(100dvh - 32px)",
-      "display: flex",
-      "flex-direction: column",
+      "max-height: calc(100dvh - 32px)", "display: flex", "flex-direction: column",
       "overflow: hidden",
-      ..if expanded {
-        ["height: min(720px, calc(100dvh - 32px))"]
-      },
     ],
     [
-      div(
-        style=[
-          "flex: 1 1 auto", "min-height: 0", "min-width: 0", "overflow-y: auto",
-          "overflow-x: hidden", "scrollbar-gutter: stable", "padding-inline: 4px",
-        ],
-        content,
-      ),
+      dialog_body(content),
       if context.link is Some(_) {
-        @rui.dialog_footer([
+        @rui.dialog_footer(style=["flex-shrink: 0"], [
           dialog_close_button("Close"),
           @rui.button(
             style=[@presentation.UI_FONT_STYLE],

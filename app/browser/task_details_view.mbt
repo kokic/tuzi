@@ -5,7 +5,7 @@ fn task_details_dialog(
   emit : Emit[Msg],
 ) -> Html {
   guard tasks.iter().find_first(task => task.id == id) is Some(task) else {
-    modal("Task details", emit, size=Wide, [
+    modal("Task details", emit, size=Wide(tall=false), [
       @rui.empty(
         @rui.empty_header([
           @rui.empty_title("Task unavailable"),
@@ -29,7 +29,7 @@ fn task_details_dialog(
   modal(
     "Task details",
     emit,
-    size=Wide,
+    size=Wide(tall=false),
     description?,
     style=[
       "max-height: calc(100dvh - 32px)", "display: flex", "flex-direction: column",

@@ -1,9 +1,10 @@
 ///|
+#derive(Debug, Eq)
 pub(all) enum ToastVariant {
   ToastDefault
   ToastDestructive
   ToastSuccess
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend ToastVariant with Debug::{to_repr}
@@ -12,6 +13,7 @@ pub extend ToastVariant with Debug::{to_repr}
 pub extend ToastVariant with Eq::{equal, not_equal}
 
 ///|
+#derive(Eq)
 priv struct ToastEntry {
   id : Int32
   title : String
@@ -19,15 +21,16 @@ priv struct ToastEntry {
   variant : ToastVariant
   closing : Bool
   swipe_direction : Int32
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct ToastModel {
   next_id : Int32
   entries : Array[ToastEntry]
   pause_sources : Array[String]
   expired : Array[Int32]
-} derive(Eq)
+}
 
 ///|
 priv enum ToastMsg {
@@ -176,7 +179,9 @@ pub fn[C : @html.IsChildren] toast_title(
     title?,
     attrs=ui_attrs(attrs).data_set("slot", "toast-title"),
     style=ui_styles(
-      ["font-size:var(--tuzi-ui-size);line-height:1.25rem;font-weight:var(--tuzi-weight-ui)"],
+      [
+        "font-size:var(--tuzi-ui-size);line-height:1.25rem;font-weight:var(--tuzi-weight-ui)",
+      ],
       style,
     ),
     children,

@@ -2,11 +2,12 @@
 using @tuzi {type Entry, type EntryAppearance}
 
 ///|
+#derive(Eq)
 pub(all) enum SortMode {
   Name
   Size
   Time
-} derive(Eq)
+}
 
 ///|
 pub extend SortMode with Eq::{equal, not_equal}

@@ -21,10 +21,11 @@ fn Model::create_links_in_other_pane(
 }
 
 ///|
+#derive(Eq)
 priv struct LinkFields {
   path : String
   target : String?
-} derive(Eq)
+}
 
 ///|
 fn Dialog::map_info(

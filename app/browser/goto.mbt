@@ -1,10 +1,11 @@
 ///|
+#derive(Eq)
 priv struct GotoContext {
   pane : PaneSide
   directory : Path
   input : String
   pending : Bool
-} derive(Eq)
+}
 
 ///|
 priv enum GotoMsg {

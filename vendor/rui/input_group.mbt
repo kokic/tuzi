@@ -1,10 +1,11 @@
 ///|
+#derive(Debug, Eq)
 pub(all) enum InputGroupAddonAlign {
   InputInlineStart
   InputInlineEnd
   InputBlockStart
   InputBlockEnd
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend InputGroupAddonAlign with Debug::{to_repr}
@@ -13,12 +14,13 @@ pub extend InputGroupAddonAlign with Debug::{to_repr}
 pub extend InputGroupAddonAlign with Eq::{equal, not_equal}
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum InputGroupButtonSize {
   InputButtonXs
   InputButtonSm
   InputButtonIconXs
   InputButtonIconSm
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend InputGroupButtonSize with Debug::{to_repr}
@@ -200,8 +202,7 @@ fn input_group_button_size_style(size : InputGroupButtonSize) -> String {
   match size {
     InputButtonXs =>
       "--rui-button-padding-inline:0.375rem;--rui-button-icon-size:0.875rem;line-height:1.25rem"
-    InputButtonIconXs =>
-      "--rui-button-icon-size:1rem"
+    InputButtonIconXs => "--rui-button-icon-size:1rem"
     InputButtonSm | InputButtonIconSm => ""
   }
 }

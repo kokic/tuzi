@@ -1,22 +1,25 @@
 ///|
+#derive(Eq)
 priv enum ProgressState {
   Submitting
   Rejected(@tuzi.ApiFailure)
   Tracking(Int32, TaskStatus?)
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct ProgressItem {
   operation : FileOperation
   state : ProgressState
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct ProgressBatch {
   items : Array[ProgressItem]
   session : String
   error : RequestFailure?
-} derive(Eq)
+}
 
 ///|
 fn ProgressBatch::initialize(

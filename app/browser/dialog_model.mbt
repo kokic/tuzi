@@ -5,6 +5,7 @@ priv enum NewEntryKind {
 }
 
 ///|
+#derive(Eq)
 priv enum Dialog {
   Nil
   Help
@@ -31,4 +32,4 @@ priv enum Dialog {
   GitRenameInput(context~ : GitContext, reference~ : String, input~ : String)
   RemoveWorktreeConfirm(context~ : GitContext, worktree~ : @tuzi.GitWorktree)
   Progress(ProgressBatch)
-} derive(Eq)
+}

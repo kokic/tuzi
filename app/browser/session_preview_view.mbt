@@ -27,7 +27,7 @@ fn session_preview_dialog(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
         modal(
           context.path.basename(),
           emit,
-          size=Reading,
+          size=Reading(tall=false),
           style=[
             "height: min(780px, calc(100dvh - 32px))", "max-height: calc(100dvh - 32px)",
             "display: flex", "flex-direction: column", "overflow: hidden",

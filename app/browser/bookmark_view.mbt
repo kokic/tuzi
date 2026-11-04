@@ -11,7 +11,7 @@ fn bookmarks_dialog(
   modal(
     "Bookmarks",
     emit,
-    size=Wide,
+    size=Wide(tall=false),
     description="Jump to a directory in the \{target} pane.",
     [
       if bookmarks.is_empty() {

@@ -1,16 +1,18 @@
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) enum TaskKind {
   File(FileOperation)
   Git(GitRequest)
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) enum TaskStatus {
   Queued
   Running
   Completed(String)
   Failed(ApiFailure)
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
 pub fn TaskStatus::is_active(self : TaskStatus) -> Bool {
@@ -21,19 +23,21 @@ pub fn TaskStatus::is_active(self : TaskStatus) -> Bool {
 }
 
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) struct Task {
   id : Int32
   kind : TaskKind
   description : String
   status : TaskStatus
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) struct TaskSnapshot {
   session : String
   revision : Int32
   tasks : Array[Task]
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
 pub extend TaskKind with Eq::{equal, not_equal}
@@ -72,10 +76,11 @@ pub extend TaskSnapshot with ToJson::{to_json}
 pub extend TaskSnapshot with FromJson::{from_json}
 
 ///|
+#derive(ToJson, FromJson)
 pub(all) struct TaskSubmission {
   session : String
   results : Array[ApiResponse[Int32]]
-} derive(ToJson, FromJson)
+}
 
 ///|
 pub extend TaskSubmission with ToJson::{to_json}

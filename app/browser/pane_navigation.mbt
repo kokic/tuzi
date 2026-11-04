@@ -61,12 +61,15 @@ fn Model::update_panes(
           Left => model.panes.0
           Right => model.panes.1
         }
-        let matches = (pane : Pane) =>
+        let matches = (pane : Pane) => {
           pane.id == target.view_id && pane.request_id == target.request_id
+        }
         matches(stack.current) || stack.parents.any(matches)
       })
       guard !targets.is_empty() else { return (model, @rabbita.none) }
-      let names = entries.filter(entry => entry.is_dir()).map(entry => entry.name)
+      let names = entries
+        .filter(entry => entry.is_dir())
+        .map(entry => entry.name)
       guard !names.is_empty() else { return (model, @rabbita.none) }
       (
         model,

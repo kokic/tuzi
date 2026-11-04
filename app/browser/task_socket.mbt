@@ -1,17 +1,19 @@
 ///|
+#derive(Eq)
 priv enum TaskConnectionPhase {
   Connecting
   Connected
   WaitingToReconnect
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct TaskConnection {
   generation : Int32
   phase : TaskConnectionPhase
   retry_delay : Int32
   received : Bool
-} derive(Eq)
+}
 
 ///|
 fn task_socket_cmd(generation : Int32, emit : Emit[Msg]) -> Cmd {

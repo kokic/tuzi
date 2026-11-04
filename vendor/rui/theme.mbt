@@ -1096,10 +1096,11 @@ const UiInteractionCss : String =
   #|
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum ColorMode {
   Light
   Dark
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend ColorMode with Debug::{to_repr}
@@ -1133,7 +1134,6 @@ const ThemeRoleStyle : String =
   #|--rui-ring:var(--rui-border);--rui-switch-unchecked:var(--rui-border);--rui-switch-thumb-checked:var(--rui-background);--rui-switch-thumb-unchecked:var(--rui-background);
   #|--rui-sidebar:var(--rui-background);--rui-sidebar-foreground:var(--rui-foreground);--rui-sidebar-primary:var(--rui-primary);--rui-sidebar-primary-foreground:var(--rui-primary-foreground);
   #|--rui-sidebar-accent:var(--rui-accent);--rui-sidebar-accent-foreground:var(--rui-accent-foreground);--rui-sidebar-border:var(--rui-border);--rui-sidebar-ring:var(--rui-ring);
-
 
 ///|
 fn theme_mode_name(mode : ColorMode) -> String {

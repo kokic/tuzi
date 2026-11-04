@@ -3,7 +3,7 @@ const HelpTableCaption : String = "ONLY APPLE CAN'T DO"
 
 ///|
 fn help_dialog(emit : Emit[Msg]) -> Html {
-  modal("Help", emit, size=Wide, [
+  modal("Help", emit, size=Wide(tall=false), [
     @rui.table([
       @rui.table_caption(style=["color: currentColor"], HelpTableCaption),
       @rui.table_body(help_lines()),

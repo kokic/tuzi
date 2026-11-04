@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) enum GitOperation {
   Pull
   Push
@@ -8,7 +9,7 @@ pub(all) enum GitOperation {
   RemoveWorktree(Path)
   Prune
   PruneWorktrees
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
 pub fn GitOperation::name(self : GitOperation) -> String {
@@ -25,10 +26,11 @@ pub fn GitOperation::name(self : GitOperation) -> String {
 }
 
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) struct GitRequest {
   path : Path
   operation : GitOperation
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
 pub extend GitOperation with ToJson::{to_json}

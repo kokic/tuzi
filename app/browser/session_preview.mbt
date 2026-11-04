@@ -1,15 +1,17 @@
 ///|
+#derive(Eq)
 priv enum SessionPreviewContent {
   Loading
   Loaded(Result[@session.Document, String])
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct SessionPreviewContext {
   id : Int32
   path : Path
   content : SessionPreviewContent
-} derive(Eq)
+}
 
 ///|
 fn Model::open_session_preview(

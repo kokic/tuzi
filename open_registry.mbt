@@ -1,41 +1,46 @@
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) enum PreviewKind {
   Markdown
   Text
   Session
   Font
   Image
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) enum OpenAction {
   Browse
   Dialog(PreviewKind)
   Browser
   ExtractZip
   External
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) struct Opener {
   label : String
   action : OpenAction
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) struct OpenAssociation {
   openers : Array[String]
   default_opener : String
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
+#derive(Eq, ToJson, FromJson)
 pub(all) struct OpenRegistry {
   openers : Map[String, Opener]
   folder : OpenAssociation
   filenames : Map[String, OpenAssociation]
   extensions : Map[String, OpenAssociation]
   other_file : OpenAssociation
-} derive(Eq, ToJson, FromJson)
+}
 
 ///|
 /// Explicit filename associations take precedence over extensions.
@@ -57,10 +62,11 @@ pub fn OpenRegistry::for_entry(
 }
 
 ///|
+#derive(ToJson, FromJson)
 pub(all) struct OpenRequest {
   path : Path
   opener : String
-} derive(ToJson, FromJson)
+}
 
 ///|
 pub extend PreviewKind with Eq::{equal, not_equal}

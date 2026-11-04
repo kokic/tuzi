@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, FromJson, ToJson)
 pub(all) struct GitBranch {
   reference : String
   name : String
-} derive(Eq, FromJson, ToJson)
+}
 
 ///|
 pub fn GitBranch::is_remote(self : GitBranch) -> Bool {
@@ -24,6 +25,7 @@ pub extend GitBranch with FromJson::{from_json}
 pub extend GitBranch with ToJson::{to_json}
 
 ///|
+#derive(Eq, FromJson, ToJson)
 pub(all) struct GitWorktree {
   path : Path
   head : String
@@ -34,7 +36,7 @@ pub(all) struct GitWorktree {
   detached : Bool
   locked : Bool
   prunable : Bool
-} derive(Eq, FromJson, ToJson)
+}
 
 ///|
 pub fn GitWorktree::can_remove(self : GitWorktree) -> Bool {
@@ -76,12 +78,13 @@ pub extend GitWorktree with FromJson::{from_json}
 pub extend GitWorktree with ToJson::{to_json}
 
 ///|
+#derive(Eq, FromJson, ToJson)
 pub(all) struct GitInfo {
   available : Bool
   current : String
   branches : Array[GitBranch]
   worktrees : Array[GitWorktree]
-} derive(Eq, FromJson, ToJson)
+}
 
 ///|
 pub fn GitInfo::worktree_for_branch(

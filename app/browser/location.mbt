@@ -1,9 +1,10 @@
 ///|
+#derive(ToJson, @json.FromJson)
 priv struct BrowserLocation {
   left : String
   right : String
   active : Int32
-} derive(ToJson, @json.FromJson)
+}
 
 ///|
 fn Model::browser_location(model : Model) -> BrowserLocation {

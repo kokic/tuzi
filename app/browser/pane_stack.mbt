@@ -1,11 +1,12 @@
 ///|
+#derive(Eq)
 priv struct PaneStack {
   sort : SortMode
   current : Pane
   parents : Array[Pane]
   history : Set[String]
   next_id : Int32
-} derive(Eq)
+}
 
 ///|
 fn PaneStack::initialize(path : Path) -> PaneStack {

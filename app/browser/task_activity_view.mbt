@@ -10,13 +10,15 @@ fn activity_dialog(jobs : Val[TaskState], emit : Emit[Msg]) -> Val[Html] {
       task.map(task => (key, activity_item_view(task, emit)))
     })
   rows.view(rows => {
-    modal("Activity", emit, size=Wide, [
-      if rows.is_empty() {
-        @rui.empty(@rui.empty_header(@rui.empty_title("No tasks yet.")))
-      } else {
-        let children : Map[String, Html] = Map::from_iter(rows.iter())
-        @rui.item_group(children)
-      },
+    modal("Activity", emit, size=Wide(tall=true), [
+      dialog_body([
+        if rows.is_empty() {
+          @rui.empty(@rui.empty_header(@rui.empty_title("No tasks yet.")))
+        } else {
+          let children : Map[String, Html] = Map::from_iter(rows.iter())
+          @rui.item_group(children)
+        },
+      ]),
       dialog_close_footer_view(),
     ])
   })

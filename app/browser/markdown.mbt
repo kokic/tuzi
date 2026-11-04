@@ -1,22 +1,25 @@
 ///|
+#derive(Eq)
 priv enum MarkdownView {
   Preview
   Code
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv enum MarkdownContent {
   Loading
   Loaded(Result[String, String])
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct MarkdownContext {
   id : Int32
   path : Path
   view : MarkdownView
   content : MarkdownContent
-} derive(Eq)
+}
 
 ///|
 priv enum MarkdownMsg {
