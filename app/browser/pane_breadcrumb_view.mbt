@@ -33,7 +33,7 @@ fn breadcrumbs_view(
             style=[
               @presentation.UI_FONT_STYLE,
               "min-width: 0",
-              "flex-shrink: 1",
+              "flex-shrink: 0",
               "line-height: inherit",
               "--rui-button-base-fg: var(--rui-muted-foreground)",
             ],
@@ -60,14 +60,32 @@ fn breadcrumbs_view(
     let items : Array[Html] = []
     for segment in segments {
       if !items.is_empty() {
-        items.push(@rui.breadcrumb_separator())
+        items.push(@rui.breadcrumb_separator(style=["flex: none"]))
       }
-      items.push(@rui.breadcrumb_item(style=["max-width: 100%"], segment))
+      items.push(@rui.breadcrumb_item(style=["flex: none"], segment))
     }
-    @rui.breadcrumb(
+    // The scroll origin is at the current directory; reading order stays LTR.
+    let trail = @rui.breadcrumb(
       aria_label="Directory path",
-      style=[@presentation.UI_FONT_STYLE, "flex: 1", "min-width: 0"],
-      @rui.breadcrumb_list(style=["line-height: inherit"], items),
+      style=[
+        @presentation.UI_FONT_STYLE,
+        "min-width: 0",
+        "overflow-x: auto",
+        "scrollbar-width: none",
+        "direction: rtl",
+      ],
+      @rui.breadcrumb_list(
+        style=[
+          "line-height: inherit", "flex-wrap: nowrap", "white-space: nowrap",
+          "width: max-content", "min-width: 100%", "direction: ltr", "padding: 2px",
+        ],
+        items,
+      ),
+    )
+    // A new path gets a fresh scroll origin without resetting on menu updates.
+    div(
+      style=["flex: 1", "min-width: 0"],
+      Map([(path.to_string(), trail)]),
     )
   })
 }
