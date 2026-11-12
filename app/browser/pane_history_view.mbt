@@ -13,5 +13,6 @@ fn pane_history_menu_view(
     idx,
     emit,
     label="History",
+    icon=history_icon(),
   )
 }

@@ -221,7 +221,19 @@ print {
   outline-offset: 2px;
 }
 
+#tuzi .tuzi-pane-action-icon {
+  display: none;
+}
+
 @container file-pane (max-width: 32rem) {
+  #tuzi .tuzi-pane-action-text {
+    display: none;
+  }
+
+  #tuzi .tuzi-pane-action-icon {
+    display: inline-flex;
+  }
+
   #tuzi .plist {
     --tuzi-time-column: 10ch;
   }

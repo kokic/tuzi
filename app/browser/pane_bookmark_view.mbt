@@ -13,6 +13,7 @@ fn pane_bookmark_menu_view(
     idx,
     emit,
     label="Bookmarks",
+    icon=bookmarks_icon(),
     empty_label="No bookmarks yet",
   )
 }
