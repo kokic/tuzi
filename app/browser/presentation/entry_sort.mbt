@@ -4,7 +4,8 @@ using @tuzi {type Entry, type EntryAppearance}
 ///|
 #derive(Eq)
 pub(all) enum SortMode {
-  Name
+  NameAscending
+  NameDescending
   Size
   Time
 }
@@ -15,9 +16,10 @@ pub extend SortMode with Eq::{equal, not_equal}
 ///|
 pub fn SortMode::next(self : SortMode) -> SortMode {
   match self {
-    Name => Size
+    NameAscending => NameDescending
+    NameDescending => Size
     Size => Time
-    Time => Name
+    Time => NameAscending
   }
 }
 
@@ -32,7 +34,8 @@ pub fn SortMode::compare_entries(
     return -1
   }
   match sort {
-    Name => left.name.lexical_compare(right.name)
+    NameAscending => left.name.lexical_compare(right.name)
+    NameDescending => right.name.lexical_compare(left.name)
     Size => right.size.unwrap_or(None).compare(left.size.unwrap_or(None))
     Time => right.mtime.to_option().compare(left.mtime.to_option())
   }

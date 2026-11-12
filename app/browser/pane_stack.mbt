@@ -11,7 +11,7 @@ priv struct PaneStack {
 ///|
 fn PaneStack::initialize(path : Path) -> PaneStack {
   {
-    sort: Name,
+    sort: NameAscending,
     current: Pane::initialize(path),
     parents: [],
     history: Set([]),
