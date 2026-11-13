@@ -4,7 +4,8 @@ fn SortMode::label(self : SortMode) -> String {
     NameAscending => "A-Z"
     NameDescending => "Z-A"
     Size => "Size"
-    Time => "Time"
+    TimeDescending => "Latest"
+    TimeAscending => "Oldest"
   }
 }
 
@@ -15,7 +16,9 @@ fn pane_sort_select(
   sort : SortMode,
   emit : Emit[Msg],
 ) -> Val[Html] {
-  let modes : Array[SortMode] = [NameAscending, NameDescending, Size, Time]
+  let modes : Array[SortMode] = [
+    NameAscending, NameDescending, Size, TimeDescending, TimeAscending,
+  ]
   @rui.select(
     id~,
     options=modes.map(mode => {
@@ -27,7 +30,8 @@ fn pane_sort_select(
       let sort : SortMode = match value {
         "Z-A" => NameDescending
         "Size" => Size
-        "Time" => Time
+        "Latest" => TimeDescending
+        "Oldest" => TimeAscending
         _ => NameAscending
       }
       SortChanged(idx, sort)

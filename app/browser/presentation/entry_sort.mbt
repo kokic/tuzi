@@ -7,7 +7,8 @@ pub(all) enum SortMode {
   NameAscending
   NameDescending
   Size
-  Time
+  TimeDescending
+  TimeAscending
 }
 
 ///|
@@ -18,8 +19,9 @@ pub fn SortMode::next(self : SortMode) -> SortMode {
   match self {
     NameAscending => NameDescending
     NameDescending => Size
-    Size => Time
-    Time => NameAscending
+    Size => TimeDescending
+    TimeDescending => TimeAscending
+    TimeAscending => NameAscending
   }
 }
 
@@ -37,6 +39,7 @@ pub fn SortMode::compare_entries(
     NameAscending => left.name.lexical_compare(right.name)
     NameDescending => right.name.lexical_compare(left.name)
     Size => right.size.unwrap_or(None).compare(left.size.unwrap_or(None))
-    Time => right.mtime.to_option().compare(left.mtime.to_option())
+    TimeDescending => right.mtime.to_option().compare(left.mtime.to_option())
+    TimeAscending => left.mtime.to_option().compare(right.mtime.to_option())
   }
 }
