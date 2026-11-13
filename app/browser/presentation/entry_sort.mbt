@@ -6,7 +6,8 @@ using @tuzi {type Entry, type EntryAppearance}
 pub(all) enum SortMode {
   NameAscending
   NameDescending
-  Size
+  SizeDescending
+  SizeAscending
   TimeDescending
   TimeAscending
 }
@@ -18,8 +19,9 @@ pub extend SortMode with Eq::{equal, not_equal}
 pub fn SortMode::next(self : SortMode) -> SortMode {
   match self {
     NameAscending => NameDescending
-    NameDescending => Size
-    Size => TimeDescending
+    NameDescending => SizeDescending
+    SizeDescending => SizeAscending
+    SizeAscending => TimeDescending
     TimeDescending => TimeAscending
     TimeAscending => NameAscending
   }
@@ -38,7 +40,8 @@ pub fn SortMode::compare_entries(
   match sort {
     NameAscending => left.name.lexical_compare(right.name)
     NameDescending => right.name.lexical_compare(left.name)
-    Size => right.size.unwrap_or(None).compare(left.size.unwrap_or(None))
+    SizeDescending => right.size.unwrap_or(None).compare(left.size.unwrap_or(None))
+    SizeAscending => left.size.unwrap_or(None).compare(right.size.unwrap_or(None))
     TimeDescending => right.mtime.to_option().compare(left.mtime.to_option())
     TimeAscending => left.mtime.to_option().compare(right.mtime.to_option())
   }
