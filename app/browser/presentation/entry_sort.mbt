@@ -16,15 +16,18 @@ pub(all) enum SortMode {
 pub extend SortMode with Eq::{equal, not_equal}
 
 ///|
+/// The shared ordering for the sort menu and keyboard cycling.
+pub fn SortMode::all() -> Array[SortMode] {
+  [
+    NameAscending, NameDescending, SizeDescending, SizeAscending, TimeDescending, TimeAscending,
+  ]
+}
+
+///|
 pub fn SortMode::next(self : SortMode) -> SortMode {
-  match self {
-    NameAscending => NameDescending
-    NameDescending => SizeDescending
-    SizeDescending => SizeAscending
-    SizeAscending => TimeDescending
-    TimeDescending => TimeAscending
-    TimeAscending => NameAscending
-  }
+  let modes = SortMode::all()
+  let index = modes.search(self).unwrap()
+  modes[(index + 1) % modes.length()]
 }
 
 ///|

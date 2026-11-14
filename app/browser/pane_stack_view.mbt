@@ -113,7 +113,7 @@ fn pane_stack_view(
               emit,
             )
           },
-          by=sort => sort.label(),
+          by=sort => sort.value(),
         )
         let content = pane.view8(
           filter,

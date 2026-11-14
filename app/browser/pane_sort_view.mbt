@@ -11,33 +11,38 @@ fn SortMode::label(self : SortMode) -> String {
 }
 
 ///|
+fn SortMode::value(self : SortMode) -> String {
+  match self {
+    NameAscending => "name-ascending"
+    NameDescending => "name-descending"
+    SizeDescending => "size-descending"
+    SizeAscending => "size-ascending"
+    TimeDescending => "time-descending"
+    TimeAscending => "time-ascending"
+  }
+}
+
+///|
 fn pane_sort_select(
   id : String,
   idx : PaneSide,
   sort : SortMode,
   emit : Emit[Msg],
 ) -> Val[Html] {
-  let modes : Array[SortMode] = [
-    NameAscending, NameDescending, SizeDescending, SizeAscending, TimeDescending, TimeAscending,
-  ]
+  let modes = SortMode::all()
   @rui.select(
     id~,
     options=modes.map(mode => {
-      @rui.select_option(value=mode.label(), label=mode.label())
+      @rui.select_option(value=mode.value(), label=mode.label())
     }),
-    default_value=sort.label(),
+    default_value=sort.value(),
     align=End,
-    on_value_change=emit.map(value => {
-      let sort : SortMode = match value {
-        "Z-A" => NameDescending
-        "Largest" => SizeDescending
-        "Smallest" => SizeAscending
-        "Latest" => TimeDescending
-        "Oldest" => TimeAscending
-        _ => NameAscending
+    on_value_change=value => {
+      guard modes.iter().find_first(mode => mode.value() == value) is Some(sort) else {
+        return @rabbita.none
       }
-      SortChanged(idx, sort)
-    }),
+      emit(SortChanged(idx, sort))
+    },
     class="pane-sort",
     style=[
       @presentation.UI_FONT_STYLE,
@@ -85,7 +90,7 @@ fn pane_sort_select(
           modes.map(mode => {
             @rui.select_item(
               scope~,
-              value=mode.label(),
+              value=mode.value(),
               style=[@presentation.UI_FONT_STYLE],
               mode.label(),
             )
