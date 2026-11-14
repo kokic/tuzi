@@ -66,6 +66,9 @@ fn Pane::pane_view(
         ],
       ),
       "content": div(
+        attrs=@html.Attrs::build().on_click(_event => {
+          emit(PaneEvent(Activate(idx)))
+        }),
         style=[
           "position: relative", "display: flex", "flex-direction: column", "flex: 1",
           "min-width: 0", "min-height: 0",

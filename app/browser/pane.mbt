@@ -7,6 +7,7 @@ priv enum PaneMsg {
   )
   ReloadPane(PaneSide)
   GotoPath(PaneSide, Path)
+  Activate(PaneSide)
   Click(PaneSide, Int32)
   DblClick(PaneSide, Int32)
 }

@@ -83,6 +83,7 @@ fn Model::update_panes(
     DirectoryCountsLoaded(targets, result) =>
       (model.receive_directory_counts(targets, result), @rabbita.none)
     GotoPath(idx, path) => model.navigate_to_directory(idx, path)
+    Activate(idx) => ({ ..model, active: idx, }, @rabbita.none)
     Click(idx, row) => {
       let pane = model.pane_at(idx)
       (
