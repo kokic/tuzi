@@ -108,5 +108,5 @@ fn Model::apply_server_config(
     },
     panes: (model.panes.0.navigate(left), model.panes.1.navigate(right)),
   }
-  (updated, updated.save_browser_location())
+  (updated, @rabbita.none)
 }

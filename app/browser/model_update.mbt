@@ -12,7 +12,15 @@ fn Model::update(
     updated
   }
   let (updated, listings) = updated.load_pending_panes(emit)
-  (updated, @rabbita.batch([command, listings]))
+  let location_changed = updated.active != model.active ||
+    updated.panes.0.current.path != model.panes.0.current.path ||
+    updated.panes.1.current.path != model.panes.1.current.path
+  let location = if updated.startup is Started && location_changed {
+    updated.save_browser_location()
+  } else {
+    @rabbita.none
+  }
+  (updated, @rabbita.batch([command, listings, location]))
 }
 
 ///|

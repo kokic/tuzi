@@ -147,5 +147,5 @@ fn Model::navigate_to_directory(
       Right => (model.panes.0, model.panes.1.navigate(path))
     },
   }
-  (updated, updated.save_browser_location())
+  (updated, @rabbita.none)
 }
