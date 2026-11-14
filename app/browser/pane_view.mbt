@@ -87,10 +87,18 @@ fn Pane::pane_view(
                 fill=pane.entries.is_empty(),
               )
             Ready =>
-              if pane.entries.is_empty() {
+              if pane.visible_entries.is_empty() {
                 pane_status_scroll_view(
                   @rui.empty(
-                    @rui.empty_header(@rui.empty_title("Empty directory")),
+                    @rui.empty_header(
+                      @rui.empty_title(
+                        if pane.entries.is_empty() {
+                          "Empty directory"
+                        } else {
+                          "No matching results"
+                        },
+                      ),
+                    ),
                   ),
                   fill=true,
                 )
@@ -98,7 +106,7 @@ fn Pane::pane_view(
                 @html.nothing
               }
           },
-          "entries": if pane.entries.is_empty() {
+          "entries": if pane.visible_entries.is_empty() {
             @html.nothing
           } else {
             rows

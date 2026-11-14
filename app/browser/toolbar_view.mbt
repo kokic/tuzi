@@ -1,7 +1,6 @@
 ///|
 fn Model::toolbar_view(model : Model, emit : Emit[Msg]) -> Html {
-  let sel = model.panes.0.current.selected.length() +
-    model.panes.1.current.selected.length()
+  let sel = model.pane_at(model.active).selected.length()
   div(id="bar", class="tuzi-toolbar", [
     div(
       style=[

@@ -89,7 +89,6 @@ fn Model::update_panes(
       (
         {
           ..model,
-          active: idx,
           panes: set_pane(model.panes, idx, {
             ..pane,
             cursor: pane.visible_entries.get(row).map(entry => entry.name),
