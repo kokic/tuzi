@@ -38,7 +38,10 @@ fn Model::keyboard_command(
     .target()
     .to_element()
     .map_or(false, element => {
-      element.closest("[role=menu], [role=combobox], [role=listbox]") is Some(_)
+      element.closest(
+        "button, a[href], select, textarea, summary, [contenteditable]:not([contenteditable=false]), [role=button], [role=menu], [role=combobox], [role=listbox]",
+      ) is Some(_) ||
+      (!model.editing && element.closest("input") is Some(_))
     }) else {
     return @rabbita.none
   }
