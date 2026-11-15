@@ -3,6 +3,8 @@ import {
   "kokic/tuzi/session",
   "kokic/tuzi/app/browser/presentation",
   "kokic/uniform-path" @path,
+  "kokic/katex-parser" @katex,
+  "kokic/katex-parser/html" @katex_html,
   "moonbit-community/rabbita",
   "moonbit-community/rabbita/clipboard",
   "moonbit-community/rabbita/cmd",

@@ -107,7 +107,12 @@ fn session_entry_view(entry : @session.Entry) -> Html {
 fn session_message_block_view(block : @session.Block) -> Html {
   match block {
     Text(text) =>
-      @markdown.markdown(text, escape_link=true, heading_anchors=false)
+      @markdown.markdown(
+        text,
+        render_math=render_markdown_math,
+        escape_link=true,
+        heading_anchors=false,
+      )
     Image(mime_type~, data~) =>
       match mime_type {
         "image/png" | "image/jpeg" | "image/gif" | "image/webp" =>
