@@ -1,14 +1,14 @@
 name = "kokic/tuzi"
 
-version = "0.3.0"
+version = "0.3.2"
 
 import {
-  "moonbitlang/async@0.22.7",
+  "moonbitlang/async@0.22.9",
   "moonbit-community/rabbita@0.17.0",
   "moonbitlang/moonback@0.8.10",
   "moonbitlang/x@0.5.7",
   "moonbit-community/flate@0.10.0",
-  "moonbit-community/cmark@0.4.13",
+  "moonbit-community/cmark@0.4.14",
   "kokic/uniform-path@0.1.6",
 }
 
