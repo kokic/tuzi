@@ -96,6 +96,23 @@ fn MarkdownContext::dialog(context : MarkdownContext, emit : Emit[Msg]) -> Html 
 }
 
 ///|
+#warnings("-alert_xss_vulnerable")
+fn render_markdown_math(source : @markdown.MathSource) -> Html {
+  let nodes = @katex.parse(
+    source.tex,
+    settings=@katex.Settings::make(display_mode=source.display),
+  ) catch {
+    error => return @html.span("Math error: \{error.to_repr()}")
+  }
+  // Only backend-generated markup is inserted; parsing keeps the untrusted policy.
+  let markup = @katex_html.render(
+    nodes,
+    config=@katex_html.RenderConfig::make(display_mode=source.display),
+  )
+  @html.span(attrs=@html.Attrs::build().inner_html(markup), @html.nothing)
+}
+
+///|
 fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
   match context.content {
     Loading => centered_loading_view("Loading Markdown…")
@@ -107,9 +124,13 @@ fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
     Loaded(Ok(source)) =>
       match context.view {
         Preview =>
-          @markdown.markdown(source, escape_link=true, heading_anchors=false, transform_link=destination => {
-            context.resolve_link(destination)
-          })
+          @markdown.markdown(
+            source,
+            render_math=render_markdown_math,
+            escape_link=true,
+            heading_anchors=false,
+            transform_link=destination => context.resolve_link(destination),
+          )
         Code =>
           @html.pre(
             style=[
