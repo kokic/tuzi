@@ -109,7 +109,7 @@ pub async fn edit_link(
       relocate_link(source, backup)
     }
     {
-      errdefer {
+      errdefer @async.protect_from_cancel(() => {
         if same_path {
           relocate_link(backup, source) catch {
             recovery => raise LinkError::RecoveryFailed(backup, recovery)
@@ -117,12 +117,12 @@ pub async fn edit_link(
         }
         @async_fs.remove(replacement.to_native())
         @async_fs.rmdir(staging.to_native())
-      }
+      })
       relocate_link(replacement, destination)
     }
     let previous = if same_path { backup } else { source }
     {
-      errdefer {
+      errdefer @async.protect_from_cancel(() => {
         @async_fs.remove(destination.to_native()) catch {
           recovery => raise LinkError::RecoveryFailed(previous, recovery)
         }
@@ -132,7 +132,7 @@ pub async fn edit_link(
           }
         }
         @async_fs.rmdir(staging.to_native())
-      }
+      })
       @async_fs.remove(previous.to_native())
     }
     @async_fs.rmdir(staging.to_native())
