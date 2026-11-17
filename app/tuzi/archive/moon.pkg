@@ -1,5 +1,9 @@
+options(
+  "allow-experimental-packages": true,
+)
+
 import {
-  "moonbit-community/flate/zip",
+  "moonbitlang/core/archive/zip",
   "kokic/tuzi" @shared,
   "kokic/tuzi/app/tuzi/fsops",
   "kokic/uniform-path" @uniform_path,

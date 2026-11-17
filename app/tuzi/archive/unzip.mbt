@@ -49,7 +49,7 @@ pub async fn unzip_entries(source : Path, destination : Path) -> Unit {
   @async_fs.mkdir(destination.to_native(), allow_exist=false)
   errdefer @fsops.cleanup_copy(destination)
   let data = @async_fs.read_file(source.to_native())
-  let archive = @zip.read(data.binary())
+  let archive = @zip.read_all(data.binary())
   for entry in archive.entries() {
     let name = entry.name()
     let components = extraction_components(name)
