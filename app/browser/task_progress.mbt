@@ -55,6 +55,15 @@ fn ProgressBatch::submitted(
 }
 
 ///|
+fn ProgressState::is_active(self : ProgressState) -> Bool {
+  match self {
+    Submitting | Tracking(_, None) => true
+    Rejected(_) => false
+    Tracking(_, Some(status)) => status.is_active()
+  }
+}
+
+///|
 fn ProgressState::receive(
   self : ProgressState,
   statuses : Map[Int32, TaskStatus],

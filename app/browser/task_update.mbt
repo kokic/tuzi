@@ -95,6 +95,21 @@ fn TaskState::receive(
 }
 
 ///|
+fn Task::affects_listing(task : Task, directory : Path) -> Bool {
+  if task.kind.affects_listing(directory) {
+    return true
+  }
+  guard task.status is Failed({ code: NotFound, .. }) else { return false }
+  match task.kind {
+    File(Copy(source~, ..) | Unzip(source~, ..)) =>
+      directory == source.dirname() ||
+      directory == source.dirname().dirname() ||
+      directory_contains(source, directory)
+    _ => false
+  }
+}
+
+///|
 fn Model::receive_tasks(
   model : Model,
   snapshot : @tuzi.TaskSnapshot,
@@ -118,7 +133,7 @@ fn Model::receive_tasks(
   }
   let model = model.refresh_progress()
   let affected = path => {
-    restarted || changed.any(task => task.kind.affects_listing(path))
+    restarted || changed.any(task => task.affects_listing(path))
   }
   let model = {
     ..model,
