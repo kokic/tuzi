@@ -6,6 +6,7 @@ pub async fn open_url(url : String) -> Unit {
 ///|
 priv enum SystemOpenKind {
   Url
+  File
   Directory
 }
 
@@ -18,7 +19,7 @@ fn system_open_command(kind : SystemOpenKind) -> OpenCommand {
         program: "cmd",
         arguments: [Literal("/c"), Literal("start"), Literal(""), Target],
       }
-    Directory => { program: "explorer.exe", arguments: [Target], }
+    File | Directory => { program: "explorer.exe", arguments: [Target], }
   }
 }
 
@@ -30,7 +31,7 @@ fn system_open_command(kind : SystemOpenKind) -> OpenCommand {
       {
         program: match kind {
           Url => "open"
-          Directory => "/usr/bin/open"
+          File | Directory => "/usr/bin/open"
         },
         arguments: [Target],
       }

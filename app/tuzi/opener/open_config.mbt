@@ -17,6 +17,12 @@ let markdown_association : @shared.OpenAssociation = {
 }
 
 ///|
+let html_association : @shared.OpenAssociation = {
+  openers: ["system", "browser", "vscode", "explorer"],
+  default_opener: "system",
+}
+
+///|
 let session_association : @shared.OpenAssociation = {
   openers: ["session", "text", "browser", "vscode", "explorer"],
   default_opener: "session",
@@ -39,6 +45,10 @@ fn configured_openers() -> Map[String, OpenDefinition] {
   {
     "browse": { label: "Enter in Tuzi", execution: Browse, },
     "browser": { label: "Open in browser", execution: Browser, },
+    "system": {
+      label: "Open with system default",
+      execution: External(system_open_command(File)),
+    },
     "markdown": { label: "Preview Markdown", execution: Dialog(Markdown), },
     "text": { label: "Preview text", execution: Dialog(Text), },
     "session": { label: "Preview session", execution: Dialog(Session), },
@@ -128,8 +138,8 @@ fn configured_open_registry(
       "jsx": text_association,
       "json": text_preview_association,
       "jsonl": session_association,
-      "html": text_association,
-      "htm": text_association,
+      "html": html_association,
+      "htm": html_association,
       "css": text_association,
       "xml": text_association,
       "toml": text_preview_association,
