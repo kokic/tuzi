@@ -62,7 +62,7 @@ fn Model::update_message(
     OpenWith(target, id) => model.execute_opener(target, id, emit)
     EntryAction(idx, view_id, name, action) =>
       model.execute_entry_action(idx, view_id, name, action, emit)
-    MarkdownEvent(msg) => (model.update_markdown(msg), @rabbita.none)
+    MarkdownEvent(msg) => model.update_markdown(msg, emit)
     TextPreviewLoaded(id, result) =>
       (model.receive_text_preview(id, result), @rabbita.none)
     SessionPreviewLoaded(id, result) =>

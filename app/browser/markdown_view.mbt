@@ -82,7 +82,7 @@ fn MarkdownContext::dialog(context : MarkdownContext, emit : Emit[Msg]) -> Html 
                 },
               ],
               if selected {
-                context.content_view()
+                context.content_view(emit)
               } else {
                 @html.nothing
               },
@@ -113,7 +113,10 @@ fn render_markdown_math(source : @markdown.MathSource) -> Html {
 }
 
 ///|
-fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
+fn MarkdownContext::content_view(
+  context : MarkdownContext,
+  emit : Emit[Msg],
+) -> Html {
   match context.content {
     Loading => centered_loading_view("Loading Markdown…")
     Loaded(Err(error)) =>
@@ -124,12 +127,18 @@ fn MarkdownContext::content_view(context : MarkdownContext) -> Html {
     Loaded(Ok(source)) =>
       match context.view {
         Preview =>
-          @markdown.markdown(
-            source,
-            render_math=render_markdown_math,
-            escape_link=true,
-            heading_anchors=false,
-            transform_link=destination => context.resolve_link(destination),
+          @html.div(
+            id="markdown-document-\{context.id}",
+            @markdown.markdown(
+              source,
+              render_math=render_markdown_math,
+              escape_link=true,
+              heading_anchors=false,
+              transform_link=destination => context.resolve_link(destination),
+              link_attrs=destination => {
+                context.link_attributes(destination, emit)
+              },
+            ),
           )
         Code =>
           @html.pre(

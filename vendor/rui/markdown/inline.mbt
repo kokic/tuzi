@@ -25,8 +25,13 @@ fn render_inline(state : RenderState, inline : @cmark.Inline) -> @html.Html {
     Break({ v: { ty: Soft, .. }, .. }) => @html.text("\n")
     Autolink({ v, .. }) => {
       let href = if v.is_email { "mailto:" + v.link.v } else { v.link.v }
-      if link_destination(state, href) is Some(href) {
-        @html.a(href~, escape=state.escape_link, v.link.v)
+      if link_destination(state, href) is Some(destination) {
+        @html.a(
+          href=destination,
+          escape=state.escape_link,
+          attrs?=state.link_attrs.map(attributes => attributes(href)),
+          v.link.v,
+        )
       } else {
         @html.text(v.link.v)
       }
@@ -62,9 +67,9 @@ fn render_link(
           render_footnote_reference(state, link, v)
         }
       LinkDef({ v, .. }) => {
-        let destination = v.dest.map(node => node.v).unwrap_or("")
+        let reference = v.dest.map(node => node.v).unwrap_or("")
         let title = v.title.map(tight_text)
-        guard link_destination(state, destination) is Some(destination) else {
+        guard link_destination(state, reference) is Some(destination) else {
           return @html.text(plain_text(link.text))
         }
         if image {
@@ -79,6 +84,7 @@ fn render_link(
             href=destination,
             title?,
             escape=state.escape_link,
+            attrs?=state.link_attrs.map(attributes => attributes(reference)),
             render_inline(state, link.text),
           )
         }

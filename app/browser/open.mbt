@@ -48,7 +48,7 @@ fn Model::execute_opener(
     Browse => model.navigate_to_directory(target.pane, target.path)
     Dialog(kind) =>
       match kind {
-        Markdown => model.open_markdown(target.path, emit)
+        Markdown => model.open_markdown(target.path, target.pane, emit)
         Text => model.open_text_preview(target.path, emit)
         Session => model.open_session_preview(target.path, emit)
         Font | Image => model.open_info_dialog(target, emit)

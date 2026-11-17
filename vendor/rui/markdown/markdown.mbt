@@ -12,6 +12,7 @@ priv struct RenderState {
   heading_anchors : Bool
   escape_link : Bool
   transform_link : ((String) -> String)?
+  link_attrs : ((String) -> @html.Attrs)?
   defs : Map[String, @cmark.LabelDef]
   ids : Map[String, Bool]
   footnotes : Array[FootnoteUse]
@@ -47,6 +48,10 @@ priv struct FootnoteUse {
 /// browser navigation for all links, including heading anchors and footnotes.
 /// `transform_link` rewrites source link and image destinations before URL safety
 /// checks. Generated heading anchors and footnote references are not rewritten.
+/// `link_attrs` adds attributes to ordinary links and autolinks after URL safety
+/// checks. It receives the original destination, before `transform_link`, so
+/// applications can handle file navigation without parsing a resource URL.
+/// Images, heading anchors and footnote references do not use this callback.
 /// Set `heading_anchors=false` to omit generated heading links while retaining
 /// heading IDs, inline formatting and typography. Defaults to `true`.
 /// `render_heading` receives the cmark heading and replaces the entire heading.
@@ -80,6 +85,7 @@ pub fn markdown(
   render_math? : (MathSource) -> @html.Html,
   escape_link~ : Bool = false,
   transform_link? : (String) -> String,
+  link_attrs? : (String) -> @html.Attrs,
   render_heading? : (@cmark.BlockHeading) -> @html.Html,
   heading_anchors~ : Bool = true,
   parser_options~ : ParserOptions = ParserOptions::default(),
@@ -110,6 +116,7 @@ pub fn markdown(
     heading_anchors,
     escape_link,
     transform_link,
+    link_attrs,
     defs: doc.defs,
     ids: {},
     footnotes: [],

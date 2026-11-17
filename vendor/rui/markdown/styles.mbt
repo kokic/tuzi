@@ -40,6 +40,7 @@ const MarkdownCss : String =
   #|.rui-markdown .rui-markdown-copy:hover > span { border-color:var(--rui-border,oklch(0.922 0 0)); background:var(--rui-background,oklch(1 0 0)); color:inherit; }
   #|.rui-markdown .rui-markdown-copy:active > span { background:var(--rui-accent,oklch(0.97 0 0)); }
   #|.rui-markdown img { display:inline-block; max-width:100%; height:auto; vertical-align:middle; }
+  #|.rui-markdown p.rui-markdown-image { text-align:center; }
   #|.rui-markdown hr { margin:calc(var(--rui-markdown-flow) * 2.4) 0 0; border:0; border-top:1px solid var(--rui-border,oklch(0.922 0 0)); }
   #|.rui-markdown .rui-markdown-table { max-width:100%; overflow-x:auto; }
   #|.rui-markdown table { width:max-content; min-width:100%; border-collapse:separate; border-spacing:0; border-bottom:1px solid var(--rui-border,oklch(0.922 0 0)); line-height:1.5; font-variant-numeric:tabular-nums; }

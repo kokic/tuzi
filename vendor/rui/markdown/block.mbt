@@ -14,7 +14,14 @@ fn render_block(
       if tight {
         content
       } else {
-        @html.p(content)
+        @html.p(
+          class?=if standalone_image(v.inline) {
+            Some("rui-markdown-image")
+          } else {
+            None
+          },
+          content,
+        )
       }
     }
     Heading({ v, .. }) => {
@@ -89,6 +96,16 @@ fn render_block(
     ExtTable({ v, .. }) => render_table(state, v)
     BlankLine(_) | LinkRefDefinition(_) | ExtFootnoteDefinition(_) =>
       @html.nothing
+  }
+}
+
+///|
+fn standalone_image(inline : @cmark.Inline) -> Bool {
+  match inline {
+    Image(_) => true
+    Inlines({ v, .. }) => v.length() == 1 && standalone_image(v[0])
+    Link({ v, .. }) => standalone_image(v.text)
+    _ => false
   }
 }
 
