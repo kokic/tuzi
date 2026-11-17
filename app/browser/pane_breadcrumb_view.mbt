@@ -76,17 +76,14 @@ fn breadcrumbs_view(
       ],
       @rui.breadcrumb_list(
         style=[
-          "line-height: inherit", "flex-wrap: nowrap", "white-space: nowrap",
-          "width: max-content", "min-width: 100%", "direction: ltr", "padding: 2px",
+          "line-height: inherit", "flex-wrap: nowrap", "white-space: nowrap", "width: max-content",
+          "min-width: 100%", "direction: ltr", "padding: 2px",
         ],
         items,
       ),
     )
     // A new path gets a fresh scroll origin without resetting on menu updates.
-    div(
-      style=["flex: 1", "min-width: 0"],
-      Map([(path.to_string(), trail)]),
-    )
+    div(style=["flex: 1", "min-width: 0"], Map([(path.to_string(), trail)]))
   })
 }
 
