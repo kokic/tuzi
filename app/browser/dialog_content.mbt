@@ -41,7 +41,7 @@ fn dialog_view(model : Val[Model], emit : Emit[Msg]) -> Val[Html] {
       ZipInput(input~, level~, ..) =>
         zip_dialog(input, level, model.dialog_error, emit)
       UnzipInput(source~, input~) =>
-        modal("Extract ZIP", emit, [
+        modal("Extract contents", emit, [
           @rui.item(
             @rui.item_content([
               @rui.item_title("Archive"),

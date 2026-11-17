@@ -68,7 +68,9 @@ fn Model::execute_opener(
       )
     ExtractZip => {
       let name = target.entry.name
-      let stem = name.exact_view(end=name.length() - 4).to_owned()
+      let stem = name
+        .rev_find(".")
+        .map_or(name, dot => name.exact_view(end=dot).to_owned())
       let directory = if stem.is_empty() { "archive" } else { stem }
       (
         {

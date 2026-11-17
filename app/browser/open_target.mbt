@@ -49,11 +49,7 @@ fn OpenTarget::unavailable_reason(
       None
     }
     ExtractZip => {
-      let name = self.entry.name.to_lower()
-      guard !kind.is_dir() &&
-        (name.has_suffix(".zip") || name.has_suffix(".apk")) else {
-        return Some("Select a ZIP or APK file to extract.")
-      }
+      guard !kind.is_dir() else { return Some("Select a file to extract.") }
       None
     }
     External => None

@@ -41,6 +41,18 @@ let image_association : @shared.OpenAssociation = {
 }
 
 ///|
+let archive_association : @shared.OpenAssociation = {
+  openers: ["extract", "browser", "explorer"],
+  default_opener: "extract",
+}
+
+///|
+let zip_container_association : @shared.OpenAssociation = {
+  openers: ["browser", "extract", "explorer"],
+  default_opener: "browser",
+}
+
+///|
 fn configured_openers() -> Map[String, OpenDefinition] {
   {
     "browse": { label: "Enter in Tuzi", execution: Browse, },
@@ -54,7 +66,7 @@ fn configured_openers() -> Map[String, OpenDefinition] {
     "session": { label: "Preview session", execution: Dialog(Session), },
     "font": { label: "Preview font", execution: Dialog(Font), },
     "image": { label: "Preview image", execution: Dialog(Image), },
-    "extract": { label: "Extract ZIP", execution: ExtractZip, },
+    "extract": { label: "Extract contents", execution: ExtractZip, },
     "vscode": {
       label: "Open in VSCode",
       execution: External(vscode_command()),
@@ -173,14 +185,20 @@ fn configured_open_registry(
       "heic": image_association,
       "heif": image_association,
       "jxl": image_association,
-      "apk": {
-        openers: ["extract", "browser", "explorer"],
-        default_opener: "extract",
-      },
-      "zip": {
-        openers: ["extract", "browser", "explorer"],
-        default_opener: "extract",
-      },
+      "apk": archive_association,
+      "zip": archive_association,
+      "jar": zip_container_association,
+      "war": zip_container_association,
+      "ear": zip_container_association,
+      "epub": zip_container_association,
+      "docx": zip_container_association,
+      "xlsx": zip_container_association,
+      "pptx": zip_container_association,
+      "odt": zip_container_association,
+      "ods": zip_container_association,
+      "odp": zip_container_association,
+      "ipa": zip_container_association,
+      "xpi": zip_container_association,
     },
     other_file: { openers: ["browser", "explorer"], default_opener: "browser", },
   }
